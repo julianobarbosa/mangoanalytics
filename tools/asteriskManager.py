@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
-
+import MySQLdb
+	
 class AsteriskManager:
 	def getMySQLPassword(self):
 		elastixConf = open('/etc/elastix.conf', 'r')
