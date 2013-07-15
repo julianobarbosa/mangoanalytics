@@ -3,7 +3,7 @@
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
-from tarifica.forms import AddProviderInfo
+from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
