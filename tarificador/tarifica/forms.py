@@ -1,6 +1,6 @@
 #coding=UTF-8
 from django import forms
-from tarifica.models import PaymentType
+from tarifica.models import PaymentType, TariffMode, DestinationGroup
 
 class AddProviderInfo(forms.Form):
     ##provider = forms.ChoiceField(choices = [(e, e.name) for e in Provider.objects.all()], label = 'Selecciona Troncal')
