@@ -22,7 +22,7 @@ def setupAddProviderInfo(request):
     else:
         form = AddProviderInfo() # An unbound form
 
-    return render(request, 'tarifica/contact.html', {
+    return render(request, 'tarifica/setupprovider.html', {
         'form': form,
     })
 

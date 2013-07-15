@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Luis Lizarraga', 'luis.lzrg@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -72,6 +72,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    ("static", "/opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/static/tarifica")
 )
 
 # List of finder classes that know how to find static files in
