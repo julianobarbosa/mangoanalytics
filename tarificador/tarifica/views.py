@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo
 
 
+#cambiar la funcion para que reciba un provider y se le agrege la informacion
 def setupAddProviderInfo(request):
     if request.method == 'POST': # If the form has been submitted...
         form = AddProviderInfo(request.POST) # A form bound to the POST data
