@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-{% load staticfiles %}
-<html lang="en">
-    <head>
-        
-        <link href="{% static "tarifica/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
-        <title> Agregar Informacion de Troncal </title>
-        <meta name="viewport" content"width=device-width, initial-scale=1.0">
-    </head>
-    <body>
+{% extends base.html %}
 
+{% block title %}Agregar información de Troncales{% endblock %}
+
+
+{% block content %}
 
         <form action="" method="post" class="form-horizontal">{% csrf_token %}
             {{ form.non_field_errors }}
@@ -60,8 +55,4 @@
             </div>
         </form>
 
-
-        <script src="{% static "tarifica/js/jquery-1.10.2.min.js" %}"></script>
-        <script src="{% static "tarifica/js/bootstrap.min.js" %}"></script>
-    </body>
-</html>
+{% endblock %}
