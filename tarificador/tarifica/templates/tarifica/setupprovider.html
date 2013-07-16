@@ -3,8 +3,7 @@
 <html lang="en">
     <head>
         
-        <link href="{% static "tarifica/css/bootstrap.min.css" %}" rel="stylesheet">
-        <link href="{% static "tarifica/css/bootstrap-responsive.min.css" %}" rel="stylesheet">
+        <link href="{% static "tarifica/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
         <title> Agregar Informacion de Troncal </title>
         <meta name="viewport" content"width=device-width, initial-scale=1.0">
     </head>
@@ -62,7 +61,6 @@
         </form>
 
 
-        <script src="{{ STATIC_URL }}bootstrap/js/jquery.js"></script>
-        <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+        <script src="{% static "/tarifica/js/bootstrap.min.js" %}"></script>
     </body>
 </html>
