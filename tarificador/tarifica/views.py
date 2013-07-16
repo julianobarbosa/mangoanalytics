@@ -45,7 +45,7 @@ def setupAddBaseTariffs(request):
     else:
         form = AddBaseTariffs() # An unbound form
 
-    return render(request, 'tarifica/setupbasetariffs', {
+    return render(request, 'tarifica/setupbasetariffs.html', {
         'form': form,
     })
 
@@ -65,7 +65,7 @@ def setupAddBundles(request):
     else:
         form = AddBundles() # An unbound form
 
-    return render(request, 'tarifica/contact.html', {
+    return render(request, 'tarifica/setupbundles.html', {
         'form': form,
     })
 
