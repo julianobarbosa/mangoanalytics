@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar paquetesde bla{% endblock %}
+
+
+{% block content %}
+
+        <div class="row-fluid well">
+            <div class="span12">
+                <h4> Troncal bla </h4>
+            </div>
+        </div>
+
+
+        <form action="" method="post" class="form-horizontal">{% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="control-group">
+                {{ form.name.errors }}
+                <label class="control-label" for="id_name">Nombre</label>
+                <div class="controls">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.destination_group.errors }}
+                <label class="control-label" for="id_destination_group">Localidad</label>
+                <div class="controls">
+                    {{ form.destination_group }}
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.tariff_mode.errors }}
+                <label class="control-label" for="id_tariff_mode">Modo</label>
+                <div class="controls">
+                    {{ form.tariff_mode }}
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.cost.errors }}
+                <label class="control-label" for="id_cost">Costo</label>
+                <div class="controls">
+                    {{ form.cost }}
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar Paquete</button>
+                <button type="button" class="btn">Cancelar</button>
+            </div>
+        </form>
+
+{% endblock %}
