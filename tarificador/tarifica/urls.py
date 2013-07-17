@@ -7,5 +7,5 @@ urlpatterns = patterns('',
                        url(r'setuppaquetes$', views.setupAddBundles, name = 'Agregar paquetes'),
                        url(r'thanks$', views.thanks, name = 'gracias'),
                        url(r'contact$',views.thanks, name = 'contacto'),
-                       url(r'dashboardtroncales$', views.dashboardTroncales, name = 'Dashboard Troncales')
+                       url(r'dashboardtroncales$', views.dashboardTrunks, name = 'Dashboard Troncales')
 )

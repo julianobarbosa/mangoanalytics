@@ -48,6 +48,10 @@ class Provider(models.Model):
     bundles = models.ForeignKey(Bundles)
     destination_group = models.ForeignKey(DestinationGroup)
     period_end = models.DateTimeField()
+    is_configured = models.BooleanField()
+    has_bundles = models.BooleanField()
+    def __unicode__(self):
+        return self.asterisk_name
 
 
 class Calls(models.Model):

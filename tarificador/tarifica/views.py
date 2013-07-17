@@ -4,6 +4,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
+from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
@@ -70,8 +71,22 @@ def setupAddBundles(request):
     })
 
 
-def dashboardTroncales(request):
-    return render(request, 'tarifica/dashboardtroncales.html')
+def dashboardTrunks(request):
+    a_mysql_m = AsteriskMySQLManager()
+    trunks = a_mysql_m.getTrunkInformation()
+    for x in trunks:
+        try:
+            e = Provider.get(asterisk_id = x[0])
+        except Provider.DoesNotExist:
+            p = Provider(asterisk_id = x[0], asterisk_name = x[1])
+        except Provider.MultipleObjectsReturned:
+            print "troncales repetidas!"
+    providers_not_configured = Provider.objects.filter(is_configured=True)
+    providers_configured = Provider.objects.filter(is_configured=False)
+    return render(request, 'tarifica/dashboardtroncales.html', {
+                  'not_configured' : providers_not_configured,
+                  'configured' : providers_configured,
+                  })
 
 
 
