@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
+from tarifica import models
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
