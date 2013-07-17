@@ -79,12 +79,12 @@ def dashboardTrunks(request):
         try:
             e = Provider.objects.get(asterisk_id = x[0])
         except Provider.DoesNotExist:
-            p = Provider(asterisk_id = x[0], asterisk_name = x[1], monthly_cost = 0)
+            p = Provider(asterisk_id = x[0], asterisk_name = x[1])
             p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
-    providers_not_configured = Provider.objects.filter(is_configured=True)
-    providers_configured = Provider.objects.filter(is_configured=False)
+    providers_not_configured = Provider.objects.filter(is_configured=False)
+    providers_configured = Provider.objects.filter(is_configured=True)
     return render(request, 'tarifica/dashboardtroncales.html', {
                   'not_configured' : providers_not_configured,
                   'configured' : providers_configured,
