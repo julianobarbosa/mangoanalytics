@@ -12,7 +12,7 @@ def getMySQLPassword():
 			return line.split('=')[1]
 
 # 1 - Obtain mysql root password:
-$rootPass = getMySQLPassword()
+rootPass = getMySQLPassword()
 print rootPass
 
 dbName = 'nextor_tarificador'
