@@ -4,13 +4,13 @@ from django.db import models
 
 
 class PaymentType(models.Model):
-    name = models.CharField(max_length = 255)
+    name = models.CharField(max_length = 255, default="Pospago")
 
 
 class DestinationGroup(models.Model):
     name = models.CharField(max_length = 255)
-    prefix = models.CharField(max_length = 255)
-    matching_number = models.CharField(max_length = 255)
+    prefix = models.CharField(max_length = 255, blank=True)
+    matching_number = models.CharField(max_length = 255, blank=True)
 
 
 class TariffMode(models.Model):
@@ -42,7 +42,7 @@ class Provider(models.Model):
     name = models.CharField(max_length = 255)
     monthly_cost = models.FloatField(default=0)
     provider_type = models.CharField(max_length = 50, blank=True)
-    payment_type = models.ForeignKey(PaymentType, default=PaymentType())
+    payment_type = models.ForeignKey(PaymentType, blank=True)
     channels = models.IntegerField(blank=True)
     base_tariff = models.ForeignKey(BaseTariff, blank=True)
     bundles = models.ForeignKey(Bundles, blank=True)
