@@ -79,7 +79,7 @@ def dashboardTrunks(request):
         try:
             e = Provider.objects.get(asterisk_id = x[0])
         except Provider.DoesNotExist:
-            p = Provider(asterisk_id = x[0], asterisk_name = x[1])
+            p = Provider(asterisk_id = x[0], asterisk_name = x[1], monthly_cost = 0)
             p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
