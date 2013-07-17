@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-import MySQLdb
+import _mysql
 
 def getMySQLPassword():
 	elastixConf = open('/etc/elastix.conf', 'r')
@@ -20,26 +20,25 @@ dbUser = 'nxt_tarificador'
 dbPass = 'k4590NAEUI'
 
 # 2 - Connect to mysql:
-db = MySQLdb.connect(host='localhost',user='root',
+db = _mysql.connect(host='localhost',user='root',
 	passwd=rootPass)
-cursor = db.cursor()
 
 # 3 - Create database:
-createDBSQL = """CREATE DATABASE %s"""
-cursor.execute(createDBSQL, (dbName,))
+createDBSQL = "CREATE DATABASE "+dbName
+db.query(createDBSQL)
 
 # 4 - Create user:
-createUserSQL = """CREATE USER %s@'localhost' IDENTIFIED BY '%s'"""
-cursor.execute(createUserSQL, (dbUser, dbPass))
+createUserSQL = "CREATE USER '"+dbUser+"'@'localhost' IDENTIFIED BY '"+dbPass+"'"
+db.query(createUserSQL)
 
 # 5 - Assign privileges for own db
-assignPriv = """GRANT ALL PRIVILEGES ON '%s'.* TO %s@'localhost'"""
-cursor.execute(assignPriv, (dbName, dbUser))
+assignPriv = "GRANT ALL PRIVILEGES ON '"+dbName+"'.* TO '"+dbUser+"@'localhost'"
+db.query(assignPriv)
 
 # 6 - Assign privileges for asterisk main db
-asteriskPriv = """GRANT SELECT ON asterisk.* TO %s@'localhost'"""
-cursor.execute(asteriskPriv, (dbUser,))
+asteriskPriv = "GRANT SELECT ON asterisk.* TO '"+dbUser+"'@'localhost'"
+db.query(asteriskPriv)
 
 # 6 - Assign privileges for asterisk cdr db
-asteriskPriv = """GRANT SELECT ON asteriskcdrdb.* TO %s@'localhost'"""
-cursor.execute(asteriskPriv, (dbUser,))
+asteriskPriv = "GRANT SELECT ON asteriskcdrdb.* TO '"+dbUser+"'@'localhost'"
+db.query(asteriskPriv)
