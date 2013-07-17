@@ -77,7 +77,7 @@ def dashboardTrunks(request):
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
         try:
-            e = Provider.get(asterisk_id = x[0])
+            e = Provider.objects.get(asterisk_id = x[0])
         except Provider.DoesNotExist:
             p = Provider(asterisk_id = x[0], asterisk_name = x[1])
         except Provider.MultipleObjectsReturned:
