@@ -9,7 +9,7 @@ def getMySQLPassword():
 			break
 		if 'mysqlrootpwd' in line:
 			line.strip('\n')
-			return line.split('=')[1]
+			return line.split('=')[1].strip('\n')
 
 # 1 - Obtain mysql root password:
 rootPass = getMySQLPassword()
