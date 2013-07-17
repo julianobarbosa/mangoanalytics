@@ -80,6 +80,7 @@ def dashboardTrunks(request):
             e = Provider.objects.get(asterisk_id = x[0])
         except Provider.DoesNotExist:
             p = Provider(asterisk_id = x[0], asterisk_name = x[1])
+            p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
     providers_not_configured = Provider.objects.filter(is_configured=True)
