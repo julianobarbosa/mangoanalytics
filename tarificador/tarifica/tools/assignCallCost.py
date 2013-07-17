@@ -12,7 +12,7 @@ class CallCostAssigner:
 	def assignDestinationGroupsInfo(self):
 		self.destinationGroups = DestinationGroups.objects.all()
 
-	def getNewAsteriskCalls(self):
+	def getDailyAsteriskCalls(self):
 		try:
 			lastCall = Call.objects.order_by('id')[0:1].get()
 		except DoesNotExist, e:
@@ -20,6 +20,10 @@ class CallCostAssigner:
 		
 		am = AsteriskMySQLManager()
 		am.connect('asteriskcdrdb')
+		if lastCall is None:
+			sql = "SELECT * from cdr where uniqueId > '"+lastCall.asterisk_id+"'"
+			sql += 
+
 		am.cursor.execute('SELECT ')
 
 

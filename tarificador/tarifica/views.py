@@ -1,7 +1,7 @@
 # Create your views here.
 
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
@@ -9,7 +9,9 @@ from tarifica.models import Provider, DestinationGroup, BaseTariff
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
-def setupAddProviderInfo(request, name):
+def setupAddProviderInfo(request, asterisk_id):
+    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
+
     if request.method == 'POST': # If the form has been submitted...
         form = AddProviderInfo(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -20,12 +22,13 @@ def setupAddProviderInfo(request, name):
             channels = form.cleaned_data['channels']
             p = Provider(name, monthly_cost, payment_type, channels)
             p.save()
-            return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
+            return HttpResponseRedirect('tarifica/dashboardtroncales') # Redirect after POST
     else:
         form = AddProviderInfo() # An unbound form
 
     return render(request, 'tarifica/setupprovider.html', {
         'form': form,
+        'provider': provider
     })
 
 
