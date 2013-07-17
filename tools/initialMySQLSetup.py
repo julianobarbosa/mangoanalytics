@@ -21,7 +21,7 @@ dbPass = 'k4590NAEUI'
 
 # 2 - Connect to mysql:
 db = MySQLdb.connect(host='localhost',user='root',
-	passwd=rootPass,db='mysql')
+	passwd=rootPass)
 cursor = db.cursor
 
 # 3 - Create database:
