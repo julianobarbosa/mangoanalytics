@@ -32,7 +32,7 @@ createUserSQL = "CREATE USER '"+dbUser+"'@'localhost' IDENTIFIED BY '"+dbPass+"'
 db.query(createUserSQL)
 
 # 5 - Assign privileges for own db
-assignPriv = "GRANT ALL PRIVILEGES ON '"+dbName+"'.* TO '"+dbUser+"@'localhost'"
+assignPriv = "GRANT ALL PRIVILEGES ON "+dbName+".* TO '"+dbUser+"'@'localhost'"
 db.query(assignPriv)
 
 # 6 - Assign privileges for asterisk main db
