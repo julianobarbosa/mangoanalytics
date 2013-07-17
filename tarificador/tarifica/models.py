@@ -21,14 +21,14 @@ class TariffMode(models.Model):
 
 class BaseTariff(models.Model):
     cost = models.FloatField()
-    mode = models.ForeignKey(TariffMode)
-    destination_group = models.ForeignKey(DestinationGroup)
+    mode = models.ForeignKey(TariffMode, blank=True, null=True)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 
 class Bundles(models.Model):
     name = models.CharField(max_length = 255)
-    destination_group = models.ForeignKey(DestinationGroup)
-    tariff_mode = models.ForeignKey(TariffMode)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
     cost = models.FloatField()
     usage = models.IntegerField()
     amount = models.IntegerField()
@@ -42,11 +42,11 @@ class Provider(models.Model):
     name = models.CharField(max_length = 255)
     monthly_cost = models.FloatField(default=0)
     provider_type = models.CharField(max_length = 50, blank=True)
-    payment_type = models.ForeignKey('PaymentType', blank=True, null=True)
+    payment_type = models.ForeignKey(PaymentType, blank=True, null=True)
     channels = models.IntegerField(blank=True)
-    base_tariff = models.ForeignKey('BaseTariff')
-    bundles = models.ForeignKey(Bundles, blank=True)
-    destination_group = models.ForeignKey('DestinationGroup')
+    base_tariff = models.ForeignKey(BaseTariff, blank=True, null=True)
+    bundles = models.ForeignKey(Bundles, blank=True, null=True)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     period_end = models.IntegerField(default=0)
     is_configured = models.BooleanField(default=False)
     has_bundles = models.BooleanField(default=False)
@@ -66,11 +66,11 @@ class Calls(models.Model):
 class Extension(models.Model):
     extension_number = models.IntegerField()
     name = models.CharField(max_length = 255)
-    calls = models.ForeignKey(Calls)
+    calls = models.ForeignKey(Calls, blank=True, null=True)
 
 
 class UserDailyDetail(models.Model):
-    extension = models.ForeignKey(Extension)
+    extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
     cost = models.FloatField()
@@ -78,15 +78,15 @@ class UserDailyDetail(models.Model):
 
 
 class UserDestinationDetail(models.Model):
-    extension = models.ForeignKey(Extension)
+    extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
     cost = models.FloatField()
-    destination_group = models.ForeignKey(DestinationGroup)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 
 class UserDestinationNumberDetail(models.Model):
-    extension = models.ForeignKey(Extension)
+    extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
     cost = models.FloatField()
@@ -95,7 +95,7 @@ class UserDestinationNumberDetail(models.Model):
 
 
 class ProviderDailyDetail(models.Model):
-    provider = models.ForeignKey(Provider)
+    provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
@@ -103,11 +103,11 @@ class ProviderDailyDetail(models.Model):
 
 
 class ProviderDestinationDetail(models.Model):
-    provider = models.ForeignKey(Provider)
+    provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
-    destination_group = models.ForeignKey(DestinationGroup)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 
 
