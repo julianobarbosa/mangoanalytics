@@ -20,6 +20,7 @@ def setupAddProviderInfo(request, asterisk_id):
             provider.period_end = form.cleaned_data['period_end']
             provider.payment_type = PaymentType.objects.get(name=form.cleaned_data['payment_type'])
             provider.channels = form.cleaned_data['channels']
+            provider.is_configured = True
             provider.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
