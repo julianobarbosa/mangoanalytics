@@ -20,8 +20,8 @@ dbUser = 'nxt_tarificador'
 dbPass = 'k4590NAEUI'
 
 # 2 - Connect to mysql:
-db = MySQLdb.connect(host='localhost',user='root',
-	passwd=rootPass)
+db = MySQLdb.connect(host='127.0.0.1',user='root',
+	passwd=rootPass, port=3306)
 cursor = db.cursor
 
 # 3 - Create database:
