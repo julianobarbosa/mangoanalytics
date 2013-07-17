@@ -15,13 +15,12 @@ def setupAddProviderInfo(request, asterisk_id):
     if request.method == 'POST': # If the form has been submitted...
         form = AddProviderInfo(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            name = form.cleaned_data['name']
-            monthly_cost = form.cleaned_data['monthly_cost']
-            period_end = form.cleaned_data['period_end']
-            payment_type = form.cleaned_data['payment_type']
-            channels = form.cleaned_data['channels']
-            p = Provider(name, monthly_cost, payment_type, channels)
-            p.save()
+            provider.name = form.cleaned_data['name']
+            provider.monthly_cost = form.cleaned_data['monthly_cost']
+            provider.period_end = form.cleaned_data['period_end']
+            provider.payment_type = form.cleaned_data['payment_type']
+            provider.channels = form.cleaned_data['channels']
+            provider.save()
             return HttpResponseRedirect('tarifica/dashboardtroncales') # Redirect after POST
     else:
         form = AddProviderInfo() # An unbound form
