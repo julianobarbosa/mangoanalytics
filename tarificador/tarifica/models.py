@@ -50,11 +50,19 @@ class Provider(models.Model):
     period_end = models.DateTimeField()
 
 
+class Calls(models.Model):
+    dialed_number = models.IntegerField()
+    origin_number = models.IntegerField()
+    duration = models.FloatField()
+    cost = models.FloatField()
+    date = models.DateTimeField()
+
 
 
 class Extension(models.Model):
     extension_number = models.IntegerField()
     name = models.CharField(max_length = 255)
+    calls = models.ForeignKey(Calls)
 
 
 class UserDailyDetail(models.Model):
