@@ -16,13 +16,13 @@ class AsteriskMySQLManager:
 				break
 			if 'mysqlrootpwd' in line:
 				line.strip('\n')
-				self.dbPass = line.split('=')[1]
+				self.dbPass = line.split('=')[1].strip('\n')
 
 	def connect(self):
 		self.getMySQLPassword()
 		self.db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
                   passwd=self.dbPass,db=self.dbName)
-		self.cursor = db.cursor
+		self.cursor = db.cursor()
 		return True
 
 	def getTrunkInformation(self):
