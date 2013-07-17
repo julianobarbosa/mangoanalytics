@@ -18,22 +18,22 @@ class AsteriskMySQLManager:
 				line.strip('\n')
 				self.dbPass = line.split('=')[1].strip('\n')
 
-	def connect(self):
+	def connect(self, database):
 		self.getMySQLPassword()
 		self.db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
-                  passwd=self.dbPass,db=self.dbName)
+                  passwd=self.dbPass,db=database)
 		self.cursor = self.db.cursor()
 		return True
 
 	def getTrunkInformation(self):
 		if self.cursor is None:
-			self.connect()
+			self.connect(self.dbName)
 		self.cursor.execute('SELECT trunkid,name from trunks where disabled = %s', ('off',))
 		return self.cursor.fetchall()
 
 	def getUserInformation(self):
 		if self.cursor is None:
-			self.connect()
+			self.connect(self.dbName)
 		self.cursor.execute('SELECT extension,name from users')
 		return self.cursor.fetchall()
 
