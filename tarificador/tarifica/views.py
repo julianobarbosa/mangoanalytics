@@ -4,7 +4,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
-from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
+from tools.asteriskMySQLManager import AsteriskMySQLManager
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
@@ -19,7 +19,7 @@ def setupAddProviderInfo(request):
             channels = form.cleaned_data['channels']
             p = Provider(name, monthly_cost, payment_type, channels)
             p.save()
-            return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
+      1      return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
     else:
         form = AddProviderInfo() # An unbound form
 
