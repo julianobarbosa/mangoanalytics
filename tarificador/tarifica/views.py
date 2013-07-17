@@ -19,7 +19,7 @@ def setupAddProviderInfo(request):
             channels = form.cleaned_data['channels']
             p = Provider(name, monthly_cost, payment_type, channels)
             p.save()
-      1      return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
+            return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
     else:
         form = AddProviderInfo() # An unbound form
 
