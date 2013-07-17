@@ -22,7 +22,7 @@ class AsteriskMySQLManager:
 		self.getMySQLPassword()
 		self.db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
                   passwd=self.dbPass,db=self.dbName)
-		self.cursor = db.cursor()
+		self.cursor = self.db.cursor()
 		return True
 
 	def getTrunkInformation(self):
