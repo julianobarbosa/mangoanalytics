@@ -5,15 +5,16 @@
 
 {% block content %}
 
+<div class="row-fluid well">
+    <div class="span12">
+        <h4> Troncal {{provider.asterisk_name}} </h4>
+    </div>
+</div>
+
+
+
 <form action="{% url  %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
-    <div class="control-group well well-small">
-        {{ form.name.errors }}
-        <label class="control-label" for="id_name">Seleccionar Troncal</label>
-        <div class="controls">
-            {{ form.name }}
-        </div>
-    </div>
     <div class="control-group">
         {{ form.name.errors }}
         <label class="control-label" for="id_name">Nombre</label>

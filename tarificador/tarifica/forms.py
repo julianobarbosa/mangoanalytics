@@ -3,7 +3,6 @@ from django import forms
 from tarifica.models import PaymentType, TariffMode, DestinationGroup
 
 class AddProviderInfo(forms.Form):
-    ##provider = forms.ChoiceField(choices = [(e, e.name) for e in Provider.objects.all()], label = 'Selecciona Troncal')
     name = forms.CharField(label = 'Nombre', error_messages={'required':'Por favor proporciona un nombre para el Troncal'})
     monthly_cost = forms.FloatField(label = 'Renta Mensual', error_messages={
                                     'required':'Por favor proporciona la renta mensual del Troncal seleccionado',
