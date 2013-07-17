@@ -21,7 +21,7 @@ def setupAddProviderInfo(request, asterisk_id):
             provider.payment_type = PaymentType.objects.get(name=form.cleaned_data['payment_type'])
             provider.channels = form.cleaned_data['channels']
             provider.save()
-            return HttpResponseRedirect('/dashboardtroncales') # Redirect after POST
+            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
         form = AddProviderInfo() # An unbound form
 
