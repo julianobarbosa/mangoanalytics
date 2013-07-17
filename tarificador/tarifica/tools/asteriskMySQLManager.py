@@ -29,13 +29,13 @@ class AsteriskMySQLManager:
 		if self.cursor is None:
 			self.connect()
 		self.cursor.execute('SELECT trunkid,name from trunks where disabled = %s', ('off',))
-		return c.fetchall():
+		return c.fetchall()
 
 	def getUserInformation(self):
 		if self.cursor is None:
 			self.connect()
 		self.cursor.execute('SELECT extension,name from users')
-		return c.fetchall():
+		return c.fetchall()
 
 if __name__ == '__main__':
 	print 'running'
