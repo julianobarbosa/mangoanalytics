@@ -69,7 +69,7 @@
             <tbody>
                 {% for prov in not_configured %}
                 <tr>
-                    <td><a href="{% url 'tarifica:setuptroncales' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
+                    <td><a href="{% url 'tarifica:setupprovider' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

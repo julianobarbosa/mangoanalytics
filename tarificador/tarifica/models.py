@@ -37,7 +37,7 @@ class Bundles(models.Model):
 
 
 class Provider(models.Model):
-    asterisk_id = models.CharField(max_length = 255)
+    asterisk_id = models.IntegerField(max_length = 255)
     asterisk_name = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
     monthly_cost = models.FloatField(default=0)
