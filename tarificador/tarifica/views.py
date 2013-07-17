@@ -70,7 +70,8 @@ def setupAddBundles(request):
     })
 
 
-
+def dashboardTroncales(request):
+    return render(request, 'tarifica/dashboardtroncales.html')
 
 
 
