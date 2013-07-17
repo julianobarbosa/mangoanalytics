@@ -8,7 +8,7 @@ from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
-def setupAddProviderInfo(request):
+def setupAddProviderInfo(request, name):
     if request.method == 'POST': # If the form has been submitted...
         form = AddProviderInfo(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
