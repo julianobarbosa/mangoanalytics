@@ -43,7 +43,7 @@ class Provider(models.Model):
     monthly_cost = models.FloatField(default=0)
     provider_type = models.CharField(max_length = 50, blank=True)
     payment_type = models.ForeignKey(PaymentType, blank=True, null=True)
-    channels = models.IntegerField(blank=True)
+    channels = models.IntegerField(blank=True, default=0)
     base_tariff = models.ForeignKey(BaseTariff, blank=True, null=True)
     bundles = models.ForeignKey(Bundles, blank=True, null=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
