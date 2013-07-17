@@ -47,7 +47,7 @@ class Provider(models.Model):
     base_tariff = models.ForeignKey(BaseTariff, blank=True)
     bundles = models.ForeignKey(Bundles, blank=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True)
-    period_end = models.DateTimeField(default="0")
+    period_end = models.IntegerField(default=0)
     is_configured = models.BooleanField(default=False)
     has_bundles = models.BooleanField(default=False)
     def __unicode__(self):
