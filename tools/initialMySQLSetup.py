@@ -42,3 +42,5 @@ db.query(asteriskPriv)
 # 6 - Assign privileges for asterisk cdr db
 asteriskPriv = "GRANT SELECT ON asteriskcdrdb.* TO '"+dbUser+"'@'localhost'"
 db.query(asteriskPriv)
+
+print """All operations finished successfully"""
