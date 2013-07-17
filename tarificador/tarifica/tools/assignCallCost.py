@@ -5,7 +5,6 @@ from tarifica.models import *
 class CallCostAssigner:
 	destinationGroups = None
 	bundles = None
-	lastCall = None
 
 	def assignBundleInfo(self):
 		self.bundles = Bundle.objects.all()
@@ -15,15 +14,13 @@ class CallCostAssigner:
 
 	def getNewAsteriskCalls(self):
 		try:
-			self.lastCall = Call.objects.order_by('id')[0:1].get()
+			lastCall = Call.objects.order_by('id')[0:1].get()
 		except DoesNotExist, e:
-			self.lastCall = None
+			lastCall = None
 		
 		am = AsteriskMySQLManager()
 		am.connect('asteriskcdrdb')
-		am.cursor.execute('')
-
-
+		am.cursor.execute('SELECT ')
 
 
 if __name__ == '__main__':
