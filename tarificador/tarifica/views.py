@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles
+from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
@@ -41,11 +41,11 @@ def setupAddBaseTariffs(request, asterisk_id):
             name = form.cleaned_data['destination_group']
             prefix = form.cleaned_data['prefix']
             matching_number = form.cleaned_data['matching_number']
-            tariff_mode = form.cleaned_data['tariff_mode']
+            tariff_mode = TariffMode.objects.get(form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
-            d = DestinationGroup(name, prefix, matching_number)
+            d = DestinationGroup(name=name, prefix=prefix, matching_number=matching_number)
             d.save()
-            b = BaseTariff(cost, tariff_mode, d)
+            b = BaseTariff(cost=cost, tariff_mode=tariff_mode, destination_group=d)
             b.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
@@ -64,8 +64,8 @@ def setupAddBundles(request, asterisk_id):
         form = AddBundles(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             name = form.cleaned_data['name']
-            destination_group = form.cleaned_data['destination_group']
-            tariff_mode = form.cleaned_data['period_end']
+            destination_group = DestinationGroup.objects.get(form.cleaned_data['destination_group'])
+            tariff_mode = TariffMode.objects.get(form.cleaned_data['period_end'])
             cost = form.cleaned_data['cost']
             b = Bundle(name, destination_group, tariff_mode, cost)
             b.save()
