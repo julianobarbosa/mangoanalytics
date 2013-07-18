@@ -106,21 +106,14 @@ def dashboardTrunks(request):
 
 def deleteProvider(request, id):
     provider = get_object_or_404(Provider, id = id)
-    #des = provider.destination_group.all()
-    #bun = provider.bundles.all()
-    #base = provider.base_tariff()
     provider.delete()
-    #if des:
-    #    for e in des:
-    #        e.delete()
-    #if bun:
-    #    for e in bun:
-    #        e.delete()
-    #if base:
-    #    for e in base:
-    #        e.delete()
     return HttpResponseRedirect('/tarifica/dashboardtroncales')
 
+
+def deleteBundle(request, id):
+    bundle = get_object_or_404(Bundle, id = id)
+    bundle.delete()
+    return HttpResponseRedirect('/tarifica/dashboardtroncales')
 
 
 

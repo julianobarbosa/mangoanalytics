@@ -7,6 +7,7 @@ urlpatterns = patterns('',
    url(r'^setupbundles/', views.setupAddBundles, name = 'setupbundles'),
    #url(r'^setupbundles/(?P<asterisk_id>\d+)$', views.setupAddBundles, name = 'setupbundles'),
    url(r'^deleteprovider/(?P<id>\d+)$', views.deleteProvider, name = 'deleteprovider'),
+   url(r'^deletebundle/(?P<id>\d+)$', views.deleteBundle, name = 'deletebundle'),
    url(r'^thanks$', views.thanks, name = 'gracias'),
    url(r'^contact$',views.thanks, name = 'contacto'),
    url(r'^dashboardtroncales$', views.dashboardTrunks, name = 'dashboardtroncales')
