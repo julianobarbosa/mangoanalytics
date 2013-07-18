@@ -8,6 +8,7 @@ class PaymentType(models.Model):
 
 
 class DestinationGroup(models.Model):
+    provider = ForeignKey(Provider, blank=True, null=True)
     name = models.CharField(max_length = 255)
     prefix = models.CharField(max_length = 255, blank=True)
     matching_number = models.CharField(max_length = 255, blank=True)
@@ -20,6 +21,7 @@ class TariffMode(models.Model):
 
 
 class BaseTariff(models.Model):
+    provider = ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     mode = models.ForeignKey(TariffMode, blank=True, null=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
@@ -27,6 +29,7 @@ class BaseTariff(models.Model):
 
 class Bundles(models.Model):
     name = models.CharField(max_length = 255)
+    provider = ForeignKey(Provider, blank=True, null=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
     cost = models.FloatField()
@@ -44,9 +47,6 @@ class Provider(models.Model):
     provider_type = models.CharField(max_length = 50, blank=True)
     payment_type = models.ForeignKey(PaymentType, blank=True, null=True)
     channels = models.IntegerField(blank=True, default=0)
-    base_tariff = models.ForeignKey(BaseTariff, blank=True, null=True)
-    bundles = models.ForeignKey(Bundles, blank=True, null=True)
-    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     period_end = models.IntegerField(default=0)
     is_configured = models.BooleanField(default=False)
     has_bundles = models.BooleanField(default=False)
