@@ -103,5 +103,15 @@ def dashboardTrunks(request):
 
 
 
+
+def deleteProvider(request, id):
+    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
+    provider.delete()
+    return HttpResponseRedirect('/tarifica/dashboardtroncales')
+
+
+
+
+
 def thanks(request):
     return HttpResponse("jaja")
