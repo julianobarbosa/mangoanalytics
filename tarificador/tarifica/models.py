@@ -7,35 +7,13 @@ class PaymentType(models.Model):
     name = models.CharField(max_length = 255, default="Pospago")
 
 
-class DestinationGroup(models.Model):
-    provider = ForeignKey(Provider, blank=True, null=True)
-    name = models.CharField(max_length = 255)
-    prefix = models.CharField(max_length = 255, blank=True)
-    matching_number = models.CharField(max_length = 255, blank=True)
+
 
 
 class TariffMode(models.Model):
     name = models.CharField(max_length = 255)
     def __unicode__(self):
         return self.name
-
-
-class BaseTariff(models.Model):
-    provider = ForeignKey(Provider, blank=True, null=True)
-    cost = models.FloatField()
-    mode = models.ForeignKey(TariffMode, blank=True, null=True)
-    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
-
-
-class Bundles(models.Model):
-    name = models.CharField(max_length = 255)
-    provider = ForeignKey(Provider, blank=True, null=True)
-    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
-    tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
-    cost = models.FloatField()
-    usage = models.IntegerField()
-    amount = models.IntegerField()
-
 
 
 
@@ -52,6 +30,31 @@ class Provider(models.Model):
     has_bundles = models.BooleanField(default=False)
     def __unicode__(self):
         return self.asterisk_name
+
+
+class Bundles(models.Model):
+    name = models.CharField(max_length = 255)
+    provider = models.ForeignKey(Provider, blank=True, null=True)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
+    cost = models.FloatField()
+    usage = models.IntegerField()
+    amount = models.IntegerField()
+
+
+
+class BaseTariff(models.Model):
+    provider = models.ForeignKey(Provider, blank=True, null=True)
+    cost = models.FloatField()
+    mode = models.ForeignKey(TariffMode, blank=True, null=True)
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+
+
+class DestinationGroup(models.Model):
+    provider = models.ForeignKey(Provider, blank=True, null=True)
+    name = models.CharField(max_length = 255)
+    prefix = models.CharField(max_length = 255, blank=True)
+    matching_number = models.CharField(max_length = 255, blank=True)
 
 
 class Calls(models.Model):
