@@ -90,10 +90,10 @@ def dashboardTrunks(request):
             p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
-    providers_not_configured = Provider.objects.filter(is_configured=False)
-    providers_configured = Provider.objects.filter(is_configured=True)
-    bundles = Bundles.objects.all()
-    locales = DestinationGroup.objects.all()
+    providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
+    providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
+    bundles = Bundles.objects.all().order_by('name')
+    locales = DestinationGroup.objects.all().order_by('name')
     return render(request, 'tarifica/dashboardtroncales.html', {
                   'not_configured' : providers_not_configured,
                   'configured' : providers_configured,
