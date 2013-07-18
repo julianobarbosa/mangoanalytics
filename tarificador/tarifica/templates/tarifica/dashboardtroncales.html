@@ -47,20 +47,6 @@
                         {% endif %}
                     </tr>
                 {% endfor %}
-                    <tr>
-                    <td>AXTEL</td>
-                    <td>E1 R2</td>
-                    <td>17 D/C MES</td>
-                    <td>$299</td>
-                    <td>SI</td>
-                    <td><a href="#">Ver Paquetes</a></td>
-                    <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
-                            <i class="icon-pencil icon-white"></i>
-                        </a>
-                        <a href="#" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
-                            <i class="icon-remove-sign icon-white"></i></a>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
@@ -97,9 +83,10 @@
                 </tr>
             </thead>
             <tbody>
+                {% for bun in bundles %}
                 <tr>
-                    <td>TELMEX ILIMIT1</td>
-                    <td>$2,000</td>
+                    <td>{{bun.name}}</td>
+                    <td>{{bun.cost}}</td>
                     <td><a href="#">Asignar Paquetes</a></td>
                     <td><a href="#">Ver Asignacion</a></td>
                     <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
@@ -109,21 +96,10 @@
                             <i class="icon-remove-sign icon-white"></i></a>
                     </td>
                 </tr>
+                {% endfor %}
                 <tr>
                     <td>AXTEL CELULAR</td>
                     <td>$500</td>
-                    <td><a href="#">Asignar Paquetes</a></td>
-                    <td><a href="#">Ver Asignacion</a></td>
-                    <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
-                            <i class="icon-pencil icon-white"></i>
-                        </a>
-                        <a href="#" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
-                            <i class="icon-remove-sign icon-white"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>AXTEL LDI</td>
-                    <td>$5,000</td>
                     <td><a href="#">Asignar Paquetes</a></td>
                     <td><a href="#">Ver Asignacion</a></td>
                     <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
@@ -167,17 +143,19 @@
                 </tr>
             </thead>
             <tbody>
+                {% for loc in locales%}
+                <tr>
+                    <td>{{loc.name}}</td>
+                    <td>{{loc.prefix}}</td>
+                    <td>{{loc.matching_number}}</td>
+                    <td>SESION</td>
+                </tr>
+                {% endfor %}
                 <tr>
                     <td>lOCAL</td>
                     <td>662</td>
                     <td>xxxxxxx</td>
                     <td>SESION</td>
-                </tr>
-                    <tr>
-                    <td>CELULAR</td>
-                    <td>LOCAL</td>
-                    <td>045</td>
-                    <td>XXXXXXXXXX</td>
                 </tr>
             </tbody>
         </table>
