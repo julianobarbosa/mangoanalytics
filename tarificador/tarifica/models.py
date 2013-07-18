@@ -32,6 +32,13 @@ class Provider(models.Model):
         return self.asterisk_name
 
 
+class DestinationGroup(models.Model):
+    provider = models.ForeignKey(Provider, blank=True, null=True)
+    name = models.CharField(max_length = 255)
+    prefix = models.CharField(max_length = 255, blank=True)
+    matching_number = models.CharField(max_length = 255, blank=True)
+
+
 class Bundles(models.Model):
     name = models.CharField(max_length = 255)
     provider = models.ForeignKey(Provider, blank=True, null=True)
@@ -49,12 +56,6 @@ class BaseTariff(models.Model):
     mode = models.ForeignKey(TariffMode, blank=True, null=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
-
-class DestinationGroup(models.Model):
-    provider = models.ForeignKey(Provider, blank=True, null=True)
-    name = models.CharField(max_length = 255)
-    prefix = models.CharField(max_length = 255, blank=True)
-    matching_number = models.CharField(max_length = 255, blank=True)
 
 
 class Calls(models.Model):
