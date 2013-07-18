@@ -41,7 +41,7 @@ def setupAddBaseTariffs(request, asterisk_id):
             name = form.cleaned_data['destination_group']
             prefix = form.cleaned_data['prefix']
             matching_number = form.cleaned_data['matching_number']
-            tariff_mode = TariffMode.objects.get(name=form.cleaned_data['tariff_mode'])
+            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
             d = DestinationGroup(name=name, prefix=prefix, matching_number=matching_number)
             d.save()
@@ -64,8 +64,8 @@ def setupAddBundles(request, asterisk_id):
         form = AddBundles(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             name = form.cleaned_data['name']
-            destination_group = DestinationGroup.objects.get(name=form.cleaned_data['destination_group'])
-            tariff_mode = TariffMode.objects.get(name=form.cleaned_data['period_end'])
+            destination_group = DestinationGroup.objects.get(id=form.cleaned_data['destination_group'])
+            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['period_end'])
             cost = form.cleaned_data['cost']
             b = Bundle(name, destination_group, tariff_mode, cost)
             b.save()
