@@ -143,12 +143,10 @@
 
 {% else %}
 
-<div class="row-fluid">
-    <div class="span12 well well-small">
-        <div class="span4"><h4>Aún no hay paquetes configurados</h4></div>
-        <div id="container" style="float:right">
-            <a href="{% url 'tarifica:setupbundles' %}" class="btn btn-primary"></i>Agregar Paquete</a>
-        </div>
+<div class="row-fluid well well-small">
+    <div class="span10"><h4>Aún no hay paquetes configurados</h4></div>
+    <div class="span2" id="container" style="float:right">
+        <a href="{% url 'tarifica:setupbundles' %}" class="btn btn-primary"></i>Agregar Paquete</a>
     </div>
 </div>
 
