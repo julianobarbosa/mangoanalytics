@@ -33,7 +33,8 @@ def setupAddProviderInfo(request, asterisk_id):
 
 
 
-def setupAddBaseTariffs(request):
+def setupAddBaseTariffs(request, asterisk_id):
+    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
     if request.method == 'POST': # If the form has been submitted...
         form = AddBaseTariffs(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -46,7 +47,7 @@ def setupAddBaseTariffs(request):
             d.save()
             b = BaseTariff(cost, tariff_mode, d)
             b.save()
-            return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
+            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
         form = AddBaseTariffs() # An unbound form
 
@@ -56,7 +57,8 @@ def setupAddBaseTariffs(request):
 
 
 
-def setupAddBundles(request):
+def setupAddBundles(request, asterisk_id):
+    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
     if request.method == 'POST': # If the form has been submitted...
         form = AddBundles(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -66,12 +68,13 @@ def setupAddBundles(request):
             cost = form.cleaned_data['cost']
             b = Bundle(name, destination_group, tariff_mode, cost)
             b.save()
-            return HttpResponseRedirect('tarifica/thanks') # Redirect after POST
+            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
         form = AddBundles() # An unbound form
 
     return render(request, 'tarifica/setupbundles.html', {
         'form': form,
+        'provider' : provider,
     })
 
 

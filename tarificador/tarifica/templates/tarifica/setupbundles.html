@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Agregar paquetesde bla{% endblock %}
+{% block title %}Agregar paquetes de {{provider.name}}{% endblock %}
 
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal bla </h4>
+        <h4> Troncal {{provider.name}} </h4>
     </div>
 </div>
 
 
-<form action="" method="post" class="form-horizontal">{% csrf_token %}
+<form action="{% url 'tarifica:setupprovider' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
