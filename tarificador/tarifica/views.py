@@ -109,6 +109,7 @@ def deleteProvider(request, id):
     des = provider.destination_group
     bun = provider.bundles
     base = provider.base_tariff
+    provider.delete()
     if des:
         des.delete()
     if bun:
