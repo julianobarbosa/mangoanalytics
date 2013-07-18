@@ -53,20 +53,6 @@
             </tbody>
         </table>
     </div>
-
-{% else %}
-
-<div class="row-fluid">
-    <div class="span12 well well-small">
-        <h4>Aún no hay troncales configurados</h4>
-    </div>
-</div>
-
-
-{% endif %}
-
-
-
     <div class="span4 well well-small">
         <h5>TRONCALES NO CONFIGURADAS</h5>
         <table class="table table-striped table-hovered table-condensed">
@@ -81,6 +67,28 @@
     </div>
 
 </div>
+
+{% else %}
+
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <h4>Aún no hay troncales configurados</h4>
+    </div>
+    <div class="span4 well well-small">
+        <h5>TRONCALES NO CONFIGURADAS</h5>
+        <table class="table table-striped table-hovered table-condensed">
+            <tbody>
+                {% for prov in not_configured %}
+                <tr>
+                    <td><a href="{% url 'tarifica:setupprovider' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endif %}
 
 
 
