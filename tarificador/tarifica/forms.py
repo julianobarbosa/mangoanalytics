@@ -13,7 +13,7 @@ class AddProviderInfo(forms.Form):
                                     'invalid':'Por favor proporciona un número válido',
                                     'max_value':'Por favor proporcione un número entre 1 y 31',
                                     'min_value':'Por favor proporcione un número entre 1 y 31'})
-    payment_type = forms.ChoiceField(choices = [(e.name, e.name) for e in PaymentType.objects.all()], label = 'Modalidad de Pago')
+    payment_type = forms.ChoiceField(choices = [(e.id, e.name) for e in PaymentType.objects.all()], label = 'Modalidad de Pago')
     channels = forms.IntegerField(label = 'Canales', error_messages={'required':u'Por favor proporciona el número de canales'})
 
 

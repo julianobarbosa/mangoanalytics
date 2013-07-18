@@ -80,6 +80,7 @@
 
 
 
+{% if bundles%}
 <div class="row-fluid">
     <div class="span12 well well-small">
         <div class="span4"><h4><strong>PAQUETES CONFIGURADOS</strong></h4></div>
@@ -135,6 +136,16 @@
     </div>
 </div>
 
+
+{% else %}
+
+<div class="row-fluid">
+    <div class="span12 well well-small">
+        <h5>Aún no hay paquetes configurados.</h5>
+    </div>
+</div>
+
+{% endif %}
 
 
 

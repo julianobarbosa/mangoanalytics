@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType
+from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
@@ -88,9 +88,11 @@ def dashboardTrunks(request):
             print "troncales repetidas!"
     providers_not_configured = Provider.objects.filter(is_configured=False)
     providers_configured = Provider.objects.filter(is_configured=True)
+    bundles = Bundles.objects.all()
     return render(request, 'tarifica/dashboardtroncales.html', {
                   'not_configured' : providers_not_configured,
                   'configured' : providers_configured,
+                  'bundles' : bundles
                   })
 
 
