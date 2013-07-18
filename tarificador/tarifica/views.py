@@ -89,10 +89,12 @@ def dashboardTrunks(request):
     providers_not_configured = Provider.objects.filter(is_configured=False)
     providers_configured = Provider.objects.filter(is_configured=True)
     bundles = Bundles.objects.all()
+    locales = DestinationGroup.objects.all()
     return render(request, 'tarifica/dashboardtroncales.html', {
                   'not_configured' : providers_not_configured,
                   'configured' : providers_configured,
-                  'bundles' : bundles
+                  'bundles' : bundles,
+                  'locales' : locales,
                   })
 
 
