@@ -53,6 +53,7 @@ def setupAddBaseTariffs(request, asterisk_id):
 
     return render(request, 'tarifica/setupbasetariffs.html', {
         'form': form,
+        'provider' : provider,
     })
 
 
