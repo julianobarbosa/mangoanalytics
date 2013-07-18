@@ -47,6 +47,9 @@ def setupAddBaseTariffs(request, asterisk_id):
             d.save()
             b = BaseTariff(cost=cost, mode=tariff_mode, destination_group=d)
             b.save()
+            provider.destination_group.add(d)
+            provider.base_tariff.add(b)
+            provider.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
         form = AddBaseTariffs() # An unbound form
@@ -106,16 +109,19 @@ def dashboardTrunks(request):
 
 def deleteProvider(request, id):
     provider = get_object_or_404(Provider, id = id)
-    des = DestinationGroup.objects.get(id=provider.destination_group)
-    bun = Bundles.objects.get(id=provider.bundles)
-    base = BaseTariff.objects.get(id=provider.base_tariff)
+    des = provider.destination_group.all()
+    bun = provider.bundles.all()
+    base = provider.base_tariff()
     provider.delete()
     if des:
-        des.delete()
+        for e in des:
+            e.delete()
     if bun:
-        bun.delete()
+        for e in bun:
+            e.delete()
     if base:
-        base.delete()
+        for e in base:
+            e.delete()
     return HttpResponseRedirect('/tarifica/dashboardtroncales')
 
 
