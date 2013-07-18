@@ -106,9 +106,9 @@ def dashboardTrunks(request):
 
 def deleteProvider(request, id):
     provider = get_object_or_404(Provider, id = id)
-    des = provider.destination_group
-    bun = provider.bundles
-    base = provider.base_tariff
+    des = DestinationGroup.objects.get(id=provider.destination_group)
+    bun = Bundles.objects.get(id=provider.bundles)
+    base = BaseTariff.objects.get(id=provider.base_tariff)
     provider.delete()
     if des:
         des.delete()
