@@ -1,6 +1,8 @@
 #!/usr/bin/env python2.7
 import asteriskMySQLManager
 from tarifica.models import *
+import datetime
+from django.utils import timezone
 
 class CallCostAssigner:
 	destinationGroups = None
@@ -12,19 +14,21 @@ class CallCostAssigner:
 	def assignDestinationGroupsInfo(self):
 		self.destinationGroups = DestinationGroups.objects.all()
 
-	def getDailyAsteriskCalls(self):
-		try:
-			lastCall = Call.objects.order_by('id')[0:1].get()
-		except DoesNotExist, e:
-			lastCall = None
-		
+	def getStartOfDay(self, date):
+		return date.strftime('%Y-%m-%d')+" 00:00:00"
+
+	def getEndOfDay(self, date):
+		date = date + datetime.timedelta(days = 1)
+		return date.strftime('%Y-%m-%d')+" 00:00:00"
+
+	def getDailyAsteriskCalls(self, date):
 		am = AsteriskMySQLManager()
 		am.connect('asteriskcdrdb')
-		if lastCall is None:
-			sql = "SELECT * from cdr where uniqueId > '"+lastCall.asterisk_id+"'"
-			sql += 
-
-		am.cursor.execute('SELECT ')
+		sql = "SELECT * from cdr where callDate > %s AND callDate < %s"
+		am.cursor.execute(sql, (getStartOfDay(date), getEndOfDay(date)))
+		# Iteramos sobre las llamadas:
+		while True:
+			entry = am.cursor.fetchone()
 
 
 if __name__ == '__main__':
