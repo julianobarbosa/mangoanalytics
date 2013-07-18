@@ -47,8 +47,8 @@ def setupAddBaseTariffs(request, asterisk_id):
             d.save()
             b = BaseTariff(cost=cost, mode=tariff_mode, destination_group=d)
             b.save()
-            provider.destination_group.add(d)
-            provider.base_tariff.add(b)
+            provider.destination_group = d
+            provider.base_tariff = b
             provider.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
