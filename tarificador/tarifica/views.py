@@ -58,8 +58,8 @@ def setupAddBaseTariffs(request, asterisk_id):
 
 
 
-def setupAddBundles(request, asterisk_id):
-    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
+def setupAddBundles(request):
+    base = BaseTariff.objects.all()
     if request.method == 'POST': # If the form has been submitted...
         form = AddBundles(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -75,7 +75,7 @@ def setupAddBundles(request, asterisk_id):
 
     return render(request, 'tarifica/setupbundles.html', {
         'form': form,
-        'provider' : provider,
+        'base' : base,
     })
 
 

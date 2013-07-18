@@ -1,16 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}Agregar paquetes de {{provider.name}}{% endblock %}
+{% block title %}Agregar paquetes de bla{% endblock %}
 
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{provider.name}} </h4>
+        <h4> Troncal bla </h4>
     </div>
 </div>
 
+
+
+{% if not base %}
+
+
+<div class="row-fluid well">
+    <div class="span12">
+        <h4> No hay tarifas base configuradas, favor de configurar tarifas base de troncal primero </h4>
+    </div>
+</div>
+
+
+{% else %}
 
 <form action="{% url 'tarifica:setupbundles' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
@@ -47,5 +60,7 @@
         <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
     </div>
 </form>
+{% endif %}
+
 
 {% endblock %}
