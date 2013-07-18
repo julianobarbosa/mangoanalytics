@@ -45,7 +45,7 @@ def setupAddBaseTariffs(request, asterisk_id):
             cost = form.cleaned_data['cost']
             d = DestinationGroup(name=name, prefix=prefix, matching_number=matching_number)
             d.save()
-            b = BaseTariff(cost=cost, tariff_mode=tariff_mode, destination_group=d)
+            b = BaseTariff(cost=cost, mode=tariff_mode, destination_group=d)
             b.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
