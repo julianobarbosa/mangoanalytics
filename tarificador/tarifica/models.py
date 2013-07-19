@@ -45,7 +45,7 @@ class Bundles(models.Model):
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
     cost = models.FloatField()
-    usage = models.IntegerField()
+    usage = models.IntegerField(blank=True, null=True)
     amount = models.IntegerField()
 
 
