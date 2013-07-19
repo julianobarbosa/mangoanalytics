@@ -114,7 +114,7 @@ def deleteProvider(request, id):
 
 
 def deleteBundle(request, id):
-    bundle = get_object_or_404(Bundle, id = id)
+    bundle = get_object_or_404(Bundles, id = id)
     bundle.delete()
     return HttpResponseRedirect('/tarifica/dashboardtroncales')
 
