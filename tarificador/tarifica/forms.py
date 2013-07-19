@@ -34,5 +34,8 @@ class AddBundles(forms.Form):
     cost = forms.FloatField(label = 'Costo', error_messages={
                             'required':u'Por favor proporciona el costo del paquete',
                             'invalid':'Por favor proporciona un número válido'})
+    amount = forms.IntegerField(error_messages={
+                            'required':u'Por favor proporciona la cantiad de minutos/sesiones',
+                            'invalid':'Por favor proporciona un entero válido'}))
 
 

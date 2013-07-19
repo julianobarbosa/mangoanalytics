@@ -58,6 +58,13 @@
             {{ form.cost }}
         </div>
     </div>
+    <div class="control-group">
+        {{ form.amount.errors }}
+        <label class="control-label" for="id_amount">Cantidad de minutos\sesiones</label>
+        <div class="controls">
+            {{ form.amount }}
+        </div>
+    </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Paquete</button>
         <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
