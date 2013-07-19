@@ -68,7 +68,8 @@ def setupAddBundles(request, id):
             destination_group = DestinationGroup.objects.get(id=form.cleaned_data['destination_group'])
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
-            b = Bundles(name=name, provider=provider, destination_group=destination_group, tariff_mode=tariff_mode, cost=cost)
+            amount = form.cleaned_data['amount']
+            b = Bundles(name=name, provider=provider, destination_group=destination_group, tariff_mode=tariff_mode, cost=cost, amount=amount)
             b.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:

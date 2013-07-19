@@ -36,6 +36,6 @@ class AddBundles(forms.Form):
                             'invalid':'Por favor proporciona un número válido'})
     amount = forms.IntegerField(error_messages={
                             'required':u'Por favor proporciona la cantiad de minutos/sesiones',
-                            'invalid':'Por favor proporciona un entero válido'}))
+                            'invalid':'Por favor proporciona un entero válido'})
 
 
