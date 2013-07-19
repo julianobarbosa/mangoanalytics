@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Agregar paquetes de bla{% endblock %}
+{% block title %}Agregar paquetes de {{provider.name}}{% endblock %}
 
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal bla </h4>
+        <h4> Troncal {{provider.name}} </h4>
     </div>
 </div>
 
@@ -18,7 +18,7 @@
 
 <div class="row-fluid well">
     <div class="span10">
-        <h4> No hay tarifas base configuradas, favor de configurar tarifas base de troncal primero </h4>
+        <h4> No hay tarifas base configuradas, favor de configurar tarifas base de troncal {{provider.name}} primero </h4>
     </div>
     <div class="span2 pull-right">
         <a href="{% url 'tarifica:dashboardtroncales' %}" class="btn"></i>Regresar</a>

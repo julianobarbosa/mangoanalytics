@@ -58,7 +58,8 @@ def setupAddBaseTariffs(request, asterisk_id):
 
 
 
-def setupAddBundles(request):
+def setupAddBundles(request, id):
+    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
     base = BaseTariff.objects.all()
     if request.method == 'POST': # If the form has been submitted...
         form = AddBundles(request.POST) # A form bound to the POST data
@@ -67,7 +68,7 @@ def setupAddBundles(request):
             destination_group = DestinationGroup.objects.get(id=form.cleaned_data['destination_group'])
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['period_end'])
             cost = form.cleaned_data['cost']
-            b = Bundle(name, destination_group, tariff_mode, cost)
+            b = Bundle(name, provider, destination_group, tariff_mode, cost)
             b.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
@@ -76,6 +77,7 @@ def setupAddBundles(request):
     return render(request, 'tarifica/setupbundles.html', {
         'form': form,
         'base' : base,
+        'provider' : provider,
     })
 
 
@@ -86,7 +88,7 @@ def dashboardTrunks(request):
         try:
             e = Provider.objects.get(asterisk_id = x[0])
         except Provider.DoesNotExist:
-            p = Provider(asterisk_id = x[0], asterisk_name = x[1])
+            p = Provider(asterisk_id = x[0], asterisk_name = x[1], provider_type = x[2])
             p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
