@@ -59,7 +59,7 @@ def setupAddBaseTariffs(request, asterisk_id):
 
 
 def setupAddBundles(request, id):
-    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
+    provider = get_object_or_404(Provider, id = id)
     base = BaseTariff.objects.all()
     if request.method == 'POST': # If the form has been submitted...
         form = AddBundles(request.POST) # A form bound to the POST data
