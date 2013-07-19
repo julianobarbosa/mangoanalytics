@@ -26,7 +26,7 @@
                         <td>{{prov.name}}</td>
                         <td>{{prov.provider_type}}</td>
                         <td>{{prov.period_end}}</td>
-                        <td>{{prov.monthly_cost}}</td>
+                        <td>${{prov.monthly_cost}}</td>
                         {% if prov.has_bundles%}
                             <td>SI</td>
                             <td><a href="{% url 'tarifica:setupbundles' prov.id %}">Asignar Paquetes</a></td>
@@ -161,10 +161,10 @@
             <tbody>
                 {% for loc in locales%}
                 <tr>
-                    <td>{{loc.name}}</td>
-                    <td>{{loc.prefix}}</td>
-                    <td>{{loc.matching_number}}</td>
-                    <td>SESION</td>
+                    <td>{{loc.destination_group.name}}</td>
+                    <td>{{loc.destination_group.prefix}}</td>
+                    <td>{{loc.destination_group.matching_number}}</td>
+                    <td>{{loc.tariff_mode.name}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
