@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 import MySQLdb
+import MySQLdb.cursors
 
 class AsteriskMySQLManager:
 	dbUser = 'root'
@@ -20,9 +21,9 @@ class AsteriskMySQLManager:
 
 	def connect(self, database):
 		self.getMySQLPassword()
-		self.db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
-                  passwd=self.dbPass,db=database)
-		self.cursor = self.db.cursor()
+		db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
+                  passwd=self.dbPass,db=database,cursorclass=MySQLdb.cursors.DictCursor)
+		self.cursor = db.cursor()
 		return True
 
 	def getTrunkInformation(self):

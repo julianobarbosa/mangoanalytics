@@ -1,18 +1,29 @@
 #!/usr/bin/env python2.7
-import asteriskMySQLManager
-from tarifica.models import *
+from asteriskMySQLManager import AsteriskMySQLManager
 import datetime
-from django.utils import timezone
 
 class CallCostAssigner:
 	destinationGroups = None
+	am = None
 	bundles = None
+	cursor = None
 
-	def assignBundleInfo(self):
-		self.bundles = Bundle.objects.all()
+	def __init__(self):
+		self.am = AsteriskMySQLManager()
+
+	def getBundles(self, destinationGroup_id):
+		self.am.connect('nextor_tarificador')
+		sql = "SELECT * from tarifica_bundles JOIN tarifica_destinationgroup \
+			ON tarifica_bundles.destination_group_id = tarifica_destinationgroup.id  \
+			WHERE tarifica_destinationgroup.id = %s"
+		self.am.cursor.execute(sql, (destinationGroup_id))
+		return self.am.cursor.fetchall()
 	
-	def assignDestinationGroupsInfo(self):
-		self.destinationGroups = DestinationGroups.objects.all()
+	def getDestinationGroups(self):
+		self.am.connect('nextor_tarificador')
+		sql = "SELECT * from tarifica_destinationgroup"
+		self.am.cursor.execute(sql)
+		return self.am.cursor.fetchall()
 
 	def getStartOfDay(self, date):
 		return date.strftime('%Y-%m-%d')+" 00:00:00"
@@ -22,14 +33,12 @@ class CallCostAssigner:
 		return date.strftime('%Y-%m-%d')+" 00:00:00"
 
 	def getDailyAsteriskCalls(self, date):
-		am = AsteriskMySQLManager()
-		am.connect('asteriskcdrdb')
 		sql = "SELECT * from cdr where callDate > %s AND callDate < %s"
-		am.cursor.execute(sql, (getStartOfDay(date), getEndOfDay(date)))
+		self.am.cursor.execute(sql, (getStartOfDay(date), getEndOfDay(date)))
 		# Iteramos sobre las llamadas:
 		while True:
-			entry = am.cursor.fetchone()
-
+			entry = self.am.cursor.fetchone()
+			print entry
 
 if __name__ == '__main__':
 	print 'running'
