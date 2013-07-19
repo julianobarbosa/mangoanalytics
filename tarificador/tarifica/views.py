@@ -42,7 +42,7 @@ def setupAddBaseTariffs(request, asterisk_id):
             prefix = form.cleaned_data['prefix']
             matching_number = form.cleaned_data['matching_number']
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
-            print form.cleaned_data['tariff_mode']
+            print tariff_mode.name
             cost = form.cleaned_data['cost']
             d = DestinationGroup(provider=provider, name=name, prefix=prefix, matching_number=matching_number)
             d.save()
