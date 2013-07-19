@@ -66,7 +66,7 @@ def setupAddBundles(request, id):
         if form.is_valid(): # All validation rules pass
             name = form.cleaned_data['name']
             destination_group = DestinationGroup.objects.get(id=form.cleaned_data['destination_group'])
-            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['period_end'])
+            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
             b = Bundle(name, provider, destination_group, tariff_mode, cost)
             b.save()
