@@ -11,6 +11,8 @@
     </div>
 </div>
 
+{{formset.managment_form}}
+
 {% for form in formset%}
 
 <form action="{% url 'tarifica:setupchangeprovider' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
