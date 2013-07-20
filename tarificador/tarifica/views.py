@@ -91,9 +91,9 @@ def dashboardTrunks(request):
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
         try:
-            e = Provider.objects.get(asterisk_id = ['trunkid'])
+            e = Provider.objects.get(asterisk_id = x['trunkid'])
         except Provider.DoesNotExist:
-            p = Provider(asterisk_id = ['trunkid'], asterisk_name = ['name'], provider_type = ['tech'])
+            p = Provider(asterisk_id = x['trunkid'], asterisk_name = x['name'], provider_type = x['tech'])
             p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
