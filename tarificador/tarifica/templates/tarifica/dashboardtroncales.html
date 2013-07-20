@@ -32,7 +32,7 @@
                             <td><a href="{% url 'tarifica:setupbundles' prov.id %}">Asignar Paquetes</a></td>
                             <td><a href="#">Ver Paquetes</a></td>
                             <td><a href="{% url 'tarifica:setupbasetariffs' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
-                            <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                            <td><a href="{% url 'tarifica:setupchangeprovider' provider.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                                 <i class="icon-pencil icon-white"></i>
                             </a>
                             <a href="{% url 'tarifica:deleteprovider' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
@@ -43,7 +43,7 @@
                             <td><a href="{% url 'tarifica:setupbundles' prov.id %}">Asignar Paquetes</a></td>
                             <td></td>
                             <td><a href="{% url 'tarifica:setupbasetariffs' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
-                            <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                            <td><a href="{% url 'tarifica:setupchangeprovider' provider.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                                 <i class="icon-pencil icon-white"></i>
                             </a>
                             <a href="{% url 'tarifica:deleteprovider' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">

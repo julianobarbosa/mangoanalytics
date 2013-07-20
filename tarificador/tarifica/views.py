@@ -124,8 +124,8 @@ def deleteBundle(request, id):
 
 
 
-def setupChangeProviderInfo(request, asterisk_id):
-    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
+def setupChangeProviderInfo(request, id):
+    provider = get_object_or_404(Provider, id = id)
 
     if request.method == 'POST': # If the form has been submitted...
         form = AddProviderInfo(request.POST) # A form bound to the POST data

@@ -7,13 +7,13 @@
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{provider.asterisk_name}} </h4>
+        <h4> Troncal {{provider.name}} </h4>
     </div>
 </div>
 
 {% for form in formset%}
 
-<form action="{% url 'tarifica:setupprovider' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+<form action="{% url 'tarifica:setupchangeprovider' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
