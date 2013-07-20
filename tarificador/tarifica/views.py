@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode
+from django.forms.formsets import formset_factory
 
 
 #cambiar la funcion para que reciba un provider y se le agrege la informacion
@@ -42,7 +43,7 @@ def setupAddBaseTariffs(request, asterisk_id):
             prefix = form.cleaned_data['prefix']
             matching_number = form.cleaned_data['matching_number']
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
-            print tariff_mode.name
+            print tariff_mode.name 
             cost = form.cleaned_data['cost']
             d = DestinationGroup(provider=provider, name=name, prefix=prefix, matching_number=matching_number)
             d.save()
@@ -70,6 +71,8 @@ def setupAddBundles(request, id):
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
             amount = form.cleaned_data['amount']
+            provider.has_bundles=True
+            provider.save()
             b = Bundles(name=name, provider=provider, destination_group=destination_group, tariff_mode=tariff_mode, cost=cost, amount=amount)
             b.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
@@ -88,9 +91,9 @@ def dashboardTrunks(request):
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
         try:
-            e = Provider.objects.get(asterisk_id = x[0])
+            e = Provider.objects.get(asterisk_id = ['trunkid'])
         except Provider.DoesNotExist:
-            p = Provider(asterisk_id = x[0], asterisk_name = x[1], provider_type = x[2])
+            p = Provider(asterisk_id = ['trunkid'], asterisk_name = ['name'], provider_type = ['tech'])
             p.save()
         except Provider.MultipleObjectsReturned:
             print "troncales repetidas!"
@@ -118,6 +121,40 @@ def deleteBundle(request, id):
     bundle = get_object_or_404(Bundles, id = id)
     bundle.delete()
     return HttpResponseRedirect('/tarifica/dashboardtroncales')
+
+
+
+def setupChangeProviderInfo(request, asterisk_id):
+    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
+
+    if request.method == 'POST': # If the form has been submitted...
+        form = AddProviderInfo(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            provider.name = form.cleaned_data['name']
+            provider.monthly_cost = form.cleaned_data['monthly_cost']
+            provider.period_end = form.cleaned_data['period_end']
+            provider.payment_type = PaymentType.objects.get(id=form.cleaned_data['payment_type'])
+            provider.channels = form.cleaned_data['channels']
+            provider.is_configured = True
+            provider.save()
+            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
+    else:
+        AddProviderInfoSet = formset_factory(AddProviderInfo)
+        formset = AddProviderInfoSet(initial=[
+        {'name': provider.name,
+         'monthly_cost': provider.monthly_cost,
+         'period_end': provider.period_end,
+         'payment_type': provider.payment_type,
+         'channels': provider.channels,
+        }
+        ]) # An unbound form
+
+    return render(request, 'tarifica/setupprovider.html', {
+        'formset': formset,
+        'provider': provider
+    })
+
+
 
 
 
