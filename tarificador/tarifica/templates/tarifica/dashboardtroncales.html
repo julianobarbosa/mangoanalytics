@@ -30,7 +30,7 @@
                         {% if prov.has_bundles%}
                             <td>SI</td>
                             <td><a href="{% url 'tarifica:setupbundles' prov.id %}">Asignar Paquetes</a></td>
-                            <td><a href="#">Ver Paquetes</a></td>
+                            <td><a href="{% url 'tarifica:viewbundles' prov.id %}">Ver Paquetes</a></td>
                             <td><a href="{% url 'tarifica:setupbasetariffs' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
                             <td><a href="{% url 'tarifica:setupchangeprovider' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                                 <i class="icon-pencil icon-white"></i>
