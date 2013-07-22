@@ -91,13 +91,14 @@ def dashboardTrunks(request):
     a_mysql_m = AsteriskMySQLManager()
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
-        try:
-            e = Provider.objects.get(asterisk_id = x['trunkid'])
-        except Provider.DoesNotExist:
-            p = Provider(asterisk_id = x['trunkid'], asterisk_name = x['name'], provider_type = x['tech'])
-            p.save()
-        except Provider.MultipleObjectsReturned:
-            print "troncales repetidas!"
+        if x:
+            try:
+                e = Provider.objects.get(asterisk_id = x['trunkid'])
+            except Provider.DoesNotExist:
+                p = Provider(asterisk_id = x['trunkid'], asterisk_name = x['name'], provider_type = x['tech'])
+                p.save()
+            except Provider.MultipleObjectsReturned:
+                print "troncales repetidas!"
     providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
     providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
     bundles = Bundles.objects.all().order_by('name')
