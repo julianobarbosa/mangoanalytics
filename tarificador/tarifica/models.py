@@ -47,6 +47,7 @@ class Bundles(models.Model):
     cost = models.FloatField()
     usage = models.IntegerField(blank=True, null=True)
     amount = models.IntegerField()
+    priority = models.IntegerField()
 
 
 
