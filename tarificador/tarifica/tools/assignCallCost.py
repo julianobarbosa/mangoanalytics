@@ -21,11 +21,20 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (destinationGroup_id))
 		return self.am.cursor.fetchall()
 
-	def getAllBundles(self):
+	def getAllBundlesFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_bundles"
-		self.am.cursor.execute(sql,))
+		sql = "SELECT * from tarifica_bundles JOIN tarifica_provider \
+			ON tarifica_bundles.provider_id = tarifica_provider.id  \
+			WHERE tarifica_provider.id = %s"
+		self.am.cursor.execute(sql, (provider_id,))
 		return self.am.cursor.fetchall()
+
+	def getAllConfiguredProviders(self):
+		self.am.connect('nextor_tarificador')
+		sql = "SELECT * from tarifica_provider WHERE is_configured = %s"
+		self.am.cursor.execute(sql, (True,))
+		return self.am.cursor.fetchall()
+		pass
 	
 	def getDestinationGroups(self):
 		self.am.connect('nextor_tarificador')
@@ -53,6 +62,8 @@ class CallCostAssigner:
 		return date.strftime('%Y-%m-%d')+" 00:00:00"
 
 	def getDailyAsteriskCalls(self, date):
+		# Primero revisamos si es el día de corte.
+		self.resetBundleUsage()
 		self.am.connect('asteriskcdrdb')
 		sql = "SELECT * from cdr where callDate > %s AND callDate < %s AND lastapp = %s AND disposition = %s"
 		self.am.cursor.execute(sql, (self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED'))
@@ -61,44 +72,69 @@ class CallCostAssigner:
 			entry = self.am.cursor.fetchone()
 			if entry is None:
 				break
-			print entry
+			self.assignCost(entry)
+
+	def saveBundleUsage(bundle):
+		self.am.connect('nextor_tarificador')
+		sql = "UPDATE tarifica_bundles SET usage = %s WHERE id = %s"
+		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
 	def resetBundleUsage(self):
-		for bundle in self.getAllBundles():
-			today = datetime.datetime.today()
-			if bundle.
+		today = datetime.datetime.today()
+		for provider in self.getAllConfiguredProviders():
+			if provider['period_end'] == today.day:
+				for bundle in self.getAllBundlesFromProvider(provider['id']):
+					bundle['usage'] = 0
+					try:
+						self.saveBundleUsage(bundle)
+						print "Bundle "+bundle['name']+" reset."
+					except Exception, e:
+						print "Error while saving bundle: ", e
+
 
 	def assignCost(self, call):
-		destinationGroups = self.getDestinationGroups()
-		for d in destinationGroups:
-			try:
-				pos = call['dst'].index(d['prefix'])
+		# Extraemos la troncal por la cual se fue la llamada:
+		
+		try:
+			for d in self.getDestinationGroups():
+				try:
+					pos = call['dst'].index(d['prefix'])
+				except ValueError, e:
+					pos = None
+				if pos is None:
+					continue
+
 				# Se encontro el prefijo!
 				numberDialed = call['dst'][pos + len(d['prefix']):]
 				if len(numberDialed) == len(d['matching_number']):
 					# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
 					bundles = self.getBundles(d['id'])
-					assignedToBundle = False
-					for b in bundles:
-						if b['usage'] == b['amount']:
-							continue
-						else:
-							if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
-								b['usage'] -= 1
+					if len(bundles) > 0:
+						for b in bundles:
+							if b['usage'] == b['amount']:
+								continue
 							else:
-								#Redondeamos al minuto más cercano de la llamada
-								b['usage'] = ceil(call['billsec'] / 60)
-								print b
-							assignedToBundle = True
-					#Una vez hechos los cálculos, le damos el costo:
-					if not assignedToBundle:
+								print "Usage before: ", b
+								if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
+									b['usage'] -= 1
+								else:
+									#Redondeamos al minuto más cercano de la llamada
+									b['usage'] = ceil(call['billsec'] / 60)
+								print "Usage after: ", b
+					else:
+						# No hay paquetes configurados, calculamos el costo con la tarifa base:
 						tariff = self.getBaseTariff(d['id'])
-						call['cost'] = ceil(call['billsec'] / 60) * tariff['cost']
-
+						if len(tariff) > 0:
+							cost = ceil(call['billsec'] / 60) * tariff['cost']
+							print cost
+						else:
+							print "No base tariffs configured: cannot proceed."
+							continue
 				else:
-					pass
-			except:
-				pass
+					# No coincide la longitud del numero marcado con la longitud esperada de la localidad
+					continue
+		except TypeError, e:
+			print "No Destination Groups configured: cannot proceed."
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
