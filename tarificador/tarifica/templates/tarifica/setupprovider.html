@@ -12,8 +12,10 @@
 </div>
 
 
-
-<form action="{% url 'tarifica:setupprovider' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+{% block table%}
+<form action="{% url 'tarifica:setupprovider' provider.asterisk_id %}" method="post" class="form-horizontal">
+    {% endblock %}
+    {% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}

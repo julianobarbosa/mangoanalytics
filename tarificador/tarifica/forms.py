@@ -35,7 +35,10 @@ class AddBundles(forms.Form):
                             'required':u'Por favor proporciona el costo del paquete',
                             'invalid':'Por favor proporciona un número válido'})
     amount = forms.IntegerField(error_messages={
-                            'required':u'Por favor proporciona la cantiad de minutos/sesiones',
+                            'required':u'Por favor proporciona la cantidad de minutos/sesiones',
+                            'invalid':'Por favor proporciona un entero válido'})
+    priority = forms.IntegerField(error_messages={
+                            'required':u'Por favor proporciona la prioridad del paquete en cuestión',
                             'invalid':'Por favor proporciona un entero válido'})
 
 
