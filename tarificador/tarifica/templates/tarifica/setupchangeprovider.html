@@ -11,11 +11,10 @@
     </div>
 </div>
 
-{{formset.managment_form}}
-
-{% for form in formset%}
 
 <form action="{% url 'tarifica:setupchangeprovider' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
+    {{formset.managment_form}}
+    {% for form in formset%}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
@@ -56,9 +55,10 @@
         <button type="submit" class="btn btn-primary">Guardar Troncal</button>
         <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
     </div>
+    {% endfor %}
 </form>
 
-{% endfor %}
+
 
 
 {% endblock %}
