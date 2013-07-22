@@ -158,7 +158,7 @@ def setupChangeProviderInfo(request, id):
 
 
 def setupChangeBundles(request, id):
-    b = get_object_or_404(Provider, id = id)
+    b = get_object_or_404(Bundles, id = id)
     if request.method == 'POST': # If the form has been submitted...
         form = AddBundles(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass

@@ -50,6 +50,13 @@
             {{ form.amount }}
         </div>
     </div>
+    <div class="control-group">
+        {{ form.priority.errors }}
+        <label class="control-label" for="id_amount">Prioridad</label>
+        <div class="controls">
+            {{ form.priority }}
+        </div>
+    </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Paquete</button>
         <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
