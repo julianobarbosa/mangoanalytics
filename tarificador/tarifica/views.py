@@ -188,6 +188,13 @@ def setupChangeBundles(request, id):
 
 
 
+def viewBundles(request, id):
+    prov = get_object_or_404(Provider, id = id)
+    bundles = Bundles.objects.filter(provider=prov)
+    return render(request, 'tarifica/viewbundles.html', {
+                  'bundles' : bundles,
+                  'provider' : prov,
+                  })
 
 
 
