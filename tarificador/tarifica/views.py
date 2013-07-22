@@ -139,18 +139,17 @@ def setupChangeProviderInfo(request, id):
             provider.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
-        AddProviderInfoSet = formset_factory(AddProviderInfo)
-        formset = AddProviderInfoSet(initial=[
+        form = AddProviderInfo(initial=[
         {'name': provider.name,
          'monthly_cost': provider.monthly_cost,
          'period_end': provider.period_end,
          'payment_type': provider.payment_type,
          'channels': provider.channels,
         }
-        ]) # An unbound form
+        ])# An unbound form
 
     return render(request, 'tarifica/setupprovider.html', {
-        'formset': formset,
+        'form': form,
         'provider': provider
     })
 
