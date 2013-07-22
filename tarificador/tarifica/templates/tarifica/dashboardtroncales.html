@@ -114,7 +114,7 @@
                     <td>{{bun.name}}</td>
                     <td>${{bun.cost}}</td>
                     <td>{{bun.priority}}</td>
-                    <td><a href="#" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                    <td><a href="{% url 'tarifica:setupchangebundles' bun.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                             <i class="icon-pencil icon-white"></i>
                         </a>
                         <a href="{% url 'tarifica:deletebundle' bun.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
