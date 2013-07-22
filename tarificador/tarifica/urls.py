@@ -4,6 +4,7 @@ from tarifica import views
 urlpatterns = patterns('',
    url(r'^setupprovider/(?P<asterisk_id>\d+)$', views.setupAddProviderInfo, name = 'setupprovider'),
    url(r'^setupchangeprovider/(?P<id>\d+)$', views.setupChangeProviderInfo, name = 'setupchangeprovider'),
+   url(r'^setupchangebundles/(?P<id>\d+)$', views.setupChangeBundles, name = 'setupchangebundles'),
    url(r'^setupbasetariffs/(?P<asterisk_id>\d+)$', views.setupAddBaseTariffs, name = 'setupbasetariffs'),
    #url(r'^setupbundles/', views.setupAddBundles, name = 'setupbundles'),
    url(r'^setupbundles/(?P<id>\d+)$', views.setupAddBundles, name = 'setupbundles'),

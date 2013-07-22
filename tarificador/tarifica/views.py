@@ -157,6 +157,37 @@ def setupChangeProviderInfo(request, id):
 
 
 
+def setupChangeBundles(request, id):
+    b = get_object_or_404(Provider, id = id)
+    if request.method == 'POST': # If the form has been submitted...
+        form = AddBundles(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            b.name = form.cleaned_data['name']
+            b.destination_group = DestinationGroup.objects.get(id=form.cleaned_data['destination_group'])
+            b.tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
+            b.cost = form.cleaned_data['cost']
+            b.amount = form.cleaned_data['amount']
+            b.priority = form.cleaned_data['priority']
+            b.save()
+            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
+    else:
+        form = AddBundles(initial=
+        {'name': b.name,
+         'destination_group': b.destination_group,
+         'tariff_mode': b.tariff_mode,
+         'cost': b.cost,
+         'amount': b.amount,
+         'priority': b.priority,
+        }) # An unbound form
+
+    return render(request, 'tarifica/setupchangebundles.html', {
+        'form': form,
+        'b' : b,
+    })
+
+
+
+
 
 
 def thanks(request):

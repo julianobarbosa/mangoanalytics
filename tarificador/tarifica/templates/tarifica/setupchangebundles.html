@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Cambiar información de Troncales{% endblock %}
+{% block title %}Cambiar paquetes de {{provider.name}}{% endblock %}
 
 
 {% block content %}
@@ -12,7 +12,8 @@
 </div>
 
 
-<form action="{% url 'tarifica:setupchangeprovider' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
+
+<form action="{% url 'tarifica:setupchangebundles' b.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
@@ -22,40 +23,39 @@
         </div>
     </div>
     <div class="control-group">
-        {{ form.monthly_cost.errors }}
-        <label class="control-label" for="id_monthly_cost">Renta Mensual</label>
+        {{ form.destination_group.errors }}
+        <label class="control-label" for="id_destination_group">Localidad</label>
         <div class="controls">
-            {{ form.monthly_cost }}
+            {{ form.destination_group }}
         </div>
     </div>
     <div class="control-group">
-        {{ form.period_end.errors }}
-        <label class="control-label" for="id_period_end">Día de Corte</label>
+        {{ form.tariff_mode.errors }}
+        <label class="control-label" for="id_tariff_mode">Modo</label>
         <div class="controls">
-            {{ form.period_end }}
+            {{ form.tariff_mode }}
         </div>
     </div>
     <div class="control-group">
-        {{ form.payment_type.errors }}
-        <label class="control-label" for="id_payment_type">Modalidad de Pago</label>
+        {{ form.cost.errors }}
+        <label class="control-label" for="id_cost">Costo</label>
         <div class="controls">
-            {{ form.payment_type }}
+            {{ form.cost }}
         </div>
     </div>
     <div class="control-group">
-        {{ form.channels.errors }}
-        <label class="control-label" for="id_channels">Canales</label>
+        {{ form.amount.errors }}
+        <label class="control-label" for="id_amount">Cantidad de minutos\sesiones</label>
         <div class="controls">
-            {{ form.channels }}
+            {{ form.amount }}
         </div>
     </div>
     <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Guardar Troncal</button>
+        <button type="submit" class="btn btn-primary">Guardar Paquete</button>
         <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
     </div>
 </form>
-
-
+{% endif %}
 
 
 {% endblock %}
