@@ -91,6 +91,7 @@ def dashboardTrunks(request):
     a_mysql_m = AsteriskMySQLManager()
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
+        print x['trunkid']
         if x['trunkid']:
             try:
                 e = Provider.objects.get(asterisk_id = x['trunkid'])
