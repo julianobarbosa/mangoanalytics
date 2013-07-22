@@ -148,7 +148,7 @@ def setupChangeProviderInfo(request, id):
         }
         ])# An unbound form
 
-    return render(request, 'tarifica/setupprovider.html', {
+    return render(request, 'tarifica/setupchangeprovider.html', {
         'form': form,
         'provider': provider
     })
