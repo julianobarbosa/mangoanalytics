@@ -22,15 +22,10 @@
                 {% for prov,cost in provider_daily_costs%}
                 <tr>
                     <th>{{prov.name}}</th>
-                    <td>{{cost}}</td>
+                    <td>${{cost}}</td>
                     <td><a href="#">Ver Mas</a></td>
                 </tr>
                 {% endfor %}
-                <tr>
-                    <th>TELMEX</th>
-                    <td>$9,001</td>
-                    <td><a href="#">Ver Mas</a></td>
-                </tr>
             </tbody>
         </table>
         <h5> Consumo total al dia ${{total_cost}} MXN antes de I.V.A.</h5>

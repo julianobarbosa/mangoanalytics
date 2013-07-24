@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode, ProviderDailyDetail
+from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode, ProviderDailyDetail, ProviderDestinationDetail
 from django.forms.formsets import formset_factory
 
 
@@ -224,6 +224,11 @@ def generalDashboard(request):
             provider_total_cost = e.cost + provider_total_cost
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
+    locales = ProviderDestinationDetail.objects.raw(
+        'SELECT SUM(cost), destination_group.name FROM tarifica_provider_destination_detail LEFT JOIN tarifica_destination_group ON tarifica_provider_destination_detail.destination_group = tarifica_destination_group.id WHERE date > %s AND date < %s GROUP BY destination_group ORDER BY SUM(cost)',
+        [start_date,end_date]
+        )
+    print locales
     return render(request, 'tarifica/generaldashboard.html', {
               'total_cost' : total_cost,
               'provider_daily_costs' : provider_daily_costs,

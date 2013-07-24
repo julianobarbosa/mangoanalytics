@@ -89,6 +89,7 @@ class UserDestinationDetail(models.Model):
     total_minutes = models.FloatField()
     cost = models.FloatField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    date = models.DateField()
 
 
 class UserDestinationNumberDetail(models.Model):
@@ -114,6 +115,7 @@ class ProviderDestinationDetail(models.Model):
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    date = models.DateField()
 
 
 class UserInformation(models.Model):
