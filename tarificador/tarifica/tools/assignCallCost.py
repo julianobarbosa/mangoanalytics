@@ -98,9 +98,12 @@ class CallCostAssigner:
 	def assignCost(self, call):
 		print "Assigning cost to calls..."
 		#Obtenemos la informacion necesaria:
+		configuedProviders = getAllConfiguredProviders()
 		callInfo = call['dstchannel']
-		print callInfo.split('/')
-		
+		callInfoList = callInfo.split('/')
+		for prov in configuedProviders:
+			if callInfoList[1].count(prov['asterisk_channel_id'])
+
 		# Extraemos la troncal por la cual se fue la llamada:
 		destinations = self.getDestinationGroups()
 		if len(destinations) == 0:
