@@ -1,6 +1,7 @@
 # Create your views here.
 
 import datetime
+from django.utils.timezone import utc
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
@@ -212,7 +213,9 @@ def viewBundles(request, id):
 
 
 def generalDashboard(request):
-    end_date = datetime.datetime.today()
+    from django.db import connection, transaction
+    cursor = connection.cursor()
+    end_date = datetime.datetime.utcnow().replace(tzinfo=utc)
     start_date = datetime.date(end_date.year,end_date.month, 1)
     provider_daily_costs = []
     total_cost = 0
@@ -224,25 +227,30 @@ def generalDashboard(request):
             provider_total_cost = e.cost + provider_total_cost
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
-    locales = ProviderDestinationDetail.objects.raw(
-        'SELECT id, SUM(cost), destination_group_id \
+    cursor.execute('SELECT tarifica_providerdestinationdetail.id, SUM(tarifica_providerdestinationdetail.cost), tarifica_providerdestinationdetail.destination_group_id \
         FROM tarifica_providerdestinationdetail \
         LEFT JOIN tarifica_destinationgroup \
         ON tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         WHERE date > %s AND date < %s GROUP BY destination_group_id ORDER BY SUM(cost)',
-        [start_date,end_date]
-        )
+        [start_date,end_date])
+    locales = dictfetchall(cursor)[:2]
     for l in locales:
         print l
     return render(request, 'tarifica/generaldashboard.html', {
               'total_cost' : total_cost,
               'provider_daily_costs' : provider_daily_costs,
+              'locales' : locales,
               })
 
 
 
 
-
+def dictfetchall(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
 
 
 
