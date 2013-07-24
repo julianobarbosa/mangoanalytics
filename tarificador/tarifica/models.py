@@ -20,6 +20,7 @@ class TariffMode(models.Model):
 class Provider(models.Model):
     asterisk_id = models.IntegerField()
     asterisk_name = models.CharField(max_length = 255)
+    asterisk_channel_id = models.CharField(max_length=255)
     name = models.CharField(max_length = 255)
     monthly_cost = models.FloatField(default=0)
     provider_type = models.CharField(max_length = 50, blank=True)
@@ -114,6 +115,9 @@ class ProviderDestinationDetail(models.Model):
     total_minutes = models.FloatField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
+
+class UserInformation(models.Model):
+    first_time_user = models.BooleanField(default=True)
 
 
 

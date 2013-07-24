@@ -95,7 +95,7 @@ def dashboardTrunks(request):
             try:
                 e = Provider.objects.get(asterisk_id = x['trunkid'])
             except Provider.DoesNotExist:
-                p = Provider(asterisk_id = x['trunkid'], asterisk_name = x['name'], provider_type = x['tech'])
+                p = Provider(asterisk_id = x['trunkid'], asterisk_name = x['name'], provider_type = x['tech'], asterisk_channel_id = x['channelid'])
                 p.save()
             except Provider.MultipleObjectsReturned:
                 print "troncales repetidas!"
@@ -201,11 +201,22 @@ def viewBundles(request, id):
 def generalDashboard(request):
     start_date = datetime.date(end_date.year,end_date.month, 1)
     end_date = datetime.date.now()
-    providers = Provider.objects.filter(is_configured=True)
-    detail = ProviderDailyDetail.objects.filter(date__range=(start_date,end_date))
+    provider_daily_costs = []
     total_cost = 0
-    for e in detail:
-        total_cost = e.cost + total_cost
+    providers = Provider.objects.filter(is_configured=True)
+    for prov in providers:
+        detail = ProviderDailyDetail.objects.filter(date__range=(start_date,end_date)).filter(provider = prov)
+        provider_total_cost = 0
+        for e in detail:
+            provider_total_cost = e.cost + provider_total_cost
+        provider_daily_costs.append((prov,provider_total_cost))
+        total_cost += provider_total_cost
+    return render(request, 'tarifica/generaldashboard.html', {
+              'total_cost' : total_cost,
+              'provider_daily_costs' : provider_daily_costs,
+              })
+
+
 
 
 

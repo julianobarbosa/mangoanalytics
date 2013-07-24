@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Dashboard {% endblock %}
+{% block title %} Dashboard Central {% endblock %}
 
 
 {% block content %}
@@ -19,24 +19,21 @@
 
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <tbody>
+                {% for x in provider_daily_costs%}
+                <tr>
+                    <th>{{x[0].name}}</th>
+                    <td>{{x[1]}}</td>
+                    <td><a href="#">Ver Mas</a></td>
+                </tr>
+                {% endfor %}
                 <tr>
                     <th>TELMEX</th>
                     <td>$9,001</td>
                     <td><a href="#">Ver Mas</a></td>
                 </tr>
-                <tr>
-                    <th>AVANTEL</th>
-                    <td>$80,455</td>
-                    <td><a href="#">Ver Mas</a></td>
-                </tr>
-                <tr>
-                    <th>AXTEL</th>
-                    <td>$89,546</td>
-                    <td><a href="#">Ver Mas</a></td>
-                </tr>
             </tbody>
         </table>
-        <h5> Consumo total al dia $45,000 MXN antes de I.V.A.</h5>
+        <h5> Consumo total al dia ${{total_cost}} MXN antes de I.V.A.</h5>
 
     </div>
 
