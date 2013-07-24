@@ -13,13 +13,13 @@ class CallCostAssigner:
 	def __init__(self):
 		self.am = AsteriskMySQLManager()
 
-	def getBundles(self, destinationGroup_id):
+	def getProviderBundlesForDestination(self, provider_id, destinationGroup_id):
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_bundles JOIN tarifica_destinationgroup \
 			ON tarifica_bundles.destination_group_id = tarifica_destinationgroup.id  \
-			WHERE tarifica_destinationgroup.id = %s \
+			WHERE tarifica_destinationgroup.provider_id = %s AND tarifica_destinationgroup.id = %s \
 			ORDER BY tarifica_bundles.priority ASC"
-		self.am.cursor.execute(sql, (destinationGroup_id))
+		self.am.cursor.execute(sql, (provider_id, destinationGroup_id))
 		return self.am.cursor.fetchall()
 
 	def getAllBundlesFromProvider(self, provider_id):
@@ -52,7 +52,7 @@ class CallCostAssigner:
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_tariffmode WHERE id = %s"
 		self.am.cursor.execute(sql, (tariffMode_id,))
-		return self.am.cursor.fetchall()
+		return self.am.cursor.fetchone()
 
 	def getStartOfDay(self, date):
 		return date.strftime('%Y-%m-%d')+" 00:00:00"
@@ -66,8 +66,11 @@ class CallCostAssigner:
 		print "Script running on day "+self.getStartOfDay(date)+"."
 		self.resetBundleUsage()
 		self.am.connect('asteriskcdrdb')
-		sql = "SELECT * from cdr where callDate > %s AND callDate < %s AND lastapp = %s AND disposition = %s"
-		self.am.cursor.execute(sql, (self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED'))
+		sql = "SELECT * from cdr WHERE callDate > %s AND callDate < %s AND lastapp = %s \
+		AND disposition = %s"
+		self.am.cursor.execute(sql, 
+			(self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED')
+		)
 		# Iteramos sobre las llamadas:
 		totalCalls = 0
 		dailyCallDetail = []
@@ -75,13 +78,13 @@ class CallCostAssigner:
 			totalCalls += 1
 			dailyCallDetail.append(self.assignCost(row))
 
+		print self.saveCalls(dailyCallDetail)
 		print "Total calls processed:", totalCalls
-		self.saveCalls(dailyCallDetail)
-		print totalCalls, "calls processed successfully."
 
 	def saveBundleUsage(self, bundle):
 		self.am.connect('nextor_tarificador')
-		sql = "UPDATE tarifica_bundles SET usage = %s WHERE id = %s"
+		sql = "UPDATE tarifica_bundles SET tarifica_bundles.usage = %s \
+		WHERE tarifica_bundles.id = %s"
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
 	def saveCalls(self, calls):
@@ -89,6 +92,7 @@ class CallCostAssigner:
 		sql = "INSERT INTO tarifica_calls(dialed_number, origin_number, duration, cost, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
+		return self.am.db.commit()
 
 	def resetBundleUsage(self):
 		print "Checking if bundle usage needs to be reset..."
@@ -149,20 +153,20 @@ class CallCostAssigner:
 					if len(numberDialed) == len(d['matching_number']):
 						# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
 						print "Call number fits pattern for destination group", d['name']
-						bundles = self.getBundles(d['id'])
+						bundles = self.getProviderBundlesForDestination(prov['id'], d['id'])
 						if len(bundles) > 0:
 							for b in bundles:
 								if b['usage'] == b['amount']:
 									print "Bundle",b['name'],"usage has reached its limit."
 									continue
 								else:
-									print "Usage before: ", b
+									print "Usage before: ", b['usage']
 									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
 										b['usage'] -= 1
 									else:
 										#Redondeamos al minuto más cercano de la llamada
 										b['usage'] = ceil(call['billsec'] / 60)
-									print "Usage after: ", b
+									print "Usage after: ", b['usage']
 									#Guardamos los cambios
 									self.saveBundleUsage(b)
 						else:
@@ -170,7 +174,7 @@ class CallCostAssigner:
 							print "No bundles configured for destination group", d['name']
 							tariff = self.getBaseTariff(d['id'])
 							if len(tariff) > 0:
-								print "Seconds:",call['billsec'],", Minutes:",call['billsec']/60,", Billed minutes:",ceil(call['billsec'] / 60)
+								print "Billed minutes:",ceil(call['billsec'] / 60)
 								cost = ceil(call['billsec'] / 60) * tariff['cost']
 								print "Calculated cost:", cost
 							else:
@@ -180,7 +184,20 @@ class CallCostAssigner:
 						# No coincide la longitud del numero marcado con la longitud esperada de la localidad
 						continue
 		
-		return (dialedNoForProvider, call['src'], ceil(call['billsec'] / 60), cost, datetime.date(year=call['calldate'].year, month=call['calldate'].month, day=call['calldate'].day))
+		return (
+			dialedNoForProvider, 
+			call['src'], 
+			ceil(call['billsec'] / 60), 
+			cost, 
+			datetime.datetime(
+				year=call['calldate'].year, 
+				month=call['calldate'].month, 
+				day=call['calldate'].day,
+				hour=call['calldate'].hour,
+				minute=call['calldate'].minute,
+				second=call['calldate'].second
+			)
+		)
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()

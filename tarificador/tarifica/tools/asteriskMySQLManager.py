@@ -8,6 +8,7 @@ class AsteriskMySQLManager:
 	dbName = 'asterisk'
 	dbPass = None
 	cursor = None
+	db = None
 
 	def getMySQLPassword(self):
 		elastixConf = open('/etc/elastix.conf', 'r')
@@ -21,9 +22,9 @@ class AsteriskMySQLManager:
 
 	def connect(self, database):
 		self.getMySQLPassword()
-		db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
+		self.db = MySQLdb.connect(host=self.dbHost,user=self.dbUser,
                   passwd=self.dbPass,db=database,cursorclass=MySQLdb.cursors.DictCursor)
-		self.cursor = db.cursor()
+		self.cursor = self.db.cursor()
 		return True
 
 	def getTrunkInformation(self):
