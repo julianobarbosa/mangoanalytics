@@ -63,7 +63,9 @@ class CallCostAssigner:
 
 	def getDailyAsteriskCalls(self, date):
 		# Primero revisamos si es el día de corte.
+		print "Script running on day "+self.getStartOfDay(date)+"."
 		self.resetBundleUsage()
+		print "Getting calls."
 		self.am.connect('asteriskcdrdb')
 		sql = "SELECT * from cdr where callDate > %s AND callDate < %s AND lastapp = %s AND disposition = %s"
 		self.am.cursor.execute(sql, (self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED'))
@@ -80,6 +82,7 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
 	def resetBundleUsage(self):
+		print "Checking if bundle usage needs to be reset..."
 		today = datetime.datetime.today()
 		for provider in self.getAllConfiguredProviders():
 			if provider['period_end'] == today.day:
@@ -93,53 +96,58 @@ class CallCostAssigner:
 
 
 	def assignCost(self, call):
-		# Extraemos la troncal por la cual se fue la llamada:
+		print "Assigning cost to calls..."
+		#Obtenemos la informacion necesaria:
+		callInfo = call['dstchannel']
+		print callInfo.split('/')
 		
-		try:
-			for d in self.getDestinationGroups():
-				try:
-					pos = call['dst'].index(d['prefix'])
-				except ValueError, e:
-					pos = None
-				if pos is None:
-					continue
-
-				# Se encontro el prefijo!
-				numberDialed = call['dst'][pos + len(d['prefix']):]
-				if len(numberDialed) == len(d['matching_number']):
-					# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
-					bundles = self.getBundles(d['id'])
-					if len(bundles) > 0:
-						for b in bundles:
-							if b['usage'] == b['amount']:
-								continue
-							else:
-								print "Usage before: ", b
-								if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
-									b['usage'] -= 1
-								else:
-									#Redondeamos al minuto más cercano de la llamada
-									b['usage'] = ceil(call['billsec'] / 60)
-								print "Usage after: ", b
-					else:
-						# No hay paquetes configurados, calculamos el costo con la tarifa base:
-						tariff = self.getBaseTariff(d['id'])
-						if len(tariff) > 0:
-							cost = ceil(call['billsec'] / 60) * tariff['cost']
-							print cost
-						else:
-							print "No base tariffs configured: cannot proceed."
-							continue
-				else:
-					# No coincide la longitud del numero marcado con la longitud esperada de la localidad
-					continue
-		except TypeError, e:
+		# Extraemos la troncal por la cual se fue la llamada:
+		destinations = self.getDestinationGroups()
+		if len(destinations) == 0:
 			print "No Destination Groups configured: cannot proceed."
+			return False
+
+
+		for d in self.getDestinationGroups():
+			try:
+				pos = call['dst'].index(d['prefix'])
+			except ValueError, e:
+				pos = None
+			if pos is None:
+				continue
+
+			# Se encontro el prefijo!
+			numberDialed = call['dst'][pos + len(d['prefix']):]
+			if len(numberDialed) == len(d['matching_number']):
+				# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
+				bundles = self.getBundles(d['id'])
+				if len(bundles) > 0:
+					for b in bundles:
+						if b['usage'] == b['amount']:
+							continue
+						else:
+							print "Usage before: ", b
+							if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
+								b['usage'] -= 1
+							else:
+								#Redondeamos al minuto más cercano de la llamada
+								b['usage'] = ceil(call['billsec'] / 60)
+							print "Usage after: ", b
+				else:
+					# No hay paquetes configurados, calculamos el costo con la tarifa base:
+					tariff = self.getBaseTariff(d['id'])
+					if len(tariff) > 0:
+						cost = ceil(call['billsec'] / 60) * tariff['cost']
+						print cost
+					else:
+						print "No base tariffs configured: cannot proceed."
+						continue
+			else:
+				# No coincide la longitud del numero marcado con la longitud esperada de la localidad
+				continue
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	print week
-	week = week - datetime.timedelta(days=7)
-	print week
+	week = week - datetime.timedelta(days=14)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
