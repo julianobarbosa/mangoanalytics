@@ -1,0 +1,20 @@
+- model: tarifica.TariffMode
+  pk: 1
+  fields:
+    name: Minuto
+
+- model: tarifica.TariffMode
+  pk: 2
+  fields:
+    name: Sesión
+
+- model: tarifica.PaymentType
+  pk: 1
+  fields:
+    name: Pospago
+
+
+- model: tarifica.PaymentType
+  pk: 1
+  fields:
+    name: Prepago
