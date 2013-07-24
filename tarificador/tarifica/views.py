@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode
+from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode, ProviderDailyDetail
 from django.forms.formsets import formset_factory
 
 
@@ -74,7 +74,15 @@ def setupAddBundles(request, id):
             provider.has_bundles=True
             provider.save()
             priority = form.cleaned_data['priority']
-            b = Bundles(priority = priority, name=name, provider=provider, destination_group=destination_group, tariff_mode=tariff_mode, cost=cost, amount=amount)
+            b = Bundles(
+                priority = priority,
+                name=name,
+                provider=provider,
+                destination_group=destination_group,
+                tariff_mode=tariff_mode,
+                cost=cost,
+                amount=amount
+                )
             b.save()
             return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
     else:
@@ -95,7 +103,12 @@ def dashboardTrunks(request):
             try:
                 e = Provider.objects.get(asterisk_id = x['trunkid'])
             except Provider.DoesNotExist:
-                p = Provider(asterisk_id = x['trunkid'], asterisk_name = x['name'], provider_type = x['tech'], asterisk_channel_id = x['channelid'])
+                p = Provider(
+                    asterisk_id = x['trunkid'],
+                    asterisk_name = x['name'],
+                    provider_type = x['tech'],
+                    asterisk_channel_id = x['channelid']
+                    )
                 p.save()
             except Provider.MultipleObjectsReturned:
                 print "troncales repetidas!"
