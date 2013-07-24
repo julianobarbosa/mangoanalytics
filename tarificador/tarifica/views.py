@@ -199,7 +199,7 @@ def viewBundles(request, id):
 
 
 def generalDashboard(request):
-    end_date = datetime.date.now()
+    end_date = datetime.today()
     start_date = datetime.date(end_date.year,end_date.month, 1)
     provider_daily_costs = []
     total_cost = 0
