@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 #!/usr/bin/env python2.7
+from __future__ import division
 from asteriskMySQLManager import AsteriskMySQLManager
 import datetime
 import string
-from math import ceil
+from math import ceil,floor
 
 class CallCostAssigner:
 	am = None
@@ -34,13 +35,12 @@ class CallCostAssigner:
 		sql = "SELECT * from tarifica_provider WHERE is_configured = %s"
 		self.am.cursor.execute(sql, (True,))
 		return self.am.cursor.fetchall()
-		pass
 	
-	def getDestinationGroups(self):
+	def getDestinationGroupsFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_destinationgroup"
-		self.am.cursor.execute(sql)
-		return self.am.cursor.fetchone()
+		sql = "SELECT * from tarifica_destinationgroup WHERE provider_id = %s"
+		self.am.cursor.execute(sql, (provider_id,))
+		return self.am.cursor.fetchall()
 
 	def getBaseTariff(self, destinationGroup_id):
 		self.am.connect('nextor_tarificador')
@@ -65,21 +65,30 @@ class CallCostAssigner:
 		# Primero revisamos si es el día de corte.
 		print "Script running on day "+self.getStartOfDay(date)+"."
 		self.resetBundleUsage()
-		print "Getting calls."
 		self.am.connect('asteriskcdrdb')
 		sql = "SELECT * from cdr where callDate > %s AND callDate < %s AND lastapp = %s AND disposition = %s"
 		self.am.cursor.execute(sql, (self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED'))
 		# Iteramos sobre las llamadas:
-		while True:
-			entry = self.am.cursor.fetchone()
-			if entry is None:
-				break
-			self.assignCost(entry)
+		totalCalls = 0
+		dailyCallDetail = []
+		for row in self.am.cursor.fetchall():
+			totalCalls += 1
+			dailyCallDetail.append(self.assignCost(row))
 
-	def saveBundleUsage(bundle):
+		print "Total calls processed:", totalCalls
+		self.saveCalls(dailyCallDetail)
+		print totalCalls, "calls processed successfully."
+
+	def saveBundleUsage(self, bundle):
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundles SET usage = %s WHERE id = %s"
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
+
+	def saveCalls(self, calls):
+		self.am.connect('nextor_tarificador')
+		sql = "INSERT INTO tarifica_calls(dialed_number, origin_number, duration, cost, date) \
+		VALUES(%s, %s, %s, %s, %s)"
+		self.am.cursor.executemany(sql, calls)
 
 	def resetBundleUsage(self):
 		print "Checking if bundle usage needs to be reset..."
@@ -94,63 +103,87 @@ class CallCostAssigner:
 					except Exception, e:
 						print "Error while saving bundle: ", e
 
-
 	def assignCost(self, call):
-		print "Assigning cost to calls..."
 		#Obtenemos la informacion necesaria:
-		configuedProviders = getAllConfiguredProviders()
-		callInfo = call['dstchannel']
-		callInfoList = callInfo.split('/')
-		for prov in configuedProviders:
-			if callInfoList[1].count(prov['asterisk_channel_id'])
-
-		# Extraemos la troncal por la cual se fue la llamada:
-		destinations = self.getDestinationGroups()
-		if len(destinations) == 0:
-			print "No Destination Groups configured: cannot proceed."
+		configuedProviders = self.getAllConfiguredProviders()
+		callInfoList = call['lastdata'].split('/')
+		cost = 0
+		dialedNoForProvider = call['dst']
+		separated = []
+		for a in callInfoList:
+			separated = separated + a.split(',')
+		try:
+			dialedNoForProvider = separated[2]
+		except IndexError:
+			print "No dialed number present! Skipping..."
 			return False
 
-
-		for d in self.getDestinationGroups():
+		for prov in configuedProviders:
+			# Extraemos la troncal por la cual se fue la llamada:
 			try:
-				pos = call['dst'].index(d['prefix'])
-			except ValueError, e:
-				pos = None
-			if pos is None:
-				continue
+				provider = callInfoList[1]
+			except IndexError:
+				print "No trunk information present, skipping..."
+				break
 
-			# Se encontro el prefijo!
-			numberDialed = call['dst'][pos + len(d['prefix']):]
-			if len(numberDialed) == len(d['matching_number']):
-				# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
-				bundles = self.getBundles(d['id'])
-				if len(bundles) > 0:
-					for b in bundles:
-						if b['usage'] == b['amount']:
-							continue
-						else:
-							print "Usage before: ", b
-							if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
-								b['usage'] -= 1
-							else:
-								#Redondeamos al minuto más cercano de la llamada
-								b['usage'] = ceil(call['billsec'] / 60)
-							print "Usage after: ", b
-				else:
-					# No hay paquetes configurados, calculamos el costo con la tarifa base:
-					tariff = self.getBaseTariff(d['id'])
-					if len(tariff) > 0:
-						cost = ceil(call['billsec'] / 60) * tariff['cost']
-						print cost
-					else:
-						print "No base tariffs configured: cannot proceed."
+			if provider.count(prov['asterisk_channel_id']) > 0:
+				print "Provider found:",prov['name']
+
+				destinations = self.getDestinationGroupsFromProvider(prov['id'])
+				if len(destinations) == 0:
+					print "No Destination Groups configured: cannot proceed."
+					continue
+				for d in destinations:
+					print "Trying to fit into destination",d['name']
+					try:
+						pos = dialedNoForProvider.index(d['prefix'])
+						print "Call prefix fits into destination group",d['name']
+					except ValueError, e:
+						pos = None
+					if pos is None:
 						continue
-			else:
-				# No coincide la longitud del numero marcado con la longitud esperada de la localidad
-				continue
+
+					# Se encontro el prefijo!
+					numberDialed = dialedNoForProvider[pos + len(d['prefix']):]
+					print "Number called according to trunk:",numberDialed
+					if len(numberDialed) == len(d['matching_number']):
+						# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
+						print "Call number fits pattern for destination group", d['name']
+						bundles = self.getBundles(d['id'])
+						if len(bundles) > 0:
+							for b in bundles:
+								if b['usage'] == b['amount']:
+									print "Bundle",b['name'],"usage has reached its limit."
+									continue
+								else:
+									print "Usage before: ", b
+									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
+										b['usage'] -= 1
+									else:
+										#Redondeamos al minuto más cercano de la llamada
+										b['usage'] = ceil(call['billsec'] / 60)
+									print "Usage after: ", b
+									#Guardamos los cambios
+									self.saveBundleUsage(b)
+						else:
+							# No hay paquetes configurados, calculamos el costo con la tarifa base:
+							print "No bundles configured for destination group", d['name']
+							tariff = self.getBaseTariff(d['id'])
+							if len(tariff) > 0:
+								print "Seconds:",call['billsec'],", Minutes:",call['billsec']/60,", Billed minutes:",ceil(call['billsec'] / 60)
+								cost = ceil(call['billsec'] / 60) * tariff['cost']
+								print "Calculated cost:", cost
+							else:
+								print "No base tariffs configured: cannot proceed."
+								continue
+					else:
+						# No coincide la longitud del numero marcado con la longitud esperada de la localidad
+						continue
+		
+		return (dialedNoForProvider, call['src'], ceil(call['billsec'] / 60), cost, datetime.date(year=call['calldate'].year, month=call['calldate'].month, day=call['calldate'].day))
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=14)
+	week = week - datetime.timedelta(days=30)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
