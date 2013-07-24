@@ -225,7 +225,7 @@ def generalDashboard(request):
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
     locales = ProviderDestinationDetail.objects.raw(
-        'SELECT SUM(cost), destination_group.id FROM tarifica_providerdestinationdetail LEFT JOIN tarifica_destinationgroup ON tarifica_providerdestinationdetail.destination_group = tarifica_destinationgroup.id WHERE date > %s AND date < %s GROUP BY destination_group ORDER BY SUM(cost)',
+        'SELECT SUM(cost), destination_group_id FROM tarifica_providerdestinationdetail LEFT JOIN tarifica_destinationgroup ON tarifica_providerdestinationdetail.destination_group = tarifica_destinationgroup.id WHERE date > %s AND date < %s GROUP BY destination_group ORDER BY SUM(cost)',
         [start_date,end_date]
         )
     for l in locales:
