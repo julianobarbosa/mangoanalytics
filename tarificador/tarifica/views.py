@@ -228,7 +228,8 @@ def generalDashboard(request):
         'SELECT SUM(cost), destination_group.name FROM tarifica_provider_destination_detail LEFT JOIN tarifica_destination_group ON tarifica_provider_destination_detail.destination_group = tarifica_destination_group.id WHERE date > %s AND date < %s GROUP BY destination_group ORDER BY SUM(cost)',
         [start_date,end_date]
         )
-    print locales
+    for l in locales:
+        print l
     return render(request, 'tarifica/generaldashboard.html', {
               'total_cost' : total_cost,
               'provider_daily_costs' : provider_daily_costs,
