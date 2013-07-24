@@ -79,7 +79,7 @@ class UserDailyDetail(models.Model):
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
     cost = models.FloatField()
-    date = models.DateTimeField()
+    date = models.DateField()
 
 
 class UserDestinationDetail(models.Model):
@@ -104,7 +104,7 @@ class ProviderDailyDetail(models.Model):
     cost = models.FloatField()
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
-    date = models.DateTimeField()
+    date = models.DateField()
 
 
 class ProviderDestinationDetail(models.Model):

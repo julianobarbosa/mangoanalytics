@@ -1,6 +1,6 @@
 # Create your views here.
 
-
+import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
@@ -9,7 +9,7 @@ from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType,
 from django.forms.formsets import formset_factory
 
 
-#cambiar la funcion para que reciba un provider y se le agrege la informacion
+
 def setupAddProviderInfo(request, asterisk_id):
     provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
 
@@ -195,6 +195,20 @@ def viewBundles(request, id):
                   'bundles' : bundles,
                   'provider' : prov,
                   })
+
+
+
+def generalDashboard(request):
+    start_date = datetime.date(end_date.year,end_date.month, 1)
+    end_date = datetime.date.now()
+    providers = Provider.objects.filter(is_configured=True)
+    detail = ProviderDailyDetail.objects.filter(date__range=(start_date,end_date))
+    total_cost = 0
+    for e in detail:
+        total_cost = e.cost + total_cost
+
+
+
 
 
 
