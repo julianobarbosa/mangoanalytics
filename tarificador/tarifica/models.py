@@ -62,7 +62,7 @@ class BaseTariff(models.Model):
 
 class Calls(models.Model):
     dialed_number = models.CharField(max_length = 255)
-    extension = models.CharField(max_length = 255)
+    extension_number = models.CharField(max_length = 255)
     duration = models.FloatField()
     cost = models.FloatField()
     date = models.DateTimeField()
