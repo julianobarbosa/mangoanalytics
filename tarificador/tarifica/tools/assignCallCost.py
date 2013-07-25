@@ -64,6 +64,8 @@ class CallCostAssigner:
 	def getDailyAsteriskCalls(self, date):
 		# Primero revisamos si es el día de corte.
 		print "Script running on day "+self.getStartOfDay(date)+"."
+		# Obtenemos las extensiones configuradas:
+		extensions = self.am.getUserInformation()
 		self.resetBundleUsage()
 		self.am.connect('asteriskcdrdb')
 		sql = "SELECT * from cdr WHERE callDate > %s AND callDate < %s AND lastapp = %s \
@@ -72,14 +74,19 @@ class CallCostAssigner:
 			(self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED')
 		)
 		# Iteramos sobre las llamadas:
-		totalCalls = 0
+		totalOutgoingCalls = 0
 		dailyCallDetail = []
 		for row in self.am.cursor.fetchall():
-			totalCalls += 1
-			dailyCallDetail.append(self.assignCost(row))
-
+			for ext in extensions:
+				if row['src'] == ext['extension']:
+					print "Outgoing call found, assigning cost..."
+					totalOutgoingCalls += 1
+					dailyCallDetail.append(self.assignCost(row))
+					break
+					
 		print self.saveCalls(dailyCallDetail)
-		print "Total calls processed:", totalCalls
+		print "----------------------------------------------------"
+		print "Total outgoing calls processed:", totalOutgoingCalls
 
 	def saveBundleUsage(self, bundle):
 		self.am.connect('nextor_tarificador')
@@ -89,7 +96,7 @@ class CallCostAssigner:
 
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
-		sql = "INSERT INTO tarifica_calls(dialed_number, origin_number, duration, cost, date) \
+		sql = "INSERT INTO tarifica_calls(dialed_number, extension_number, duration, cost, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
