@@ -1,6 +1,7 @@
 # Create your views here.
 
 import datetime
+from django.db import connection, transaction
 from django.utils.timezone import utc
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -225,7 +226,6 @@ def viewBundles(request, id):
 
 
 def generalDashboard(request):
-    from django.db import connection, transaction
     cursor = connection.cursor()
     end_date = datetime.datetime.utcnow().replace(tzinfo=utc)
     start_date = datetime.date(end_date.year,end_date.month, 1)
@@ -261,9 +261,8 @@ def generalDashboard(request):
               })
 
 
-
+#modificar, last month del primero del mes pasado al primero de este mes
 def generalUsers(request, month=None, year=None, day=None):
-    from django.db import connection, transaction
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     y = 0
