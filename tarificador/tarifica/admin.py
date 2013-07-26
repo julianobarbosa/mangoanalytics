@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tarifica.models import Provider, PaymentType, TariffMode, UserDailyDetail, DestinationGroup, DestinationName, DestinationCountry, ProviderDailyDetail, ProviderDestinationDetail
+from tarifica.models import *
 
 admin.site.register(Provider)
 admin.site.register(PaymentType)

@@ -1,5 +1,3 @@
-# Create your views here.
-
 import datetime
 from django.utils.timezone import utc
 from django.shortcuts import render, get_object_or_404
@@ -9,31 +7,61 @@ from tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 from django.forms.formsets import formset_factory
 
+from views.providers import *
+from views.destinationGroups import *
+from views.bundles import *
+from views.users import *
+from views.trunks import *
 
-
-def setupAddProviderInfo(request, asterisk_id):
-    provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
-
-    if request.method == 'POST': # If the form has been submitted...
-        form = AddProviderInfo(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
-            provider.name = form.cleaned_data['name']
-            provider.monthly_cost = form.cleaned_data['monthly_cost']
-            provider.period_end = form.cleaned_data['period_end']
-            provider.payment_type = PaymentType.objects.get(id=form.cleaned_data['payment_type'])
-            provider.channels = form.cleaned_data['channels']
-            provider.is_configured = True
-            provider.save()
-            return HttpResponseRedirect('/tarifica/dashboardtrunks') # Redirect after POST
-    else:
-        form = AddProviderInfo() # An unbound form
-
-    return render(request, 'tarifica/setupprovider.html', {
-        'form': form,
-        'provider': provider
+def setup(request):
+    a_mysql_m = AsteriskMySQLManager()
+    users = a_mysql_m.getUserInformation()
+    for u in users:
+        if u['name']:
+            try:
+                e = Extension.objects.get(name = u['name'])
+            except Extension.DoesNotExist:
+                e = Extension(
+                    name = u['name'],
+                    extension_number = u['extension'],
+                    )
+                e.save()
+            except Extension.MultipleObjectsReturned:
+                print "extensiones repetidas!"
+    trunks = a_mysql_m.getTrunkInformation()
+    for x in trunks:
+        if x['name']:
+            try:
+                e = Provider.objects.get(asterisk_id = x['trunkid'])
+            except Provider.DoesNotExist:
+                p = Provider(
+                    asterisk_id = x['trunkid'],
+                    asterisk_name = x['name'],
+                    provider_type = x['tech'],
+                    asterisk_channel_id = x['channelid']
+                    )
+                p.save()
+            except Provider.MultipleObjectsReturned:
+                print "troncales repetidas!"
+    providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
+    providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
+    bundles = Bundles.objects.all().order_by('name')
+    locales = BaseTariff.objects.all()
+    return render(request, 'tarifica/dashboardtroncales.html', {
+        'not_configured' : providers_not_configured,
+        'configured' : providers_configured,
+        'bundles' : bundles,
+        'locales' : locales,
     })
 
+def trunks(request):
+    pass
 
+def realtime(request):
+    pass
+
+def dashboard(request):
+    pass
 
 def setupAddBaseTariffs(request, asterisk_id):
     provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
@@ -331,8 +359,3 @@ def dictfetchall(cursor):
         dict(zip([col[0] for col in desc], row))
         for row in cursor.fetchall()
     ]
-
-
-
-def thanks(request):
-    return HttpResponse("jaja")

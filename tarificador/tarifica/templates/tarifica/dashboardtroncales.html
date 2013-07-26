@@ -1,6 +1,6 @@
 {% extends "trunks.html" %}
 
-{% block title %}Dashboard Troncales{% endblock %}
+{% block title %}Setup{% endblock %}
 
 {% block content %}
 
@@ -29,10 +29,10 @@
                         <td>${{prov.monthly_cost}}</td>
                         {% if prov.has_bundles%}
                             <td>SI</td>
-                            <td><a href="{% url 'tarifica:setupbundles' prov.id %}">Asignar Paquetes</a></td>
-                            <td><a href="{% url 'tarifica:viewbundles' prov.id %}">Ver Paquetes</a></td>
-                            <td><a href="{% url 'tarifica:setupbasetariffs' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
-                            <td><a href="{% url 'tarifica:setupchangeprovider' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                            <td><a href="{% url 'tarifica:bundles_create' prov.id %}">Asignar Paquetes</a></td>
+                            <td><a href="{% url 'tarifica:bundles_provider_get' prov.id %}">Ver Paquetes</a></td>
+                            <td><a href="{% url 'tarifica:destinations_create' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
+                            <td><a href="{% url 'tarifica:destinations_update' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                                 <i class="icon-pencil icon-white"></i>
                             </a>
                             <a href="{% url 'tarifica:deleteprovider' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
