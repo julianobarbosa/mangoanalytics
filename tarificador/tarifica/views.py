@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode, ProviderDailyDetail, ProviderDestinationDetail
+from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode, ProviderDailyDetail, ProviderDestinationDetail, Extension
 from django.forms.formsets import formset_factory
 
 
@@ -44,7 +44,6 @@ def setupAddBaseTariffs(request, asterisk_id):
             prefix = form.cleaned_data['prefix']
             matching_number = form.cleaned_data['matching_number']
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
-            print tariff_mode.name 
             cost = form.cleaned_data['cost']
             d = DestinationGroup(provider=provider, name=name, prefix=prefix, matching_number=matching_number)
             d.save()
@@ -98,6 +97,19 @@ def setupAddBundles(request, id):
 
 def dashboardTrunks(request):
     a_mysql_m = AsteriskMySQLManager()
+    users = a_mysql_m.getUserInformation()
+    for u in users:
+        if u['name']:
+            try:
+                e = Extension.objects.get(name = u['name'])
+            except Extension.DoesNotExist:
+                e = Extension(
+                    name = u['name'],
+                    extension_number = u['extension'],
+                    )
+                e.save()
+            except Extension.MultipleObjectsReturned:
+                print "extensiones repetidas!"
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
         if x['name']:
@@ -227,20 +239,51 @@ def generalDashboard(request):
             provider_total_cost = e.cost + provider_total_cost
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
-    cursor.execute('SELECT tarifica_providerdestinationdetail.id, SUM(tarifica_providerdestinationdetail.cost), tarifica_providerdestinationdetail.destination_group_id \
+    cursor.execute('SELECT tarifica_providerdestinationdetail.id, SUM(tarifica_providerdestinationdetail.cost) AS cost, tarifica_destinationgroup.name, tarifica_providerdestinationdetail.destination_group_id AS destid\
         FROM tarifica_providerdestinationdetail \
         LEFT JOIN tarifica_destinationgroup \
         ON tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
-        WHERE date > %s AND date < %s GROUP BY destination_group_id ORDER BY SUM(cost)',
+        WHERE date > %s AND date < %s GROUP BY destination_group_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
-    locales = dictfetchall(cursor)[:2]
-    for l in locales:
-        print l
+    locales = dictfetchall(cursor)[:3]
+    cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
+        FROM tarifica_userdailydetail \
+        LEFT JOIN tarifica_extension\
+        ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
+        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
+        [start_date,end_date])
+    extensions = dictfetchall(cursor)[:3]
     return render(request, 'tarifica/generaldashboard.html', {
               'total_cost' : total_cost,
               'provider_daily_costs' : provider_daily_costs,
               'locales' : locales,
+              'extensions' : extensions
               })
+
+
+
+def generalUsers(request):
+    from django.db import connection, transaction
+    cursor = connection.cursor()
+    end_date = datetime.datetime.utcnow().replace(tzinfo=utc)
+    start_date = datetime.date(end_date.year,end_date.month, 1)
+    cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
+        FROM tarifica_userdailydetail \
+        LEFT JOIN tarifica_extension\
+        ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
+        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
+        [start_date,end_date])
+    extensions = dictfetchall(cursor)[:3]
+    return render(request, 'tarifica/generalusers.html', {
+              'extensions' : extensions
+              })
+
+
+
+def realtime(request):
+    import subprocess
+    process = subprocess.call(['asterisk','-rx 'core show channels verbose''])
+
 
 
 

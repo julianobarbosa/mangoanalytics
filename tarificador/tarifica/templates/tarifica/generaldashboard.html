@@ -52,28 +52,17 @@
                     <th>PAIS</th>
                     <th>TIPO DESTINO</th>
                     <th>COSTO ACTUAL</th>
-                    <!--<th>ANALISIS DE USO</th>-->
                 </tr>
             </thead>
             <tbody>
+                {% for l in locales %}
                 <tr>
                     <td>MXN</td>
-                    <td>LOCAL</td>
-                    <td>$9,001</td>
+                    <td>{{l.name}}</td>
+                    <td>${{l.cost}}</td>
                     <td><a href="#">Analisis de Uso</a></td>
                 </tr>
-                <tr>
-                    <td>USA</td>
-                    <td>LOCAL</td>
-                    <td>$67,900</td>
-                    <td><a href="#">Analisis de Uso</a></td>
-                </tr>
-                <tr>
-                    <td>GB</td>
-                    <td>CELULAR</td>
-                    <td>$190,800</td>
-                    <td><a href="#">Analisis de Uso</a></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
 
@@ -90,21 +79,13 @@
                 </tr>
             </thead>
             <tbody>
+                {% for e in extensions%}
                 <tr>
-                    <td>211</td>
-                    <td>Luis</td>
-                    <td>$9,001</td>
+                    <td>{{e.extension_number}}</td>
+                    <td>{{e.name}}</td>
+                    <td>${{e.cost}}</td>
                 </tr>
-                <tr>
-                    <td>212</td>
-                    <td>Chucho</td>
-                    <td>$9,584</td>
-                </tr>
-                <tr>
-                    <td>213</td>
-                    <td>Derek</td>
-                    <td>$9,999</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
