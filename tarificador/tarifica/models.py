@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 class PaymentType(models.Model):
     name = models.CharField(max_length = 255, default="Pospago")
+    def __unicode__(self):
+        return self.name
 
 class TariffMode(models.Model):
     name = models.CharField(max_length = 255)
@@ -24,26 +26,33 @@ class Provider(models.Model):
     def __unicode__(self):
         return self.asterisk_name
 
-class DestinationGroup(models.Model):
+class DestinationName(models.Model):
     name = models.CharField(max_length = 255)
+    def __unicode__(self):
+        return self.name
+
+class DestinationCountry(models.Model):
+    name = models.CharField(max_length = 255)
+    def __unicode__(self):
+        return self.name
+
+class DestinationGroup(models.Model):
+    cost = models.FloatField()
+    tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
+    prefix = models.CharField(max_length = 255, blank=True)
+    matching_number = models.CharField(max_length = 255, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    destination_name = models.ForeignKey(DestinationName, blank=True, null=True)
+    destination_country = models.ForeignKey(DestinationCountry, blank=True, null=True)
 
 class Bundles(models.Model):
     name = models.CharField(max_length = 255)
-    provider = models.ForeignKey(Provider, blank=True, null=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
     cost = models.FloatField()
     usage = models.IntegerField(blank=True, null=True)
     amount = models.IntegerField()
     priority = models.IntegerField()
-
-class BaseTariff(models.Model):
-    provider = models.ForeignKey(Provider, blank=True, null=True)
-    cost = models.FloatField()
-    mode = models.ForeignKey(TariffMode, blank=True, null=True)
-    prefix = models.CharField(max_length = 255, blank=True)
-    matching_number = models.CharField(max_length = 255, blank=True)
-    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 class Calls(models.Model):
     dialed_number = models.CharField(max_length = 255)

@@ -36,7 +36,7 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (True,))
 		return self.am.cursor.fetchall()
 	
-	def getDestinationGroupsFromProvider(self, provider_id):
+	def getAllBaseTariffsFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_destinationgroup WHERE provider_id = %s"
 		self.am.cursor.execute(sql, (provider_id,))
@@ -141,15 +141,15 @@ class CallCostAssigner:
 			if provider.count(prov['asterisk_channel_id']) > 0:
 				print "Provider found:",prov['name']
 
-				destinations = self.getDestinationGroupsFromProvider(prov['id'])
-				if len(destinations) == 0:
-					print "No Destination Groups configured: cannot proceed."
+				baseTariffs = self.getAllBaseTariffsFromProvider(prov['id'])
+				if len(baseTariffs) == 0:
+					print "No base tariffs configured: cannot proceed."
 					continue
-				for d in destinations:
-					print "Trying to fit into destination",d['name']
+				for d in baseTariffs:
+					print "Trying to fit into base tariff",d['name']
 					try:
 						pos = dialedNoForProvider.index(d['prefix'])
-						print "Call prefix fits into destination group",d['name']
+						print "Call prefix fits into base tariff",d['name']
 					except ValueError, e:
 						pos = None
 					if pos is None:
@@ -159,10 +159,10 @@ class CallCostAssigner:
 					numberDialed = dialedNoForProvider[pos + len(d['prefix']):]
 					print "Number called according to trunk:",numberDialed
 					if len(numberDialed) == len(d['matching_number']):
-						# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
-						print "Call number fits pattern for destination group", d['name']
-						destination_group_id = d['id']
-						bundles = self.getProviderBundlesForDestination(prov['id'], d['id'])
+						# El numero marcado cae dentro de esta tarifa! Obtenemos los paquetes de la localidad
+						print "Call number fits pattern for base tariff", d['name']
+						destination_group_id = d['destination_group_id']
+						bundles = self.getProviderBundlesForDestination(prov['id'], d['destination_group_id'])
 						if len(bundles) > 0:
 							for b in bundles:
 								if b['usage'] == b['amount']:

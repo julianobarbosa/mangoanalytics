@@ -1,11 +1,12 @@
 from django.contrib import admin
-from tarifica.models import Provider, PaymentType, TariffMode, BaseTariff, UserDailyDetail, DestinationGroup, ProviderDailyDetail, ProviderDestinationDetail
+from tarifica.models import Provider, PaymentType, TariffMode, UserDailyDetail, DestinationGroup, DestinationName, DestinationCountry, ProviderDailyDetail, ProviderDestinationDetail
 
 admin.site.register(Provider)
 admin.site.register(PaymentType)
 admin.site.register(TariffMode)
-admin.site.register(BaseTariff)
 admin.site.register(DestinationGroup)
+admin.site.register(DestinationName)
+admin.site.register(DestinationCountry)
 admin.site.register(ProviderDailyDetail)
 admin.site.register(ProviderDestinationDetail)
 admin.site.register(UserDailyDetail)
