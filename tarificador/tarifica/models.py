@@ -1,21 +1,13 @@
 from django.db import models
 
 # Create your models here.
-
-
 class PaymentType(models.Model):
     name = models.CharField(max_length = 255, default="Pospago")
-
-
-
-
 
 class TariffMode(models.Model):
     name = models.CharField(max_length = 255)
     def __unicode__(self):
         return self.name
-
-
 
 class Provider(models.Model):
     asterisk_id = models.IntegerField()
@@ -32,10 +24,8 @@ class Provider(models.Model):
     def __unicode__(self):
         return self.asterisk_name
 
-
 class DestinationGroup(models.Model):
     name = models.CharField(max_length = 255)
-
 
 class Bundles(models.Model):
     name = models.CharField(max_length = 255)
@@ -47,8 +37,6 @@ class Bundles(models.Model):
     amount = models.IntegerField()
     priority = models.IntegerField()
 
-
-
 class BaseTariff(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
@@ -57,27 +45,18 @@ class BaseTariff(models.Model):
     matching_number = models.CharField(max_length = 255, blank=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
-
-
 class Calls(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
     duration = models.FloatField()
     cost = models.FloatField()
-<<<<<<< HEAD
     date = models.DateField()
-=======
-    date = models.DateTimeField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
->>>>>>> 6c0ead60973e2fbed5b72f3a7316d8c12a472662
-
-
 
 class Extension(models.Model):
     extension_number = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
     calls = models.ForeignKey(Calls, blank=True, null=True)
-
 
 class UserDailyDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
@@ -85,7 +64,6 @@ class UserDailyDetail(models.Model):
     total_minutes = models.FloatField()
     cost = models.FloatField()
     date = models.DateField()
-
 
 class UserDestinationDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
@@ -95,7 +73,6 @@ class UserDestinationDetail(models.Model):
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     date = models.DateField()
 
-
 class UserDestinationNumberDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
@@ -104,14 +81,12 @@ class UserDestinationNumberDetail(models.Model):
     prefix = models.CharField(max_length = 255)
     number = models.IntegerField()
 
-
 class ProviderDailyDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     total_calls = models.IntegerField()
     total_minutes = models.FloatField()
     date = models.DateField()
-
 
 class ProviderDestinationDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
@@ -121,9 +96,5 @@ class ProviderDestinationDetail(models.Model):
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     date = models.DateField()
 
-
 class UserInformation(models.Model):
     first_time_user = models.BooleanField(default=True)
-
-
-
