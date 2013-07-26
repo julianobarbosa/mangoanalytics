@@ -1,0 +1,65 @@
+[
+  {
+    "model": "tarifica.TariffMode",
+    "pk": 1,
+    "fields": {
+      "name": "Minuto"
+    }
+  },
+  {
+    "model": "tarifica.TariffMode",
+    "pk": 2,
+    "fields": {
+      "name": "Sesión"
+    }
+  },
+  {
+    "model": "tarifica.PaymentType",
+    "pk": 1,
+    "fields": {
+      "name": "Pospago"
+    }
+  },
+  {
+    "model": "tarifica.PaymentType",
+    "pk": 1,
+    "fields": {
+      "name": "Prepago"
+    }
+  },
+  {
+    "model": "tarifica.DestinationGroup",
+    "pk": 1,
+    "fields": {
+      "name": "Local"
+    }
+  },
+  {
+    "model": "tarifica.DestinationGroup",
+    "pk": 2,
+    "fields": {
+      "name": "Nacional"
+    }
+  },
+  {
+    "model": "tarifica.DestinationGroup",
+    "pk": 3,
+    "fields": {
+      "name": "Internacional"
+    }
+  },
+  {
+    "model": "tarifica.DestinationGroup",
+    "pk": 4,
+    "fields": {
+      "name": "Celular Local"
+    }
+  },
+  {
+    "model": "tarifica.DestinationGroup",
+    "pk": 5,
+    "fields": {
+      "name": "Celular Nacional"
+    }
+  },
+]

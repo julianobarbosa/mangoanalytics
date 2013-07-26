@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.forms import AddProviderInfo, AddBaseTariffs, AddBundles
 from tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.models import Provider, DestinationGroup, BaseTariff, PaymentType, Bundles, TariffMode, ProviderDailyDetail, ProviderDestinationDetail, Extension
+from tarifica.models import *
 from django.forms.formsets import formset_factory
 
 
