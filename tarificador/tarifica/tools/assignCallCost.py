@@ -96,8 +96,8 @@ class CallCostAssigner:
 
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
-		sql = "INSERT INTO tarifica_calls(dialed_number, extension_number, duration, cost, date) \
-		VALUES(%s, %s, %s, %s, %s)"
+		sql = "INSERT INTO tarifica_calls(dialed_number, extension_number, duration, cost, date, destination_group) \
+		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
 
@@ -119,6 +119,7 @@ class CallCostAssigner:
 		configuedProviders = self.getAllConfiguredProviders()
 		callInfoList = call['lastdata'].split('/')
 		cost = 0
+		destination_group_id = 0
 		dialedNoForProvider = call['dst']
 		separated = []
 		for a in callInfoList:
@@ -160,6 +161,7 @@ class CallCostAssigner:
 					if len(numberDialed) == len(d['matching_number']):
 						# El numero marcado cae dentro de esta localidad! Obtenemos los paquetes de la localidad
 						print "Call number fits pattern for destination group", d['name']
+						destination_group_id = d['id']
 						bundles = self.getProviderBundlesForDestination(prov['id'], d['id'])
 						if len(bundles) > 0:
 							for b in bundles:
@@ -203,7 +205,8 @@ class CallCostAssigner:
 				hour=call['calldate'].hour,
 				minute=call['calldate'].minute,
 				second=call['calldate'].second
-			)
+			),
+			destination_group_id
 		)
 
 if __name__ == '__main__':

@@ -66,6 +66,7 @@ class Calls(models.Model):
     duration = models.FloatField()
     cost = models.FloatField()
     date = models.DateTimeField()
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 
 
