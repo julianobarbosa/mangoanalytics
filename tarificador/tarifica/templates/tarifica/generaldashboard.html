@@ -3,6 +3,18 @@
 {% block title %} Dashboard Central {% endblock %}
 
 
+{% block navbar %}
+<li class="active">
+    <a href="{% url 'tarifica:generaldashboard' %}">Home</a>
+</li>
+<li>
+    <a href="{% url 'tarifica:dashboardtrunks' %}">Troncales</a>
+</li>
+<li>
+    <a href="{% url 'tarifica:usersgeneral' %}">Usuarios</a>
+</li>
+{% endblock %}
+
 {% block content %}
 
 <div class="well">

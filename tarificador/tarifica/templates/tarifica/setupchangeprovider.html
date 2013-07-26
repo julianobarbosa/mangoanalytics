@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "trunks.html" %}
 
 {% block title %}Cambiar información de Troncales{% endblock %}
 
@@ -51,7 +51,7 @@
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Troncal</button>
-        <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
+        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
     </div>
 </form>
 

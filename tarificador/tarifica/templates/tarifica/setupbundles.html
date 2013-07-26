@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "trunks.html" %}
 
 {% block title %}Agregar paquetes de {{provider.name}}{% endblock %}
 
@@ -21,7 +21,7 @@
         <h4> No hay tarifas base configuradas, favor de configurar tarifas base de troncal {{provider.name}} primero </h4>
     </div>
     <div class="span2 pull-right">
-        <a href="{% url 'tarifica:dashboardtroncales' %}" class="btn"></i>Regresar</a>
+        <a href="{% url 'tarifica:dashboardtrunks' %}" class="btn"></i>Regresar</a>
     </div>
 </div>
 
@@ -74,7 +74,7 @@
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Paquete</button>
-        <a class="btn" href="{% url 'tarifica:dashboardtroncales' %}">Cancelar</a>
+        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
     </div>
 </form>
 {% endif %}

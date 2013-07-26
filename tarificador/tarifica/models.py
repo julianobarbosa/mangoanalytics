@@ -34,10 +34,7 @@ class Provider(models.Model):
 
 
 class DestinationGroup(models.Model):
-    provider = models.ForeignKey(Provider, blank=True, null=True)
     name = models.CharField(max_length = 255)
-    prefix = models.CharField(max_length = 255, blank=True)
-    matching_number = models.CharField(max_length = 255, blank=True)
 
 
 class Bundles(models.Model):
@@ -56,6 +53,8 @@ class BaseTariff(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     mode = models.ForeignKey(TariffMode, blank=True, null=True)
+    prefix = models.CharField(max_length = 255, blank=True)
+    matching_number = models.CharField(max_length = 255, blank=True)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 
@@ -65,7 +64,7 @@ class Calls(models.Model):
     extension_number = models.CharField(max_length = 255)
     duration = models.FloatField()
     cost = models.FloatField()
-    date = models.DateTimeField()
+    date = models.DateField()
 
 
 

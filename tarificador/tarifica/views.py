@@ -24,7 +24,7 @@ def setupAddProviderInfo(request, asterisk_id):
             provider.channels = form.cleaned_data['channels']
             provider.is_configured = True
             provider.save()
-            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
+            return HttpResponseRedirect('/tarifica/dashboardtrunks') # Redirect after POST
     else:
         form = AddProviderInfo() # An unbound form
 
@@ -49,7 +49,7 @@ def setupAddBaseTariffs(request, asterisk_id):
             d.save()
             b = BaseTariff(provider=provider, cost=cost, mode=tariff_mode, destination_group=d)
             b.save()
-            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
+            return HttpResponseRedirect('/tarifica/dashboardtrunks') # Redirect after POST
     else:
         form = AddBaseTariffs() # An unbound form
 
@@ -84,7 +84,7 @@ def setupAddBundles(request, id):
                 amount=amount
                 )
             b.save()
-            return HttpResponseRedirect('/tarifica/dashboardtroncales') # Redirect after POST
+            return HttpResponseRedirect('/tarifica/dashboardtrunks') # Redirect after POST
     else:
         form = AddBundles() # An unbound form
 
@@ -262,27 +262,64 @@ def generalDashboard(request):
 
 
 
-def generalUsers(request):
+def generalUsers(request, month=None, year=None, day=None):
     from django.db import connection, transaction
     cursor = connection.cursor()
-    end_date = datetime.datetime.utcnow().replace(tzinfo=utc)
-    start_date = datetime.date(end_date.year,end_date.month, 1)
+    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    y = 0
+    m = 0
+    d = 0
+    if year:
+        y = year
+    else:
+        y = today.year
+    if month:
+        m = month
+    else:
+        m = today.month
+    if day:
+        d = day
+    else:
+        d = today.day
+    end_date = datetime.date(y, m, d)
+    start_date = datetime.date(y, m , 1)
     cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
         FROM tarifica_userdailydetail \
         LEFT JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
         WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
-    extensions = dictfetchall(cursor)[:3]
-    return render(request, 'tarifica/generalusers.html', {
-              'extensions' : extensions
+    extensions = dictfetchall(cursor)[:5]
+    cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, SUM(tarifica_userdailydetail.total_minutes) AS minutes\
+        , tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
+        FROM tarifica_userdailydetail \
+        LEFT JOIN tarifica_extension\
+        ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
+        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
+        [start_date,end_date])
+    all_users = dictfetchall(cursor)
+    average = 0
+    n = 0
+    for cost in all_users:
+        average += cost['cost']
+        n += 1
+    average = average/n
+    return render(request, 'tarifica/usersgeneral.html', {
+              'extensions' : extensions,
+              'all_users' : all_users,
+              'average' : average,
               })
 
 
 
 def realtime(request):
     import subprocess
-    process = subprocess.call(['asterisk','-rx 'core show channels verbose''])
+    process = subprocess.call(["asterisk","-rx 'core show channels verbose'"])
+    data = re.split("\n+", process)[1:]
+    processed_data = [re.split(":?", d, 9) for d in data]
+    return render(request, 'tarifica/realtime.html', {
+              'data' : processed_data,
+              })
 
 
 

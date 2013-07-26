@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "users.html" %}
 
 
 {% block title %} Usuarios {% endblock %}
@@ -13,9 +13,10 @@
         <a href="#" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Mes Anterior</a>
         <a href="#" class="btn btn-primary"></i>Personalizado</a>
 
+
         <div id="container" style="float:right;text-align:center">
             <h5>Promedios Historicos</h5>
-            <h5>Costo promedio mensual por usuario es <font color="red">$199</font></h5>
+            <h5>Costo promedio mensual por usuario es <font color="red">${{average}}</font></h5>
         </div>
 
     </div>
@@ -35,30 +36,17 @@
                 </tr>
             </thead>
             <tbody>
+                {% for ext in extensions%}
                 <tr>
-                    <td>211</td>
-                    <td>Luis</td>
-                    <td>$9,999</td>
+                    <td>{{ext.extension_number}}</td>
+                    <td>{{ext.name}}</td>
+                    <td>${{ext.cost}}</td>
                 </tr>
+                {% endfor %}
                 <tr>
                     <td>212</td>
                     <td>Chucho</td>
                     <td>$9,888</td>
-                </tr>
-                <tr>
-                    <td>213</td>
-                    <td>Derek</td>
-                    <td>$9,777</td>
-                </tr>
-                <tr>
-                    <td>214</td>
-                    <td>John</td>
-                    <td>$9,666</td>
-                </tr>
-                <tr>
-                    <td>215</td>
-                    <td>Cashusha</td>
-                    <td>$9,555</td>
                 </tr>
             </tbody>
         </table>
@@ -86,39 +74,20 @@
                 </tr>
             </thead>
             <tbody>
+                {% for user in all_users %}
                 <tr>
-                    <td>Luis</td>
-                    <td>211</td>
-                    <td>25,000</td>
-                    <td>$9,999</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.extension_number}}</td>
+                    <td>{{user.minutes}}</td>
+                    <td>${{user.cost}}</td>
                     <td><a href="detalleusuario.html">Ver Mas</a></td>
                 </tr>
-                <tr>
-                    <td>Chucho</td>
-                    <td>212</td>
-                    <td>24,000</td>
-                    <td>$9,888</td>
-                    <td><a href="detalleusuario.html">Ver Mas</a></td>
-                </tr>
+                {% endfor %}
                 <tr>
                     <td>Derek</td>
                     <td>213</td>
                     <td>23,000</td>
                     <td>$9,777</td>
-                    <td><a href="detalleusuario.html">Ver Mas</a></td>
-                </tr>
-                <tr>
-                    <td>John</td>
-                    <td>214</td>
-                    <td>22,000</td>
-                    <td>$9,666</td>
-                    <td><a href="detalleusuario.html">Ver Mas</a></td>
-                </tr>
-                <tr>
-                    <td>Cashusha</td>
-                    <td>215</td>
-                    <td>21,000</td>
-                    <td>$9,555</td>
                     <td><a href="detalleusuario.html">Ver Mas</a></td>
                 </tr>
             </tbody>
