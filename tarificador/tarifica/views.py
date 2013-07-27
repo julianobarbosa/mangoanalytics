@@ -312,10 +312,13 @@ def generalUsers(request, month=None, year=None, day=None):
 
 
 def realtime(request):
-    import subprocess
-    process = subprocess.call(["asterisk","-rx 'core show channels verbose'"])
-    data = re.split("\n+", process)[1:]
-    processed_data = [re.split(":?", d, 9) for d in data]
+    import subprocess, re
+    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    #process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
+    process ='Channel              Context              Extension        Prio State   Application  Data                      CallerID        Duration Accountcode PeerAccount BridgedTo\nIP/469-000002aa     macro-dialout-trunk  s                  19 Up      Dial         SIP/Nextor/525555543001,3 469             00:00:25                         SIP/Nextor-000002ab\nSIP/464-000002ac     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525555458610,3 464             00:00:13                         (None)\nSIP/4680-000002b0    from-internal        555                 3 Up      Wait         1                         4680            00:00:00                         (None)\nSIP/Nextor-000002ab  from-pstn                                1 Up      AppDial      (Outgoing Line)           755543001       00:00:25                         SIP/469-000002aa\nSIP/Nextor-000002af  from-pstn            752909139           1 Down    AppDial      (Outgoing Line)           752909139       00:00:09                         (None)\nSIP/Nextor-000002ad  from-pstn            755458610           1 Down    AppDial      (Outgoing Line)           755458610       00:00:13                         (None)\nSIP/470-000002ae     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525552909139,3 470             00:00:09                         (None)\n\n7 active channels\n4 active calls\n412 calls processed'
+    data = re.split("\n+", process)[1:-4]
+    processed_data = [re.split(" +", d, 9) for d in data if d[6]]
+    #data = [ d[7], "algo", re.split("/", d[6]), , d[8] ]
     return render(request, 'tarifica/realtime.html', {
               'data' : processed_data,
               })
