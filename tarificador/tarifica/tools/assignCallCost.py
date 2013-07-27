@@ -13,21 +13,12 @@ class CallCostAssigner:
 	def __init__(self):
 		self.am = AsteriskMySQLManager()
 
-	def getProviderBundlesForDestination(self, provider_id, destinationGroup_id):
+	def getAllBundlesFromDestinationGroup(self, destination_group_id):
 		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_bundles JOIN tarifica_destinationgroup \
-			ON tarifica_bundles.destination_group_id = tarifica_destinationgroup.id  \
-			WHERE tarifica_destinationgroup.provider_id = %s AND tarifica_destinationgroup.id = %s \
-			ORDER BY tarifica_bundles.priority ASC"
-		self.am.cursor.execute(sql, (provider_id, destinationGroup_id))
-		return self.am.cursor.fetchall()
-
-	def getAllBundlesFromProvider(self, provider_id):
-		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_bundles JOIN tarifica_provider \
-			ON tarifica_bundles.provider_id = tarifica_provider.id  \
-			WHERE tarifica_provider.id = %s"
-		self.am.cursor.execute(sql, (provider_id,))
+		sql = "SELECT * from tarifica_bundles \
+			WHERE destination_group_id = %s \
+			ORDER BY priority ASC"
+		self.am.cursor.execute(sql, (destination_group_id,))
 		return self.am.cursor.fetchall()
 
 	def getAllConfiguredProviders(self):
@@ -36,17 +27,11 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (True,))
 		return self.am.cursor.fetchall()
 	
-	def getAllBaseTariffsFromProvider(self, provider_id):
+	def getAllDestinationGroupsFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_destinationgroup WHERE provider_id = %s"
 		self.am.cursor.execute(sql, (provider_id,))
 		return self.am.cursor.fetchall()
-
-	def getBaseTariff(self, destinationGroup_id):
-		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_basetariff WHERE destination_group_id = %s"
-		self.am.cursor.execute(sql, (destinationGroup_id,))
-		return self.am.cursor.fetchone()
 
 	def getTariffMode(self, tariffMode_id):
 		self.am.connect('nextor_tarificador')
@@ -84,7 +69,6 @@ class CallCostAssigner:
 					dailyCallDetail.append(self.assignCost(row))
 					break
 					
-		print self.saveCalls(dailyCallDetail)
 		print "----------------------------------------------------"
 		print "Total outgoing calls processed:", totalOutgoingCalls
 
@@ -95,8 +79,12 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
 	def saveCalls(self, calls):
+		if len(calls[0]) == 0:
+			print "No call information to save, ending..."
+			return False
 		self.am.connect('nextor_tarificador')
-		sql = "INSERT INTO tarifica_calls(dialed_number, extension_number, duration, cost, date, destination_group) \
+		sql = "INSERT INTO tarifica_calls \
+		(dialed_number, extension_number, duration, cost, date, destination_group_id) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
@@ -116,7 +104,6 @@ class CallCostAssigner:
 
 	def assignCost(self, call):
 		#Obtenemos la informacion necesaria:
-		configuedProviders = self.getAllConfiguredProviders()
 		callInfoList = call['lastdata'].split('/')
 		cost = 0
 		destination_group_id = 0
@@ -128,8 +115,12 @@ class CallCostAssigner:
 			dialedNoForProvider = separated[2]
 		except IndexError:
 			print "No dialed number present! Skipping..."
-			return False
+			return ()
 
+		configuedProviders = self.getAllConfiguredProviders()
+		if len(configuedProviders) == 0:
+			print "No providers configured, ending..."
+			return ()
 		for prov in configuedProviders:
 			# Extraemos la troncal por la cual se fue la llamada:
 			try:
@@ -141,15 +132,15 @@ class CallCostAssigner:
 			if provider.count(prov['asterisk_channel_id']) > 0:
 				print "Provider found:",prov['name']
 
-				baseTariffs = self.getAllBaseTariffsFromProvider(prov['id'])
-				if len(baseTariffs) == 0:
-					print "No base tariffs configured: cannot proceed."
+				destinations = self.getAllDestinationGroupsFromProvider(prov['id'])
+				if len(destinations) == 0:
+					print "No destination groups configured: cannot proceed."
 					continue
-				for d in baseTariffs:
-					print "Trying to fit into base tariff",d['name']
+				for d in destinations:
+					print "Trying to fit into destination group",d['name']
 					try:
 						pos = dialedNoForProvider.index(d['prefix'])
-						print "Call prefix fits into base tariff",d['name']
+						print "Call prefix fits into destination group",d['name']
 					except ValueError, e:
 						pos = None
 					if pos is None:
@@ -160,9 +151,9 @@ class CallCostAssigner:
 					print "Number called according to trunk:",numberDialed
 					if len(numberDialed) == len(d['matching_number']):
 						# El numero marcado cae dentro de esta tarifa! Obtenemos los paquetes de la localidad
-						print "Call number fits pattern for base tariff", d['name']
-						destination_group_id = d['destination_group_id']
-						bundles = self.getProviderBundlesForDestination(prov['id'], d['destination_group_id'])
+						print "Call number fits pattern for destination group", d['name']
+						destination_group_id = d['id']
+						bundles = self.getAllBundlesFromDestinationGroup(d['id'])
 						if len(bundles) > 0:
 							for b in bundles:
 								if b['usage'] == b['amount']:
@@ -181,18 +172,16 @@ class CallCostAssigner:
 						else:
 							# No hay paquetes configurados, calculamos el costo con la tarifa base:
 							print "No bundles configured for destination group", d['name']
-							tariff = self.getBaseTariff(d['id'])
-							if len(tariff) > 0:
-								print "Billed minutes:",ceil(call['billsec'] / 60)
-								cost = ceil(call['billsec'] / 60) * tariff['cost']
-								print "Calculated cost:", cost
-							else:
-								print "No base tariffs configured: cannot proceed."
-								continue
+							print "Billed minutes:",ceil(call['billsec'] / 60)
+							cost = ceil(call['billsec'] / 60) * float(d['cost'])
+							print "Calculated cost:", cost
 					else:
 						# No coincide la longitud del numero marcado con la longitud esperada de la localidad
 						continue
+			else:
+				print "No provider found for", provider
 		
+		print "Costo calculado:",cost
 		return (
 			dialedNoForProvider, 
 			call['src'], 

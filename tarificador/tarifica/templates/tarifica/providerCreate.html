@@ -1,0 +1,59 @@
+{% extends "trunks.html" %}
+
+{% block title %}Agregar información de Troncales{% endblock %}
+
+
+{% block content %}
+
+<div class="row-fluid well">
+    <div class="span12">
+        <h4> Troncal {{provider.asterisk_name}} </h4>
+    </div>
+</div>
+
+
+
+<form action="{% url 'tarifica:providers_create' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="control-group">
+        {{ form.name.errors }}
+        <label class="control-label" for="id_name">Nombre</label>
+        <div class="controls">
+            {{ form.name }}
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.monthly_cost.errors }}
+        <label class="control-label" for="id_monthly_cost">Renta Mensual</label>
+        <div class="controls">
+            {{ form.monthly_cost }}
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.period_end.errors }}
+        <label class="control-label" for="id_period_end">Día de Corte</label>
+        <div class="controls">
+            {{ form.period_end }}
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.payment_type.errors }}
+        <label class="control-label" for="id_payment_type">Modalidad de Pago</label>
+        <div class="controls">
+            {{ form.payment_type }}
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.channels.errors }}
+        <label class="control-label" for="id_channels">Canales</label>
+        <div class="controls">
+            {{ form.channels }}
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Guardar Troncal</button>
+        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
+    </div>
+</form>
+
+{% endblock %}
