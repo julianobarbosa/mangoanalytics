@@ -7,6 +7,13 @@ import datetime
 import string
 from math import ceil,floor
 
+def getStartOfDay(date):
+	return date.strftime('%Y-%m-%d')+" 00:00:00"
+
+def getEndOfDay(date):
+	date = date + datetime.timedelta(days = 1)
+	return date.strftime('%Y-%m-%d')+" 00:00:00"
+
 class CallCostAssigner:
 	am = None
 
@@ -15,7 +22,7 @@ class CallCostAssigner:
 
 	def getAllBundlesFromDestinationGroup(self, destination_group_id):
 		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_bundles \
+		sql = "SELECT * from tarifica_bundle \
 			WHERE destination_group_id = %s \
 			ORDER BY priority ASC"
 		self.am.cursor.execute(sql, (destination_group_id,))
@@ -29,7 +36,9 @@ class CallCostAssigner:
 	
 	def getAllDestinationGroupsFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
-		sql = "SELECT * from tarifica_destinationgroup WHERE provider_id = %s"
+		sql = "SELECT * from tarifica_destinationgroup JOIN tarifica_destinationname \
+			ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+			WHERE provider_id = %s"
 		self.am.cursor.execute(sql, (provider_id,))
 		return self.am.cursor.fetchall()
 
@@ -39,16 +48,11 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (tariffMode_id,))
 		return self.am.cursor.fetchone()
 
-	def getStartOfDay(self, date):
-		return date.strftime('%Y-%m-%d')+" 00:00:00"
-
-	def getEndOfDay(self, date):
-		date = date + datetime.timedelta(days = 1)
-		return date.strftime('%Y-%m-%d')+" 00:00:00"
+	
 
 	def getDailyAsteriskCalls(self, date):
 		# Primero revisamos si es el día de corte.
-		print "Script running on day "+self.getStartOfDay(date)+"."
+		print "Script running on day "+getStartOfDay(date)+"."
 		# Obtenemos las extensiones configuradas:
 		extensions = self.am.getUserInformation()
 		self.resetBundleUsage()
@@ -56,7 +60,7 @@ class CallCostAssigner:
 		sql = "SELECT * from cdr WHERE callDate > %s AND callDate < %s AND lastapp = %s \
 		AND disposition = %s"
 		self.am.cursor.execute(sql, 
-			(self.getStartOfDay(date), self.getEndOfDay(date), 'Dial', 'ANSWERED')
+			(getStartOfDay(date), getEndOfDay(date), 'Dial', 'ANSWERED')
 		)
 		# Iteramos sobre las llamadas:
 		totalOutgoingCalls = 0
@@ -66,16 +70,21 @@ class CallCostAssigner:
 				if row['src'] == ext['extension']:
 					print "Outgoing call found, assigning cost..."
 					totalOutgoingCalls += 1
-					dailyCallDetail.append(self.assignCost(row))
+					callCostInfo = self.assignCost(row)
+					if callCostInfo:
+						dailyCallDetail.append(callCostInfo)
 					break
 					
 		print "----------------------------------------------------"
 		print "Total outgoing calls processed:", totalOutgoingCalls
+		self.saveCalls(dailyCallDetail)
+		print "----------------------------------------------------"
+		print "Total outgoing calls saved:", len(dailyCallDetail)
 
 	def saveBundleUsage(self, bundle):
 		self.am.connect('nextor_tarificador')
-		sql = "UPDATE tarifica_bundles SET tarifica_bundles.usage = %s \
-		WHERE tarifica_bundles.id = %s"
+		sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s \
+		WHERE tarifica_bundle.id = %s"
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
 	def saveCalls(self, calls):
@@ -83,7 +92,7 @@ class CallCostAssigner:
 			print "No call information to save, ending..."
 			return False
 		self.am.connect('nextor_tarificador')
-		sql = "INSERT INTO tarifica_calls \
+		sql = "INSERT INTO tarifica_call \
 		(dialed_number, extension_number, duration, cost, date, destination_group_id) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
@@ -177,11 +186,15 @@ class CallCostAssigner:
 							print "Calculated cost:", cost
 					else:
 						# No coincide la longitud del numero marcado con la longitud esperada de la localidad
+						print "Call number does not fit pattern for destination group."
 						continue
 			else:
 				print "No provider found for", provider
+				return ()
 		
-		print "Costo calculado:",cost
+		if destination_group_id == 0:
+			return ()
+			
 		return (
 			dialedNoForProvider, 
 			call['src'], 
@@ -200,6 +213,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=30)
+	week = week - datetime.timedelta(days=31)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)

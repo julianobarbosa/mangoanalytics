@@ -108,6 +108,15 @@ def realtime(request):
         t = today - timedelta
         print t
         d.append(t.time().strftime("%H:%M:%S"))
+        provider = Provider.objects.get(Provider, asterisk_name = d[2])
+        destination_groups = DestinationGroup.objects.filter(provider = provider)
+        for d in destination_groups:
+            try:
+                pos = d[3].index(d.prefix)
+            except ValueError,e :
+                post = None
+            if pos is None or pos != 0:
+                ""
     return render(request, 'tarifica/realtime.html', {
               'data' : data,
               })

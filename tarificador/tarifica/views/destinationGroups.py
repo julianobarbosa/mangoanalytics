@@ -46,4 +46,6 @@ def getDestinationGroup(request, provider_id):
     pass
 
 def deleteDestinationGroup(request, destination_group_id):
-    pass
+    destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
+    destination_group.delete()
+    return HttpResponseRedirect('/tarifica/setup')

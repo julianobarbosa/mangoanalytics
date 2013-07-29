@@ -62,7 +62,7 @@ class Call(models.Model):
     extension_number = models.CharField(max_length = 255)
     duration = models.FloatField()
     cost = models.FloatField()
-    date = models.DateField()
+    date = models.DateTimeField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
 
 class Extension(models.Model):
