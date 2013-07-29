@@ -103,20 +103,23 @@ def realtime(request):
         ]
     for d in data:
         t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
-        print t1
+        # print t1
         timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
         t = today - timedelta
-        print t
+        # print t
         d.append(t.time().strftime("%H:%M:%S"))
-        provider = Provider.objects.get(Provider, asterisk_name = d[2])
-        destination_groups = DestinationGroup.objects.filter(provider = provider)
-        for d in destination_groups:
-            try:
-                pos = d[3].index(d.prefix)
-            except ValueError,e :
-                post = None
-            if pos is None or pos != 0:
-                ""
+        print "asdasdasd"
+        print d[2]
+        print d[3]
+        # provider = Provider.objects.get(Provider, asterisk_name = d[2])
+        # destination_groups = DestinationGroup.objects.filter(provider = provider)
+        # for d in destination_groups:
+        #    try:
+        #        pos = d[3].index(d.prefix)
+        #    except ValueError,e :
+        #        post = None
+        #    if pos is None or pos != 0:
+        #        ""
     return render(request, 'tarifica/realtime.html', {
               'data' : data,
               })

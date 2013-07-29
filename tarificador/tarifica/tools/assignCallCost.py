@@ -48,8 +48,6 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (tariffMode_id,))
 		return self.am.cursor.fetchone()
 
-	
-
 	def getDailyAsteriskCalls(self, date):
 		# Primero revisamos si es el día de corte.
 		print "Script running on day "+getStartOfDay(date)+"."
