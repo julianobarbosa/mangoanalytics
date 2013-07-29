@@ -24,6 +24,7 @@ urlpatterns = patterns('',
    url(r'^dashboard$', general.dashboard, name = 'dashboard'),
 
    url(r'^users/general$', users.generalUsers, name = 'users_general'),
-   url(r'^users/detail/(?P<extension_id>\d+$)', users.detailUsers, name = 'users_detail'),
-   url(r'^users/analitics/(?P<extension_id>\d+$)', users.analiticsUsers, name = 'users_analitics'),
+   url(r'^users/general/(?P<period_id>\w+)$', users.generalUsers, name = 'users_general_period'),
+   url(r'^users/detail/(?P<extension_id>\d+)$', users.detailUsers, name = 'users_detail'),
+   url(r'^users/analitics/(?P<extension_id>\d+)$', users.analiticsUsers, name = 'users_analitics'),
 )

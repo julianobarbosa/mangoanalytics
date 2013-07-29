@@ -9,8 +9,19 @@
 
     <div class="span12 well well-small">
 
+
+        {% if custom %}
         <a href="#" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Mes Actual</a>
         <a href="#" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Mes Anterior</a>
+        {% endif %}
+
+
+
+        {% if last %}
+        <a href="" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Mes Actual</a>
+        {% else %}
+        <a href="{% url 'tarifica:users_general_period' "last" %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Mes Anterior</a>
+        {% endif %}
         <a href="#" class="btn btn-primary"></i>Personalizado</a>
 
 
