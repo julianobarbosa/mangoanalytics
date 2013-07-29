@@ -63,15 +63,6 @@ def updateBundle(request, bundle_id):
         'bundle' : b,
     })
 
-def getBundle(request, provider_id):
-    prov = get_object_or_404(Provider, id = id)
-    destination_groups = DestinationGroup.filter(provider = prov)
-    bundles = Bundle.objects.filter(provider=prov)
-    return render(request, 'tarifica/viewbundles.html', {
-                  'bundles' : bundles,
-                  'provider' : prov,
-                  })
-
 def deleteBundle(request, bundle_id):
     bundle = get_object_or_404(Bundle, id = bundle_id)
     bundle.delete()
