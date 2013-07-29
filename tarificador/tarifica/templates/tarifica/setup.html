@@ -22,7 +22,11 @@
             <tbody>
                 {% for prov in configured %}
                     <tr>
-                        <td>{{prov.name}}</td>
+                        <td>
+                            <a href="{% url 'tarifica:providers_get' prov.id %}">
+                                {{prov.name}}
+                            </a>
+                        </td>
                         <td>{{prov.provider_type}}</td>
                         <td>{{prov.period_end}}</td>
                         <td>${{prov.monthly_cost}}</td>

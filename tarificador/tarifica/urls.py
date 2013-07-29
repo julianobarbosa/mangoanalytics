@@ -11,12 +11,10 @@ urlpatterns = patterns('',
    
    url(r'^destinations/create/(?P<provider_id>\d+)$', destinationGroups.createDestinationGroup, name = 'destinations_create'),
    url(r'^destinations/update/(?P<destination_group_id>\d+)$', destinationGroups.updateDestinationGroup, name = 'destinations_update'),
-   url(r'^destinations/provider/(?P<provider_id>\d+)$', destinationGroups.getDestinationGroup, name = 'destinations_provider_get'),
    url(r'^destinations/delete/(?P<destination_group_id>\d+)$', destinationGroups.deleteDestinationGroup, name = 'destinations_delete'),
    
    url(r'^bundles/create/(?P<destination_group_id>\d+)$', bundles.createBundle, name = 'bundles_create'),
    url(r'^bundles/update/(?P<bundle_id>\d+)$', bundles.updateBundle, name = 'bundles_update'),
-   url(r'^bundles/provider/(?P<provider_id>\d+)$', bundles.getBundle, name = 'bundles_provider_get'),
    url(r'^bundles/delete/(?P<bundle_id>\d+)$', bundles.deleteBundle, name = 'bundles_delete'),
 
    url(r'^trunks$', general.trunks, name = 'trunks'),
