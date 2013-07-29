@@ -4,7 +4,7 @@
 yum groupinstall -y "Development tools" 
 yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel mysql-devel git
     
-#Installing Python 2.7.5 on Elastix 1.6
+#Installing Python 2.7.5 on Elastix 2.4
 wget http://python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
 tar xf Python-2.7.5.tar.bz2
 cd Python-2.7.5

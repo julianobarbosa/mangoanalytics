@@ -9,10 +9,10 @@
 
     <body>
         <div class="row-fluid well">
-            <div class="span9">
+            <div class="span6">
                 <img src="{% static "tarifica/nextorlogo.png" %}">
             </div>
-            <div class="span3">
+            <div class="span3 pull-right">
                 {% block user %}
                 <h5>User</h5>
                 {% endblock %}
@@ -33,7 +33,7 @@
                 <li>
                     <a href="{% url 'tarifica:trunks' %}">Trunks</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="{% url 'tarifica:users_general' %}">Users</a>
                 </li>
                 {% endblock %}
@@ -44,7 +44,7 @@
 
 
     <footer class="footer">
-        <div class="container" style="float:center">
+        <div class="container">
             <p>NEXTOR Telecom.</p>
             <p>Version 1.0</p>
         </div>

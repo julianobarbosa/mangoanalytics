@@ -1,32 +1,22 @@
 {% extends "trunks.html" %}
 
-{% block title %}Cambiar paquetes de {{provider.name}}{% endblock %}
-
+{% block title %}Agregar paquetes a {{ destination_group }}{% endblock %}
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{provider.name}} </h4>
+        <h4> Troncal {{ destination_group.provider.name }} </h4>
     </div>
 </div>
 
-
-
-<form action="{% url 'tarifica:setupchangebundles' b.id %}" method="post" class="form-horizontal">{% csrf_token %}
+<form action="{% url 'tarifica:bundles_create' destination_group.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
         <label class="control-label" for="id_name">Nombre</label>
         <div class="controls">
             {{ form.name }}
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.destination_group.errors }}
-        <label class="control-label" for="id_destination_group">Localidad</label>
-        <div class="controls">
-            {{ form.destination_group }}
         </div>
     </div>
     <div class="control-group">
@@ -59,7 +49,7 @@
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Paquete</button>
-        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
+        <a class="btn" href="{% url 'tarifica:setup' %}">Cancelar</a>
     </div>
 </form>
 

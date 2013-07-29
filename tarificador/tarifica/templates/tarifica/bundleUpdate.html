@@ -1,47 +1,25 @@
 {% extends "trunks.html" %}
 
-{% block title %}Agregar paquetes de {{provider.name}}{% endblock %}
+{% block title %}Cambiar paquetes de {{ bundle.destination_group }}{% endblock %}
 
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{provider.name}} </h4>
+        <h4> Troncal {{ bundle.destination_group.provider.name }} </h4>
     </div>
 </div>
 
 
 
-{% if not base %}
-
-
-<div class="row-fluid well">
-    <div class="span10">
-        <h4> No hay tarifas base configuradas, favor de configurar tarifas base de troncal {{provider.name}} primero </h4>
-    </div>
-    <div class="span2 pull-right">
-        <a href="{% url 'tarifica:dashboardtrunks' %}" class="btn"></i>Regresar</a>
-    </div>
-</div>
-
-
-{% else %}
-
-<form action="{% url 'tarifica:setupbundles' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
+<form action="{% url 'tarifica:bundles_update' bundle.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
         <label class="control-label" for="id_name">Nombre</label>
         <div class="controls">
             {{ form.name }}
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.destination_group.errors }}
-        <label class="control-label" for="id_destination_group">Localidad</label>
-        <div class="controls">
-            {{ form.destination_group }}
         </div>
     </div>
     <div class="control-group">
@@ -74,10 +52,8 @@
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Paquete</button>
-        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
+        <a class="btn" href="{% url 'tarifica:setup' %}">Cancelar</a>
     </div>
 </form>
-{% endif %}
-
 
 {% endblock %}

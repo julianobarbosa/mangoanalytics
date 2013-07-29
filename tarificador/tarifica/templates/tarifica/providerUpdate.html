@@ -1,19 +1,18 @@
 {% extends "trunks.html" %}
 
-{% block title %}Agregar información de Troncales{% endblock %}
+{% block title %}Cambiar información de Troncales{% endblock %}
 
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{provider.asterisk_name}} </h4>
+        <h4> Troncal {{provider.name}} </h4>
     </div>
 </div>
 
 
-
-<form action="{% url 'tarifica:setupprovider' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+<form action="{% url 'tarifica:providers_update' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
@@ -52,8 +51,11 @@
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Troncal</button>
-        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
+        <a class="btn" href="{% url 'tarifica:setup' %}">Cancelar</a>
     </div>
 </form>
+
+
+
 
 {% endblock %}
