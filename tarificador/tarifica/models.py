@@ -22,7 +22,6 @@ class Provider(models.Model):
     channels = models.IntegerField(blank=True, default=0)
     period_end = models.IntegerField(default=0)
     is_configured = models.BooleanField(default=False)
-    has_bundles = models.BooleanField(default=False)
     def __unicode__(self):
         return self.asterisk_name
 
@@ -37,6 +36,7 @@ class DestinationCountry(models.Model):
         return self.name
 
 class DestinationGroup(models.Model):
+    provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
     prefix = models.CharField(max_length = 255, blank=True)
@@ -44,8 +44,11 @@ class DestinationGroup(models.Model):
     notes = models.TextField(null=True, blank=True)
     destination_name = models.ForeignKey(DestinationName, blank=True, null=True)
     destination_country = models.ForeignKey(DestinationCountry, blank=True, null=True)
+    has_bundles = models.BooleanField(default=False)
+    def __unicode__(self):
+        return self.provider.name, '-', self.destination_name.name
 
-class Bundles(models.Model):
+class Bundle(models.Model):
     name = models.CharField(max_length = 255)
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
@@ -54,7 +57,7 @@ class Bundles(models.Model):
     amount = models.IntegerField()
     priority = models.IntegerField()
 
-class Calls(models.Model):
+class Call(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
     duration = models.FloatField()
@@ -65,7 +68,7 @@ class Calls(models.Model):
 class Extension(models.Model):
     extension_number = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
-    calls = models.ForeignKey(Calls, blank=True, null=True)
+    calls = models.ForeignKey(Call, blank=True, null=True)
 
 class UserDailyDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)

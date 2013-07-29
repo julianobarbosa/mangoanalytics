@@ -17,7 +17,6 @@
                     <th>TIPO</th>
                     <th>CORTE</th>
                     <th>RENTA MENSUAL</th>
-                    <th>TIENE PAQUETES?</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,29 +26,19 @@
                         <td>{{prov.provider_type}}</td>
                         <td>{{prov.period_end}}</td>
                         <td>${{prov.monthly_cost}}</td>
-                        {% if prov.has_bundles%}
-                            <td>SI</td>
-                            <td><a href="{% url 'tarifica:bundles_create' prov.id %}">Asignar Paquetes</a></td>
-                            <td><a href="{% url 'tarifica:bundles_provider_get' prov.id %}">Ver Paquetes</a></td>
-                            <td><a href="{% url 'tarifica:destinations_create' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
-                            <td><a href="{% url 'tarifica:destinations_update' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                        <td>
+                            <a href="{% url 'tarifica:destinations_create' prov.id %}">
+                                Agregar Tarifas Base
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'tarifica:providers_update' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                                 <i class="icon-pencil icon-white"></i>
                             </a>
-                            <a href="{% url 'tarifica:deleteprovider' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
-                                <i class="icon-remove-sign icon-white"></i></a>
-                            </td>
-                        {% else %}
-                            <td>NO</td>
-                            <td><a href="{% url 'tarifica:setupbundles' prov.id %}">Asignar Paquetes</a></td>
-                            <td></td>
-                            <td><a href="{% url 'tarifica:setupbasetariffs' prov.asterisk_id %}">Agregar Tarifas Base</a></td>
-                            <td><a href="{% url 'tarifica:setupchangeprovider' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
-                                <i class="icon-pencil icon-white"></i>
+                            <a href="{% url 'tarifica:providers_delete' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
+                                <i class="icon-remove-sign icon-white"></i>
                             </a>
-                            <a href="{% url 'tarifica:deleteprovider' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
-                                <i class="icon-remove-sign icon-white"></i></a>
-                            </td>
-                        {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -61,7 +50,7 @@
             <tbody>
                 {% for prov in not_configured %}
                 <tr>
-                    <td><a href="{% url 'tarifica:setupprovider' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
+                    <td><a href="{% url 'tarifica:providers_create' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -82,7 +71,7 @@
             <tbody>
                 {% for prov in not_configured %}
                 <tr>
-                    <td><a href="{% url 'tarifica:setupprovider' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
+                    <td><a href="{% url 'tarifica:providers_create' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -114,10 +103,10 @@
                     <td>{{bun.name}}</td>
                     <td>${{bun.cost}}</td>
                     <td>{{bun.priority}}</td>
-                    <td><a href="{% url 'tarifica:setupchangebundles' bun.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                    <td><a href="{% url 'tarifica:bundles_update' bun.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
                             <i class="icon-pencil icon-white"></i>
                         </a>
-                        <a href="{% url 'tarifica:deletebundle' bun.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
+                        <a href="{% url 'tarifica:bundles_delete' bun.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
                             <i class="icon-remove-sign icon-white"></i></a>
                     </td>
                 </tr>
@@ -144,19 +133,34 @@
         <table class="table table-striped table-hovered table-condensed">
             <thead>
                 <tr>
+                    <th>TRONCAL</th>
                     <th>NOMBRE</th>
                     <th>PREFIJO</th>
                     <th>MATCH</th>
                     <th>MODO</th>
+                    <th>PAQUETES</th>
                 </tr>
             </thead>
             <tbody>
                 {% for loc in locales%}
                 <tr>
-                    <td>{{loc.destination_group.name}}</td>
-                    <td>{{loc.destination_group.prefix}}</td>
-                    <td>{{loc.destination_group.matching_number}}</td>
-                    <td>{{loc.mode.name}}</td>
+                    <td>{{loc.provider}}</td>
+                    <td>{{loc.destination_name.name}}</td>
+                    <td>{{loc.prefix}}</td>
+                    <td>{{loc.matching_number}}</td>
+                    <td>{{loc.tariff_mode.name}}</td>
+                    <td>
+                        {% if loc.has_bundles %}
+                        <i class="icon-ok"></i>
+                        {% else %}
+                        <i class="icon-remove"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'tarifica:bundles_create' loc.id %}">
+                            Asignar Paquetes
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

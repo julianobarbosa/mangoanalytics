@@ -11,14 +11,20 @@
     </div>
 </div>
 
-
-<form action="{% url 'tarifica:setupbasetariffs' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+<form action="{% url 'tarifica:destinations_create' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
-        {{ form.destination_group.errors }}
+        {{ form.destination_name.errors }}
         <label class="control-label" for="id_destination_group">Localidad</label>
         <div class="controls">
-            {{ form.destination_group }}
+            {{ form.destination_name }}
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.destination_country.errors }}
+        <label class="control-label" for="id_destination_group">País</label>
+        <div class="controls">
+            {{ form.destination_country }}
         </div>
     </div>
     <div class="control-group">
@@ -51,7 +57,7 @@
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Guardar Tarifa</button>
-        <a class="btn" href="{% url 'tarifica:dashboardtrunks' %}">Cancelar</a>
+        <a class="btn" href="{% url 'tarifica:setup' %}">Cancelar</a>
     </div>
 </form>
 
