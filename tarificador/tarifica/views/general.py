@@ -1,4 +1,4 @@
-#Views for providers
+#General views
 
 import datetime
 from django.utils.timezone import utc
@@ -108,23 +108,24 @@ def realtime(request):
         t = today - timedelta
         # print t
         d.append(t.time().strftime("%H:%M:%S"))
-        print "asdasdasd"
-        print d[2]
-        print d[3]
-        # provider = Provider.objects.get(Provider, asterisk_name = d[2])
-        # destination_groups = DestinationGroup.objects.filter(provider = provider)
-        # for d in destination_groups:
-        #    try:
-        #        pos = d[3].index(d.prefix)
-        #    except ValueError,e :
-        #        post = None
-        #    if pos is None or pos != 0:
-        #        ""
+        provider = Provider.objects.get(asterisk_name = d[2])
+        destination_groups = DestinationGroup.objects.filter(provider = provider)
+        for dest in destination_groups:
+            try:
+                pos = d[3].index(dest.prefix)
+            except ValueError,e :
+                post = None
+            if pos == 0:
+                numberDialed = d[3][pos + len(dest.prefix):]
+                if len(numberDialed) == len(dest.matching_number):
+                    d[1] = dest.destination_name.name
+            else:
+                continue
     return render(request, 'tarifica/realtime.html', {
               'data' : data,
               })
 
-def dashboard(request):
+def dashboard(request, period_id="thisMonth"):
     from django.db import connection, transaction
     cursor = connection.cursor()
     end_date = datetime.datetime.utcnow().replace(tzinfo=utc)

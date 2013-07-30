@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
-from django.forms.formsets import formset_factory
 
 def createDestinationGroup(request, provider_id):
     provider = get_object_or_404(Provider, id = provider_id)

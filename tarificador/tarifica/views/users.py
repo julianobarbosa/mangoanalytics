@@ -10,7 +10,7 @@ from tarifica import forms
 from django.db import connection, transaction
 
 
-def generalUsers(request, period_id):
+def generalUsers(request, period_id="thisMonth"):
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     form = forms.getDate(initial=
@@ -21,7 +21,7 @@ def generalUsers(request, period_id):
     custom = False
     end_date = datetime.date(year=today.year, month=today.month, day=today.day)
     start_date = datetime.date(year=today.year, month=today.month, day=1)
-    if period_id == "last":
+    if period_id == "lastMonth":
         timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
@@ -64,7 +64,7 @@ def generalUsers(request, period_id):
               'form': form,
               })
 
-def detailUsers(request, extension_id, period_id="actual"):
+def detailUsers(request, extension_id, period_id="thisMonth"):
     Ext = get_object_or_404(Extension, id = extension_id)
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -76,7 +76,7 @@ def detailUsers(request, extension_id, period_id="actual"):
     custom = False
     end_date = datetime.date(year=today.year, month=today.month, day=today.day)
     start_date = datetime.date(year=today.year, month=today.month, day=1)
-    if period_id == "last":
+    if period_id == "lastMonth":
         timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Status check {% endblock %}
+
+{% block content %}
+<h1>Status check</h1>
+
+	{% if user_info.is_first_import_finished %}
+		<h3>Congratulations! Initial call processing finished successfully.</h3>
+		<p>
+			You can start oogling at all the cool data <a href="{% url 'tarifica:dashboard' %}">here</a>.
+		</p>
+	{% else %}
+		<h3>Sorry! We've not finished processing your call data yet.</h3>
+		<p>
+			Currently, we've processed {{ percentage_imported }}% of your data and it's taken us {{ lapsedMinutes }}, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining }} minutes to finish.
+		</p>
+	{% endif %}
+{% endblock %}

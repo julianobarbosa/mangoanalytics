@@ -5,7 +5,7 @@ from __future__ import division
 from asteriskMySQLManager import AsteriskMySQLManager
 import datetime
 import string
-from math import ceil,floor
+from math import ceil
 
 def getStartOfDay(date):
 	return date.strftime('%Y-%m-%d')+" 00:00:00"
