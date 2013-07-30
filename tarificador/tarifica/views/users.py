@@ -17,7 +17,7 @@ def generalUsersLastMonth(request):
 
 
 
-def generalUsers(request, period_id="actual"):
+def generalUsers(request, period_id="thisMonth"):
     from django.db import connection, transaction
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -27,7 +27,7 @@ def generalUsers(request, period_id="actual"):
     d = 0
     last_month = False
     custom = False
-    if period_id == "last":
+    if period_id == "lastMonth":
         timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         y = t.year

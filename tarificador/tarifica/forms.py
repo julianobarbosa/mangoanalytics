@@ -48,3 +48,11 @@ class getDate(forms.Form):
                             'required':u'Por favor proporciona una fecha inicial'})
     end_date = forms.DateField(label = 'Fecha final', error_messages={
                             'required':u'Por favor proporciona una fecha final'})
+
+class getNotificationEmail(forms.Form):
+    email = forms.EmailField(label = 'Email', error_messages=
+        {
+            'required':u'Por favor proporciona un correo electrónico.',
+            'invalid':u'Por favor proporciona un correo electrónico válido.'
+        }
+    )
