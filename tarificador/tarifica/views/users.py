@@ -90,17 +90,20 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
                 end_date = form.cleaned_data['end_date']
         custom = True
     cursor.execute('SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
-        tarifica_destinationgroup.id AS destid, tarifica_destinationgroup.name AS destname \
+        tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname \
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
         ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
         WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id \
-        ORDER BY SUM(cost) DESC',
+        ORDER BY cost DESC',
         [start_date,end_date, extension_id])
     destinations = dictfetchall(cursor)
-    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.date,\
-        tarifica_call.extension_number, tarifica_call.duration, tarifica_destinationgroup.name \
-        FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
+    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number,\
+        tarifica_destinationname.name, tarifica_destinationcountry.name , tarifica_call.date AS dat,\
+        tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        LEFT JOIN tarifica_destinationcountry ON tarifica_destinationgroup.destination_country_id = tarifica_destinationcountry.id \
         WHERE date > %s AND date < %s AND extension_number = %s',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
@@ -109,6 +112,8 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
     for cost in all_calls:
         average += cost['cost']
         n += 1
+        cost['dat'] = strftime(cost['dat'], '%d %B %Y')
+        cost['time'] = strftime(cost['time'], '%H:%M:%S')
     if n: average = average/n
     return render(request, 'tarifica/detailUsers.html', {
               'destinations' : destinations,

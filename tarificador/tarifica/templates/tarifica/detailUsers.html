@@ -1,5 +1,6 @@
+{% extends "users.html"%}
 
-    {% block title %} Detalle de Usuario {% endblock %}
+{% block title %} Detalle de Usuario {% endblock %}
 
 {% block content %}
 
@@ -8,12 +9,12 @@
     <div class="span12 well well-small">
 
         {% if custom %}
-            <a href="{% url 'tarifica:users_detail' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i>This Month</a>
+            <a href="{% url 'tarifica:users_detail' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
         {% else %}
             {% if last_month %}
-            <a href="{% url 'tarifica:users_detail' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+            <a href="{% url 'tarifica:users_detail' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
             {% else %}
-            <a href="{% url 'tarifica:users_detail_period' 'lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i>Last Month</a>
+            <a href="{% url 'tarifica:users_detail_period' extension_id=extension.id period_id='lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Last Month</a>
             {% endif %}
         {% endif %}
         <a href="#custom" class="btn btn-primary" data-toggle="modal"></i>Custom</a>
@@ -46,7 +47,7 @@
             </div>
             <div class="modal-footer">
                 <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                <a href="{% url 'tarifica:users_detail_period' 'custom' %}"  type="submit" class="btn btn-primary">Save changes</a>
+                <a href="{% url 'tarifica:users_detail_period' extension.id 'custom' %}"  type="submit" class="btn btn-primary">Load</a>
             </div>
         </div>
 
@@ -132,22 +133,14 @@
             <tbody>
                 {% for call in all_calls%}
                 <tr>
-                    <td>{{call.date.}}</td>
-                    <td> 12:00 pm </td>
-                    <td> CELULAR </td>
-                    <td> 50 </td>
-                    <td> $5,000 </td>
-                    <td> 5555555555 </td>
+                    <td>{{call.dat}}</td>
+                    <td>{{call.time}}</td>
+                    <td>{{call.name}}</td>
+                    <td>{{call.duration}}</td>
+                    <td>${{call.cost}}</td>
+                    <td>{{call.dialed_number}}</td>
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td>12 jun 2013</td>
-                    <td> 12:00 pm </td>
-                    <td> CELULAR </td>
-                    <td> 50 </td>
-                    <td> $5,000 </td>
-                    <td> 5555555555 </td>
-                </tr>
             </tbody>
         </table>
     </div>

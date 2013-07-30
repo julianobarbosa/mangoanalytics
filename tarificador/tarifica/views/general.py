@@ -82,7 +82,7 @@ def trunks(request):
     providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
     providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
     bundles = Bundle.objects.all().order_by('name')
-    locales = BaseTariff.objects.all()
+    locales = DestinationGroup.objects.all()
     return render(request, 'tarifica/dashboardtroncales.html', {
                   'not_configured' : providers_not_configured,
                   'configured' : providers_configured,
