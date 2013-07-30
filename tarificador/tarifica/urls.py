@@ -25,6 +25,7 @@ urlpatterns = patterns('',
 
    url(r'^users/general$', users.generalUsers, name = 'users_general'),
    url(r'^users/general/(?P<period_id>\w+)$', users.generalUsers, name = 'users_general_period'),
+   url(r'^users/general/(?P<extension_id>\d+/(?P<period_id>\w+)$', users.detailUsers, name = 'users_detaill_period'),
    url(r'^users/detail/(?P<extension_id>\d+)$', users.detailUsers, name = 'users_detail'),
    url(r'^users/analitics/(?P<extension_id>\d+)$', users.analiticsUsers, name = 'users_analitics'),
 )
