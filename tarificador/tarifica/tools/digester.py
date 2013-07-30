@@ -56,11 +56,11 @@ class Digester:
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_extension.id as extension_number, \
 			tarifica_call.date as date, \
-			tarifica_call.destination_group_id as destination_group \
+			tarifica_call.destination_group_id as destination_group_id \
 			FROM tarifica_call JOIN tarifica_extension \
 			ON tarifica_call.extension_number = tarifica_extension.extension_number \
 			WHERE date > %s AND date < %s \
-			GROUP BY destination_group_id"
+			GROUP BY tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
 		for row in self.am.cursor.fetchall():
 			callDetail.append((
@@ -208,11 +208,12 @@ class Digester:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=31)
+	week = week - datetime.timedelta(days=15)
 	print week
 	d = Digester()
-	# d.saveUserDailyDetail(week)
-	# d.saveUserDestinationNumberDetail(week)
-	# d.saveProviderDailyDetail(week)
+	d.saveUserDailyDetail(week)
+	d.saveUserDestinationDetail(week)
+	d.saveUserDestinationNumberDetail(week)
+	d.saveProviderDailyDetail(week)
 	d.saveProviderDestinationDetail(week)
 
