@@ -74,6 +74,7 @@
                 </tr>
             </tbody>
         </table>
+        {% if destinations %}
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <thead>
                 <tr>
@@ -93,6 +94,10 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <h5>There are no registered calls up to this moment</h5>
+        {% endif %}
+
 
     </div>
     <div class="span6 well well-small">
