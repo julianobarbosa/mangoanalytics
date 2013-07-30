@@ -91,7 +91,8 @@ class UserDestinationNumberDetail(models.Model):
     total_minutes = models.FloatField()
     cost = models.FloatField()
     prefix = models.CharField(max_length = 255)
-    number = models.IntegerField()
+    number = models.CharField(max_length = 255)
+    date = models.DateField()
 
 class ProviderDailyDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
