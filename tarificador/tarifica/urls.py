@@ -22,7 +22,6 @@ urlpatterns = patterns('',
    url(r'^realtime$', general.realtime, name = 'realtime'),
 
    url(r'^dashboard$', general.dashboard, name = 'dashboard'),
-   url(r'^dashboard/(?P<period_id>\w+)$', general.dashboard, name = 'dashboard_period'),
 
    url(r'^users/general$', users.generalUsers, name = 'users_general'),
    url(r'^users/general/(?P<period_id>\w+)$', users.generalUsers, name = 'users_general_period'),

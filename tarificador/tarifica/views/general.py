@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
-from django.forms.formsets import formset_factory
+from tarifica import forms
+from django.db import connection, transaction
 
 def setup(request):
     a_mysql_m = AsteriskMySQLManager()
@@ -125,11 +126,13 @@ def realtime(request):
               'data' : data,
               })
 
-def dashboard(request, period_id="thisMonth"):
-    from django.db import connection, transaction
+def dashboard(request):
+    today = datetime.date.today()
+    #Last Month
+    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
+
     cursor = connection.cursor()
-    end_date = datetime.datetime.utcnow().replace(tzinfo=utc)
-    start_date = datetime.date(end_date.year,end_date.month, 1)
     provider_daily_costs = []
     total_cost = 0
     providers = Provider.objects.filter(is_configured=True)
@@ -140,26 +143,45 @@ def dashboard(request, period_id="thisMonth"):
             provider_total_cost = e.cost + provider_total_cost
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
-    cursor.execute('SELECT tarifica_providerdestinationdetail.id, SUM(tarifica_providerdestinationdetail.cost) AS cost, tarifica_destinationgroup.name, tarifica_providerdestinationdetail.destination_group_id AS destid\
+
+    #Last 7 days
+    start_date = datetime.date(year=today.year, month=today.month, day=today.day - 7)
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
+    start_date = start_date.strftime('%Y-%m-%d')
+    end_date = end_date.strftime('%Y-%m-%d')
+    sql = "SELECT tarifica_providerdestinationdetail.id, \
+        SUM(tarifica_providerdestinationdetail.cost) AS cost, \
+        tarifica_destinationname.name as destination_name, \
+        tarifica_destinationcountry.name as country_name \
         FROM tarifica_providerdestinationdetail \
         LEFT JOIN tarifica_destinationgroup \
         ON tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
-        WHERE date > %s AND date < %s GROUP BY destination_group_id ORDER BY SUM(cost) DESC',
-        [start_date,end_date])
+        LEFT JOIN tarifica_destinationname \
+        ON tarifica_destinationname.id = tarifica_destinationgroup.destination_name_id \
+        LEFT JOIN tarifica_destinationcountry \
+        ON tarifica_destinationcountry.id = tarifica_destinationgroup.destination_country_id \
+        WHERE date > %s AND date < %s \
+        GROUP BY destination_group_id \
+        ORDER BY SUM(tarifica_providerdestinationdetail.cost) DESC"
+    cursor.execute(sql, (start_date,end_date))
     locales = dictfetchall(cursor)[:3]
-    cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
+    sql = 'SELECT tarifica_userdailydetail.id, \
+        SUM(tarifica_userdailydetail.cost) AS cost, \
+        tarifica_extension.name, \
+        tarifica_extension.extension_number \
         FROM tarifica_userdailydetail \
-        LEFT JOIN tarifica_extension\
+        LEFT JOIN tarifica_extension \
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
-        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
-        [start_date,end_date])
+        WHERE date > %s AND date < %s \
+        GROUP BY tarifica_userdailydetail.extension_id ORDER BY SUM(cost) DESC'
+    cursor.execute(sql, (start_date, end_date))
     extensions = dictfetchall(cursor)[:3]
-    return render(request, 'tarifica/generaldashboard.html', {
-              'total_cost' : total_cost,
-              'provider_daily_costs' : provider_daily_costs,
-              'locales' : locales,
-              'extensions' : extensions
-              })
+    return render(request, 'tarifica/dashboard.html', {
+        'total_cost' : total_cost,
+        'provider_daily_costs' : provider_daily_costs,
+        'locales' : locales,
+        'extensions' : extensions
+    })
 
 def dictfetchall(cursor):
     desc = cursor.description

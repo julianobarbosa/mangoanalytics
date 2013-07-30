@@ -62,7 +62,8 @@ def checkProcessingStatus(request):
         processedDays = (lastProviderDailyDetail.date - initialDateForProcessing).days
         daysToBeProcessed = (endDateForProcessing - initialDateForProcessing).days
         percentage_imported = ( processedDays / daysToBeProcessed ) * 100
-        minutesRemaining = ( daysToBeProcessed * lapsedMinutes ) / processedDays
+        totalMinutes = ( daysToBeProcessed * lapsedMinutes ) / processedDays
+        minutesRemaining = totalMinutes - lapsedMinutes
         
     except ObjectDoesNotExist, e:
         percentage_imported = 0
