@@ -21,15 +21,15 @@
         {% else %}
         <a href="{% url 'tarifica:users_general_period' 'last' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Mes Anterior</a>
         {% endif %}
-        <a href="#myModal" class="btn btn-primary" data-toggle="modal"></i>Personalizado</a>
+        <a href="#custom" class="btn btn-primary" data-toggle="modal"></i>Personalizado</a>
 
-        <div id="myModal" class="modal hide fade">
+        <div id="custom" class="modal hide fade">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3>Personalizar</h3>
             </div>
             <div class="modal-body">
-                <form action="{% url 'tarifica:providers_create' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+                <form action="#" method="post" class="form-horizontal">{% csrf_token %}
                     {{ form.non_field_errors }}
                     <div class="well">
                         <div id="datetimepicker1" class="input-append">
