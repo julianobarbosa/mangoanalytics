@@ -43,3 +43,8 @@ class createBundle(forms.Form):
                             'invalid':'Por favor proporciona un entero válido'})
 
 
+class getDate(forms.Form):
+    start_date = forms.DateField(label = 'Fecha inicial', error_messages={
+                            'required':u'Por favor proporciona una fecha inicial'})
+    end_date = forms.DateField(label = 'Fecha final', error_messages={
+                            'required':u'Por favor proporciona una fecha final'})

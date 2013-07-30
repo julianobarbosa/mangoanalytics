@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
+from tarifica import forms
 
 def generalUsersLastMonth(request):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -20,21 +21,23 @@ def generalUsers(request, period_id="actual"):
     from django.db import connection, transaction
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    form = forms.getDate()
     y = 0
     m = 0
     d = 0
-    last = False
+    last_month = False
     custom = False
-    if period_id is "last":
-        timedelta = datetime.timedelta(day = 1, month=today.month, year=today.year)
+    if period_id == "last":
+        timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         y = t.year
         m = t.month
         d = t.day
+        last_month = True
         print y
-    elif period_id is "custom":
+    elif period_id == "custom":
         pass
-    elif period_id is "actual":
+    else:
         y = today.year
         m = today.month
         d = today.day
@@ -65,8 +68,9 @@ def generalUsers(request, period_id="actual"):
               'extensions' : extensions,
               'all_users' : all_users,
               'average' : average,
-              'last' : last,
-              'custom' : custom
+              'last_month' : last_month,
+              'custom' : custom,
+              'form': form,
               })
 
 def detailUsers(request, extension_id):
