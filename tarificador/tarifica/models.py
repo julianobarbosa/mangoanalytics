@@ -60,10 +60,11 @@ class Bundle(models.Model):
 class Call(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
-    duration = models.FloatField()
+    duration = models.IntegerField()
     cost = models.FloatField()
     date = models.DateTimeField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    provider = models.ForeignKey(Provider, blank=True, null=True)
 
 class Extension(models.Model):
     extension_number = models.CharField(max_length = 255)
@@ -73,14 +74,14 @@ class Extension(models.Model):
 class UserDailyDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
-    total_minutes = models.FloatField()
+    total_minutes = models.IntegerField()
     cost = models.FloatField()
     date = models.DateField()
 
 class UserDestinationDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
-    total_minutes = models.FloatField()
+    total_minutes = models.IntegerField()
     cost = models.FloatField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     date = models.DateField()
@@ -88,7 +89,7 @@ class UserDestinationDetail(models.Model):
 class UserDestinationNumberDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
     total_calls = models.IntegerField()
-    total_minutes = models.FloatField()
+    total_minutes = models.IntegerField()
     cost = models.FloatField()
     prefix = models.CharField(max_length = 255)
     number = models.CharField(max_length = 255)
@@ -98,14 +99,14 @@ class ProviderDailyDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     total_calls = models.IntegerField()
-    total_minutes = models.FloatField()
+    total_minutes = models.IntegerField()
     date = models.DateField()
 
 class ProviderDestinationDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     total_calls = models.IntegerField()
-    total_minutes = models.FloatField()
+    total_minutes = models.IntegerField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     date = models.DateField()
 

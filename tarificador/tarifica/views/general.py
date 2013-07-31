@@ -50,47 +50,6 @@ def setup(request):
         'locales' : locales,
     })
 
-def trunks(request):
-    a_mysql_m = AsteriskMySQLManager()
-    users = a_mysql_m.getUserInformation()
-    for u in users:
-        if u['name']:
-            try:
-                e = Extension.objects.get(name = u['name'])
-            except Extension.DoesNotExist:
-                e = Extension(
-                    name = u['name'],
-                    extension_number = u['extension'],
-                    )
-                e.save()
-            except Extension.MultipleObjectsReturned:
-                print "extensiones repetidas!"
-    trunks = a_mysql_m.getTrunkInformation()
-    for x in trunks:
-        if x['name']:
-            try:
-                e = Provider.objects.get(asterisk_id = x['trunkid'])
-            except Provider.DoesNotExist:
-                p = Provider(
-                    asterisk_id = x['trunkid'],
-                    asterisk_name = x['name'],
-                    provider_type = x['tech'],
-                    asterisk_channel_id = x['channelid']
-                    )
-                p.save()
-            except Provider.MultipleObjectsReturned:
-                print "troncales repetidas!"
-    providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
-    providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
-    bundles = Bundle.objects.all().order_by('name')
-    locales = DestinationGroup.objects.all()
-    return render(request, 'tarifica/dashboardtroncales.html', {
-                  'not_configured' : providers_not_configured,
-                  'configured' : providers_configured,
-                  'bundles' : bundles,
-                  'locales' : locales,
-                  })
-
 def realtime(request):
     import subprocess, re
     today = datetime.datetime.utcnow().replace(tzinfo=utc)

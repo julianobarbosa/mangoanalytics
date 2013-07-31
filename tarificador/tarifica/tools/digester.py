@@ -46,7 +46,9 @@ class Digester:
 		(extension_id, total_calls, total_minutes, cost, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, callData)
-		return self.am.db.commit()
+		totalRowsSaved = self.am.db.commit()
+		print "----------------------------------------"
+		print "User Daily Detail saved:", totalRowsSaved
 
 	def getUserDestinationDetail(self, day):
 		callDetail = []	
@@ -84,7 +86,9 @@ class Digester:
 		(extension_id, total_calls, total_minutes, cost, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, callData)
-		return self.am.db.commit()
+		totalRowsSaved = self.am.db.commit()
+		print "----------------------------------------"
+		print "User Destination Detail saved:", totalRowsSaved
 
 	def getUserDestinationNumberDetail(self, day):
 		callDetail = []	
@@ -127,7 +131,9 @@ class Digester:
 		(extension_id, total_calls, total_minutes, cost, prefix, number, date) \
 		VALUES(%s, %s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, callData)
-		return self.am.db.commit()
+		totalRowsSaved = self.am.db.commit()
+		print "----------------------------------------"
+		print "User Destination Number Detail saved:", totalRowsSaved
 
 	# -----------------TRUNKS---------------------
 	def getProviderDailyDetail(self, day):
@@ -164,7 +170,9 @@ class Digester:
 		(provider_id, cost, total_calls, total_minutes, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, callData)
-		return self.am.db.commit()
+		totalRowsSaved = self.am.db.commit()
+		print "----------------------------------------"
+		print "Provider Daily Detail saved:", totalRowsSaved
 
 	def getProviderDestinationDetail(self, day):
 		callDetail = []	
@@ -202,13 +210,15 @@ class Digester:
 		(provider_id, cost, total_calls, total_minutes, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, callData)
-		return self.am.db.commit()
+		totalRowsSaved = self.am.db.commit()
+		print "----------------------------------------"
+		print "Provider Destination Detail saved:", totalRowsSaved
 
 
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=15)
+	week = week - datetime.timedelta(days=16)
 	print week
 	d = Digester()
 	d.saveUserDailyDetail(week)

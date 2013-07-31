@@ -86,13 +86,10 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
 	def saveCalls(self, calls):
-		if len(calls[0]) == 0:
-			print "No call information to save, ending..."
-			return False
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_call \
-		(dialed_number, extension_number, duration, cost, date, destination_group_id) \
-		VALUES(%s, %s, %s, %s, %s, %s)"
+		(dialed_number, extension_number, duration, cost, date, destination_group_id, provider_id) \
+		VALUES(%s, %s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
 
@@ -113,6 +110,7 @@ class CallCostAssigner:
 		#Obtenemos la informacion necesaria:
 		callInfoList = call['lastdata'].split('/')
 		cost = 0
+		provider_id = 0
 		destination_group_id = 0
 		dialedNoForProvider = call['dst']
 		separated = []
@@ -138,6 +136,7 @@ class CallCostAssigner:
 
 			if provider.count(prov['asterisk_channel_id']) > 0:
 				print "Provider found:",prov['name']
+				provider_id = prov['id']
 
 				destinations = self.getAllDestinationGroupsFromProvider(prov['id'])
 				if len(destinations) == 0:
@@ -150,7 +149,7 @@ class CallCostAssigner:
 						print "Call prefix fits into destination group",d['name']
 					except ValueError, e:
 						pos = None
-					if pos is None:
+					if pos is None or pos != 0:
 						continue
 
 					# Se encontro el prefijo!
@@ -206,7 +205,8 @@ class CallCostAssigner:
 				minute=call['calldate'].minute,
 				second=call['calldate'].second
 			),
-			destination_group_id
+			destination_group_id,
+			provider_id
 		)
 
 if __name__ == '__main__':
