@@ -8,26 +8,32 @@
     <div class="span6">
         <!--Consumos de este mes -->
         <div class="well well-small">
+        <h1>
+            FALTA SUMARLE COSTOS DE BUNDLE DE CADA PROVEEDOR!
+        </h1>
             <p>
                 Costs:
-                <span class="pull-right">
-                    <a href="{% url 'tarifica:trunks' 'custom' %}" class="btn">Custom Interval</a>
-                </span>
-                <span class="pull-right">
-                    <a href="{% url 'tarifica:trunks' 'lastMonth' %}" class="btn">Last Month</a>
-                </span>
-                <span class="pull-right">
-                    <a href="{% url 'tarifica:trunks' 'thisMonth' %}" class="btn">This Month</a>
+                <span class="btn-group pull-right">
+                    <a href="{% url 'tarifica:trunks' 'thisMonth' %}" class="btn">
+                        This Month
+                    </a>
+                    <a href="{% url 'tarifica:trunks' 'lastMonth' %}" class="btn">
+                        Last Month
+                    </a>
+                    <a href="{% url 'tarifica:trunks' 'custom' %}" class="btn">
+                        Custom Interval
+                    </a>
                 </span>
             </p>
-            <table>
+            <br>
+            <table class="table table-hovered table-striped table-condensed">
                 <tbody>
                 {% for prov in providers %}
                     <tr>
-                        <td>{{ prov.name }}</td>
-                        <td>{{ prov.cost }}</td>
+                        <th>{{ prov.provider.name }}:</th>
+                        <td>${{ prov.total_cost }}</td>
                         <td>
-                            <a href="{% url 'tarifica:trunks_get' prov.id %}" class="btn btn-primary">More</a>
+                            <a href="{% url 'tarifica:trunks_get' prov.provider.id %}" class="btn btn-primary">More</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -37,26 +43,32 @@
 
         <!--Detalle proveedor -->
         {% for prov in providers %}
+        <h4>Configured providers:</h4>
         <div class="well well-small">
             <p>
-                <strong>Name:</strong>{{ prov.name }}
+                <strong>Name:</strong> {{ prov.provider.name }}
             </p>
             <p>
-                <strong>Trunk type:</strong>{{ prov.provider_type }}
+                <strong>Trunk type:</strong> {{ prov.provider.provider_type }}
             </p>
             <p>
-                <strong>Billing start:</strong>{{ prov.period_end }} monthly
+                <strong>Billing start:</strong> {{ prov.provider.period_end }} monthly
             </p>
             <p>
-                <strong>Payment Type:</strong>{{ prov.payment_type }}
+                <strong>Payment Type:</strong> {{ prov.provider.payment_type }}
             </p>
             <p>
-                <strong>Average monthly cost:</strong>{{ prov.name }}
+                <strong>Average monthly cost:</strong> ${{ prov.average_cost }}
             </p>
             <p>
-                <strong>Current period cost:</strong>{{ prov.name }}
+                <strong>Current period cost:</strong> 
+                {% if prov.total_cost == None %}
+                    $0.00
+                {% else %}
+                    ${{ prov.total_cost }}
+                {% endif %}
                 <span class="pull-right">
-                    <a href="{% url 'tarifica:trunks_get' prov.id %}"></a>
+                    <a href="{% url 'tarifica:trunks_get' prov.provider.id %}"></a>
                 </span>
             </p>
         </div>

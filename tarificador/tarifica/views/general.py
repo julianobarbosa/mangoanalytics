@@ -122,7 +122,7 @@ def dashboard(request):
         WHERE date > %s AND date < %s \
         GROUP BY destination_group_id \
         ORDER BY SUM(tarifica_providerdestinationdetail.cost) DESC"
-    cursor.execute(sql, (start_date,end_date))
+    cursor.execute(sql, (start_date, end_date))
     locales = dictfetchall(cursor)[:3]
     sql = 'SELECT tarifica_userdailydetail.id, \
         SUM(tarifica_userdailydetail.cost) AS cost, \
