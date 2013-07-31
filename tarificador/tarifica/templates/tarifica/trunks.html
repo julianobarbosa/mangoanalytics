@@ -1,0 +1,78 @@
+{% extends "trunks.html" %}
+
+{% block title %} Trunks {% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <!--Columna izquierda-->
+    <div class="span6">
+        <!--Consumos de este mes -->
+        <div class="well well-small">
+            <p>
+                Costs:
+                <span class="pull-right">
+                    <a href="{% url 'tarifica:trunks' 'custom' %}" class="btn">Custom Interval</a>
+                </span>
+                <span class="pull-right">
+                    <a href="{% url 'tarifica:trunks' 'lastMonth' %}" class="btn">Last Month</a>
+                </span>
+                <span class="pull-right">
+                    <a href="{% url 'tarifica:trunks' 'thisMonth' %}" class="btn">This Month</a>
+                </span>
+            </p>
+            <table>
+                <tbody>
+                {% for prov in providers %}
+                    <tr>
+                        <td>{{ prov.name }}</td>
+                        <td>{{ prov.cost }}</td>
+                        <td>
+                            <a href="{% url 'tarifica:trunks_get' prov.id %}" class="btn btn-primary">More</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!--Detalle proveedor -->
+        {% for prov in providers %}
+        <div class="well well-small">
+            <p>
+                <strong>Name:</strong>{{ prov.name }}
+            </p>
+            <p>
+                <strong>Trunk type:</strong>{{ prov.provider_type }}
+            </p>
+            <p>
+                <strong>Billing start:</strong>{{ prov.period_end }} monthly
+            </p>
+            <p>
+                <strong>Payment Type:</strong>{{ prov.payment_type }}
+            </p>
+            <p>
+                <strong>Average monthly cost:</strong>{{ prov.name }}
+            </p>
+            <p>
+                <strong>Current period cost:</strong>{{ prov.name }}
+                <span class="pull-right">
+                    <a href="{% url 'tarifica:trunks_get' prov.id %}"></a>
+                </span>
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!--Columna derecha-->
+    <div class="span6">
+        <!--Gráfica pie-->
+        <div class="well well-small"></div>
+        <!--Gráfica por proveedor-->
+        {% for prov in providers %}
+        <div id="{{ prov.id }}" class="well well-small">
+            
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
