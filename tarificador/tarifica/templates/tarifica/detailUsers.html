@@ -1,6 +1,6 @@
 {% extends "users.html"%}
 
-{% block title %} Detalle de Usuario {% endblock %}
+{% block title %} User Detail {% endblock %}
 
 {% block content %}
 
@@ -61,8 +61,10 @@
 
 <div class="row-fluid">
     <div class="span6 well well-small">
+        <div style="float:right">
+            <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"></i>Usage analysis</a>
+        </div>
         <h5><strong> User Detail </strong></h5>
-
         <table class="table table-hovered table-condensed" border="0">
             <tbody>
                 <tr>
@@ -90,7 +92,6 @@
                     <td>MXN</td>
                     <td>{{d.destname}}</td>
                     <td>${{d.cost}}</td>
-                    <td><a href="#">Usage analysis</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
