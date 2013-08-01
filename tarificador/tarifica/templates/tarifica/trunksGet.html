@@ -11,13 +11,13 @@
             <p>
                 <strong>{{ provider.name }}</strong>
                 <span class="btn-group pull-right">
-                    <a href="{% url 'tarifica:trunks' 'thisMonth' %}" class="btn">
+                    <a href="{% url 'tarifica:trunks_get' trunk_id=provider.id period_id='thisMonth' %}" class="btn">
                         This Month
                     </a>
-                    <a href="{% url 'tarifica:trunks' 'lastMonth' %}" class="btn">
+                    <a href="{% url 'tarifica:trunks_get' trunk_id=provider.id period_id='lastMonth' %}" class="btn">
                         Last Month
                     </a>
-                    <a href="{% url 'tarifica:trunks' 'custom' %}" class="btn">
+                    <a href="{% url 'tarifica:trunks_get' trunk_id=provider.id period_id='custom' %}" class="btn">
                         Custom Interval
                     </a>
                 </span>
@@ -32,10 +32,15 @@
                 <strong>Payment Type:</strong> {{ provider.payment_type }}
             </p>
             <p>
-                <strong>Average monthly cost:</strong> {{ provider.name }}
+                <strong>Average monthly cost:</strong> ${{ averageMonthlyCost }}
             </p>
             <p>
-                <strong>Current period cost:</strong> {{ provider.name }}
+                <strong>Current period cost:</strong> 
+                {% if currentPeriodCost == None %}
+                    $0.00
+                {% else %}
+                    ${{ currentPeriodCost }}
+                {% endif %}
                 <span class="pull-right">
                     <a href="{% url 'tarifica:trunks_get' provider.id %}"></a>
                 </span>
@@ -69,7 +74,21 @@
                         <td>
                             <i class="icon-arrow-up"></i> {{ b.date_start }} - <i class="icon-arrow-down"></i> {{ b.date_end }}</td>
                         {% for d in b.data %}
+                            {% if d.total_cost == None %}
+                            <td>0</td>
+                            {% else %}
                             <td>{{ d }}</td>
+                            {% endif %}
+                            {% if d.total_calls == None %}
+                            <td>0</td>
+                            {% else %}
+                            <td>{{ d }}</td>
+                            {% endif %}
+                            {% if d.total_minutes == None %}
+                            <td>0</td>
+                            {% else %}
+                            <td>{{ d }}</td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                     {% endfor %}
