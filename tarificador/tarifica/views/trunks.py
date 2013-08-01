@@ -34,21 +34,30 @@ def general(request, period_id="thisMonth"):
 
     providers = Provider.objects.filter(is_configured = True)
     averageMonthlyCost = 0
+    totalTrunksCost = 0
     providersData = []
     for p in providers:
         billingPeriods = getBillingPeriods(p)
         total_cost = getTrunkCurrentIntervalCost(p.id, start_date, end_date)[0]['total_cost']
+        bundles = Bundles.objects.filter(provider_id = p.id)
+        for b in bundles:
+            if b is None:
+                total_cost += b.cost
         for b in billingPeriods:
             if b['data'][0]['total_cost'] is not None:
                 averageMonthlyCost += b['data'][0]['total_cost']
             average_cost = averageMonthlyCost / len(billingPeriods)
+        #totalTrunksCost = totalTrunksCost + total_cost
         providersData.append({
             'provider': p, 
             'total_cost': total_cost, 
             'average_cost': average_cost
         })
-    return render(request, 'tarifica/trunks.html', {
+
+    return render(request, 'tarifica/troncalesgeneral.html', {
         'providers' : providersData,
+        'form' : form,
+        'totalTrunksCost' : totalTrunksCost
     })
     
 def getTrunk(request, trunk_id, period_id="thisMonth"):
