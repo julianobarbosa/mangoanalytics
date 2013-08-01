@@ -104,7 +104,10 @@ def dashboard(request):
         total_cost += provider_total_cost
 
     #Last 7 days
-    start_date = datetime.date(year=today.year, month=today.month, day=today.day - 7)
+    if today.day - 7 < 0:
+        start_date = datetime.date(year=today.year, month=today.month, day=1)
+    else:
+        start_date = datetime.date(year=today.year, month=today.month, day=today.day - 7)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day)
     start_date = start_date.strftime('%Y-%m-%d')
     end_date = end_date.strftime('%Y-%m-%d')
@@ -135,6 +138,9 @@ def dashboard(request):
         GROUP BY tarifica_userdailydetail.extension_id ORDER BY SUM(cost) DESC'
     cursor.execute(sql, (start_date, end_date))
     extensions = dictfetchall(cursor)[:3]
+
+    #Information for graph
+
     return render(request, 'tarifica/dashboard.html', {
         'total_cost' : total_cost,
         'provider_daily_costs' : provider_daily_costs,
