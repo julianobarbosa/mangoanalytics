@@ -77,17 +77,17 @@
                             {% if d.total_cost == None %}
                             <td>0</td>
                             {% else %}
-                            <td>{{ d }}</td>
+                            <td>{{ d.total_cost }}</td>
                             {% endif %}
                             {% if d.total_calls == None %}
                             <td>0</td>
                             {% else %}
-                            <td>{{ d }}</td>
+                            <td>{{ d.total_calls }}</td>
                             {% endif %}
                             {% if d.total_minutes == None %}
                             <td>0</td>
                             {% else %}
-                            <td>{{ d }}</td>
+                            <td>{{ d.total_minutes }}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
