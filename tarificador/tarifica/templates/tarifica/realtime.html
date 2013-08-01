@@ -5,14 +5,10 @@
 {% block content %}
 
 <div class="row-fluid">
-    <div id="graph" class="span6 well" style="height:300px; min-height:300px">
+    <div id="graph" class="span12 well" style="height:400px; min-height:400px, width:100%">
         
     </div>
 </div>
-
-
-
-
 
 <div class="row-fluid">
     <div class="span12 well well-small">
@@ -46,27 +42,21 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{% static "tarifica/js/jquery.jqplot.min.js" %}"></script>
-<script type="text/javascript" src="{% static "tarifica/js/plugins/jqplot.pieRenderer.min.js" %}"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){
-        var data = [
-            ['Heavy Industry', 12],['Retail', 9], ['Light Industry', 14], 
-            ['Out of home', 16],['Commuting', 7], ['Orientation', 9]
-        ];
-        var plot2 = jQuery.jqplot ('graph', [data], 
-        {
+
+
+        var data = $.parseJSON('{{ graphData | safe }}');
+        var plot1 = jQuery.jqplot ('graph', [data], 
+        { 
             seriesDefaults: {
+                // Make this a pie chart.
                 renderer: jQuery.jqplot.PieRenderer, 
                 rendererOptions: {
-                    // Turn off filling of slices.
-                    fill: false,
-                    showDataLabels: true, 
-                    // Add a margin to seperate the slices.
-                    sliceMargin: 4, 
-                    // stroke the slices with a little thicker line.
-                    lineWidth: 5
+                    // Put data labels on the pie slices.
+                    // By default, labels show the percentage of the slice.
+                    showDataLabels: true
                 }
             }, 
             legend: { show:true, location: 'e' }

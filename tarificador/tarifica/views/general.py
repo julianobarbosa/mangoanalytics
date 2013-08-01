@@ -8,6 +8,7 @@ from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
+import json
 
 def setup(request):
     a_mysql_m = AsteriskMySQLManager()
@@ -61,6 +62,7 @@ def realtime(request):
         [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
         for d in processed_data if re.search("/",d[6])
         ]
+    graphData = []
     for d in data:
         t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
         # print t1
@@ -81,9 +83,18 @@ def realtime(request):
                     d[1] = dest.destination_name.name
             else:
                 continue
+        accountedFor = False
+        for g in graphData:
+            if g[0] == d[1]:
+                accountedFor = True
+                g[1] += 1
+        if not accountedFor:
+            graphData.append([d[1], 1])
+
     return render(request, 'tarifica/realtime.html', {
-              'data' : data,
-              })
+        'data' : data,
+        'graphData' : json.dumps(graphData),
+    })
 
 def dashboard(request):
     today = datetime.date.today()
@@ -104,10 +115,7 @@ def dashboard(request):
         total_cost += provider_total_cost
 
     #Last 7 days
-    if today.day - 7 < 0:
-        start_date = datetime.date(year=today.year, month=today.month, day=1)
-    else:
-        start_date = datetime.date(year=today.year, month=today.month, day=today.day - 7)
+    start_date = datetime.date(year=today.year, month=today.month, day=(today - datetime.timedelta(days=7)).day)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day)
     start_date = start_date.strftime('%Y-%m-%d')
     end_date = end_date.strftime('%Y-%m-%d')

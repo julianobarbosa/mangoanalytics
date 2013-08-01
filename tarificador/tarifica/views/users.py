@@ -55,14 +55,22 @@ def generalUsers(request, period_id="thisMonth"):
         average += cost['cost']
         n += 1
     if n: average = average/n
+
+    thisMonth = 'July'
+    lastMonth = 'June'
+    lastTwoMonths = 'May'
+
     return render(request, 'tarifica/generalUsers.html', {
-              'extensions' : extensions,
-              'all_users' : all_users,
-              'average' : average,
-              'last_month' : last_month,
-              'custom' : custom,
-              'form': form,
-              })
+        'extensions' : extensions,
+        'all_users' : all_users,
+        'average' : average,
+        'last_month' : last_month,
+        'custom' : custom,
+        'form': form,
+        'thisMonth': thisMonth,
+        'lastMonth': lastMonth,
+        'lastTwoMonths': lastTwoMonths,
+    })
 
 def detailUsers(request, extension_id, period_id="thisMonth"):
     Ext = get_object_or_404(Extension, id = extension_id)
