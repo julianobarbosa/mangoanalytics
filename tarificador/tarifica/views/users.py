@@ -59,14 +59,22 @@ def generalUsers(request, period_id="thisMonth"):
         average += cost['cost']
         n += 1
     if n: average = average/n
+
+    thisMonth = 'July'
+    lastMonth = 'June'
+    lastTwoMonths = 'May'
+
     return render(request, 'tarifica/generalUsers.html', {
-              'extensions' : extensions,
-              'all_users' : all_users,
-              'average' : average,
-              'last_month' : last_month,
-              'custom' : custom,
-              'form': form,
-              })
+        'extensions' : extensions,
+        'all_users' : all_users,
+        'average' : average,
+        'last_month' : last_month,
+        'custom' : custom,
+        'form': form,
+        'thisMonth': thisMonth,
+        'lastMonth': lastMonth,
+        'lastTwoMonths': lastTwoMonths,
+    })
 
 def detailUsers(request, extension_id, period_id="thisMonth"):
     Ext = get_object_or_404(Extension, id = extension_id)
@@ -157,10 +165,14 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date']
         custom = True
-    cursor.execute('SELECT tarifica_call.id, SUM(tarifica_call.cost) AS cost, tarifica_call.dialed_number,\
-        SUM(tarifica_call.duration) AS duration WHERE date > %s AND date < %s AND extension_number = %s \
-        GROUP BY dialed_number ORDER BY SUM(cost) DESC',
-        [start_date_year,end_date_year, Ext.extension_number])
+    sql = "SELECT tarifica_call.id,\
+        SUM(tarifica_call.cost) AS cost,\
+        tarifica_call.dialed_number,\
+        SUM(tarifica_call.duration) AS duration \
+        FROM tarifica_call\
+        WHERE date > %s AND date < %s AND extension_number = %s \
+        GROUP BY dialed_number ORDER BY SUM(cost) DESC"
+    cursor.execute(sql,[start_date_year,end_date_year, Ext.extension_number])
     top_calls = dictfetchall(cursor)[:10]
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number,\
         tarifica_destinationname.name, tarifica_destinationcountry.name , tarifica_call.date AS dat,\
@@ -171,7 +183,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
         WHERE date > %s AND date < %s AND extension_number = %s',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
-    return render(request, 'tarifica/analiticsUsers', {
+    return render(request, 'tarifica/analyticsUsers.html', {
               'all_calls' : all_calls,
               'top_calls' : top_calls,
               'last_month' : last_month,

@@ -37,16 +37,12 @@ class Digester:
 
 	def saveUserDailyDetail(self, day):
 		callData = self.getUserDailyDetail(day)
-		if len(callData[0]) == 0:
-			print "No call information to save, ending..."
-			return False
-
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdailydetail \
 		(extension_id, total_calls, total_minutes, cost, date) \
 		VALUES(%s, %s, %s, %s, %s)"
-		self.am.cursor.executemany(sql, callData)
-		totalRowsSaved = self.am.db.commit()
+		totalRowsSaved = self.am.cursor.executemany(sql, callData)
+		self.am.db.commit()
 		print "----------------------------------------"
 		print "User Daily Detail saved:", totalRowsSaved
 
@@ -77,16 +73,12 @@ class Digester:
 
 	def saveUserDestinationDetail(self, day):
 		callData = self.getUserDestinationDetail(day)
-		if len(callData[0]) == 0:
-			print "No call information to save, ending..."
-			return False
-		print len(callData[0])
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdestinationdetail \
 		(extension_id, total_calls, total_minutes, cost, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
-		self.am.cursor.executemany(sql, callData)
-		totalRowsSaved = self.am.db.commit()
+		totalRowsSaved = self.am.cursor.executemany(sql, callData)
+		self.am.db.commit()
 		print "----------------------------------------"
 		print "User Destination Detail saved:", totalRowsSaved
 
@@ -121,17 +113,12 @@ class Digester:
 
 	def saveUserDestinationNumberDetail(self, day):
 		callData = self.getUserDestinationNumberDetail(day)
-		print callData
-		if len(callData[0]) == 0:
-			print "No user destination number information to save, ending..."
-			return False
-		print len(callData[0])
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdestinationnumberdetail \
 		(extension_id, total_calls, total_minutes, cost, prefix, number, date) \
 		VALUES(%s, %s, %s, %s, %s, %s, %s)"
-		self.am.cursor.executemany(sql, callData)
-		totalRowsSaved = self.am.db.commit()
+		totalRowsSaved = self.am.cursor.executemany(sql, callData)
+		self.am.db.commit()
 		print "----------------------------------------"
 		print "User Destination Number Detail saved:", totalRowsSaved
 
@@ -161,16 +148,12 @@ class Digester:
 
 	def saveProviderDailyDetail(self, day):
 		callData = self.getProviderDailyDetail(day)
-		if len(callData[0]) == 0:
-			print "No call information to save, ending..."
-			return False
-
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_providerdailydetail \
 		(provider_id, cost, total_calls, total_minutes, date) \
 		VALUES(%s, %s, %s, %s, %s)"
-		self.am.cursor.executemany(sql, callData)
-		totalRowsSaved = self.am.db.commit()
+		totalRowsSaved = self.am.cursor.executemany(sql, callData)
+		self.am.db.commit()
 		print "----------------------------------------"
 		print "Provider Daily Detail saved:", totalRowsSaved
 
@@ -201,16 +184,12 @@ class Digester:
 
 	def saveProviderDestinationDetail(self, day):
 		callData = self.getProviderDestinationDetail(day)
-		if len(callData[0]) == 0:
-			print "No call information to save, ending..."
-			return False
-		print len(callData[0])
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_providerdestinationdetail \
 		(provider_id, cost, total_calls, total_minutes, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
-		self.am.cursor.executemany(sql, callData)
-		totalRowsSaved = self.am.db.commit()
+		totalRowsSaved = self.am.cursor.executemany(sql, callData)
+		self.am.db.commit()
 		print "----------------------------------------"
 		print "Provider Destination Detail saved:", totalRowsSaved
 
@@ -218,7 +197,7 @@ class Digester:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=20)
+	week = week - datetime.timedelta(days=1)
 	print week
 	d = Digester()
 	d.saveUserDailyDetail(week)
