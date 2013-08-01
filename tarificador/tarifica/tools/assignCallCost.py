@@ -211,6 +211,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=16)
+	week = week - datetime.timedelta(days=20)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
