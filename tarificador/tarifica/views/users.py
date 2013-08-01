@@ -34,14 +34,17 @@ def generalUsers(request, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date']
         custom = True
-    cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
+    cursor.execute(
+        'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
         tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
         WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
     extensions = dictfetchall(cursor)[:5]
-    cursor.execute('SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
+    #for e in extensions : print e['extension_number']
+    cursor.execute(
+        'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
         SUM(tarifica_userdailydetail.total_minutes) AS minutes, tarifica_extension.name, \
         tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
@@ -49,6 +52,7 @@ def generalUsers(request, period_id="thisMonth"):
         WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
     all_users = dictfetchall(cursor)
+    #for a in all_users: print a
     average = 0
     n = 0
     for cost in all_users:
@@ -98,7 +102,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         ORDER BY cost DESC',
         [start_date,end_date, extension_id])
     destinations = dictfetchall(cursor)
-    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number,\
+    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration,\
         tarifica_destinationname.name, tarifica_destinationcountry.name , tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
@@ -112,8 +116,8 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
     for cost in all_calls:
         average += cost['cost']
         n += 1
-        cost['dat'] = strftime(cost['dat'], '%d %B %Y')
-        cost['time'] = strftime(cost['time'], '%H:%M:%S')
+        cost['dat'] = cost['dat'].strftime('%d %B %Y')
+        cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
     return render(request, 'tarifica/detailUsers.html', {
               'destinations' : destinations,
@@ -124,7 +128,6 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'form': form,
               'extension' : Ext,
               })
-
 
 
 def analyticsUsers(request, extension_id, period_id="thisMonth"):
