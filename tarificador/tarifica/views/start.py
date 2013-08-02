@@ -12,10 +12,10 @@ def step1(request):
     return render(request, 'tarifica/start/step1.html', {})
 
 def step2(request):
+    user_info = get_object_or_404(UserInformation, id = 1)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.getNotificationEmail()
         if form.is_valid(): # All validation rules pass
-            user_info = UserInformation.objects.get(pk = 1)
             user_info.notification_email = form.cleaned_data['email']
             user_info.first_import_started = datetime.datetime.now()
             user_info.save()
@@ -24,7 +24,9 @@ def step2(request):
             # callDataStart()
             return HttpResponseRedirect('/start/step3') # Redirect after POST
     else:
-        form = forms.getNotificationEmail()
+        form = forms.getNotificationEmail(initial = {
+            'email': user_info.notification_email
+        })
 
     return render(request, 'tarifica/start/step2.html', {
         'form': form

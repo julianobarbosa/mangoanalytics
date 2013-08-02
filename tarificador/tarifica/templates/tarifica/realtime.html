@@ -45,8 +45,6 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-
-
         var data = $.parseJSON('{{ graphData | safe }}');
         var plot1 = jQuery.jqplot ('graph', [data], 
         { 
