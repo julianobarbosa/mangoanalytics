@@ -56,3 +56,21 @@ class getNotificationEmail(forms.Form):
             'invalid':u'Por favor proporciona un correo electrónico válido.'
         }
     )
+
+
+class getUserInfo(forms.Form):
+    country_code = forms.CharField(max_length = 50, error_messages={
+                    'required':u'Por favor proporciona el código de tu país'})
+    bussiness_name = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Por favor proporciona el nombre de tu empresa'})
+    contact_first_name = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Por favor proporciona el primer nombre del contacto'})
+    contact_last_name = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Por favor proporciona el segundo nombre del contacto'})
+    notification_email = forms.EmailField(label = 'Email', error_messages={
+                        'required':u'Por favor proporciona un correo electrónico.',
+                        'invalid':u'Por favor proporciona un correo electrónico válido.'})
+    currency_code = forms.CharField(max_length = 10, error_messages={
+                    'required':u'Por favor proporciona el código del tipo de moneda'})
+    currency_symbol = forms.CharField(max_length = 1, error_messages={
+                    'required':u'Por favor proporciona el símbolo del tipo de moneda'})
