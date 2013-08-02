@@ -158,6 +158,9 @@ def dashboard(request):
         'extensions' : extensions
     })
 
+def config(request):
+    pass
+    
 def dictfetchall(cursor):
     desc = cursor.description
     return [

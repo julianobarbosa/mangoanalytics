@@ -3,6 +3,8 @@ from tarifica.views import bundles, destinationGroups, general, providers, trunk
 
 urlpatterns = patterns('',
    url(r'^setup$', general.setup, name = 'setup'),
+   
+   url(r'^config$', general.config, name = 'config'),
 
    url(r'^providers/create/(?P<asterisk_id>\d+)$', providers.createProvider, name = 'providers_create'),
    url(r'^providers/update/(?P<provider_id>\d+)$', providers.updateProvider, name = 'providers_update'),
