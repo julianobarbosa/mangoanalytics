@@ -19,21 +19,23 @@ def generalUsers(request, period_id="thisMonth"):
         })
     last_month = False
     custom = False
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    timedelta = datetime.timedelta(days = 1)
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     if period_id == "lastMonth":
-        timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
-        end_date = datetime.date(year=t.year, month=t.month, day=t.day)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        end_date = datetime.date(year=today.year, month=today.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date']
-                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date'] - timedelta
+                end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
+    print start_date.isoformat()
+    print end_date.isoformat()
     cursor.execute(
         'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
         tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
@@ -86,21 +88,23 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         })
     last_month = False
     custom = False
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    timedelta = datetime.timedelta(days = 1)
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     if period_id == "lastMonth":
-        timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
-        end_date = datetime.date(year=t.year, month=t.month, day=t.day)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        end_date = datetime.date(year=today.year, month=today.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date']
-                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date'] - timedelta
+                end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
+    print start_date.isoformat()
+    print end_date.isoformat()
     cursor.execute('SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname \
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
@@ -108,8 +112,9 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
         WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id \
         ORDER BY cost DESC',
-        [start_date,end_date, extension_id])
+        [start_date,end_date, Ext.id])
     destinations = dictfetchall(cursor)
+    for d in destinations: print d
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration,\
         tarifica_destinationname.name, tarifica_destinationcountry.name , tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
@@ -148,23 +153,25 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
         })
     last_month = False
     custom = False
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
-    start_date_year = datetime.date(year=today.year, month=1, day=1)
-    end_date_year = datetime.date(year=today.year, month=today.month, day=today.day)
+    timedelta = datetime.timedelta(days = 1)
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    start_date_year = datetime.date(year=today.year, month=1, day=1) - timedelta
+    end_date_year = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
     if period_id == "lastMonth":
-        timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
-        end_date = datetime.date(year=t.year, month=t.month, day=t.day)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        end_date = datetime.date(year=today.year, month=today.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date']
-                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date'] - timedelta
+                end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
+    print start_date.isoformat()
+    print end_date.isoformat()
     sql = "SELECT tarifica_call.id,\
         SUM(tarifica_call.cost) AS cost,\
         tarifica_call.dialed_number,\
