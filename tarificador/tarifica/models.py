@@ -112,8 +112,8 @@ class ProviderDestinationDetail(models.Model):
 
 class UserInformation(models.Model):
     first_time_user = models.BooleanField(default=True)
-    first_import_started = models.DateTimeField()
-    is_first_import_finished = models.BooleanField()
+    first_import_started = models.DateTimeField(blank=True, null=True)
+    is_first_import_finished = models.BooleanField(default=False)
     country_code = models.CharField(max_length=50)
     bussiness_name = models.CharField(max_length=255)
     contact_first_name = models.CharField(max_length=255)

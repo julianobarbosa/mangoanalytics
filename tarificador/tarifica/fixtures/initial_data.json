@@ -68,5 +68,20 @@
     "fields": {
       "name": "Global"
     }
+  },
+  {
+    "model": "tarifica.UserInformation",
+    "pk": 1,
+    "fields": {
+      "first_time_user": true,
+      "is_first_import_finished":  false,
+      "country_code": "USA",
+      "currency_code": "USD",
+      "currency_symbol": "$",
+      "contact_first_name": "Pepe",
+      "contact_last_name": "Pótamo",
+      "notification_email": "osnofla.cp@gmail.com",
+      "bussiness_name": "NEXTOR"
+    }
   }
 ]

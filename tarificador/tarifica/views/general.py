@@ -11,6 +11,7 @@ from django.db import connection, transaction
 import json
 
 def setup(request):
+    user_info = get_object_or_404(UserInformation, id = 1)
     a_mysql_m = AsteriskMySQLManager()
     users = a_mysql_m.getUserInformation()
     for u in users:
@@ -49,6 +50,7 @@ def setup(request):
         'configured' : providers_configured,
         'bundles' : bundles,
         'locales' : locales,
+        'user_info' : user_info,
     })
 
 def realtime(request):
