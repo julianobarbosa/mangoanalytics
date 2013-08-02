@@ -1,5 +1,7 @@
 # Initial configuration views
+from __future__ import division
 import datetime
+from django.utils.timezone import utc
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,7 +24,7 @@ def step2(request):
 
             # Start processing call data:
             # callDataStart()
-            return HttpResponseRedirect('/start/step3') # Redirect after POST
+            return HttpResponseRedirect('/start/step2') # Redirect after POST
     else:
         form = forms.getNotificationEmail(initial = {
             'email': user_info.notification_email
@@ -33,36 +35,39 @@ def step2(request):
     })
 
 def step3(request):
-    return render(request, 'tarifica/start/step3.html', {})
+    import subprocess
+    user_info = get_object_or_404(UserInformation, id = 1)
+    importer_script_path = "/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/"
+    try:
+        # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', user_info.notification_email])
+        p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', user_info.notification_email])
+    except Exception, e:
+        print "Error while digesting:",e
+        p = None
+    user_info.first_import_started = datetime.datetime.now()
+    user_info.save()
+    return render(request, 'tarifica/start/step3.html', {'p': p })
 
 def checkProcessingStatus(request):
     user_info = get_object_or_404(UserInformation, id = 1)
-    # By default, we import 2 month's worth of data, so we can check how many
+    # By default, we import 6 month's worth of data, so we can check how many
     # days are between today and the last date imported.
     try:
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
         lastProviderDailyDetail = ProviderDailyDetail.objects.latest('date')
-        lapsedTime = user_info.first_import_started - datetime.datetime.now()
-        lapsedMinutes = ceil(lapsedTime.seconds / 60)
+        lapsedTime = now - user_info.first_import_started
+        lapsedSeconds = lapsedTime.total_seconds()
+        lapsedMinutes = lapsedTime.total_seconds() / 60
 
-        startDate = user_info.first_import_started
-        initialDateForProcessing = datetime.datetime(
-            year = startDate.year,
-            month = startDate.month,
-            day = 1,
-            hours = 0,
-            minutes = 0,
-            seconds = 0
+        endDateForProcessing = datetime.date(
+            year = user_info.first_import_started.year,
+            month = user_info.first_import_started.month,
+            day = user_info.first_import_started.day
         )
-        endDateForProcessing = datetime.datetime(
-            year = startDate.year,
-            month = startDate.month + 2,
-            day = 1,
-            hours = 0,
-            minutes = 0,
-            seconds = 0
-        )
+        initialDateForProcessing = endDateForProcessing - datetime.timedelta(days = 141)
+
+        daysToBeProcessed = 140
         processedDays = (lastProviderDailyDetail.date - initialDateForProcessing).days
-        daysToBeProcessed = (endDateForProcessing - initialDateForProcessing).days
         percentage_imported = ( processedDays / daysToBeProcessed ) * 100
         totalMinutes = ( daysToBeProcessed * lapsedMinutes ) / processedDays
         minutesRemaining = totalMinutes - lapsedMinutes

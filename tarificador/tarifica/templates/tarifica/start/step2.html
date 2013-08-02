@@ -24,8 +24,11 @@
 			{{ field.label_tag }} {{ field }}
 		{% endfor %}
 		{{ form.subject.errors }}
-		<button type="submit" class="btn btn-primary">Start!</button>
+		<button type="submit" class="btn btn-primary">Save</button>
 	</form>
+</p>
+<p>
+	<a class="btn btn-primary" href="{% url 'tarifica:start_step3' %}">Start!</a>
 </p>
 
 {% endblock %}

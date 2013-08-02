@@ -26,13 +26,15 @@ class Digester:
 			GROUP BY extension_number"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
 		for row in self.am.cursor.fetchall():
-			callDetail.append((
+			d = (
 				row['extension_number'],
 				row['total_calls'],
 				row['total_minutes'],
 				row['cost'],
 				row['date']
-			))
+			)
+			print d
+			callDetail.append(d)
 		return callDetail
 
 	def saveUserDailyDetail(self, day):
@@ -197,12 +199,12 @@ class Digester:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=1)
+	week = week - datetime.timedelta(days=100)
 	print week
 	d = Digester()
 	d.saveUserDailyDetail(week)
-	d.saveUserDestinationDetail(week)
-	d.saveUserDestinationNumberDetail(week)
-	d.saveProviderDailyDetail(week)
-	d.saveProviderDestinationDetail(week)
+	#d.saveUserDestinationDetail(week)
+	#d.saveUserDestinationNumberDetail(week)
+	#d.saveProviderDailyDetail(week)
+	#d.saveProviderDestinationDetail(week)
 

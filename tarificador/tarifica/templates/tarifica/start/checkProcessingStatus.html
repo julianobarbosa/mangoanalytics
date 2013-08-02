@@ -13,7 +13,14 @@
 	{% else %}
 		<h3>Sorry! We've not finished processing your call data yet.</h3>
 		<p>
-			Currently, we've processed {{ percentage_imported }}% of your data and it's taken us {{ lapsedMinutes }}, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining }} minutes to finish.
+			<div class="progress progress-striped active" style="width:50%">
+				<div class="bar" style="width: {{ percentage_imported }}%;">
+					<span style="text-align:center;"><strong>{{ percentage_imported }}%</strong></span>
+				</div>
+			</div>
+		</p>
+		<p>
+			Currently, we've processed {{ percentage_imported }}% of your data and it's taken us {{ lapsedMinutes }} minutes, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining }} minutes to finish.
 		</p>
 	{% endif %}
 {% endblock %}
