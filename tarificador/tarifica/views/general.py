@@ -159,8 +159,30 @@ def dashboard(request):
     })
 
 def config(request):
-    pass
-    
+    user_info = UserInformation.objects.get(pk = 1)
+    if request.method == 'POST': # If the form has been submitted...
+        form = forms.getUserInfo()
+        if form.is_valid(): # All validation rules pass
+            user_info.country_code = form.cleaned_data['country_code']
+            user_info.bussiness_name = form.cleaned_data['bussiness_name']
+            user_info.contact_first_name = form.cleaned_data['contact_first_name']
+            user_info.contact_last_name = form.cleaned_data['contact_last_name']
+            user_info.notification_email = form.cleaned_data['notification_email']
+            user_info.currency_code = form.cleaned_data['currency_code']
+            user_info.currency_symbol = form.cleaned_data['currency_symbol']
+            user_info.save()
+            return HttpResponseRedirect('/dashboard') # Redirect after POST
+    else:
+        form = forms.getUserInfo(initial=
+        {'notification_email': user_info.notification_email,})
+
+    return render(request, 'tarifica/userUpdate.html', {
+        'form': form
+    })
+
+
+
+
 def dictfetchall(cursor):
     desc = cursor.description
     return [
