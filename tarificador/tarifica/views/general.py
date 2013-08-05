@@ -126,14 +126,12 @@ def dashboard(request):
     sql = "SELECT tarifica_providerdestinationdetail.id, \
         SUM(tarifica_providerdestinationdetail.cost) AS cost, \
         tarifica_destinationname.name as destination_name, \
-        tarifica_destinationcountry.name as country_name \
+        tarifica_destinationgroup.destination_country as country_name \
         FROM tarifica_providerdestinationdetail \
         LEFT JOIN tarifica_destinationgroup \
         ON tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname \
         ON tarifica_destinationname.id = tarifica_destinationgroup.destination_name_id \
-        LEFT JOIN tarifica_destinationcountry \
-        ON tarifica_destinationcountry.id = tarifica_destinationgroup.destination_country_id \
         WHERE date > %s AND date < %s \
         GROUP BY destination_group_id \
         ORDER BY SUM(tarifica_providerdestinationdetail.cost) DESC"
