@@ -31,11 +31,6 @@ class DestinationName(models.Model):
     def __unicode__(self):
         return self.name
 
-class DestinationCountry(models.Model):
-    name = models.CharField(max_length = 255)
-    def __unicode__(self):
-        return self.name
-
 class DestinationGroup(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
@@ -43,7 +38,7 @@ class DestinationGroup(models.Model):
     prefix = models.CharField(max_length = 255, blank=True)
     notes = models.TextField(null=True, blank=True)
     destination_name = models.ForeignKey(DestinationName, blank=True, null=True)
-    destination_country = models.ForeignKey(DestinationCountry, blank=True, null=True)
+    destination_country = CountryField()
     has_bundles = models.BooleanField(default=False)
     def __unicode__(self):
         return self.provider.name, '-', self.destination_name.name

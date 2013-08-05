@@ -10,12 +10,12 @@ from tarifica.models import *
 
 def createDestinationGroup(request, provider_id):
     provider = get_object_or_404(Provider, id = provider_id)
-    destinations = get_list_or_404(DestinationGroup, provider_id = provider_id)
+    destinations = DestinationGroup.objects.filter(provider_id = provider_id)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
-            country = DestinationCountry.objects.get(id=form.cleaned_data['destination_country'])
+            country = form.cleaned_data['destination_country']
             prefix = form.cleaned_data['prefix']
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
@@ -39,12 +39,12 @@ def createDestinationGroup(request, provider_id):
     })
 
 def updateDestinationGroup(request, destination_group_id):
-    destination_group = get_object_or_404(Provider, id = destination_group_id)
+    destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
-            country = DestinationCountry.objects.get(id=form.cleaned_data['destination_country'])
+            country = form.cleaned_data['destination_country']
             prefix = form.cleaned_data['prefix']
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']

@@ -167,6 +167,9 @@
                         </a>
                     </td>
                     <td>
+                        <a href="{% url 'tarifica:destinations_update' loc.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Update">
+                            <i class="icon-pencil icon-white"></i>
+                        </a>
                         <a href="{% url 'tarifica:destinations_delete' loc.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
                             <i class="icon-remove-sign icon-white"></i>
                         </a>
@@ -198,7 +201,7 @@
 {% else %}
 <div class="row-fluid">
     <div class="span8 well well-small">
-        <h4>Aún no hay localidades configuradas.</h4>
+        <h4>No base tariffs have been configured yet.</h4>
     </div>
     <div class="span4 well well-small">
         {% if user_info.trunks_configured and not user_info.base_tariffs_configured %}
@@ -274,7 +277,7 @@
 </div>
 {% else %}
 <div class="row-fluid">
-    <div class="span8 well well-small"><h4>Aún no hay paquetes configurados</h4></div>
+    <div class="span8 well well-small"><h4>No bundles have been configured yet.</h4></div>
     <div class="span4 well well-small">
         {% if user_info.base_tariffs_configured and not user_info.bundles_configured %}
         <div class="alert alert-info">

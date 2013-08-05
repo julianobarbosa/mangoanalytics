@@ -14,9 +14,9 @@ def step1(request):
     user_info = get_object_or_404(UserInformation, id = 1)
 
     if request.method == 'POST': # If the form has been submitted...
-        form = forms.getUserInfo()
+        form = forms.getUserInfo(request.POST)
         if form.is_valid(): # All validation rules pass
-            user_info.country_code = form.cleaned_data['country_code']
+            user_info.country = form.cleaned_data['country']
             user_info.bussiness_name = form.cleaned_data['bussiness_name']
             user_info.contact_first_name = form.cleaned_data['contact_first_name']
             user_info.contact_last_name = form.cleaned_data['contact_last_name']
@@ -30,7 +30,7 @@ def step1(request):
             print "wasn't valid"
     else:
         form = forms.getUserInfo(initial={
-            'country_code': user_info.country_code,
+            'country': user_info.country,
             'bussiness_name': user_info.bussiness_name,
             'contact_first_name': user_info.contact_first_name,
             'contact_last_name': user_info.contact_last_name,
