@@ -77,25 +77,23 @@ def realtime(request):
         # print t
         d.append(t.time().strftime("%H:%M:%S"))
         provider = Provider.objects.get(asterisk_name = d[2])
-        destination_groups = DestinationGroup.objects.filter(provider = provider)
+        destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('prefix')
         for dest in destination_groups:
             try:
                 pos = d[3].index(dest.prefix)
             except ValueError,e :
                 post = None
             if pos == 0:
-                numberDialed = d[3][pos + len(dest.prefix):]
-                if len(numberDialed) == len(dest.matching_number):
-                    d[1] = dest.destination_name.name
+                d[1] = dest
             else:
                 continue
         accountedFor = False
         for g in graphData:
-            if g[0] == d[1]:
+            if g[0] == d[1].destination_name.name:
                 accountedFor = True
                 g[1] += 1
         if not accountedFor:
-            graphData.append([d[1], 1])
+            graphData.append([d[1].destination_name.name, 1])
 
     return render(request, 'tarifica/realtime.html', {
         'data' : data,

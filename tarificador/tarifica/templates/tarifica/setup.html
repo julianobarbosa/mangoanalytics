@@ -151,7 +151,10 @@
                 {% for loc in locales%}
                 <tr>
                     <td>{{loc.provider}}</td>
-                    <td>{{loc.destination_name.name}}</td>
+                    <td>
+                        <img src="{{ loc.destination_country.flag }}">
+                        {{loc.destination_name.name}}
+                    </td>
                     <td>{{loc.prefix}}</td>
                     <td>{{loc.tariff_mode.name}}</td>
                     <td>

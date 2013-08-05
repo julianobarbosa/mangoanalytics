@@ -27,7 +27,10 @@
                 {% for d in data %}
                 <tr>
                     <td>{{d.0}}</td>
-                    <td>{{d.1}}</td>
+                    <td>
+                        <img src="{{ d.1.destination_country.flag }}">
+                        {{d.1.destination_name.name}}
+                    </td>
                     <td>{{d.3}}</td>
                     <td>{{d.2}}</td>
                     <td>{{d.5}}</td>
