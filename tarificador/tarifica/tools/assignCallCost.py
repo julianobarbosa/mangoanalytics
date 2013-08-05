@@ -28,6 +28,15 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (destination_group_id,))
 		return self.am.cursor.fetchall()
 
+	def getAllBundlesFromProvider(self, provider_id):
+		self.am.connect('nextor_tarificador')
+		sql = "SELECT * from tarifica_bundle \
+			LEFT JOIN tarifica_destinationgroup \
+			ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
+			WHERE tarifica_destinationgroup.provider_id = %s"
+		self.am.cursor.execute(sql, (provider_id,))
+		return self.am.cursor.fetchall()
+
 	def getAllConfiguredProviders(self):
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_provider WHERE is_configured = %s"
@@ -185,9 +194,6 @@ class CallCostAssigner:
 						# No coincide la longitud del numero marcado con la longitud esperada de la localidad
 						print "Call number does not fit pattern for destination group."
 						continue
-			else:
-				print "No provider found for", provider
-				return ()
 		
 		if destination_group_id == 0:
 			return ()

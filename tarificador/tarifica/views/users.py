@@ -68,7 +68,6 @@ def generalUsers(request, period_id="thisMonth"):
     lastTwoMonths = 'May'
 
     data = getBarChartInfo(cursor)
-    print data
 
     return render(request, 'tarifica/generalUsers.html', {
         'extensions' : extensions,
@@ -137,6 +136,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
+    data = getBarChartInfo(cursor)
     return render(request, 'tarifica/detailUsers.html', {
               'destinations' : destinations,
               'all_calls' : all_calls,
@@ -145,6 +145,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'custom' : custom,
               'form': form,
               'extension' : Ext,
+              'data' : json.dumps(data),
               })
 
 

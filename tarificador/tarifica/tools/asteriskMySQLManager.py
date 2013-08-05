@@ -28,14 +28,12 @@ class AsteriskMySQLManager:
 		return True
 
 	def getTrunkInformation(self):
-		if self.cursor is None:
-			self.connect(self.dbName)
+		self.connect(self.dbName)
 		self.cursor.execute('SELECT trunkid,name,tech,channelid from trunks where disabled = %s', ('off',))
 		return self.cursor.fetchall()
 
 	def getUserInformation(self):
-		if self.cursor is None:
-			self.connect(self.dbName)
+		self.connect(self.dbName)
 		self.cursor.execute('SELECT extension,name from users')
 		return self.cursor.fetchall()
 
