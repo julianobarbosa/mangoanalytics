@@ -147,12 +147,14 @@
             pickTime: false
         });
 
-        var thisMonth = [200, 600, 700, 1000];
-        var lastMonth = [460, -210, 690, 820];
-        var lastTwoMonths = [-260, -440, 320, 200];
+        var data = $.parseJSON('{{ data | safe }}');
+
+        var thisMonth = data[2];
+        var lastMonth = data[3];
+        var lastTwoMonths = data[4];
         // Can specify a custom tick Array.
         // Ticks should match up one for each y value (category) in the series.
-        var ticks = ['May', 'June', 'July', 'August'];
+        var ticks = data[1];
          
         var plot1 = $.jqplot('graph', [thisMonth, lastMonth, lastTwoMonths], {
             // The "seriesDefaults" option is an options object that will
@@ -165,9 +167,9 @@
             // option on the series option.  Here a series option object
             // is specified for each series.
             series:[
-                {label:'{{ thisMonth }}'},
-                {label:'{{ lastMonth }}'},
-                {label:'{{ lastTwoMonths }}'}
+                {label:data[0][0]},
+                {label:data[0][1]},
+                {label:data[0][2]}
             ],
             // Show the legend and put it outside the grid, but inside the
             // plot container, shrinking the grid to accomodate the legend.
