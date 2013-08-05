@@ -2,7 +2,7 @@
 
 import datetime
 from django.utils.timezone import utc
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
@@ -10,6 +10,7 @@ from tarifica.models import *
 
 def createDestinationGroup(request, provider_id):
     provider = get_object_or_404(Provider, id = provider_id)
+    destinations = get_list_or_404(DestinationGroup, provider_id = provider_id)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -27,13 +28,14 @@ def createDestinationGroup(request, provider_id):
             	tariff_mode=tariff_mode
             )
             d.save()
-            return HttpResponseRedirect('/setup') # Redirect after POST
+            return HttpResponseRedirect('/destinations/create/'+provider_id) # Redirect after POST
     else:
         form = forms.createDestinationGroup() # An unbound form
 
     return render(request, 'tarifica/destinationGroupCreate.html', {
         'form': form,
         'provider' : provider,
+        'destinations' : destinations
     })
 
 def updateDestinationGroup(request, destination_group_id):

@@ -1,6 +1,7 @@
 #coding=UTF-8
 from django import forms
 from tarifica.models import PaymentType, TariffMode, DestinationGroup, DestinationName, DestinationCountry
+from django_countries import CountryField
 
 class createProvider(forms.Form):
     name = forms.CharField(label = 'Nombre', error_messages={'required':'Por favor proporciona un nombre para el Troncal'})
@@ -58,7 +59,7 @@ class getNotificationEmail(forms.Form):
 
 
 class getUserInfo(forms.Form):
-    country_code = forms.CharField(max_length = 50, error_messages={
+    country = forms.CharField(max_length = 50, error_messages={
                     'required':u'Por favor proporciona el código de tu país'})
     bussiness_name = forms.CharField(max_length = 255, error_messages={
                     'required':u'Por favor proporciona el nombre de tu empresa'})

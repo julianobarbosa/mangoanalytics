@@ -38,8 +38,15 @@ def general(request, period_id="thisMonth"):
     providersData = []
     for p in providers:
         bundlesCost = getBundlesCost(p.id)
+        print bundlesCost
         billingPeriods = getBillingPeriods(p)
-        total_cost = getTrunkCurrentIntervalCost(p.id, start_date, end_date)[0]['total_cost'] + bundlesCost
+        total_cost = 0
+        current_interval_cost = getTrunkCurrentIntervalCost(p.id, start_date, end_date)[0]['total_cost']
+        if current_interval_cost is None:
+            current_interval_cost = 0
+        if bundlesCost[0]['cost'] is None:
+            bundlesCost[0]['cost'] = 0
+        total_cost = bundlesCost[0]['cost'] + current_interval_cost
         for b in billingPeriods:
             if b['data'][0]['total_cost'] is not None:
                 averageMonthlyCost += b['data'][0]['total_cost']
@@ -183,14 +190,13 @@ def getTrunkCalls(provider_id, start_date, end_date):
 
 def getBundlesCost(provider_id):
     cursor = connection.cursor()
-    sql = "SELECT SUM(tarifica_bundles.cost) as cost \
-        FROM tarifica_destinationgroup \
-        LEFT JOIN tarifica_bundles.destination_group_id = tarifica_destinationgroup.id \
+    sql = "SELECT SUM(tarifica_bundle.cost) as cost \
+        FROM tarifica_bundle \
+        LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
         WHERE tarifica_destinationgroup.provider_id = %s "
     cursor.execute(sql, (provider_id))
     return dictfetchall(cursor)
-
-
 
 def downloadTrunkCDR(request, trunk_id, period_id):
     pass
