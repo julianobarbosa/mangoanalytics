@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %} Initial Config {% endblock %}
+
+{% block content %}
+<h1>Initial Call Detail Digestion:</h1>
+
+<div class="alert alert-danger">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+	<strong><i class="icon-exclamation-sign"></i> Attention:</strong> 
+	This operation may take a long time, depending on your Elastix server resources and the amount of calls made.
+</div>
+<p>
+	When pressing the "Start!" button, we'll begin assigning each of your calls a cost based on the previous configuration step. 
+</p>
+<p>
+	We can notify you when this digestion is finished by sending you an email to a specified email address. Please input one below:
+</p>
+<p>
+	<form action="{% url 'tarifica:start_step2' %}" method="post" class="form-inline">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		{% for field in form %}
+			{{ field.label_tag }} {{ field }}
+		{% endfor %}
+		{{ form.subject.errors }}
+		<button type="submit" class="btn btn-primary">Save</button>
+	</form>
+</p>
+<p>
+	<a class="btn btn-primary" href="{% url 'tarifica:start_step3' %}">Start!</a>
+</p>
+
+{% endblock %}

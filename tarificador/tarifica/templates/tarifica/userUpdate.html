@@ -7,47 +7,50 @@
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> User</h4>
+        <h4>Update User Information</h4>
     </div>
 </div>
-
-
 
 <form action="{% url 'tarifica:config' %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.country_code.errors }}
-        <label class="control-label" for="id_country_code">Country Code</label>
+        <label class="control-label" for="id_country_code">Country</label>
         <div class="controls">
             {{ form.country_code }}
+            <span class="help-inline">Where is your server running?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.bussiness_name.errors }}
-        <label class="control-label" for="id_bussiness_name">Bussiness Name</label>
+        <label class="control-label" for="id_bussiness_name">Company Name</label>
         <div class="controls">
             {{ form.bussiness_name }}
+            <span class="help-inline">What's your company's name?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.contact_first_name.errors }}
-        <label class="control-label" for="id_contact_first_name">First Name</label>
+        <label class="control-label" for="id_contact_first_name">Contact First Name</label>
         <div class="controls">
             {{ form.contact_first_name }}
+            <span class="help-inline">What's your first name?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.contact_last_name.errors }}
-        <label class="control-label" for="id_contact_last_name">Last Name</label>
+        <label class="control-label" for="id_contact_last_name">Contact Last Name</label>
         <div class="controls">
             {{ form.contact_last_name }}
+            <span class="help-inline">What's your last name?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.notification_email.errors }}
-        <label class="control-label" for="id_notification_email">Email</label>
+        <label class="control-label" for="id_notification_email">Contact Email</label>
         <div class="controls">
             {{ form.notification_email }}
+            <span class="help-inline">Where can we reach you to send you notifications?</span>
         </div>
     </div>
     <div class="control-group">
@@ -55,6 +58,7 @@
         <label class="control-label" for="id_currency_code">Currency Code</label>
         <div class="controls">
             {{ form.currency_code }}
+            <span class="help-inline">What's the currency used by your providers? (USD, MXN, EUR, etc)</span>
         </div>
     </div>
     <div class="control-group">
@@ -62,12 +66,11 @@
         <label class="control-label" for="id_currency_symbol">Currency Symbol</label>
         <div class="controls">
             {{ form.currency_symbol }}
+            <span class="help-inline">What's your currency symbol? ($, €, £, etc)</span>
         </div>
     </div>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a class="btn" href="{% url 'tarifica:setup' %}">Cancel
-        </a>
     </div>
 </form>
 

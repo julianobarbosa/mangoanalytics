@@ -3,28 +3,28 @@
     "model": "tarifica.TariffMode",
     "pk": 1,
     "fields": {
-      "name": "Minuto"
+      "name": "Minute"
     }
   },
   {
     "model": "tarifica.TariffMode",
     "pk": 2,
     "fields": {
-      "name": "Sesión"
+      "name": "Session"
     }
   },
   {
     "model": "tarifica.PaymentType",
     "pk": 1,
     "fields": {
-      "name": "Pospago"
+      "name": "Postpaid"
     }
   },
   {
     "model": "tarifica.PaymentType",
     "pk": 2,
     "fields": {
-      "name": "Prepago"
+      "name": "Prepaid"
     }
   },
   {
@@ -75,13 +75,16 @@
     "fields": {
       "first_time_user": true,
       "is_first_import_finished":  false,
+      "trunks_configured":  false,
+      "base_tariffs_configured":  false,
+      "bundles_configured":  false,
       "country_code": "USA",
       "currency_code": "USD",
       "currency_symbol": "$",
-      "contact_first_name": "Pepe",
-      "contact_last_name": "Pótamo",
-      "notification_email": "osnofla.cp@gmail.com",
-      "bussiness_name": "NEXTOR"
+      "contact_first_name": "Name",
+      "contact_last_name": "Last Name",
+      "notification_email": "me@example.com",
+      "bussiness_name": "My Company"
     }
   }
 ]

@@ -2,9 +2,11 @@ from django.conf.urls import patterns, url
 from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, start
 
 urlpatterns = patterns('',
+   url(r'^$', general.setup, name = 'setup'),
    url(r'^setup$', general.setup, name = 'setup'),
    
    url(r'^config$', general.config, name = 'config'),
+   url(r'^config/update/(?P<option>\w+)$', general.updateUser, name = 'config_update_user'),
 
    url(r'^providers/create/(?P<asterisk_id>\d+)$', providers.createProvider, name = 'providers_create'),
    url(r'^providers/update/(?P<provider_id>\d+)$', providers.updateProvider, name = 'providers_update'),
@@ -39,5 +41,6 @@ urlpatterns = patterns('',
    url(r'^start/step1$', start.step1, name = "start_step1"),
    url(r'^start/step2$', start.step2, name = "start_step2"),
    url(r'^start/step3$', start.step3, name = "start_step3"),
+   url(r'^start/step4$', start.step4, name = "start_step4"),
    url(r'^start/check_processing_status$', start.checkProcessingStatus, name = "check_processing_status")
 )

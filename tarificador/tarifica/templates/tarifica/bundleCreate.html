@@ -1,12 +1,12 @@
 {% extends "trunks.html" %}
 
-{% block title %}Agregar paquetes a {{ destination_group }}{% endblock %}
+{% block title %}Add bundles to {{ destination_group }}{% endblock %}
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{ destination_group.provider.name }} </h4>
+        <h4> Adding bundles to {{ destination_group }} </h4>
     </div>
 </div>
 
@@ -14,42 +14,47 @@
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
-        <label class="control-label" for="id_name">Nombre</label>
+        <label class="control-label" for="id_name">Name</label>
         <div class="controls">
             {{ form.name }}
+            <span class="help-inline">Custom name for this bundle.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.tariff_mode.errors }}
-        <label class="control-label" for="id_tariff_mode">Modo</label>
+        <label class="control-label" for="id_tariff_mode">Billing Mode</label>
         <div class="controls">
             {{ form.tariff_mode }}
+            <span class="help-inline">Is this bundle billed per sesion or per minute?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.cost.errors }}
-        <label class="control-label" for="id_cost">Costo</label>
+        <label class="control-label" for="id_cost">Cost</label>
         <div class="controls">
             {{ form.cost }}
+            <span class="help-inline">The monthly fee charged by your provider for this bundle.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.amount.errors }}
-        <label class="control-label" for="id_amount">Cantidad de minutos\sesiones</label>
+        <label class="control-label" for="id_amount">Amount of minutes/sessions</label>
         <div class="controls">
             {{ form.amount }}
+            <span class="help-inline">How many minutes/sessions does this bundle have?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.priority.errors }}
-        <label class="control-label" for="id_amount">Prioridad</label>
+        <label class="control-label" for="id_amount">Priority</label>
         <div class="controls">
             {{ form.priority }}
+            <span class="help-inline">If you have several bundles that include a common destination, which should be applied first?</span>
         </div>
     </div>
     <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Guardar Paquete</button>
-        <a class="btn" href="{% url 'tarifica:setup' %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Save Bundle</button>
+        <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
     </div>
 </form>
 

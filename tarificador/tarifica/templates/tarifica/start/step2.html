@@ -3,32 +3,26 @@
 {% block title %} Initial Config {% endblock %}
 
 {% block content %}
-<h1>Initial Call Detail Digestion:</h1>
-
-<div class="alert alert-danger">
-	<a href="#" class="close" data-dismiss="alert">&times;</a>
-	<strong><i class="icon-exclamation-sign"></i> Attention:</strong> 
-	This operation may take a long time, depending on your Elastix server resources and the amount of calls made.
-</div>
+<h3>Step 2:</h3>
 <p>
-	When pressing the "Start!" button, we'll begin assigning each of your calls a cost based on the previous configuration step. 
+	Configure all trunks for your elastix system. We need to know on which day of the month your billing starts, and how much it costs.
 </p>
 <p>
-	We can notify you when this digestion is finished by sending you an email to a specified email address. Please input one below:
+	Then, add base tariffs for the default destination groups. We need to know how much each provider bills you for your local, national and international calls, and also how much they charge for local and national cell phone calls.
 </p>
 <p>
-	<form action="{% url 'tarifica:start_step2' %}" method="post" class="form-inline">
-		{% csrf_token %}
-		{{ form.non_field_errors }}
-		{% for field in form %}
-			{{ field.label_tag }} {{ field }}
-		{% endfor %}
-		{{ form.subject.errors }}
-		<button type="submit" class="btn btn-primary">Save</button>
-	</form>
+	If you have a bundle configured with some of your providers (let's say, one that gives you 100 discounted calls to Spain for a fixed monthly cost), add it the destination group that applies (international with a Spain prefix, in this case).
 </p>
 <p>
-	<a class="btn btn-primary" href="{% url 'tarifica:start_step3' %}">Start!</a>
+	<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">Start Trunk, Tariffs and Bundles Configuration</a>
 </p>
 
+<hr>
+
+<p>
+	Once you have configured everything, it's time to start calculating your call history. 
+</p>
+<p>
+	<a class="btn btn-primary" href="{% url 'tarifica:start_step3' %}">Start Calculating Costs</a>
+</p>
 {% endblock %}

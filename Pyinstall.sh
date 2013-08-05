@@ -21,10 +21,15 @@ python2.7 setup.py install
 easy_install-2.7 virtualenv
 
 #Creating virtualenv directory and installation paths
-mkdir /opt/NEXTOR && cd /opt/NEXTOR
-virtualenv tarificador
-cd tarificador
-source bin/activate
+mkdir /opt/NEXTOR
+virtualenv /opt/NEXTOR/tarificador
+source /opt/NEXTOR/tarificador/bin/activate
 
 #Installing django
 pip install django MySQL-python
+python tools/initialMySQLSetup.py
+
+mkdir /opt/NEXTOR/tarificador/django-tarificador
+cp -R src/* /opt/NEXTOR/tarificador/django-tarificador/
+python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
+python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runserver 0.0.0.0:8000

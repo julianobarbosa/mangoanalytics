@@ -22,7 +22,7 @@ def createProvider(request, asterisk_id):
             provider.channels = form.cleaned_data['channels']
             provider.is_configured = True
             provider.save()
-            return HttpResponseRedirect('/tarifica/setup') # Redirect after POST
+            return HttpResponseRedirect('/setup') # Redirect after POST
     else:
         form = forms.createProvider() # An unbound form
 
@@ -54,7 +54,7 @@ def updateProvider(request, provider_id):
             provider.channels = form.cleaned_data['channels']
             provider.is_configured = True
             provider.save()
-            return HttpResponseRedirect('/tarifica/setup') # Redirect after POST
+            return HttpResponseRedirect('/setup') # Redirect after POST
     else:
         form = forms.createProvider(initial=
         {'name': provider.name,
@@ -73,4 +73,4 @@ def updateProvider(request, provider_id):
 def deleteProvider(request, provider_id):
     provider = get_object_or_404(Provider, id = provider_id)
     provider.delete()
-    return HttpResponseRedirect('/tarifica/setup')
+    return HttpResponseRedirect('/setup')

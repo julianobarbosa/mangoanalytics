@@ -1,0 +1,241 @@
+{% extends "setup.html" %}
+
+{% block title %}Setup{% endblock %}
+
+{% block content %}
+
+{% if configured %}
+
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <div class="span4"><h4><strong>TRONCALES CONFIGURADAS</strong></h4></div>
+        <table class="table table-striped table-hovered table-condensed">
+            <thead>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>TIPO</th>
+                    <th>CORTE</th>
+                    <th>RENTA MENSUAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prov in configured %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'tarifica:providers_get' prov.id %}">
+                                {{prov.name}}
+                            </a>
+                        </td>
+                        <td>{{prov.provider_type}}</td>
+                        <td>{{prov.period_end}}</td>
+                        <td>${{prov.monthly_cost}}</td>
+                        <td>
+                            <a href="{% url 'tarifica:destinations_create' prov.id %}">
+                                Agregar Tarifas Base
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'tarifica:providers_update' prov.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                                <i class="icon-pencil icon-white"></i>
+                            </a>
+                            <a href="{% url 'tarifica:providers_delete' prov.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
+                                <i class="icon-remove-sign icon-white"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="span4 well well-small">
+        <h5>TRONCALES NO CONFIGURADAS</h5>
+        <table class="table table-striped table-hovered table-condensed">
+            <tbody>
+                {% for prov in not_configured %}
+                <tr>
+                    <td><a href="{% url 'tarifica:providers_create' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <h4>Aún no hay troncales configurados</h4>
+    </div>
+    <div class="span4 well well-small">
+        {% if not user_info.is_first_import_finished %}
+        <div class="alert alert-info">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <p>
+                Here you can find all active trunks of your Elastix System. To start configuring one, just click on its name and enter the requested information.
+            </p>
+            <p>
+                After configuring your trunks, assign base tariffs to each. That is, how much it costs for you to call each destination group (Local, National, Intl...)
+            </p>
+        </div>
+        {% endif %}
+        <h5>TRONCALES NO CONFIGURADAS</h5>
+        <table class="table table-striped table-hovered table-condensed">
+            <tbody>
+                {% for prov in not_configured %}
+                <tr>
+                    <td><a href="{% url 'tarifica:providers_create' prov.asterisk_id %}">{{prov.asterisk_name}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endif %}
+
+{% if bundles%}
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <h4><strong>PAQUETES CONFIGURADOS</strong></h4>
+        <table class="table table-striped table-hovered table-condensed">
+            <thead>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>COSTO</th>
+                    <th>ORDEN</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bun in bundles %}
+                <tr>
+                    <td>{{bun.name}}</td>
+                    <td>${{bun.cost}}</td>
+                    <td>{{bun.priority}}</td>
+                    <td><a href="{% url 'tarifica:bundles_update' bun.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Editar">
+                            <i class="icon-pencil icon-white"></i>
+                        </a>
+                        <a href="{% url 'tarifica:bundles_delete' bun.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
+                            <i class="icon-remove-sign icon-white"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="span4">
+        
+    </div>
+</div>
+
+{% else %}
+
+<div class="row-fluid">
+    <div class="span8 well well-small"><h4>Aún no hay paquetes configurados</h4></div>
+    <div class="span4 well well-small">
+        {% if not user_info.is_first_import_finished %}
+        <div class="alert alert-info">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <p>
+                If one of your providers offers you phone bundles (e.g. A bundle which lets you make 200 calls to some specific destination, in exchange for a low monthly fee), you can add see them here.
+            </p>
+            <p>
+                To assign a bundle, select the destination group by clicking on the "Assign bundle" button from the list below belonging to the provider whose bundle you're using.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}
+
+{% if locales %}
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <div class="span4"><h4><strong>LOCALIDADES CONFIGURADAS</strong></h4></div>
+        <table class="table table-striped table-hovered table-condensed">
+            <thead>
+                <tr>
+                    <th>TRONCAL</th>
+                    <th>NOMBRE</th>
+                    <th>PREFIJO</th>
+                    <th>MATCH</th>
+                    <th>MODO</th>
+                    <th>PAQUETES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loc in locales%}
+                <tr>
+                    <td>{{loc.provider}}</td>
+                    <td>{{loc.destination_name.name}}</td>
+                    <td>{{loc.prefix}}</td>
+                    <td>{{loc.matching_number}}</td>
+                    <td>{{loc.tariff_mode.name}}</td>
+                    <td>
+                        {% if loc.has_bundles %}
+                        <i class="icon-ok"></i>
+                        {% else %}
+                        <i class="icon-remove"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'tarifica:bundles_create' loc.id %}">
+                            Asignar Paquetes
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'tarifica:destinations_delete' loc.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Eliminar">
+                            <i class="icon-remove-sign icon-white"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="span4 well well-small">
+        {% if not user_info.is_first_import_finished %}
+        <div class="alert alert-info">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <p>
+                That's it! Now the only thing left to do, once you've configured all your trunks is to import the current call information, assign a cost to each call, and begin calculating monthly costs for a faster access.
+            </p>
+            <p>
+                To return to the initial wizard page, click <a class="btn btn-primary" href="{% url 'tarifica:start_step1' %}">here</a>.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% else %}
+
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <h4>Aún no hay localidades configuradas.</h4>
+    </div>
+    <div class="span4 well well-small">
+        {% if not user_info.is_first_import_finished %}
+        <div class="alert alert-info">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <p>
+                That's it! Now the only thing left to do, once you've configured all your trunks is to import the current call information, assign a cost to each call, and begin calculating monthly costs for a faster access.
+            </p>
+            <p>
+                To return to the initial wizard page, click the button below. 
+            </p>
+            <p>
+                <a class="btn btn-primary" href="{% url 'tarifica:start_step1' %}">
+                    Return to initial setup
+                </a>.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

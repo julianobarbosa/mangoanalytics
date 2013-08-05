@@ -1,0 +1,179 @@
+{% extends "users.html"%}
+
+{% block title %} User Detail {% endblock %}
+
+{% block content %}
+
+<div class="row-fluid">
+
+    <div class="span12 well well-small">
+
+        {% if custom %}
+            <a href="{% url 'tarifica:users_detail' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+        {% else %}
+            {% if last_month %}
+            <a href="{% url 'tarifica:users_detail' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+            {% else %}
+            <a href="{% url 'tarifica:users_detail_period' extension_id=extension.id period_id='lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Last Month</a>
+            {% endif %}
+        {% endif %}
+        <a href="#custom" class="btn btn-primary" data-toggle="modal"></i>Custom</a>
+
+        <div id="custom" class="modal hide fade">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Customize</h3>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post" class="form-vertical">{% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div id="datetimepicker1" class="input-append">
+                        <label for="id_start_date">Start date</label>
+                        {{ form.start_date }}
+                        <span class="add-on">
+                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                            </i>
+                        </span>
+                    </div>
+                    <div id="datetimepicker2" class="input-append">
+                        <label for="id_end_date">End date</label>
+                        {{ form.end_date }}
+                        <span class="add-on">
+                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                            </i>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
+                <a href="{% url 'tarifica:users_detail_period' extension.id 'custom' %}"  type="submit" class="btn btn-primary">Load</a>
+            </div>
+        </div>
+
+        <div id="container" style="float:right;text-align:center">
+            <h5>Average cost for this extension is <font color="red">${{average}}</font></h5>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row-fluid">
+    <div class="span6 well well-small">
+        <div style="float:right">
+            <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"></i>Usage analysis</a>
+        </div>
+        <h5><strong> User Detail </strong></h5>
+        <table class="table table-hovered table-condensed" border="0">
+            <tbody>
+                <tr>
+                    <th>Ext</th>
+                    <td>{{extension.extension_number}}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{extension.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% if destinations %}
+        <table class="table table-bordered table-striped table-hovered table-condensed">
+            <thead>
+                <tr>
+                    <th>COUNTRY</th>
+                    <th>DESTINATION</th>
+                    <th>COST</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in destinations %}
+                <tr>
+                    <td>MXN</td>
+                    <td>{{d.destname}}</td>
+                    <td>${{d.cost}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h5>There are no registered calls up to this moment</h5>
+        {% endif %}
+
+
+    </div>
+    <div class="span6 well well-small">
+
+        <img src="http://placehold.it/700x280">
+
+    </div>
+</div>
+
+</div>
+
+<div class="row-fluid">
+    <div class="span12 well well-small">
+        <img src="http://placehold.it/1700x300">
+    </div>
+</div>
+
+{% if all_calls %}
+<div class="row-fluid">
+    <div class="span12 well well-small">
+        <table class="table table-bordered table-striped table-hovered table-condensed">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>TIME</th>
+                    <th>DESTINATION</th>
+                    <th>MINUTES</th>
+                    <th>COST</th>
+                    <th>NUMBER</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for call in all_calls%}
+                <tr>
+                    <td>{{call.dat}}</td>
+                    <td>{{call.time}}</td>
+                    <td>{{call.name}}</td>
+                    <td>{{call.duration}}</td>
+                    <td>${{call.cost}}</td>
+                    <td>{{call.dialed_number}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+
+<div class="row-fluid">
+    <div class="span12 well well-small">
+        <h5>There are no registered calls up to this moment</h5>
+    </div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(function() {
+        $('#datetimepicker1').datetimepicker({
+            pickTime: false
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        $('#datetimepicker2').datetimepicker({
+            pickTime: false
+        });
+    });
+</script>
+
+{% endblock %}

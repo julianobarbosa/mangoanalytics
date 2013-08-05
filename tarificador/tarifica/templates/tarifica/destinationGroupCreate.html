@@ -1,13 +1,13 @@
 {% extends "trunks.html" %}
 
-{% block title %}Agregar tarifa base de {{provider.name}}{% endblock %}
+{% block title %}Add tariff to {{provider.name}}{% endblock %}
 
 
 {% block content %}
 
 <div class="row-fluid well">
     <div class="span12">
-        <h4> Troncal {{provider.name}} </h4>
+        <h4>Add base tariff to trunk {{provider.name}}</h4>
     </div>
 </div>
 
@@ -15,49 +15,47 @@
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.destination_name.errors }}
-        <label class="control-label" for="id_destination_group">Localidad</label>
+        <label class="control-label" for="id_destination_group">Destination</label>
         <div class="controls">
             {{ form.destination_name }}
+            <span class="help-inline">Destination group for this tariff.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.destination_country.errors }}
-        <label class="control-label" for="id_destination_group">País</label>
+        <label class="control-label" for="id_destination_group">Country</label>
         <div class="controls">
             {{ form.destination_country }}
+            <span class="help-inline">Select a country for us to know where this tariff applies to.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.prefix.errors }}
-        <label class="control-label" for="id_prefix">Prefijo</label>
+        <label class="control-label" for="id_prefix">Call Prefix</label>
         <div class="controls">
             {{ form.prefix }}
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.matching_number.errors }}
-        <label class="control-label" for="id_matching_number">Expresión Regular</label>
-        <div class="controls">
-            {{ form.matching_number }}
+            <span class="help-inline">The part of the dialed number which indicates where you're calling. It begins with a country code and (in most places) continues with an area code.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.tariff_mode.errors }}
-        <label class="control-label" for="id_tariff_mode">Modo</label>
+        <label class="control-label" for="id_tariff_mode">Billing Mode</label>
         <div class="controls">
             {{ form.tariff_mode }}
+            <span class="help-inline">Does your provider charge you per sesion or per minute?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.cost.errors }}
-        <label class="control-label" for="id_cost">Costo</label>
+        <label class="control-label" for="id_cost">Cost</label>
         <div class="controls">
             {{ form.cost }}
+            <span class="help-inline">How much does your provider charge per sesion/minute?</span>
         </div>
     </div>
     <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Guardar Tarifa</button>
-        <a class="btn" href="{% url 'tarifica:setup' %}">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Save Tariff</button>
+        <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
     </div>
 </form>
 

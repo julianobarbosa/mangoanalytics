@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %} Initial Config {% endblock %}
+
+{% block content %}
+<h1>Initial Configuration:</h1>
+
+<h3>Step 1:</h3>
+<p>
+	Configure your account: please tell us your name, in which country you're currently in, and in which currency you'd like us to show your calculated costs.
+</p>
+<p>
+	<a href="{% url 'tarifica:config' %}" class="btn btn-primary">User Configuration</a>
+</p>
+
+<h3>Step 2:</h3>
+<p>
+	Configure all trunks for your elastix system. We need to know on which day of the month your billing starts, and how much it costs.
+</p>
+
+<h3>Step 3:</h3>
+<p>
+	Add base tariffs for the default destination groups. We need to know how much each provider bills you for your local, national and international calls, and also how much they charge for local and national cell phone calls.
+</p>
+
+<h3>Step 4:</h3>
+<p>
+	If you have a bundle configured with some of your providers (let's say, one that gives you 100 discounted calls to Spain for a fixed monthly cost), add it the destination group that applies (international with a Spain prefix, in this case).
+</p>
+<p>
+	<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">Start Trunk, Tariffs and Bundles Configuration</a>
+</p>
+
+<h3>Step 5:</h3>
+<p>
+	Once you have configured everything, it's time to start calculating your call history. 
+</p>
+<p>
+	<a class="btn btn-primary" href="{% url 'tarifica:start_step2' %}">Start Calculating Costs</a>
+</p>
+
+{% endblock %}

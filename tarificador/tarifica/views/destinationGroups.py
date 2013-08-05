@@ -16,7 +16,6 @@ def createDestinationGroup(request, provider_id):
             name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
             country = DestinationCountry.objects.get(id=form.cleaned_data['destination_country'])
             prefix = form.cleaned_data['prefix']
-            matching_number = form.cleaned_data['matching_number']
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
             d = DestinationGroup(
@@ -24,12 +23,11 @@ def createDestinationGroup(request, provider_id):
             	destination_name=name, 
             	destination_country=country, 
             	prefix=prefix, 
-            	matching_number=matching_number, 
             	cost=cost,
             	tariff_mode=tariff_mode
             )
             d.save()
-            return HttpResponseRedirect('/tarifica/setup') # Redirect after POST
+            return HttpResponseRedirect('/setup') # Redirect after POST
     else:
         form = forms.createDestinationGroup() # An unbound form
 
@@ -39,7 +37,39 @@ def createDestinationGroup(request, provider_id):
     })
 
 def updateDestinationGroup(request, destination_group_id):
-    pass
+    destination_group = get_object_or_404(Provider, id = destination_group_id)
+    if request.method == 'POST': # If the form has been submitted...
+        form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
+            country = DestinationCountry.objects.get(id=form.cleaned_data['destination_country'])
+            prefix = form.cleaned_data['prefix']
+            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
+            cost = form.cleaned_data['cost']
+            d = DestinationGroup(
+                provider=provider, 
+                destination_name=name, 
+                destination_country=country, 
+                prefix=prefix, 
+                cost=cost,
+                tariff_mode=tariff_mode
+            )
+            d.save()
+            return HttpResponseRedirect('/setup') # Redirect after POST
+    else:
+        form = forms.createDestinationGroup(initial=
+        {'destination_name': destination_group.destination_name,
+         'destination_country': destination_group.destination_country,
+         'prefix': destination_group.prefix,
+         'tariff_mode': destination_group.tariff_mode,
+         'notes': destination_group.notes,
+         'cost': destination_group.cost,
+        })
+
+    return render(request, 'tarifica/destinationGroupUpdate.html', {
+        'form': form,
+        'destination_group' : destination_group,
+    })
 
 def getDestinationGroup(request, provider_id):
     pass
@@ -47,4 +77,4 @@ def getDestinationGroup(request, provider_id):
 def deleteDestinationGroup(request, destination_group_id):
     destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
     destination_group.delete()
-    return HttpResponseRedirect('/tarifica/setup')
+    return HttpResponseRedirect('/setup')

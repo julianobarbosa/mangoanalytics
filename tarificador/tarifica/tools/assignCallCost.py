@@ -47,7 +47,8 @@ class CallCostAssigner:
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_destinationgroup JOIN tarifica_destinationname \
 			ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-			WHERE provider_id = %s"
+			WHERE provider_id = %s \
+			ORDER BY CHAR_LENGTH(tarifica_destinationgroup.prefix) DESC"
 		self.am.cursor.execute(sql, (provider_id,))
 		return self.am.cursor.fetchall()
 
@@ -164,36 +165,30 @@ class CallCostAssigner:
 					# Se encontro el prefijo!
 					numberDialed = dialedNoForProvider[pos + len(d['prefix']):]
 					print "Number called according to trunk:",numberDialed
-					if len(numberDialed) == len(d['matching_number']):
-						# El numero marcado cae dentro de esta tarifa! Obtenemos los paquetes de la localidad
-						print "Call number fits pattern for destination group", d['name']
-						destination_group_id = d['id']
-						bundles = self.getAllBundlesFromDestinationGroup(d['id'])
-						if len(bundles) > 0:
-							for b in bundles:
-								if b['usage'] == b['amount']:
-									print "Bundle",b['name'],"usage has reached its limit."
-									continue
+					print "Call number fits pattern for destination group", d['name']
+					destination_group_id = d['id']
+					bundles = self.getAllBundlesFromDestinationGroup(d['id'])
+					if len(bundles) > 0:
+						for b in bundles:
+							if b['usage'] == b['amount']:
+								print "Bundle",b['name'],"usage has reached its limit."
+								continue
+							else:
+								print "Usage before: ", b['usage']
+								if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
+									b['usage'] -= 1
 								else:
-									print "Usage before: ", b['usage']
-									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Sesión':
-										b['usage'] -= 1
-									else:
-										#Redondeamos al minuto más cercano de la llamada
-										b['usage'] = ceil(call['billsec'] / 60)
-									print "Usage after: ", b['usage']
-									#Guardamos los cambios
-									self.saveBundleUsage(b)
-						else:
-							# No hay paquetes configurados, calculamos el costo con la tarifa base:
-							print "No bundles configured for destination group", d['name']
-							print "Billed minutes:",ceil(call['billsec'] / 60)
-							cost = ceil(call['billsec'] / 60) * float(d['cost'])
-							print "Calculated cost:", cost
+									#Redondeamos al minuto más cercano de la llamada
+									b['usage'] = ceil(call['billsec'] / 60)
+								print "Usage after: ", b['usage']
+								#Guardamos los cambios
+								self.saveBundleUsage(b)
 					else:
-						# No coincide la longitud del numero marcado con la longitud esperada de la localidad
-						print "Call number does not fit pattern for destination group."
-						continue
+						# No hay paquetes configurados, calculamos el costo con la tarifa base:
+						print "No bundles configured for destination group", d['name']
+						print "Billed minutes:",ceil(call['billsec'] / 60)
+						cost = ceil(call['billsec'] / 60) * float(d['cost'])
+						print "Calculated cost:", cost
 		
 		if destination_group_id == 0:
 			return ()
@@ -217,6 +212,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=3)
+	week = week - datetime.timedelta(days=4)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)

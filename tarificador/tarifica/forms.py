@@ -21,7 +21,6 @@ class createDestinationGroup(forms.Form):
     destination_name = forms.ChoiceField(choices = [(e.id, e.name) for e in DestinationName.objects.all()], label = 'Localidad')
     destination_country = forms.ChoiceField(choices = [(e.id, e.name) for e in DestinationCountry.objects.all()], label = 'País', required = False)
     prefix = forms.CharField(max_length = 255, label = 'Prefijo', error_messages={'required':u'Por favor proporciona un prefijo'})
-    matching_number = forms.CharField(max_length = 255, label = u'Cantidad de dígitos:', error_messages={'required':u'Por favor proporciona una cadena'})
     tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')
     notes = forms.CharField(label = u'Notas', required = False, widget = forms.Textarea)
     cost = forms.FloatField(label = 'Costo', error_messages={

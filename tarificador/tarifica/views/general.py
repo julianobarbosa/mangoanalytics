@@ -2,7 +2,7 @@
 
 import datetime
 from django.utils.timezone import utc
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
@@ -12,6 +12,9 @@ import json
 
 def setup(request):
     user_info = get_object_or_404(UserInformation, id = 1)
+    if user_info.first_time_user:
+        redirect('start.step1')
+
     a_mysql_m = AsteriskMySQLManager()
     users = a_mysql_m.getUserInformation()
     for u in users:
@@ -35,7 +38,8 @@ def setup(request):
                 p = Provider(
                     asterisk_id = x['trunkid'],
                     asterisk_name = x['name'],
-                    provider_type = x['tech'],
+                    name = x['name'],
+                    provider_tech = x['tech'],
                     asterisk_channel_id = x['channelid']
                     )
                 p.save()
@@ -180,7 +184,17 @@ def config(request):
         'form': form
     })
 
+def updateUser(request, option):
+    user_info = UserInformation.objects.get(pk = 1)
+    if option == "trunks_configured":
+        user_info.trunks_configured = True
+    elif option == "base_tariffs_configured":
+        user_info.base_tariffs_configured = True
+    elif option == "bundles_configured":
+        user_info.bundles_configured = True
 
+    user_info.save()
+    return HttpResponseRedirect('/setup')
 
 
 def dictfetchall(cursor):

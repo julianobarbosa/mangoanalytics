@@ -11,7 +11,35 @@ from tarifica import forms
 from math import ceil
 
 def step1(request):
-    return render(request, 'tarifica/start/step1.html', {})
+    user_info = get_object_or_404(UserInformation, id = 1)
+
+    if request.method == 'POST': # If the form has been submitted...
+        form = forms.getUserInfo()
+        if form.is_valid(): # All validation rules pass
+            user_info.country_code = form.cleaned_data['country_code']
+            user_info.bussiness_name = form.cleaned_data['bussiness_name']
+            user_info.contact_first_name = form.cleaned_data['contact_first_name']
+            user_info.contact_last_name = form.cleaned_data['contact_last_name']
+            user_info.notification_email = form.cleaned_data['notification_email']
+            user_info.currency_code = form.cleaned_data['currency_code']
+            user_info.currency_symbol = form.cleaned_data['currency_symbol']
+            user_info.first_time_user = False
+            user_info.save()
+            return HttpResponseRedirect('/start/step2') # Redirect after POST
+    else:
+        form = forms.getUserInfo(initial={
+            'country_code': user_info.country_code,
+            'bussiness_name': user_info.bussiness_name,
+            'contact_first_name': user_info.contact_first_name,
+            'contact_last_name': user_info.contact_last_name,
+            'notification_email': user_info.notification_email,
+            'currency_code': user_info.currency_code,
+            'currency_symbol': user_info.currency_symbol,
+        })
+
+    return render(request, 'tarifica/start/step1.html', {
+        'form': form
+    })
 
 def step2(request):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -22,8 +50,6 @@ def step2(request):
             user_info.first_import_started = datetime.datetime.now()
             user_info.save()
 
-            # Start processing call data:
-            # callDataStart()
             return HttpResponseRedirect('/start/step2') # Redirect after POST
     else:
         form = forms.getNotificationEmail(initial = {
@@ -35,9 +61,16 @@ def step2(request):
     })
 
 def step3(request):
-    import subprocess
     user_info = get_object_or_404(UserInformation, id = 1)
-    importer_script_path = "/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/"
+    return render(request, 'tarifica/start/step3.html', {})
+
+def step4(request):
+    import subprocess
+    import os
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+
+    user_info = get_object_or_404(UserInformation, id = 1)
+    importer_script_path = current_directory+"/../tools/"
     try:
         # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', user_info.notification_email])
         p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', user_info.notification_email])
@@ -46,7 +79,7 @@ def step3(request):
         p = None
     user_info.first_import_started = datetime.datetime.now()
     user_info.save()
-    return render(request, 'tarifica/start/step3.html', {'p': p })
+    return render(request, 'tarifica/start/step4.html', {'p': p, 'cd': importer_script_path })
 
 def checkProcessingStatus(request):
     user_info = get_object_or_404(UserInformation, id = 1)

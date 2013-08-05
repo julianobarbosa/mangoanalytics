@@ -1,0 +1,9 @@
+[
+  {
+    "model": "tarifica.DestinationCountry",
+    "pk": 1,
+    "fields": {
+      "name": "Global"
+    }
+  }
+]

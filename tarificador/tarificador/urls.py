@@ -13,6 +13,6 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^accounts/', include('accounts.urls',namespace="accounts")),
-    url(r'^tarifica/', include('tarifica.urls',namespace="tarifica")),
+    # url(r'^accounts/', include('accounts.urls',namespace="accounts")),
+    url(r'^', include('tarifica.urls',namespace="tarifica")),
 )

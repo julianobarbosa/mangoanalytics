@@ -27,7 +27,7 @@ def createBundle(request, destination_group_id):
                 amount=amount
                 )
             b.save()
-            return HttpResponseRedirect('/tarifica/setup') # Redirect after POST
+            return HttpResponseRedirect('/setup') # Redirect after POST
     else:
         form = forms.createBundle() # An unbound form
 
@@ -47,7 +47,7 @@ def updateBundle(request, bundle_id):
             b.amount = form.cleaned_data['amount']
             b.priority = form.cleaned_data['priority']
             b.save()
-            return HttpResponseRedirect('/tarifica/setup') # Redirect after POST
+            return HttpResponseRedirect('/setup') # Redirect after POST
     else:
         form = forms.createBundle(initial=
         {'name': b.name,
@@ -66,4 +66,4 @@ def updateBundle(request, bundle_id):
 def deleteBundle(request, bundle_id):
     bundle = get_object_or_404(Bundle, id = bundle_id)
     bundle.delete()
-    return HttpResponseRedirect('/tarifica/setup')
+    return HttpResponseRedirect('/setup')
