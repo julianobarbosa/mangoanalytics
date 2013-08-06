@@ -22,9 +22,9 @@ urlpatterns = patterns('',
    url(r'^bundles/delete/(?P<bundle_id>\d+)$', bundles.deleteBundle, name = 'bundles_delete'),
 
    url(r'^trunks$', trunks.general, name = 'trunks'),
-   url(r'^trunks/(?P<period_id>\w+)$', trunks.general, name = 'trunks'),
+   url(r'^trunks/(?P<period_id>\w+)$', trunks.general, name = 'trunks_period'),
    url(r'^trunks/get/(?P<trunk_id>\d+)$', trunks.getTrunk, name = 'trunks_get'),
-   url(r'^trunks/get/(?P<trunk_id>\d+)/(?P<period_id>\w+)$', trunks.getTrunk, name = 'trunks_get'),
+   url(r'^trunks/get/(?P<trunk_id>\d+)/(?P<period_id>\w+)$', trunks.getTrunk, name = 'trunks_get_period'),
    url(r'^trunks/download/(?P<trunk_id>\d+)/(?P<period_id>\w+)$', trunks.downloadTrunkCDR, name = 'trunks_download_cdr'),
 
    url(r'^realtime$', general.realtime, name = 'realtime'),

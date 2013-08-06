@@ -36,10 +36,22 @@ def general(request, period_id="thisMonth"):
     averageMonthlyCost = 0
     totalTrunksCost = 0
     providersData = []
+    monthUsage = 0
+    thisBillingPeriod = 0
     for p in providers:
         bundlesCost = getBundlesCost(p.id)
         billingPeriods = getBillingPeriods(p)
-        total_cost = getTrunkCurrentIntervalCost(p.id, start_date, end_date)[0]['total_cost'] + bundlesCost
+        thisBillingPeriod = billingPeriods[0]['data'][0]['total_cost']
+        if thisBillingPeriod is None :
+            thisBillingPeriod = 0
+        thisBillingPeriod += bundlesCost[0]['cost']
+        total_cost = 0
+        current_interval_cost = getTrunkCurrentIntervalCost(p.id, start_date, end_date)[0]['total_cost']
+        if current_interval_cost is None:
+            current_interval_cost = 0
+        if bundlesCost[0]['cost'] is None:
+            bundlesCost[0]['cost'] = 0
+        total_cost = bundlesCost[0]['cost'] + current_interval_cost
         for b in billingPeriods:
             if b['data'][0]['total_cost'] is not None:
                 averageMonthlyCost += b['data'][0]['total_cost']
@@ -48,15 +60,17 @@ def general(request, period_id="thisMonth"):
         providersData.append({
             'provider': p, 
             'total_cost': total_cost, 
-            'average_cost': average_cost
+            'average_cost': average_cost,
+            'thisBillingPeriod' : thisBillingPeriod,
         })
 
     return render(request, 'tarifica/troncalesgeneral.html', {
         'providers' : providersData,
         'form' : form,
-        'totalTrunksCost' : totalTrunksCost
+        'totalTrunksCost' : totalTrunksCost,
     })
-    
+
+
 def getTrunk(request, trunk_id, period_id="thisMonth"):
     provider = get_object_or_404(Provider, id = trunk_id)
 
@@ -81,10 +95,21 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date']
 
+    bundlesCost = getBundlesCost(provider.id)
+    total_cost = 0
+    current_interval_cost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)[0]['total_cost']
+    if current_interval_cost is None:
+        current_interval_cost = 0
+    if bundlesCost[0]['cost'] is None:
+        bundlesCost[0]['cost'] = 0
+    total_cost = bundlesCost[0]['cost'] + current_interval_cost
     averageMonthlyCost = 0
     currentPeriodCost = 0
     billingPeriods = getBillingPeriods(provider)
-    
+    thisBillingPeriod = billingPeriods[0]['data'][0]['total_cost']
+    if thisBillingPeriod is None :
+        thisBillingPeriod = 0
+    thisBillingPeriod += bundlesCost[0]['cost']
     for b in billingPeriods:
         if b['data'][0]['total_cost'] is not None:
             averageMonthlyCost += b['data'][0]['total_cost']
@@ -93,13 +118,15 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
     calls = getTrunkCalls(provider.id, start_date, end_date)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
-    return render(request, 'tarifica/trunksGet.html', {
+    return render(request, 'tarifica/troncalesproveedor.html', {
         'provider' : provider,
         'billingPeriods': billingPeriods,
         'calls': calls,
         'period_id': period_id,
         'averageMonthlyCost': averageMonthlyCost,
-        'currentPeriodCost': currentPeriodCost[0]['total_cost']
+        'currentPeriodCost': currentPeriodCost[0]['total_cost'],
+        'total_cost' : total_cost,
+        'thisBillingPeriod' : thisBillingPeriod,
     })
 
 def getTrunkCDR(provider_id, start_date, end_date):
@@ -162,6 +189,7 @@ def getBillingPeriods(provider):
         billingPeriods.append(billingPeriodData)
     return billingPeriods
 
+
 def getTrunkCalls(provider_id, start_date, end_date):
     cursor = connection.cursor()
     sql = "SELECT tarifica_call.date, \
@@ -183,14 +211,13 @@ def getTrunkCalls(provider_id, start_date, end_date):
 
 def getBundlesCost(provider_id):
     cursor = connection.cursor()
-    sql = "SELECT SUM(tarifica_bundle.cost) as cost , tarifica_bundle.id \
-        FROM tarifica_destinationgroup \
-        LEFT JOIN tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
+    sql = "SELECT SUM(tarifica_bundle.cost) as cost \
+        FROM tarifica_bundle \
+        LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
         WHERE tarifica_destinationgroup.provider_id = %s "
     cursor.execute(sql, (provider_id))
     return dictfetchall(cursor)
-
-
 
 def downloadTrunkCDR(request, trunk_id, period_id):
     pass

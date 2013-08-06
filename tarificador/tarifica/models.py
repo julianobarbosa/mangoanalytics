@@ -1,4 +1,5 @@
 from django.db import models
+#from django_countries import CountryField
 
 # Create your models here.
 class PaymentType(models.Model):
@@ -116,7 +117,7 @@ class UserInformation(models.Model):
     trunks_configured = models.BooleanField(default=False)
     base_tariffs_configured = models.BooleanField(default=False)
     bundles_configured = models.BooleanField(default=False)
-    country_code = models.CharField(max_length=50)
+    #country = CountryField()
     bussiness_name = models.CharField(max_length=255)
     contact_first_name = models.CharField(max_length=255)
     contact_last_name = models.CharField(max_length=255)

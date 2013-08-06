@@ -26,6 +26,8 @@ def step1(request):
             user_info.first_time_user = False
             user_info.save()
             return HttpResponseRedirect('/start/step2') # Redirect after POST
+        else:
+            print "wasn't valid"
     else:
         form = forms.getUserInfo(initial={
             'country_code': user_info.country_code,

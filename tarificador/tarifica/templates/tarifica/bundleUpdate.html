@@ -5,13 +5,11 @@
 
 {% block content %}
 
-<div class="row-fluid well">
+<div class="row-fluid well well-small">
     <div class="span12">
         <h4>Updating bundle {{ bundle.name }} of {{ destination_group }} </h4>
     </div>
 </div>
-
-
 
 <form action="{% url 'tarifica:bundles_update' bundle.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}

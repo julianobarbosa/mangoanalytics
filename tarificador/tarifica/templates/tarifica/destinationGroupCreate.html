@@ -2,61 +2,94 @@
 
 {% block title %}Add tariff to {{provider.name}}{% endblock %}
 
-
 {% block content %}
 
-<div class="row-fluid well">
+<div class="row-fluid well well-small">
     <div class="span12">
         <h4>Add base tariff to trunk {{provider.name}}</h4>
     </div>
 </div>
 
-<form action="{% url 'tarifica:destinations_create' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="control-group">
-        {{ form.destination_name.errors }}
-        <label class="control-label" for="id_destination_group">Destination</label>
-        <div class="controls">
-            {{ form.destination_name }}
-            <span class="help-inline">Destination group for this tariff.</span>
-        </div>
+<div class="row-fluid">
+    <div class="span8 well well-small">
+        <form action="{% url 'tarifica:destinations_create' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="control-group">
+                {{ form.destination_name.errors }}
+                <label class="control-label" for="id_destination_group">Destination</label>
+                <div class="controls">
+                    {{ form.destination_name }}
+                    <span class="help-inline">Destination group for this tariff.</span>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.destination_country.errors }}
+                <label class="control-label" for="id_destination_group">Country</label>
+                <div class="controls">
+                    {{ form.destination_country }}
+                    <span class="help-inline">Select a country for us to know where this tariff applies to.</span>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.prefix.errors }}
+                <label class="control-label" for="id_prefix">Call Prefix</label>
+                <div class="controls">
+                    {{ form.prefix }}
+                    <span class="help-inline">The part of the dialed number which indicates where you're calling. It begins with a country code and (in most places) continues with an area code. It also changes according to your provider. If you're unsure of how you're calling, you can check it by accessing your Elastix call history.</span>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.tariff_mode.errors }}
+                <label class="control-label" for="id_tariff_mode">Billing Mode</label>
+                <div class="controls">
+                    {{ form.tariff_mode }}
+                    <span class="help-inline">Does your provider charge you per sesion or per minute?</span>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.cost.errors }}
+                <label class="control-label" for="id_cost">Cost</label>
+                <div class="controls">
+                    {{ form.cost }}
+                    <span class="help-inline">How much does your provider charge per sesion/minute?</span>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Tariff</button>
+                <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
+            </div>
+        </form>
     </div>
-    <div class="control-group">
-        {{ form.destination_country.errors }}
-        <label class="control-label" for="id_destination_group">Country</label>
-        <div class="controls">
-            {{ form.destination_country }}
-            <span class="help-inline">Select a country for us to know where this tariff applies to.</span>
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.prefix.errors }}
-        <label class="control-label" for="id_prefix">Call Prefix</label>
-        <div class="controls">
-            {{ form.prefix }}
-            <span class="help-inline">The part of the dialed number which indicates where you're calling. It begins with a country code and (in most places) continues with an area code.</span>
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.tariff_mode.errors }}
-        <label class="control-label" for="id_tariff_mode">Billing Mode</label>
-        <div class="controls">
-            {{ form.tariff_mode }}
-            <span class="help-inline">Does your provider charge you per sesion or per minute?</span>
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.cost.errors }}
-        <label class="control-label" for="id_cost">Cost</label>
-        <div class="controls">
-            {{ form.cost }}
-            <span class="help-inline">How much does your provider charge per sesion/minute?</span>
-        </div>
-    </div>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Save Tariff</button>
-        <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
-    </div>
-</form>
 
+    <div class="span4 well well-small">
+        <h4>Tariffs configured for provider {{ provider.name }}</h4>
+        <hr>
+        <table class="table table-striped table-condensed table-hovered">
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Prefix</th>
+                    <th>Billing Mode</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dest in destinations %}
+                <tr>
+                    <td>{{ dest.destination_name.name }}</td>
+                    <td>{{ dest.prefix }}</td>
+                    <td>{{ dest.tariff_mode }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="well well-small">
+    <p>
+        <a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
+            Return to setup
+        </a>
+    </p>
+</div>
 {% endblock %}
