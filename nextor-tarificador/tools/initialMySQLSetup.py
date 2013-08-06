@@ -13,7 +13,6 @@ def getMySQLPassword():
 
 # 1 - Obtain mysql root password:
 rootPass = getMySQLPassword()
-print rootPass
 
 dbName = 'nextor_tarificador'
 dbUser = 'nxt_tarificador'
