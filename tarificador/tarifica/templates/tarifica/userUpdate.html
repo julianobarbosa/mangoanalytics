@@ -14,10 +14,10 @@
 <form action="{% url 'tarifica:config' %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
-        {{ form.country_code.errors }}
-        <label class="control-label" for="id_country_code">Country</label>
+        {{ form.country.errors }}
+        <label class="control-label" for="id_country">Country</label>
         <div class="controls">
-            {{ form.country_code }}
+            {{ form.country }}
             <span class="help-inline">Where is your server running?</span>
         </div>
     </div>

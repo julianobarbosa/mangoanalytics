@@ -60,14 +60,7 @@
     "pk": 5,
     "fields": {
       "name": "Celular Nacional"
-    }
-  },
-  {
-    "model": "tarifica.DestinationCountry",
-    "pk": 1,
-    "fields": {
-      "name": "Global"
-    }
+    } 
   },
   {
     "model": "tarifica.UserInformation",
@@ -78,7 +71,7 @@
       "trunks_configured":  false,
       "base_tariffs_configured":  false,
       "bundles_configured":  false,
-      "country_code": "USA",
+      "country": "US",
       "currency_code": "USD",
       "currency_symbol": "$",
       "contact_first_name": "Name",
