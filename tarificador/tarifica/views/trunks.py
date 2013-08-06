@@ -40,6 +40,8 @@ def general(request, period_id="thisMonth"):
     thisBillingPeriod = 0
     for p in providers:
         bundlesCost = getBundlesCost(p.id)
+        if bundlesCost[0]['cost'] is None:
+            bundlesCost[0]['cost'] = 0
         billingPeriods = getBillingPeriods(p)
         thisBillingPeriod = billingPeriods[0]['data'][0]['total_cost']
         if thisBillingPeriod is None :

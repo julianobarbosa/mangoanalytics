@@ -112,7 +112,7 @@ class UserInformation(models.Model):
     trunks_configured = models.BooleanField(default=False)
     base_tariffs_configured = models.BooleanField(default=False)
     bundles_configured = models.BooleanField(default=False)
-    #country = CountryField()
+    country = CountryField()
     bussiness_name = models.CharField(max_length=255)
     contact_first_name = models.CharField(max_length=255)
     contact_last_name = models.CharField(max_length=255)
