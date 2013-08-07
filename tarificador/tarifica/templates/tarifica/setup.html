@@ -144,6 +144,7 @@
                     <th>Destination</th>
                     <th>Prefix</th>
                     <th>Billing Mode</th>
+                    <th>Cost</th>
                     <th>Has bundles?</th>
                 </tr>
             </thead>
@@ -157,6 +158,7 @@
                     </td>
                     <td>{{loc.prefix}}</td>
                     <td>{{loc.tariff_mode.name}}</td>
+                    <td>{{loc.cost}}</td>
                     <td>
                         {% if loc.has_bundles %}
                         <i class="icon-ok"></i>

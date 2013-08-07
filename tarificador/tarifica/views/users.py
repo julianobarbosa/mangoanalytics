@@ -48,6 +48,7 @@ def generalUsers(request, period_id="thisMonth"):
     #for e in extensions : print e['extension_number']
     cursor.execute(
         'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
+        SUM(tarifica_userdailydetail.total_calls) AS calls , \
         SUM(tarifica_userdailydetail.total_minutes) AS minutes, tarifica_extension.name, \
         tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
@@ -67,7 +68,7 @@ def generalUsers(request, period_id="thisMonth"):
     lastMonth = 'June'
     lastTwoMonths = 'May'
 
-    data = getBarChartInfo(cursor)
+    data = getBarChartInfoByExt(cursor)
 
     return render(request, 'tarifica/generalUsers.html', {
         'extensions' : extensions,
@@ -107,10 +108,11 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date'] - timedelta
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
-    print start_date.isoformat()
-    print end_date.isoformat()
+    #print start_date.isoformat()
+    #print end_date.isoformat()
     cursor.execute('SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
-        tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname \
+        tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname, \
+        tarifica_destinationgroup.destination_country \
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
         ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
@@ -118,14 +120,13 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         ORDER BY cost DESC',
         [start_date,end_date, Ext.id])
     destinations = dictfetchall(cursor)
-    for d in destinations: print d
+    #for d in destinations: print d
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration,\
-        tarifica_destinationname.name, tarifica_destinationcountry.name , tarifica_call.date AS dat,\
+        tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        LEFT JOIN tarifica_destinationcountry ON tarifica_destinationgroup.destination_country_id = tarifica_destinationcountry.id \
-        WHERE date > %s AND date < %s AND extension_number = %s',
+        WHERE date > %s AND date < %s AND extension_number = %s ORDER BY dat',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
     average = 0
@@ -136,7 +137,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
-    data = getBarChartInfo(cursor)
+    data = getBarChartInfoByLocale(cursor, Ext.id)
     return render(request, 'tarifica/detailUsers.html', {
               'destinations' : destinations,
               'all_calls' : all_calls,
@@ -188,14 +189,16 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
     cursor.execute(sql,[start_date_year,end_date_year, Ext.extension_number])
     top_calls = dictfetchall(cursor)[:10]
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number,\
-        tarifica_destinationname.name, tarifica_destinationcountry.name , tarifica_call.date AS dat,\
+        tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        LEFT JOIN tarifica_destinationcountry ON tarifica_destinationgroup.destination_country_id = tarifica_destinationcountry.id \
-        WHERE date > %s AND date < %s AND extension_number = %s',
+        WHERE date > %s AND date < %s AND extension_number = %s ORDER BY dat',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
+    for cost in all_calls:
+        cost['dat'] = cost['dat'].strftime('%d %B %Y')
+        cost['time'] = cost['time'].strftime('%H:%M:%S')
     return render(request, 'tarifica/analyticsUsers.html', {
               'all_calls' : all_calls,
               'top_calls' : top_calls,
@@ -212,7 +215,7 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-def getBarChartInfo(cursor):
+def getBarChartInfoByExt(cursor):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
@@ -228,11 +231,12 @@ def getBarChartInfo(cursor):
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
     start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     cursor.execute(
-        'SELECT tarifica_extension.name , tarifica_extension.id\
+        'SELECT tarifica_extension.extension_number , tarifica_extension.id\
         FROM tarifica_extension\
          ORDER BY id')
     users = dictfetchall(cursor)
-    for u in users: aux.append(u['name'])
+    #print users
+    for u in users: aux.append(u['extension_number'])
     data.append(aux)
     aux = []
     cursor.execute(
@@ -240,9 +244,10 @@ def getBarChartInfo(cursor):
         tarifica_extension.name, tarifica_extension.id AS extid \
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
-        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY extension_id DESC',
+        WHERE date > %s AND date < %s GROUP BY extension_id ',
         [start_date,end_date])
     users = dictfetchall(cursor)
+    #print users
     for n in data[1]: aux.append(0)
     for u in users:
         aux[u['extid']-1] = u['cost']
@@ -256,7 +261,7 @@ def getBarChartInfo(cursor):
         tarifica_extension.name, tarifica_extension.id AS extid\
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
-        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
+        WHERE date > %s AND date < %s GROUP BY extension_id ',
         [start_date,end_date])
     users = dictfetchall(cursor)
     #print users
@@ -273,7 +278,7 @@ def getBarChartInfo(cursor):
         tarifica_extension.name, tarifica_extension.id AS extid \
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
-        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
+        WHERE date > %s AND date < %s GROUP BY extension_id ',
         [start_date,end_date])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
@@ -283,6 +288,77 @@ def getBarChartInfo(cursor):
     return data
 
 
+def getBarChartInfoByLocale(cursor, extension_id):
+    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    timedelta = datetime.timedelta(days = 1)
+    t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
+    t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
+    data = []
+    aux = []
+    aux.append("This Month")
+    aux.append(getMonthName(t1.month))
+    aux.append(getMonthName(t2.month))
+    data.append(aux)
+    #print aux
+    aux = []
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    cursor.execute(
+        'SELECT tarifica_destinationname.name , tarifica_destinationname.id\
+        FROM tarifica_destinationname\
+         ORDER BY id')
+    users = dictfetchall(cursor)
+    for u in users: aux.append(u['name'])
+    data.append(aux)
+    aux = []
+    cursor.execute(
+        'SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        tarifica_destinationgroup.id AS destid \
+        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id ',
+        [start_date,end_date,extension_id])
+    users = dictfetchall(cursor)
+    for n in data[1]: aux.append(0)
+    for u in users:
+        aux[u['destid']-1] = u['cost']
+    data.append(aux)
+    print aux
+    aux = []
+    end_date = datetime.date(year=today.year, month=today.month, day=1)
+    start_date = datetime.date(year=t1.year, month=t1.month, day=1) - timedelta
+    cursor.execute(
+        'SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        tarifica_destinationgroup.id AS destid \
+        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id ',
+        [start_date,end_date,extension_id])
+    users = dictfetchall(cursor)
+    for n in data[1]: aux.append(0)
+    for u in users:
+        aux[u['destid']-1] = u['cost']
+    data.append(aux)
+    print aux
+    aux = []
+    end_date = datetime.date(year=t1.year, month=t1.month, day=1)
+    start_date = datetime.date(year=t2.year, month=t2.month, day=1) - timedelta
+    cursor.execute(
+        'SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        tarifica_destinationgroup.id AS destid \
+        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id ',
+        [start_date,end_date,extension_id])
+    users = dictfetchall(cursor)
+    for n in data[1]: aux.append(0)
+    for u in users:
+        aux[u['destid']-1] = u['cost']
+    data.append(aux)
+    return data
 
 
 

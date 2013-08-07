@@ -101,11 +101,10 @@ def realtime(request):
     })
 
 def dashboard(request):
-    today = datetime.date.today()
-    #Last Month
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-
+    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    timedelta = datetime.timedelta(days=1)
+    start_date = (datetime.datetime(year=today.year, month=today.month, day=1) - timedelta).replace(tzinfo=utc)
+    end_date = (datetime.datetime(year=today.year, month=today.month, day=today.day) + timedelta).replace(tzinfo=utc)
     cursor = connection.cursor()
     provider_daily_costs = []
     total_cost = 0
@@ -117,12 +116,6 @@ def dashboard(request):
             provider_total_cost = e.cost + provider_total_cost
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
-
-    #Last 7 days
-    start_date = datetime.date(year=today.year, month=today.month, day=(today - datetime.timedelta(days=7)).day)
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-    start_date = start_date.strftime('%Y-%m-%d')
-    end_date = end_date.strftime('%Y-%m-%d')
     sql = "SELECT tarifica_providerdestinationdetail.id, \
         SUM(tarifica_providerdestinationdetail.cost) AS cost, \
         tarifica_destinationname.name as destination_name, \

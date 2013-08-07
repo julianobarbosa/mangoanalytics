@@ -23,7 +23,7 @@
                 <h3>Customize</h3>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" class="form-vertical">{% csrf_token %}
+                <form id="modal-form" action="{% url 'tarifica:users_general_period' 'custom' %}" method="post" class="form-vertical">{% csrf_token %}
                     {{ form.non_field_errors }}
                     <div id="datetimepicker1" class="input-append">
                         <label for="id_start_date">Start date</label>
@@ -45,7 +45,7 @@
             </div>
             <div class="modal-footer">
                 <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                <a href="{% url 'tarifica:users_general_period' 'custom' %}"  type="submit" class="btn btn-primary">Load</a>
+                <a href="" id="modal-form-submit" type="submit" class="btn btn-primary">Load</a>
             </div>
         </div>
 
@@ -107,6 +107,7 @@
                     <th>NAME</th>
                     <th>EXT/PIN</th>
                     <th>TOTAL MINUTES</th>
+                    <th>TOTAL CALLS</th>
                     <th>PERIOD TOTAL</th>
                     <th>DETAIL</th>
                 </tr>
@@ -117,6 +118,7 @@
                     <td>{{user.name}}</td>
                     <td>{{user.extension_number}}</td>
                     <td>{{user.minutes}}</td>
+                    <td>{{user.calls}}</td>
                     <td>${{user.cost}}</td>
                     <td><a href="{% url 'tarifica:users_detail' user.extid%}">More</a></td>
                 </tr>
@@ -139,6 +141,14 @@
 
 {% block scripts %}
 <script type="text/javascript">
+    $('#modal-form-submit').on('click', function(e){
+        // We don't want this to act as a link so cancel the link action
+        e.preventDefault();
+
+        // Find form and submit it
+        $('#modal-form').submit();
+    });
+
     $(document).ready(function(){
         $('#datetimepicker1').datetimepicker({
             pickTime: false

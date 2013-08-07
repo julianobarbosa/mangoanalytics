@@ -18,19 +18,23 @@ def general(request, period_id="thisMonth"):
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
         }
     )
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    timedelta = datetime.timedelta(days = 1)
+    custom = False
+    last_month = False
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     if period_id == "lastMonth":
-        timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
-        end_date = datetime.date(year=t.year, month=t.month, day=t.day)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        last_month = True
+        end_date = datetime.date(year=today.year, month=today.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date']
-                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date'] - timedelta
+                end_date = form.cleaned_data['end_date'] + timedelta
+        custom = True
 
     providers = Provider.objects.filter(is_configured = True)
     averageMonthlyCost = 0
@@ -66,10 +70,12 @@ def general(request, period_id="thisMonth"):
             'thisBillingPeriod' : thisBillingPeriod,
         })
 
-    return render(request, 'tarifica/troncalesgeneral.html', {
+    return render(request, 'tarifica/trunks.html', {
         'providers' : providersData,
         'form' : form,
         'totalTrunksCost' : totalTrunksCost,
+        'custom' : custom,
+        'last_month' : last_month,
     })
 
 
@@ -83,19 +89,23 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
         }
     )
-    end_date = datetime.date(year=today.year, month=today.month, day=today.day)
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    timedelta = datetime.timedelta(days = 1)
+    custom = False
+    last_month = False
+    end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     if period_id == "lastMonth":
-        timedelta = datetime.timedelta(days = 1)
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
-        end_date = datetime.date(year=t.year, month=t.month, day=t.day)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        last_month = True
+        end_date = datetime.date(year=today.year, month=today.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date']
-                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date'] - timedelta
+                end_date = form.cleaned_data['end_date'] + timedelta
+        custom = True
 
     bundlesCost = getBundlesCost(provider.id)
     total_cost = 0
@@ -120,7 +130,7 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
     calls = getTrunkCalls(provider.id, start_date, end_date)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
-    return render(request, 'tarifica/troncalesproveedor.html', {
+    return render(request, 'tarifica/trunksGet.html', {
         'provider' : provider,
         'billingPeriods': billingPeriods,
         'calls': calls,
@@ -129,6 +139,9 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
         'currentPeriodCost': currentPeriodCost[0]['total_cost'],
         'total_cost' : total_cost,
         'thisBillingPeriod' : thisBillingPeriod,
+        'custom' : custom,
+        'last_month' : last_month,
+        'form' : form
     })
 
 def getTrunkCDR(provider_id, start_date, end_date):
@@ -206,7 +219,7 @@ def getTrunkCalls(provider_id, start_date, end_date):
         LEFT JOIN tarifica_destinationname \
         ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
         WHERE tarifica_call.provider_id = %s \
-        AND date > %s AND date < %s"
+        AND date > %s AND date < %s ORDER BY date"
     cursor.execute(sql, (provider_id, start_date, end_date))
     return dictfetchall(cursor)
 

@@ -25,7 +25,7 @@
                 <h3>Customize</h3>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" class="form-vertical">{% csrf_token %}
+                <form id="modal-form" action="{% url 'tarifica:users_detail_period' extension.id 'custom' %}" method="post" class="form-vertical">{% csrf_token %}
                     {{ form.non_field_errors }}
                     <div id="datetimepicker1" class="input-append">
                         <label for="id_start_date">Start date</label>
@@ -47,7 +47,7 @@
             </div>
             <div class="modal-footer">
                 <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                <a href="{% url 'tarifica:users_detail_period' extension.id 'custom' %}"  type="submit" class="btn btn-primary">Load</a>
+                <a href="" id="modal-form-submit" type="submit" class="btn btn-primary">Load</a>
             </div>
         </div>
 
@@ -89,7 +89,7 @@
             <tbody>
                 {% for d in destinations %}
                 <tr>
-                    <td>MXN</td>
+                    <td><img src="{{ d.destination_country.flag }}"></td>
                     <td>{{d.destname}}</td>
                     <td>${{d.cost}}</td>
                 </tr>
@@ -125,7 +125,7 @@
                     <th>DESTINATION</th>
                     <th>MINUTES</th>
                     <th>COST</th>
-                    <th>NUMBER</th>
+                    <th>Dialed NUMBER</th>
                 </tr>
             </thead>
             <tbody>
@@ -158,6 +158,14 @@
 
 {% block scripts %}
 <script type="text/javascript">
+    $('#modal-form-submit').on('click', function(e){
+        // We don't want this to act as a link so cancel the link action
+        e.preventDefault();
+
+        // Find form and submit it
+        $('#modal-form').submit();
+    });
+
     $(document).ready(function(){
         $('#datetimepicker1').datetimepicker({
             pickTime: false

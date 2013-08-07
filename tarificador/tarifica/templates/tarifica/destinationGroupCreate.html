@@ -71,6 +71,7 @@
                     <th>Destination</th>
                     <th>Prefix</th>
                     <th>Billing Mode</th>
+                    <th>Cost</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +83,7 @@
                     <td>{{ dest.destination_name.name }}</td>
                     <td>{{ dest.prefix }}</td>
                     <td>{{ dest.tariff_mode }}</td>
+                    <td>{{ dest.cost }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -17,7 +17,7 @@
                 <tr>
                     <th>{{prov.name}}</th>
                     <td>${{cost}}</td>
-                    <td><a href="#">Ver Mas</a></td>
+                    <td><a href="{% url 'tarifica:trunks_get' prov.id %}">Ver Mas</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -48,7 +48,6 @@
                     <td>{{ l.country_name }}</td>
                     <td>{{ l.destination_name }}</td>
                     <td>${{l.cost}}</td>
-                    <td><a href="#">Analisis de Uso</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
