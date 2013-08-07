@@ -63,6 +63,13 @@
     } 
   },
   {
+    "model": "tarifica.DestinationName",
+    "pk": 6,
+    "fields": {
+      "name": "Default Tariff"
+    } 
+  },
+  {
     "model": "tarifica.UserInformation",
     "pk": 1,
     "fields": {

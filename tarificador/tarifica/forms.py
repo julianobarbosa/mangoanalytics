@@ -21,7 +21,7 @@ class createProvider(forms.Form):
 class createDestinationGroup(forms.Form):
     destination_name = forms.ChoiceField(choices = [(e.id, e.name) for e in DestinationName.objects.all()], label = 'Localidad')
     destination_country = forms.ChoiceField(choices = [(e[0], e[1]) for e in countries.COUNTRIES], label = 'Country')
-    prefix = forms.CharField(max_length = 255, label = 'Prefijo', error_messages={'required':u'Por favor proporciona un prefijo'})
+    prefix = forms.CharField(max_length = 255, label = 'Prefijo', required = False)
     tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')
     notes = forms.CharField(label = u'Notas', required = False, widget = forms.Textarea)
     cost = forms.FloatField(label = 'Costo', error_messages={
@@ -50,15 +50,6 @@ class getDate(forms.Form):
                             'required':u'Por favor proporciona una fecha inicial'})
     end_date = forms.DateField(label = 'Fecha final', error_messages={
                             'required':u'Por favor proporciona una fecha final'})
-
-class getNotificationEmail(forms.Form):
-    email = forms.EmailField(label = 'Email', error_messages=
-        {
-            'required':u'Por favor proporciona un correo electrónico.',
-            'invalid':u'Por favor proporciona un correo electrónico válido.'
-        }
-    )
-
 
 class getUserInfo(forms.Form):
     country = forms.ChoiceField(choices = [(e[0], e[1]) for e in countries.COUNTRIES], label = 'Country')

@@ -73,6 +73,7 @@ class CallCostAssigner:
 		# Iteramos sobre las llamadas:
 		totalOutgoingCalls = 0
 		dailyCallDetail = []
+		unsavedDailyCallDetail = []
 		for row in self.am.cursor.fetchall():
 			for ext in extensions:
 				if row['src'] == ext['extension']:
@@ -88,6 +89,10 @@ class CallCostAssigner:
 		self.saveCalls(dailyCallDetail)
 		print "----------------------------------------------------"
 		print "Total outgoing calls saved:", len(dailyCallDetail)
+		return {
+			'total_calls_found': totalOutgoingCalls,
+			'total_calls_saved': dailyCallDetail,
+		}
 
 	def saveBundleUsage(self, bundle):
 		self.am.connect('nextor_tarificador')
@@ -98,6 +103,14 @@ class CallCostAssigner:
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_call \
+		(dialed_number, extension_number, duration, cost, date, destination_group_id, provider_id) \
+		VALUES(%s, %s, %s, %s, %s, %s, %s)"
+		self.am.cursor.executemany(sql, calls)
+		return self.am.db.commit()
+
+	def saveUnconfiguredCalls(self, calls):
+		self.am.connect('nextor_tarificador')
+		sql = "INSERT INTO tarifica_unconfiguredcall \
 		(dialed_number, extension_number, duration, cost, date, destination_group_id, provider_id) \
 		VALUES(%s, %s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
@@ -165,7 +178,6 @@ class CallCostAssigner:
 					# Se encontro el prefijo!
 					numberDialed = dialedNoForProvider[pos + len(d['prefix']):]
 					print "Number called according to trunk:",numberDialed
-					print "Call number fits pattern for destination group", d['name']
 					destination_group_id = d['id']
 					bundles = self.getAllBundlesFromDestinationGroup(d['id'])
 					if len(bundles) > 0:
@@ -212,6 +224,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=4)
+	week = week - datetime.timedelta(days=8)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)

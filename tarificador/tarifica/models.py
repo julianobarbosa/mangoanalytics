@@ -119,3 +119,16 @@ class UserInformation(models.Model):
     notification_email = models.CharField(max_length=255)
     currency_code = models.CharField(max_length=10)
     currency_symbol = models.CharField(max_length=1)
+
+class UnconfiguredCall(models.Model):
+    dialed_number = models.CharField(max_length = 255)
+    extension_number = models.CharField(max_length = 255)
+    duration = models.IntegerField()
+    cost = models.FloatField()
+    date = models.DateTimeField()
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    provider = models.ForeignKey(Provider, blank=True, null=True)
+
+class ImportResults(models.Model):
+    calls_saved = models.IntegerField()
+    calls_not_saved = models.IntegerField()

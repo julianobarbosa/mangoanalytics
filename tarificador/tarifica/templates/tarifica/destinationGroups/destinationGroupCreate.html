@@ -85,7 +85,13 @@
                         <img src="{{ dest.destination_country.flag }}">
                     </td>
                     <td>{{ dest.destination_name.name }}</td>
-                    <td>{{ dest.prefix }}</td>
+                    <td>
+                        {% if dest.prefix = "" %}
+                            Default
+                        {% else %}
+                            {{ dest.prefix }}
+                        {% endif %}
+                    </td>
                     <td>{{ dest.tariff_mode }}</td>
                     <td>{{ user_info.currency_symbol }}{{ dest.cost }}</td>
                 </tr>
