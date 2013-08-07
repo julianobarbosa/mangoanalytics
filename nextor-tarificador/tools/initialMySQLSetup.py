@@ -22,24 +22,46 @@ dbPass = 'k4590NAEUI'
 db = _mysql.connect(host='localhost',user='root',
 	passwd=rootPass)
 
-# 3 - Create database:
+# 3 - Drop database:
+dropDBSQL = "DROP DATABASE "+dbName
+try:
+	db.query(dropDBSQL)
+except Exception, e:
+	print "Drop database failed with message:", e
+
+# 4 - Create database:
 createDBSQL = "CREATE DATABASE "+dbName
-db.query(createDBSQL)
+try:
+	db.query(createDBSQL)
+except Exception, e:
+	print "Create database failed with message:", e
 
-# 4 - Create user:
+# 5 - Create user:
 createUserSQL = "CREATE USER '"+dbUser+"'@'localhost' IDENTIFIED BY '"+dbPass+"'"
-db.query(createUserSQL)
+try:
+	db.query(createUserSQL)
+except Exception, e:
+	print "Create user failed with message:", e
 
-# 5 - Assign privileges for own db
+# 6 - Assign privileges for own db
 assignPriv = "GRANT ALL PRIVILEGES ON "+dbName+".* TO '"+dbUser+"'@'localhost'"
-db.query(assignPriv)
+try:
+	db.query(assignPriv)
+except Exception, e:
+	print "Grant privileges on ",dbName,"failed with message:", e
 
-# 6 - Assign privileges for asterisk main db
+# 7 - Assign privileges for asterisk main db
 asteriskPriv = "GRANT SELECT ON asterisk.* TO '"+dbUser+"'@'localhost'"
-db.query(asteriskPriv)
+try:
+	db.query(asteriskPriv)
+except Exception, e:
+	print "Grant select on asterisk failed with message:", e
 
-# 6 - Assign privileges for asterisk cdr db
+# 8 - Assign privileges for asterisk cdr db
 asteriskPriv = "GRANT SELECT ON asteriskcdrdb.* TO '"+dbUser+"'@'localhost'"
-db.query(asteriskPriv)
+try:
+	db.query(asteriskPriv)
+except Exception, e:
+	print "Grant select in asteriskcdrdb failed with message:", e
 
 print """All operations finished successfully"""
