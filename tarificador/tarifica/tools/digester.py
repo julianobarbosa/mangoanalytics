@@ -203,8 +203,7 @@ if __name__ == '__main__':
 	print week
 	d = Digester()
 	d.saveUserDailyDetail(week)
-	#d.saveUserDestinationDetail(week)
-	#d.saveUserDestinationNumberDetail(week)
-	#d.saveProviderDailyDetail(week)
-	#d.saveProviderDestinationDetail(week)
-
+	d.saveUserDestinationDetail(week)
+	d.saveUserDestinationNumberDetail(week)
+	d.saveProviderDailyDetail(week)
+	d.saveProviderDestinationDetail(week)

@@ -7,6 +7,7 @@ from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 
 def createBundle(request, destination_group_id):
+    user_info = get_object_or_404(UserInformation, id = 1)
     destination_group = get_object_or_404(DestinationGroup, id=destination_group_id)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createBundle(request.POST) # A form bound to the POST data
@@ -31,12 +32,14 @@ def createBundle(request, destination_group_id):
     else:
         form = forms.createBundle() # An unbound form
 
-    return render(request, 'tarifica/bundleCreate.html', {
+    return render(request, 'tarifica/bundles/bundleCreate.html', {
         'form': form,
-        'destination_group': destination_group
+        'destination_group': destination_group,
+        'user_info': user_info
     })
 
 def updateBundle(request, bundle_id):
+    user_info = get_object_or_404(UserInformation, id = 1)
     b = get_object_or_404(Bundle, id = bundle_id)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createBundle(request.POST) # A form bound to the POST data
@@ -58,9 +61,10 @@ def updateBundle(request, bundle_id):
          'priority': b.priority,
         }) # An unbound form
 
-    return render(request, 'tarifica/bundleUpdate.html', {
+    return render(request, 'tarifica/bundles/bundleUpdate.html', {
         'form': form,
         'bundle' : b,
+        'user_info': user_info
     })
 
 def deleteBundle(request, bundle_id):

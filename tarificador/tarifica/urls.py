@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, start
+from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, start, wizard
 
 urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
@@ -42,5 +42,10 @@ urlpatterns = patterns('',
    url(r'^start/step2$', start.step2, name = "start_step2"),
    url(r'^start/step3$', start.step3, name = "start_step3"),
    url(r'^start/step4$', start.step4, name = "start_step4"),
-   url(r'^start/check_processing_status$', start.checkProcessingStatus, name = "check_processing_status")
+   url(r'^start/check_processing_status$', start.checkProcessingStatus, name = "check_processing_status"),
+   
+   url(r'^wizard/start$', wizard.dryrun, name = "wizard_start"),
+   url(r'^wizard/dryrun$', wizard.dryrun, name = "wizard_dryrun"),
+   url(r'^wizard/checkMissing$', wizard.checkMissing, name = "wizard_check_missing"),
+   url(r'^wizard/run$', wizard.run, name = "wizard_run"),
 )

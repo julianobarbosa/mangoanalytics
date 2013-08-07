@@ -1,17 +1,17 @@
-{% extends "trunks.html" %}
+{% extends "setup.html" %}
 
-{% block title %}Add trunk information{% endblock %}
-
+{% block title %}Update trunk information{% endblock %}
 
 {% block content %}
 
 <div class="row-fluid well well-small">
     <div class="span12">
-        <h4> Trunk {{provider.asterisk_name}} </h4>
+        <h4> Updating trunk {{provider.name}} </h4>
     </div>
 </div>
 
-<form action="{% url 'tarifica:providers_create' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+
+<form action="{% url 'tarifica:providers_update' provider.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
@@ -58,5 +58,8 @@
         <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
     </div>
 </form>
+
+
+
 
 {% endblock %}

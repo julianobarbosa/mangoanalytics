@@ -2,7 +2,6 @@
 
 {% block title %}Updating tariff{% endblock %}
 
-
 {% block content %}
 
 <div class="row-fluid well well-small">
@@ -49,7 +48,11 @@
         {{ form.cost.errors }}
         <label class="control-label" for="id_cost">Cost</label>
         <div class="controls">
-            {{ form.cost }}
+            <div class="input-prepend input-append">
+                <span class="add-on">{{ user_info.currency_symbol }}</span>
+                {{ form.cost }}
+                <span class="add-on">{{ user_info.currency_code }}</span>
+            </div>
             <span class="help-inline">How much does your provider charge per sesion/minute?</span>
         </div>
     </div>

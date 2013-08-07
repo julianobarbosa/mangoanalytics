@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
-    <head>
-        <link href="{% static "tarifica/css/bootstrap.min.css" %}" rel="stylesheet" media="screen">
-        <title>{% block title %}NEXTOR Tarificador{% endblock %}</title>
-        <meta name="viewport" content"width=device-width, initial-scale=1.0">
-    </head>
+<head>
+    {% block css %}
+        <link href="{% static "tarifica/css/bootstrap.css" %}" rel="stylesheet" media="screen">
+    {% endblock %}
+    <title>{% block title %}NEXTOR Tarificador{% endblock %}</title>
+    <meta name="viewport" content"width=device-width, initial-scale=1.0">
+</head>
 
-    <body>
-        <div class="row-fluid well well-small">
-            <div class="span9">
-                <img src="{% static "tarifica/nextorlogo.png" %}">
-            </div>
-            <div class="span3">
-                {% block user %}
-                <strong>User</strong> | <i class="icon-cog"></i><a href="{% url 'tarifica:config' %}">Settings</a>
-                {% endblock %}
-            </div>
+<body>
+    <div class="row-fluid well well-small">
+        <div class="span9">
+            <img src="{% static "tarifica/nextorlogo.png" %}">
         </div>
-        <div id="navbar">
-            <ul class="nav nav-pills">
-                {% block navbar %}
-                <li>
-                    <a href="{% url 'tarifica:dashboard' %}">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'tarifica:setup' %}">Setup</a>
-                </li>
-                <li>
-                    <a href="{% url 'tarifica:realtime' %}">Realtime</a>
-                </li>
-                <li>
-                    <a href="{% url 'tarifica:trunks' %}">Trunks</a>
-                </li>
-                <li>
-                    <a href="{% url 'tarifica:users_general' %}">Users</a>
-                </li>
-                {% endblock %}
-            </ul>
+        <div class="span3">
+            {% block user %}
+            <strong>User</strong> | <i class="icon-cog"></i><a href="{% url 'tarifica:config' %}">Settings</a>
+            {% endblock %}
         </div>
-
-            {% block content %}{% endblock %}
-
-
+    </div>
+    <div id="navbar">
+        <ul class="nav nav-pills">
+            {% block navbar %}
+            <li>
+                <a href="{% url 'tarifica:dashboard' %}">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'tarifica:setup' %}">Setup</a>
+            </li>
+            <li>
+                <a href="{% url 'tarifica:realtime' %}">Realtime</a>
+            </li>
+            <li>
+                <a href="{% url 'tarifica:trunks' %}">Trunks</a>
+            </li>
+            <li>
+                <a href="{% url 'tarifica:users_general' %}">Users</a>
+            </li>
+            <li>
+                <a href="{% url 'tarifica:wizard_start' %}">Call Wizard</a>
+            </li>
+            {% endblock %}
+        </ul>
+    </div>
+    {% block content %}{% endblock %}
     <footer class="footer">
         <div class="container">
             <p>NEXTOR Telecom.</p>
@@ -50,8 +52,10 @@
         </div>
     </footer>
 
+{% block js %}
+    <script src="{% static "tarifica/js/jquery.min.js" %}"></script>
+    <script src="{% static "tarifica/js/bootstrap.min.js" %}"></script>
+{% endblock %}
 
-        <script src="{% static "tarifica/js/jquery.min.js" %}"></script>
-        <script src="{% static "tarifica/js/bootstrap.min.js" %}"></script>
-    </body>
+</body>
 </html>

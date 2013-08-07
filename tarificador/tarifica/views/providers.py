@@ -26,7 +26,7 @@ def createProvider(request, asterisk_id):
     else:
         form = forms.createProvider() # An unbound form
 
-    return render(request, 'tarifica/providerCreate.html', {
+    return render(request, 'tarifica/providers/providerCreate.html', {
         'form': form,
         'provider': provider
     })
@@ -35,7 +35,7 @@ def getProvider(request, provider_id):
 	provider = get_object_or_404(Provider, id = provider_id)
 	destination_groups = DestinationGroup.objects.filter(provider = provider)
 	bundles = Bundle.objects.filter(destination_group__in = destination_groups)
-	return render(request, 'tarifica/providerGet.html', {
+	return render(request, 'tarifica/providers/providerGet.html', {
         'provider': provider,
         'destination_groups': destination_groups,
         'bundles': bundles,
@@ -65,7 +65,7 @@ def updateProvider(request, provider_id):
         }
         )# An unbound form
 
-    return render(request, 'tarifica/providerUpdate.html', {
+    return render(request, 'tarifica/providers/providerUpdate.html', {
         'form': form,
         'provider': provider
     })

@@ -35,7 +35,7 @@ class DestinationGroup(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
-    prefix = models.CharField(max_length = 255, blank=True)
+    prefix = models.CharField(max_length = 255, blank=True, default="")
     notes = models.TextField(null=True, blank=True)
     destination_name = models.ForeignKey(DestinationName, blank=True, null=True)
     destination_country = CountryField()

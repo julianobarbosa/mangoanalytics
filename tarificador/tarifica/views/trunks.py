@@ -70,7 +70,7 @@ def general(request, period_id="thisMonth"):
             'thisBillingPeriod' : thisBillingPeriod,
         })
 
-    return render(request, 'tarifica/trunks.html', {
+    return render(request, 'tarifica/trunks/trunks.html', {
         'providers' : providersData,
         'form' : form,
         'totalTrunksCost' : totalTrunksCost,
@@ -130,7 +130,7 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
     calls = getTrunkCalls(provider.id, start_date, end_date)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
-    return render(request, 'tarifica/trunksGet.html', {
+    return render(request, 'tarifica/trunks/trunksGet.html', {
         'provider' : provider,
         'billingPeriods': billingPeriods,
         'calls': calls,

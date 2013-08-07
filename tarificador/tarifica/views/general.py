@@ -10,10 +10,10 @@ from tarifica import forms
 from django.db import connection, transaction
 import json
 
-def setup(request):
+def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
     if user_info.first_time_user:
-        redirect('start.step1')
+        return HttpResponseRedirect('/start/step1') # Redirect after POST
 
     a_mysql_m = AsteriskMySQLManager()
     users = a_mysql_m.getUserInformation()
@@ -49,7 +49,7 @@ def setup(request):
     providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
     bundles = Bundle.objects.all().order_by('name')
     locales = DestinationGroup.objects.all()
-    return render(request, 'tarifica/setup.html', {
+    return render(request, 'tarifica/general/setup.html', {
         'not_configured' : providers_not_configured,
         'configured' : providers_configured,
         'bundles' : bundles,
@@ -95,7 +95,7 @@ def realtime(request):
         if not accountedFor:
             graphData.append([d[1].destination_name.name, 1])
 
-    return render(request, 'tarifica/realtime.html', {
+    return render(request, 'tarifica/general/realtime.html', {
         'data' : data,
         'graphData' : json.dumps(graphData),
     })
@@ -144,7 +144,7 @@ def dashboard(request):
 
     #Information for graph
 
-    return render(request, 'tarifica/dashboard.html', {
+    return render(request, 'tarifica/general/dashboard.html', {
         'total_cost' : total_cost,
         'provider_daily_costs' : provider_daily_costs,
         'locales' : locales,
@@ -169,7 +169,7 @@ def config(request):
         form = forms.getUserInfo(initial=
         {'notification_email': user_info.notification_email,})
 
-    return render(request, 'tarifica/userUpdate.html', {
+    return render(request, 'tarifica/config.html', {
         'form': form
     })
 

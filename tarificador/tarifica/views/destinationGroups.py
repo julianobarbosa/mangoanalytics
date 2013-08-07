@@ -9,6 +9,7 @@ from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 
 def createDestinationGroup(request, provider_id):
+    user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
     destinations = DestinationGroup.objects.filter(provider_id = provider_id)
     if request.method == 'POST': # If the form has been submitted...
@@ -30,15 +31,20 @@ def createDestinationGroup(request, provider_id):
             d.save()
             return HttpResponseRedirect('/destinations/create/'+provider_id) # Redirect after POST
     else:
-        form = forms.createDestinationGroup() # An unbound form
+        form = forms.createDestinationGroup(initial=
+        {
+            'destination_country': user_info.country,
+        }) # An unbound form
 
-    return render(request, 'tarifica/destinationGroupCreate.html', {
+    return render(request, 'tarifica/destinationGroups/destinationGroupCreate.html', {
         'form': form,
         'provider' : provider,
-        'destinations' : destinations
+        'destinations' : destinations,
+        'user_info': user_info
     })
 
 def updateDestinationGroup(request, destination_group_id):
+    user_info = get_object_or_404(UserInformation, id = 1)
     destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
@@ -68,9 +74,10 @@ def updateDestinationGroup(request, destination_group_id):
          'cost': destination_group.cost,
         })
 
-    return render(request, 'tarifica/destinationGroupUpdate.html', {
+    return render(request, 'tarifica/destinationGroups/destinationGroupUpdate.html', {
         'form': form,
         'destination_group' : destination_group,
+        'user_info': user_info
     })
 
 def getDestinationGroup(request, provider_id):

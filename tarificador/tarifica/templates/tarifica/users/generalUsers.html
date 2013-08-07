@@ -1,4 +1,11 @@
 {% extends "users.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
+    <link href="{% static "tarifica/css/jquery.jqplot.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %} Users {% endblock %}
 
@@ -134,76 +141,79 @@
     </div>
 {% endif %}
 </div>
-
-
 {% endblock %}
 
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "tarifica/js/jquery.jqplot.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.barRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.categoryAxisRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
 
-{% block scripts %}
-<script type="text/javascript">
-    $('#modal-form-submit').on('click', function(e){
-        // We don't want this to act as a link so cancel the link action
-        e.preventDefault();
+    <script type="text/javascript">
+        $('#modal-form-submit').on('click', function(e){
+            // We don't want this to act as a link so cancel the link action
+            e.preventDefault();
 
-        // Find form and submit it
-        $('#modal-form').submit();
-    });
-
-    $(document).ready(function(){
-        $('#datetimepicker1').datetimepicker({
-            pickTime: false
-        });
-        $('#datetimepicker2').datetimepicker({
-            pickTime: false
+            // Find form and submit it
+            $('#modal-form').submit();
         });
 
-        var data = $.parseJSON('{{ data | safe }}');
+        $(document).ready(function(){
+            $('#datetimepicker1').datetimepicker({
+                pickTime: false
+            });
+            $('#datetimepicker2').datetimepicker({
+                pickTime: false
+            });
 
-        var thisMonth = data[2];
-        var lastMonth = data[3];
-        var lastTwoMonths = data[4];
-        // Can specify a custom tick Array.
-        // Ticks should match up one for each y value (category) in the series.
-        var ticks = data[1];
-         
-        var plot1 = $.jqplot('graph', [thisMonth, lastMonth, lastTwoMonths], {
-            // The "seriesDefaults" option is an options object that will
-            // be applied to all series in the chart.
-            seriesDefaults:{
-                renderer:$.jqplot.BarRenderer,
-                rendererOptions: {fillToZero: true}
-            },
-            // Custom labels for the series are specified with the "label"
-            // option on the series option.  Here a series option object
-            // is specified for each series.
-            series:[
-                {label:data[0][0]},
-                {label:data[0][1]},
-                {label:data[0][2]}
-            ],
-            // Show the legend and put it outside the grid, but inside the
-            // plot container, shrinking the grid to accomodate the legend.
-            // A value of "outside" would not shrink the grid and allow
-            // the legend to overflow the container.
-            legend: {
-                show: true,
-                placement: 'outsideGrid'
-            },
-            axes: {
-                // Use a category axis on the x axis and use our custom ticks.
-                xaxis: {
-                    renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks
+            var data = $.parseJSON('{{ data | safe }}');
+
+            var thisMonth = data[2];
+            var lastMonth = data[3];
+            var lastTwoMonths = data[4];
+            // Can specify a custom tick Array.
+            // Ticks should match up one for each y value (category) in the series.
+            var ticks = data[1];
+             
+            var plot1 = $.jqplot('graph', [thisMonth, lastMonth, lastTwoMonths], {
+                // The "seriesDefaults" option is an options object that will
+                // be applied to all series in the chart.
+                seriesDefaults:{
+                    renderer:$.jqplot.BarRenderer,
+                    rendererOptions: {fillToZero: true}
                 },
-                // Pad the y axis just a little so bars can get close to, but
-                // not touch, the grid boundaries.  1.2 is the default padding.
-                yaxis: {
-                    pad: 1.05,
-                    tickOptions: {formatString: '$%d'}
+                // Custom labels for the series are specified with the "label"
+                // option on the series option.  Here a series option object
+                // is specified for each series.
+                series:[
+                    {label:data[0][0]},
+                    {label:data[0][1]},
+                    {label:data[0][2]}
+                ],
+                // Show the legend and put it outside the grid, but inside the
+                // plot container, shrinking the grid to accomodate the legend.
+                // A value of "outside" would not shrink the grid and allow
+                // the legend to overflow the container.
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid'
+                },
+                axes: {
+                    // Use a category axis on the x axis and use our custom ticks.
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: ticks
+                    },
+                    // Pad the y axis just a little so bars can get close to, but
+                    // not touch, the grid boundaries.  1.2 is the default padding.
+                    yaxis: {
+                        pad: 1.05,
+                        tickOptions: {formatString: '$%d'}
+                    }
                 }
-            }
+            });
         });
-    });
-</script>
-
+    </script>
 {% endblock %}

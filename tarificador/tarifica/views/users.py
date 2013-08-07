@@ -70,7 +70,7 @@ def generalUsers(request, period_id="thisMonth"):
 
     data = getBarChartInfoByExt(cursor)
 
-    return render(request, 'tarifica/generalUsers.html', {
+    return render(request, 'tarifica/users/generalUsers.html', {
         'extensions' : extensions,
         'all_users' : all_users,
         'average' : average,
@@ -138,7 +138,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
     data = getBarChartInfoByLocale(cursor, Ext.id)
-    return render(request, 'tarifica/detailUsers.html', {
+    return render(request, 'tarifica/users/detailUsers.html', {
               'destinations' : destinations,
               'all_calls' : all_calls,
               'average' : average,
@@ -199,7 +199,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
     for cost in all_calls:
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
-    return render(request, 'tarifica/analyticsUsers.html', {
+    return render(request, 'tarifica/users/analyticsUsers.html', {
               'all_calls' : all_calls,
               'top_calls' : top_calls,
               'last_month' : last_month,

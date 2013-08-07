@@ -10,7 +10,7 @@ from tarifica.models import *
 from tarifica import forms
 from math import ceil
 
-def step1(request):
+def start(request):
     user_info = get_object_or_404(UserInformation, id = 1)
 
     if request.method == 'POST': # If the form has been submitted...
@@ -26,6 +26,8 @@ def step1(request):
             user_info.first_time_user = False
             user_info.save()
             return HttpResponseRedirect('/start/step2') # Redirect after POST
+        else:
+            print "wasn't valid"
     else:
         form = forms.getUserInfo(initial={
             'country': user_info.country,
@@ -41,7 +43,7 @@ def step1(request):
         'form': form
     })
 
-def step2(request):
+def dryrun(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     if request.method == 'POST': # If the form has been submitted...
         form = forms.getNotificationEmail()
@@ -60,11 +62,11 @@ def step2(request):
         'form': form
     })
 
-def step3(request):
+def checkMissing(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     return render(request, 'tarifica/start/step3.html', {})
 
-def step4(request):
+def run(request):
     import subprocess
     import os
     current_directory = os.path.dirname(os.path.realpath(__file__))

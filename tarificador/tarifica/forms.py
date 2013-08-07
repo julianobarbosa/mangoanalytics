@@ -26,7 +26,8 @@ class createDestinationGroup(forms.Form):
     notes = forms.CharField(label = u'Notas', required = False, widget = forms.Textarea)
     cost = forms.FloatField(label = 'Costo', error_messages={
                             'required':'Por favor proporciona el costo',
-                            'invalid':'Por favor proporciona un número válido'})
+                            'invalid':'Por favor proporciona un número válido'}, 
+                            widget=forms.TextInput(attrs={'class':'input-small'}))
 
 
 class createBundle(forms.Form):
@@ -34,7 +35,8 @@ class createBundle(forms.Form):
     tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')
     cost = forms.FloatField(label = 'Costo', error_messages={
                             'required':u'Por favor proporciona el costo del paquete',
-                            'invalid':'Por favor proporciona un número válido'})
+                            'invalid':'Por favor proporciona un número válido'},
+                            widget=forms.TextInput(attrs={'class':'input-medium'}))
     amount = forms.IntegerField(error_messages={
                             'required':u'Por favor proporciona la cantidad de minutos/sesiones',
                             'invalid':'Por favor proporciona un entero válido'})

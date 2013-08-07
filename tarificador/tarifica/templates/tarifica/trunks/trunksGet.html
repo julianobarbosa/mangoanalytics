@@ -1,4 +1,11 @@
 {% extends "trunks.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
+    <link href="{% static "tarifica/css/jquery.jqplot.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %} Trunks {% endblock %}
 
@@ -24,7 +31,7 @@
                 <h3>Customize</h3>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" class="form-vertical">{% csrf_token %}
+                <form id="modal-form" action="{% url 'tarifica:trunks_get_period' provider.id 'custom' %}" method="post" class="form-vertical">{% csrf_token %}
                     {{ form.non_field_errors }}
                     <div id="datetimepicker1" class="input-append">
                         <label for="id_start_date">Start date</label>
@@ -46,23 +53,23 @@
             </div>
             <div class="modal-footer">
                 <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                <a href="{% url 'tarifica:trunks_get_period' provider.id 'custom' %}"  type="submit" class="btn btn-primary">Load</a>
+                <a href="" id="modal-form-submit" type="submit" class="btn btn-primary">Load</a>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <div class="row-fluid">
-
     <div class="span6 well well-small">
-
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
                     <th>PROVIDER</th>
-                    <td>{{provider.name}}<div id="container" style="float:right"> <a href="#">Ver Paquetes</a></div></td>
+                    <td>{{provider.name}}
+                        <div id="container" style="float:right"> 
+                            <a href="{% url 'tarifica:providers_get' provider.id %}">Info</a>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th>TRUNK NAME</th>
@@ -70,7 +77,7 @@
                 </tr>
                 <tr>
                     <th>TRUNK TYPE</th>
-                    <td>{{provider.provider_type}}</td>
+                    <td>{{provider.provider_tech}}</td>
                 </tr>
                 <tr>
                     <th>BILLING CYCLE</th>
@@ -194,40 +201,39 @@
                     <td>{{ call.dialed_number }}</td>
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td>12 jun 2013</td>
-                    <td> 12:00 pm </td>
-                    <td> CELULAR </td>
-                    <td> 50 </td>
-                    <td> $5,000 </td>
-                    <td>155</td>
-                    <td> 5555555555 </td>
-                </tr>
             </tbody>
         </table>
     </div>
 </div>
-
-
 {% endblock %}
 
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "tarifica/js/jquery.jqplot.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.barRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.categoryAxisRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
 
-{% block scripts %}
-
-<script type="text/javascript">
-    $(function() {
-        $('#datetimepicker1').datetimepicker({
-            pickTime: false
+    <script type="text/javascript">
+        $(function() {
+            $('#datetimepicker1').datetimepicker({
+                pickTime: false
+            });
         });
-    });
-</script>
 
-<script type="text/javascript">
-    $(function() {
-        $('#datetimepicker2').datetimepicker({
-            pickTime: false
+        $(function() {
+            $('#datetimepicker2').datetimepicker({
+                pickTime: false
+            });
         });
-    });
-</script>
 
+      $('#modal-form-submit').on('click', function(e){
+        // We don't want this to act as a link so cancel the link action
+        e.preventDefault();
+
+        // Find form and submit it
+        $('#modal-form').submit();
+      });
+    </script>
 {% endblock %}

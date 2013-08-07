@@ -50,7 +50,11 @@
                 {{ form.cost.errors }}
                 <label class="control-label" for="id_cost">Cost</label>
                 <div class="controls">
-                    {{ form.cost }}
+                    <div class="input-prepend input-append">
+                        <span class="add-on">{{ user_info.currency_symbol }}</span>
+                        {{ form.cost }}
+                        <span class="add-on">{{ user_info.currency_code }}</span>
+                    </div>
                     <span class="help-inline">How much does your provider charge per sesion/minute?</span>
                 </div>
             </div>
@@ -71,7 +75,7 @@
                     <th>Destination</th>
                     <th>Prefix</th>
                     <th>Billing Mode</th>
-                    <th>Cost</th>
+                    <th>Cost ({{ user_info.currency_code }})</th>
                 </tr>
             </thead>
             <tbody>
@@ -83,7 +87,7 @@
                     <td>{{ dest.destination_name.name }}</td>
                     <td>{{ dest.prefix }}</td>
                     <td>{{ dest.tariff_mode }}</td>
-                    <td>{{ dest.cost }}</td>
+                    <td>{{ user_info.currency_symbol }}{{ dest.cost }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

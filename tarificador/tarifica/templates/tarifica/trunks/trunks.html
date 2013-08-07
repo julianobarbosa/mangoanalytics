@@ -1,4 +1,11 @@
 {% extends "trunks.html"%}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
+    <link href="{% static "tarifica/css/jquery.jqplot.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %} Trunks {% endblock %}
 
@@ -25,7 +32,7 @@
                 <h3>Customize</h3>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" class="form-vertical">{% csrf_token %}
+                <form action="{% url 'tarifica:trunks_period' 'custom' %}" method="post" id="modal-form" class="form-vertical">{% csrf_token %}
                     {{ form.non_field_errors }}
                     <div id="datetimepicker1" class="input-append">
                         <label for="id_start_date">Start date</label>
@@ -47,7 +54,7 @@
             </div>
             <div class="modal-footer">
                 <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-                <a href="{% url 'tarifica:trunks_period' 'custom' %}"  type="submit" class="btn btn-primary">Load</a>
+                <a id="modal-form-submit" href=""  type="submit" class="btn btn-primary">Load</a>
             </div>
         </div>
     </div>
@@ -71,7 +78,6 @@
                             ${{ prov.total_cost }}
                         {% endif %}
                     </td>
-                    <td><a href="#">More</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -98,7 +104,11 @@
             <tbody>
                 <tr>
                     <th>PROVIDER</th>
-                    <td>{{prov.provider.name}}<div id="container" style="float:right"> <a href="#">Bundles</a></div></td>
+                    <td>{{prov.provider.name}}
+                        <div id="container" style="float:right"> 
+                            <a href="{% url 'tarifica:providers_get' prov.provider.id %}">Info</a>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th>TRUNK NAME</th>
@@ -106,7 +116,7 @@
                 </tr>
                 <tr>
                     <th>TRUNK TYPE</th>
-                    <td>{{prov.provider.provider_type}}</td>
+                    <td>{{prov.provider.provider_tech}}</td>
                 </tr>
                 <tr>
                     <th>BILLING CYCLE</th>
@@ -154,23 +164,33 @@
 
 {% endblock %}
 
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "tarifica/js/jquery.jqplot.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.barRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.categoryAxisRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
 
-{% block scripts %}
-
-<script type="text/javascript">
-    $(function() {
-        $('#datetimepicker1').datetimepicker({
-            pickTime: false
+    <script type="text/javascript">
+        $(function() {
+            $('#datetimepicker1').datetimepicker({
+                pickTime: false
+            });
         });
-    });
-</script>
 
-<script type="text/javascript">
-    $(function() {
-        $('#datetimepicker2').datetimepicker({
-            pickTime: false
+        $(function() {
+            $('#datetimepicker2').datetimepicker({
+                pickTime: false
+            });
         });
-    });
-</script>
 
+        $('#modal-form-submit').on('click', function(e){
+            // We don't want this to act as a link so cancel the link action
+            e.preventDefault();
+
+            // Find form and submit it
+            $('#modal-form').submit();
+        });
+    </script>
 {% endblock %}

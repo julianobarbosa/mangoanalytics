@@ -38,28 +38,28 @@
     "model": "tarifica.DestinationName",
     "pk": 2,
     "fields": {
-      "name": "Nacional"
+      "name": "National"
     }
   },
   {
     "model": "tarifica.DestinationName",
     "pk": 3,
     "fields": {
-      "name": "Internacional"
+      "name": "International"
     }
   },
   {
     "model": "tarifica.DestinationName",
     "pk": 4,
     "fields": {
-      "name": "Celular Local"
+      "name": "Local Cellphone"
     }
   },
   {
     "model": "tarifica.DestinationName",
     "pk": 5,
     "fields": {
-      "name": "Celular Nacional"
+      "name": "National Cellphone"
     } 
   },
   {
