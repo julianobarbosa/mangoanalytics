@@ -205,22 +205,26 @@ class CallCostAssigner:
 		if destination_group_id == 0:
 			return ()
 			
-		return (
-			dialedNoForProvider, 
-			call['src'], 
-			ceil(call['billsec'] / 60), 
-			cost, 
-			datetime.datetime(
-				year=call['calldate'].year, 
-				month=call['calldate'].month, 
-				day=call['calldate'].day,
-				hour=call['calldate'].hour,
-				minute=call['calldate'].minute,
-				second=call['calldate'].second
+		return {
+			'callInfo':
+			(
+				dialedNoForProvider, 
+				call['src'], 
+				ceil(call['billsec'] / 60), 
+				cost, 
+				datetime.datetime(
+					year=call['calldate'].year, 
+					month=call['calldate'].month, 
+					day=call['calldate'].day,
+					hour=call['calldate'].hour,
+					minute=call['calldate'].minute,
+					second=call['calldate'].second
+				),
+				destination_group_id,
+				provider_id
 			),
-			destination_group_id,
-			provider_id
-		)
+			'saved': True
+		}
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()

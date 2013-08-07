@@ -124,10 +124,7 @@ class UnconfiguredCall(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
     duration = models.IntegerField()
-    cost = models.FloatField()
     date = models.DateTimeField()
-    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
-    provider = models.ForeignKey(Provider, blank=True, null=True)
 
 class ImportResults(models.Model):
     calls_saved = models.IntegerField()
