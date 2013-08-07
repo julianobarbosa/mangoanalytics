@@ -1,28 +1,28 @@
 {% extends "wizard.html" %}
 
-{% block title %} Initial Config {% endblock %}
+{% block title %} Wizard - Start {% endblock %}
 
 {% block content %}
-<h3>Step 2:</h3>
+<h3>Wizard - Start:</h3>
 <p>
-	Configure all trunks for your elastix system. We need to know on which day of the month your billing starts, and how much it costs.
-</p>
-<p>
-	Then, add base tariffs for the default destination groups. We need to know how much each provider bills you for your local, national and international calls, and also how much they charge for local and national cell phone calls.
-</p>
-<p>
-	If you have a bundle configured with some of your providers (let's say, one that gives you 100 discounted calls to Spain for a fixed monthly cost), add it the destination group that applies (international with a Spain prefix, in this case).
-</p>
-<p>
-	<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">Start Trunk, Tariffs and Bundles Configuration</a>
+	This wizard will help you assign costs to all your calls. You can safely run this wizard again if your realize some prefix had the wrong tariff assigned, or other mistakes.
 </p>
 
-<hr>
-
+<h4>Step 1:</h4>
 <p>
-	Once you have configured everything, it's time to start calculating your call history. 
+	Begin by making sure all your trunks are configured and all the base tariffs and corresponding provider bundles are in. Don't worry, if after assigning costs to your calls you realize some tariff or prefix was missing, you can run this again.
 </p>
 <p>
-	<a class="btn btn-primary" href="{% url 'tarifica:start_step3' %}">Start Calculating Costs</a>
+	<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
+		Configure Providers, Tariffs and Bundles
+	</a>
+</p>
+
+<h4>Step 2:</h4>
+<p>
+	Now, let's do a test-run. This means we'll assign costs to each call, but won't save them to the database yet, so you can review the results and check that every tariff you need has already been configured.
+</p>
+<p>
+	<a href="{% url 'tarifica:wizard_test_run' %}" class="btn btn-primary">Start Test-run!</a>
 </p>
 {% endblock %}

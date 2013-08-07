@@ -1,0 +1,27 @@
+{% extends "wizard.html" %}
+
+{% block title %} Wizard - Results {% endblock %}
+
+{% block content %}
+<h1>Status check</h1>
+	{% if user_info.is_first_import_finished %}
+	<h3>Test-run finished successfully!.</h3>
+	<p>
+		<a href="{% url 'tarifica:wizard_check_missing' %}" class="btn btn-primary">
+			Go To Results
+		</a>
+	</p>
+	{% else %}
+	<h3>Sorry! We've not finished processing your call data yet.</h3>
+	<p>
+		<div class="progress progress-striped active" style="width:50%">
+			<div class="bar" style="width: {{ percentage_imported }}%;">
+				<span style="text-align:center;"><strong>{{ percentage_imported }}%</strong></span>
+			</div>
+		</div>
+	</p>
+	<p>
+		Currently, we've processed {{ percentage_imported }}% of your data and it's taken us {{ lapsedMinutes }} minutes, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining }} minutes to finish.
+	</p>
+	{% endif %}
+{% endblock %}

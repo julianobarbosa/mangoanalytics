@@ -12,57 +12,62 @@ from math import ceil
 
 def start(request):
     user_info = get_object_or_404(UserInformation, id = 1)
+    return render(request, 'tarifica/wizard/start.html', {})
 
-    if request.method == 'POST': # If the form has been submitted...
-        form = forms.getUserInfo(request.POST)
-        if form.is_valid(): # All validation rules pass
-            user_info.country = form.cleaned_data['country']
-            user_info.bussiness_name = form.cleaned_data['bussiness_name']
-            user_info.contact_first_name = form.cleaned_data['contact_first_name']
-            user_info.contact_last_name = form.cleaned_data['contact_last_name']
-            user_info.notification_email = form.cleaned_data['notification_email']
-            user_info.currency_code = form.cleaned_data['currency_code']
-            user_info.currency_symbol = form.cleaned_data['currency_symbol']
-            user_info.first_time_user = False
-            user_info.save()
-            return HttpResponseRedirect('/start/step2') # Redirect after POST
-        else:
-            print "wasn't valid"
-    else:
-        form = forms.getUserInfo(initial={
-            'country': user_info.country,
-            'bussiness_name': user_info.bussiness_name,
-            'contact_first_name': user_info.contact_first_name,
-            'contact_last_name': user_info.contact_last_name,
-            'notification_email': user_info.notification_email,
-            'currency_code': user_info.currency_code,
-            'currency_symbol': user_info.currency_symbol,
-        })
+def testrun(request):
+    import subprocess
+    import os
+    current_directory = os.path.dirname(os.path.realpath(__file__))
 
-    return render(request, 'tarifica/start/step1.html', {
-        'form': form
-    })
-
-def dryrun(request):
     user_info = get_object_or_404(UserInformation, id = 1)
-    if request.method == 'POST': # If the form has been submitted...
-        form = forms.getNotificationEmail()
-        if form.is_valid(): # All validation rules pass
-            user_info.notification_email = form.cleaned_data['email']
-            user_info.first_import_started = datetime.datetime.now()
-            user_info.save()
+    importer_script_path = current_directory+"/../tools/"
+    try:
+        # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', '--testrun'])
+        p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', '--testrun'])
+    except Exception, e:
+        print "Error while dry running:",e
+        p = None
+    user_info.first_import_started = datetime.datetime.now()
+    user_info.save()
+    return render(request, 'tarifica/wizard/testRun.html', {'p': p })
 
-            return HttpResponseRedirect('/start/step2') # Redirect after POST
-    else:
-        form = forms.getNotificationEmail(initial = {
-            'email': user_info.notification_email
-        })
+def checkTestRunStatus(request):
+    user_info = get_object_or_404(UserInformation, id = 1)
+    # By default, we import 6 month's worth of data, so we can check how many
+    # days are between today and the last date imported.
+    try:
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        lastCall = Call.objects.latest('date')
+        lapsedTime = now - user_info.first_import_started
+        lapsedSeconds = lapsedTime.total_seconds()
+        lapsedMinutes = ceil(lapsedTime.total_seconds() / 60)
 
-    return render(request, 'tarifica/start/step2.html', {
-        'form': form
+        endDateForProcessing = datetime.date(
+            year = user_info.first_import_started.year,
+            month = user_info.first_import_started.month,
+            day = user_info.first_import_started.day
+        )
+        initialDateForProcessing = endDateForProcessing - datetime.timedelta(days = 141)
+
+        daysToBeProcessed = 140
+        processedDays = (lastCall.date.date() - initialDateForProcessing).days
+        percentage_imported = ( processedDays / daysToBeProcessed ) * 100
+        totalMinutes = ceil(( daysToBeProcessed * lapsedMinutes ) / processedDays)
+        minutesRemaining = totalMinutes - lapsedMinutes
+        
+    except ObjectDoesNotExist, e:
+        percentage_imported = 0
+        lapsedMinutes = 0
+        minutesRemaining = 'infinite'
+
+    return render(request, 'tarifica/wizard/checkTestRunStatus.html', {
+        'user_info': user_info,
+        'percentage_imported': percentage_imported,
+        'lapsedMinutes': lapsedMinutes,
+        'minutesRemaining': minutesRemaining
     })
 
-def checkMissing(request):
+def results(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     return render(request, 'tarifica/start/step3.html', {})
 

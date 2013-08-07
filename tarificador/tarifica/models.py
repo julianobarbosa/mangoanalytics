@@ -1,5 +1,5 @@
 from django.db import models
-from django_countries import CountryField
+from tarifica.django_countries.fields import CountryField
 
 # Create your models here.
 class PaymentType(models.Model):
@@ -33,15 +33,15 @@ class DestinationName(models.Model):
 
 class DestinationGroup(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
-    cost = models.FloatField()
-    tariff_mode = models.ForeignKey(TariffMode, blank=True, null=True)
     prefix = models.CharField(max_length = 255, blank=True, default="")
     notes = models.TextField(null=True, blank=True)
+    connection_fee = models.FloatField()
+    minute_fee = models.FloatField()
     destination_name = models.ForeignKey(DestinationName, blank=True, null=True)
-    destination_country = CountryField()
+    destination_country = CountryField(max_length = 6)
     has_bundles = models.BooleanField(default=False)
     def __unicode__(self):
-        return self.provider.name, '-', self.destination_name.name
+        return self.provider.name+'-'+self.destination_name.name
 
 class Bundle(models.Model):
     name = models.CharField(max_length = 255)
@@ -112,7 +112,7 @@ class UserInformation(models.Model):
     trunks_configured = models.BooleanField(default=False)
     base_tariffs_configured = models.BooleanField(default=False)
     bundles_configured = models.BooleanField(default=False)
-    country = CountryField()
+    country = CountryField(max_length = 6)
     bussiness_name = models.CharField(max_length=255)
     contact_first_name = models.CharField(max_length=255)
     contact_last_name = models.CharField(max_length=255)
@@ -124,6 +124,7 @@ class UnconfiguredCall(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
     duration = models.IntegerField()
+    provider = models.CharField(max_length = 255)
     date = models.DateTimeField()
 
 class ImportResults(models.Model):

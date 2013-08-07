@@ -1,6 +1,6 @@
 #coding=UTF-8
 from django import forms
-from django_countries import countries
+from tarifica.django_countries.countries import COUNTRIES
 from tarifica.models import PaymentType, TariffMode, DestinationGroup, DestinationName
 
 class createProvider(forms.Form):
@@ -20,13 +20,20 @@ class createProvider(forms.Form):
 
 class createDestinationGroup(forms.Form):
     destination_name = forms.ChoiceField(choices = [(e.id, e.name) for e in DestinationName.objects.all()], label = 'Localidad')
-    destination_country = forms.ChoiceField(choices = [(e[0], e[1]) for e in countries.COUNTRIES], label = 'Country')
+    destination_country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country',
+        error_messages={
+            'required':'Please select a valid country option'
+            }
+        )
     prefix = forms.CharField(max_length = 255, label = 'Prefijo', required = False)
-    tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')
     notes = forms.CharField(label = u'Notas', required = False, widget = forms.Textarea)
-    cost = forms.FloatField(label = 'Costo', error_messages={
-                            'required':'Por favor proporciona el costo',
-                            'invalid':'Por favor proporciona un número válido'}, 
+    minute_fee = forms.FloatField(label = 'Minute Fee', error_messages={
+                            'required':'Please input a minute fee',
+                            'invalid':'Please input a valid number'}, 
+                            widget=forms.TextInput(attrs={'class':'input-small'}))
+    connection_fee = forms.FloatField(label = 'Connection Fee', error_messages={
+                            'required':'Please input a connection fee',
+                            'invalid':'Please input a valid number'}, 
                             widget=forms.TextInput(attrs={'class':'input-small'}))
 
 
@@ -36,7 +43,7 @@ class createBundle(forms.Form):
     cost = forms.FloatField(label = 'Costo', error_messages={
                             'required':u'Por favor proporciona el costo del paquete',
                             'invalid':'Por favor proporciona un número válido'},
-                            widget=forms.TextInput(attrs={'class':'input-medium'}))
+                            widget=forms.TextInput(attrs={'class':'input-small'}))
     amount = forms.IntegerField(error_messages={
                             'required':u'Por favor proporciona la cantidad de minutos/sesiones',
                             'invalid':'Por favor proporciona un entero válido'})
@@ -52,7 +59,6 @@ class getDate(forms.Form):
                             'required':u'Por favor proporciona una fecha final'})
 
 class getUserInfo(forms.Form):
-    country = forms.ChoiceField(choices = [(e[0], e[1]) for e in countries.COUNTRIES], label = 'Country')
     bussiness_name = forms.CharField(max_length = 255, error_messages={
                     'required':u'Por favor proporciona el nombre de tu empresa'})
     contact_first_name = forms.CharField(max_length = 255, error_messages={
@@ -62,6 +68,7 @@ class getUserInfo(forms.Form):
     notification_email = forms.EmailField(label = 'Email', error_messages={
                         'required':u'Por favor proporciona un correo electrónico.',
                         'invalid':u'Por favor proporciona un correo electrónico válido.'})
+    country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country')
     currency_code = forms.CharField(max_length = 10, error_messages={
                     'required':u'Por favor proporciona el código del tipo de moneda'})
     currency_symbol = forms.CharField(max_length = 1, error_messages={

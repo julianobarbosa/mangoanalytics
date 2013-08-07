@@ -1,12 +1,13 @@
 from django.conf.urls import patterns, url
-from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, start, wizard
+from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, start, wizard, config
 
 urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
    url(r'^setup$', general.setup, name = 'setup'),
    
-   url(r'^config$', general.config, name = 'config'),
-   url(r'^config/update/(?P<option>\w+)$', general.updateUser, name = 'config_update_user'),
+   url(r'^config$', config.config, name = 'config'),
+   url(r'^config/initial$', config.initial, name = "config_initial"),
+   url(r'^config/update/(?P<option>\w+)$', config.updateUser, name = 'config_update_user'),
 
    url(r'^providers/create/(?P<asterisk_id>\d+)$', providers.createProvider, name = 'providers_create'),
    url(r'^providers/update/(?P<provider_id>\d+)$', providers.updateProvider, name = 'providers_update'),
@@ -38,14 +39,10 @@ urlpatterns = patterns('',
    url(r'^users/analytics/(?P<extension_id>\d+)$', users.analyticsUsers, name = 'users_analytics'),
    url(r'^users/analytics/(?P<extension_id>\d+)/(?P<period_id>\w+)$', users.analyticsUsers, name = 'users_analytics_period'),
 
-   url(r'^start/step1$', start.step1, name = "start_step1"),
-   url(r'^start/step2$', start.step2, name = "start_step2"),
-   url(r'^start/step3$', start.step3, name = "start_step3"),
-   url(r'^start/step4$', start.step4, name = "start_step4"),
-   url(r'^start/check_processing_status$', start.checkProcessingStatus, name = "check_processing_status"),
-   
-   url(r'^wizard/start$', wizard.dryrun, name = "wizard_start"),
-   url(r'^wizard/dryrun$', wizard.dryrun, name = "wizard_dryrun"),
-   url(r'^wizard/checkMissing$', wizard.checkMissing, name = "wizard_check_missing"),
+   url(r'^wizard/start$', wizard.start, name = "wizard_start"),
+   url(r'^wizard/testRun$', wizard.testrun, name = "wizard_test_run"),
+   url(r'^wizard/checkTestRunStatus$', wizard.checkTestRunStatus, name = "wizard_check_test_run_status"),
+   url(r'^wizard/results$', wizard.results, name = "wizard_results"),
    url(r'^wizard/run$', wizard.run, name = "wizard_run"),
+   url(r'^wizard/checkProcessingStatus$', wizard.checkProcessingStatus, name = "wizard_check_processing_status"),
 )

@@ -15,18 +15,14 @@ def createDestinationGroup(request, provider_id):
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
-            country = form.cleaned_data['destination_country']
-            prefix = form.cleaned_data['prefix']
-            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
-            cost = form.cleaned_data['cost']
             d = DestinationGroup(
             	provider=provider, 
-            	destination_name=name, 
-            	destination_country=country, 
-            	prefix=prefix, 
-            	cost=cost,
-            	tariff_mode=tariff_mode
+            	destination_name=DestinationName.objects.get(id=form.cleaned_data['destination_name']), 
+            	destination_country=form.cleaned_data['destination_country'], 
+            	prefix=form.cleaned_data['prefix'], 
+                minute_fee=form.cleaned_data['minute_fee'],
+                connection_fee=form.cleaned_data['connection_fee'],
+            	notes=form.cleaned_data['notes'],
             )
             d.save()
             return HttpResponseRedirect('/destinations/create/'+provider_id) # Redirect after POST
@@ -34,6 +30,8 @@ def createDestinationGroup(request, provider_id):
         form = forms.createDestinationGroup(initial=
         {
             'destination_country': user_info.country,
+            'minute_fee': 0.00,
+            'connection_fee': 0.00,
         }) # An unbound form
 
     return render(request, 'tarifica/destinationGroups/destinationGroupCreate.html', {
@@ -49,29 +47,22 @@ def updateDestinationGroup(request, destination_group_id):
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
-            country = form.cleaned_data['destination_country']
-            prefix = form.cleaned_data['prefix']
-            tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
-            cost = form.cleaned_data['cost']
-            d = DestinationGroup(
-                provider=provider, 
-                destination_name=name, 
-                destination_country=country, 
-                prefix=prefix, 
-                cost=cost,
-                tariff_mode=tariff_mode
-            )
-            d.save()
+            destination_group.destination_name = DestinationName.objects.get(id=form.cleaned_data['destination_name']), 
+            destination_group.destination_country = form.cleaned_data['destination_country'], 
+            destination_group.prefix = form.cleaned_data['prefix'], 
+            destination_group.minute_fee = form.cleaned_data['minute_fee'],
+            destination_group.connection_fee = form.cleaned_data['connection_fee'],
+            destination_group.notes = form.cleaned_data['notes'],
+            destination_group.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
     else:
-        form = forms.createDestinationGroup(initial=
-        {'destination_name': destination_group.destination_name,
-         'destination_country': destination_group.destination_country,
-         'prefix': destination_group.prefix,
-         'tariff_mode': destination_group.tariff_mode,
-         'notes': destination_group.notes,
-         'cost': destination_group.cost,
+        form = forms.createDestinationGroup(initial={
+            'destination_name': destination_group.destination_name,
+            'destination_country': destination_group.destination_country,
+            'prefix': destination_group.prefix,
+            'notes': destination_group.notes,
+            'minute_fee': destination_group.minute_fee,
+            'connection_fee': destination_group.connection_fee,
         })
 
     return render(request, 'tarifica/destinationGroups/destinationGroupUpdate.html', {

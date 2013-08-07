@@ -14,7 +14,7 @@
         To return to the initial wizard page, click the button below. 
     </p>
     <p>
-        <a class="btn btn-primary" href="{% url 'tarifica:start_step2' %}">
+        <a class="btn btn-primary" href="{% url 'tarifica:wizard_start' %}">
             Return to initial setup
         </a>.
     </p>
@@ -144,15 +144,15 @@
         </ul>
         <div class="tab-content">
             {% for prov in configured %}
-            <div class="tab-pane" id="{{ prov.id }}">
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ prov.id }}">
                 <table class="table table-striped table-hovered table-condensed">
                     <thead>
                         <tr>
                             <th>Trunk</th>
                             <th>Destination</th>
                             <th>Prefix</th>
-                            <th>Billing Mode</th>
-                            <th>Cost ({{ user_info.currency_code }})</th>
+                            <th>Connection Fee</th>
+                            <th>Minute Fee</th>
                             <th>Has bundles?</th>
                         </tr>
                     </thead>
@@ -166,8 +166,8 @@
                                 {{loc.destination_name.name}}
                             </td>
                             <td>{{loc.prefix}}</td>
-                            <td>{{loc.tariff_mode.name}}</td>
-                            <td>{{ user_info.currency_symbol }}{{loc.cost}}</td>
+                            <td>{{ user_info.currency_symbol }}{{loc.connection_fee}} {{ user_info.currency_code }}</td>
+                            <td>{{ user_info.currency_symbol }}{{loc.minute_fee}} {{ user_info.currency_code }}</td>
                             <td>
                                 {% if loc.has_bundles %}
                                 <i class="icon-ok"></i>

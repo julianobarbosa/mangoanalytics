@@ -37,23 +37,35 @@
         </div>
     </div>
     <div class="control-group">
-        {{ form.tariff_mode.errors }}
-        <label class="control-label" for="id_tariff_mode">Billing Mode</label>
-        <div class="controls">
-            {{ form.tariff_mode }}
-            <span class="help-inline">Does your provider charge you per sesion or per minute?</span>
-        </div>
-    </div>
-    <div class="control-group">
-        {{ form.cost.errors }}
-        <label class="control-label" for="id_cost">Cost</label>
+        {{ form.minute_fee.errors }}
+        <label class="control-label" for="id_minute_fee">Minute Fee</label>
         <div class="controls">
             <div class="input-prepend input-append">
                 <span class="add-on">{{ user_info.currency_symbol }}</span>
-                {{ form.cost }}
+                {{ form.minute_fee }}
                 <span class="add-on">{{ user_info.currency_code }}</span>
             </div>
-            <span class="help-inline">How much does your provider charge per sesion/minute?</span>
+            <span class="help-inline">If your provider bills you all calls to this prefix by minute, input the fee here.</span>
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.connection_fee.errors }}
+        <label class="control-label" for="id_connection_fee">Connection Fee</label>
+        <div class="controls">
+            <div class="input-prepend input-append">
+                <span class="add-on">{{ user_info.currency_symbol }}</span>
+                {{ form.connection_fee }}
+                <span class="add-on">{{ user_info.currency_code }}</span>
+            </div>
+            <span class="help-inline">If your provider bills you all calls to this prefix by the number of calls, not minutes, or if they bill you a call connection fee plus a minute fee, input the fee per call here.</span>
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form.notes.errors }}
+        <label class="control-label" for="id_notes">Notes</label>
+        <div class="controls">
+            {{ form.notes }}
+            <span class="help-inline">Add custom notes to this base tariff.</span>
         </div>
     </div>
     <div class="form-actions">

@@ -13,7 +13,7 @@ import json
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
     if user_info.first_time_user:
-        return HttpResponseRedirect('/start/step1') # Redirect after POST
+        return HttpResponseRedirect('/config/initial') # Redirect after POST
 
     a_mysql_m = AsteriskMySQLManager()
     users = a_mysql_m.getUserInformation()
@@ -60,40 +60,44 @@ def setup(request, provider_id = 0):
 def realtime(request):
     import subprocess, re
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
-    #process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
-    process ='Channel              Context              Extension        Prio State   Application  Data                      CallerID        Duration Accountcode PeerAccount BridgedTo\nIP/469-000002aa     macro-dialout-trunk  s                  19 Up      Dial         SIP/Nextor/525555543001,3 469             00:00:25                         SIP/Nextor-000002ab\nSIP/464-000002ac     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525555458610,3 464             00:00:13                         (None)\nSIP/4680-000002b0    from-internal        555                 3 Up      Wait         1                         4680            00:00:00                         (None)\nSIP/Nextor-000002ab  from-pstn                                1 Up      AppDial      (Outgoing Line)           755543001       00:00:25                         SIP/469-000002aa\nSIP/Nextor-000002af  from-pstn            752909139           1 Down    AppDial      (Outgoing Line)           752909139       00:00:09                         (None)\nSIP/Nextor-000002ad  from-pstn            755458610           1 Down    AppDial      (Outgoing Line)           755458610       00:00:13                         (None)\nSIP/470-000002ae     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525552909139,3 470             00:00:09                         (None)\n\n7 active channels\n4 active calls\n412 calls processed'
-    data = re.split("\n+", process)[1:-4]
-    processed_data = [re.split(" +", d, 9) for d in data if d[6] ]
-    data = [
-        [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
-        for d in processed_data if re.search("/",d[6])
-        ]
-    graphData = []
-    for d in data:
-        t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
-        # print t1
-        timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
-        t = today - timedelta
-        # print t
-        d.append(t.time().strftime("%H:%M:%S"))
-        provider = Provider.objects.get(asterisk_name = d[2])
-        destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('prefix')
-        for dest in destination_groups:
-            try:
-                pos = d[3].index(dest.prefix)
-            except ValueError,e :
-                post = None
-            if pos == 0:
-                d[1] = dest
-            else:
-                continue
-        accountedFor = False
-        for g in graphData:
-            if g[0] == d[1].destination_name.name:
-                accountedFor = True
-                g[1] += 1
-        if not accountedFor:
-            graphData.append([d[1].destination_name.name, 1])
+    try:
+        process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
+        #process ='Channel              Context              Extension        Prio State   Application  Data                      CallerID        Duration Accountcode PeerAccount BridgedTo\nIP/469-000002aa     macro-dialout-trunk  s                  19 Up      Dial         SIP/Nextor/525555543001,3 469             00:00:25                         SIP/Nextor-000002ab\nSIP/464-000002ac     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525555458610,3 464             00:00:13                         (None)\nSIP/4680-000002b0    from-internal        555                 3 Up      Wait         1                         4680            00:00:00                         (None)\nSIP/Nextor-000002ab  from-pstn                                1 Up      AppDial      (Outgoing Line)           755543001       00:00:25                         SIP/469-000002aa\nSIP/Nextor-000002af  from-pstn            752909139           1 Down    AppDial      (Outgoing Line)           752909139       00:00:09                         (None)\nSIP/Nextor-000002ad  from-pstn            755458610           1 Down    AppDial      (Outgoing Line)           755458610       00:00:13                         (None)\nSIP/470-000002ae     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525552909139,3 470             00:00:09                         (None)\n\n7 active channels\n4 active calls\n412 calls processed'
+        data = re.split("\n+", process)[1:-4]
+        processed_data = [re.split(" +", d, 9) for d in data if d[6] ]
+        data = [
+            [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
+            for d in processed_data if re.search("/",d[6])
+            ]
+        graphData = []
+        for d in data:
+            t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
+            # print t1
+            timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
+            t = today - timedelta
+            # print t
+            d.append(t.time().strftime("%H:%M:%S"))
+            provider = Provider.objects.get(asterisk_name = d[2])
+            destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('prefix')
+            for dest in destination_groups:
+                try:
+                    pos = d[3].index(dest.prefix)
+                except ValueError,e :
+                    post = None
+                if pos == 0:
+                    d[1] = dest
+                else:
+                    continue
+            accountedFor = False
+            for g in graphData:
+                if g[0] == d[1].destination_name.name:
+                    accountedFor = True
+                    g[1] += 1
+            if not accountedFor:
+                graphData.append([d[1].destination_name.name, 1])
+    except Exception as e:
+        data = []
+        graphData = []
 
     return render(request, 'tarifica/general/realtime.html', {
         'data' : data,
@@ -150,41 +154,6 @@ def dashboard(request):
         'locales' : locales,
         'extensions' : extensions
     })
-
-def config(request):
-    user_info = UserInformation.objects.get(pk = 1)
-    if request.method == 'POST': # If the form has been submitted...
-        form = forms.getUserInfo()
-        if form.is_valid(): # All validation rules pass
-            user_info.country_code = form.cleaned_data['country_code']
-            user_info.bussiness_name = form.cleaned_data['bussiness_name']
-            user_info.contact_first_name = form.cleaned_data['contact_first_name']
-            user_info.contact_last_name = form.cleaned_data['contact_last_name']
-            user_info.notification_email = form.cleaned_data['notification_email']
-            user_info.currency_code = form.cleaned_data['currency_code']
-            user_info.currency_symbol = form.cleaned_data['currency_symbol']
-            user_info.save()
-            return HttpResponseRedirect('/dashboard') # Redirect after POST
-    else:
-        form = forms.getUserInfo(initial=
-        {'notification_email': user_info.notification_email,})
-
-    return render(request, 'tarifica/config.html', {
-        'form': form
-    })
-
-def updateUser(request, option):
-    user_info = UserInformation.objects.get(pk = 1)
-    if option == "trunks_configured":
-        user_info.trunks_configured = True
-    elif option == "base_tariffs_configured":
-        user_info.base_tariffs_configured = True
-    elif option == "bundles_configured":
-        user_info.bundles_configured = True
-
-    user_info.save()
-    return HttpResponseRedirect('/setup')
-
 
 def dictfetchall(cursor):
     desc = cursor.description
