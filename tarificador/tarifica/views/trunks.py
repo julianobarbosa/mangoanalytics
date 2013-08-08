@@ -9,6 +9,8 @@ from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
 from tarifica.views.general import dictfetchall
+from dateutil.relativedelta import *
+from csv import *
 
 def general(request, period_id="thisMonth"):
     # Required for getting this month's, last month's and custom start and end dates
@@ -80,7 +82,6 @@ def general(request, period_id="thisMonth"):
         'last_month' : last_month,
     })
 
-
 def getTrunk(request, trunk_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = trunk_id)
@@ -130,14 +131,12 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
             averageMonthlyCost += b['data'][0]['total_cost']
     averageMonthlyCost = averageMonthlyCost / len(billingPeriods)
 
-    calls = getTrunkCalls(provider.id, start_date, end_date)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
     return render(request, 'tarifica/trunks/trunksGet.html', {
         'user_info' : user_info,
         'provider' : provider,
         'billingPeriods': billingPeriods,
-        'calls': calls,
         'period_id': period_id,
         'averageMonthlyCost': averageMonthlyCost,
         'currentPeriodCost': currentPeriodCost[0]['total_cost'],
@@ -176,11 +175,9 @@ def getBillingPeriods(provider):
         month = today.month,
         day = provider.period_end
     )
-    startCurrentBillingPeriod = datetime.date(
-        year = endCurrentBillingPeriod.year, 
-        month = endCurrentBillingPeriod.month - 1,
-        day = endCurrentBillingPeriod.day
-    )
+    endCurrentBillingPeriod = endCurrentBillingPeriod - relativedelta(days=1)
+    startCurrentBillingPeriod = (endCurrentBillingPeriod - relativedelta(months=1)) + relativedelta(days=1)
+    print startCurrentBillingPeriod
     
     billingPeriodData = {
         'date_start': startCurrentBillingPeriod,
@@ -193,12 +190,8 @@ def getBillingPeriods(provider):
     while True:
         if startCurrentBillingPeriod.month == 1:
             break
-        endCurrentBillingPeriod = startCurrentBillingPeriod        
-        startCurrentBillingPeriod = datetime.date(
-            year = startCurrentBillingPeriod.year, 
-            month = startCurrentBillingPeriod.month - 1,
-            day = startCurrentBillingPeriod.day
-        )
+        endCurrentBillingPeriod = startCurrentBillingPeriod - relativedelta(days=1)
+        startCurrentBillingPeriod = startCurrentBillingPeriod = (endCurrentBillingPeriod - relativedelta(months=1)) + relativedelta(days=1)
 
         billingPeriodData = {
             'date_start': startCurrentBillingPeriod,
@@ -207,7 +200,6 @@ def getBillingPeriods(provider):
         }
         billingPeriods.append(billingPeriodData)
     return billingPeriods
-
 
 def getTrunkCalls(provider_id, start_date, end_date):
     cursor = connection.cursor()
@@ -227,7 +219,6 @@ def getTrunkCalls(provider_id, start_date, end_date):
     cursor.execute(sql, (provider_id, start_date, end_date))
     return dictfetchall(cursor)
 
-
 def getBundlesCost(provider_id):
     cursor = connection.cursor()
     sql = "SELECT SUM(tarifica_bundle.cost) as cost \
@@ -239,4 +230,14 @@ def getBundlesCost(provider_id):
     return dictfetchall(cursor)
 
 def downloadTrunkCDR(request, trunk_id, period_id):
+    filename = '/opt/NEXTOR/tarificador/django-tarificador/tarificador'
+    temp_file = file.open(filename, 'w', buffering)
+
+    response = HttpResponse(my_data, content_type='application/csv')
+    response['Content-Disposition'] = 'attachment; filename="foo.xls"'
+    return response
+
+    with open('some.csv', 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerows(someiterable)
     pass
