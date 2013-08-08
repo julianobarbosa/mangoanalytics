@@ -62,7 +62,7 @@ class Digester:
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
 		for row in self.am.cursor.fetchall():
 			callDetail.append((
-				row['extension_number'],
+				# row['extension_number'],
 				row['total_calls'],
 				row['total_minutes'],
 				row['cost'],
@@ -75,8 +75,8 @@ class Digester:
 		callData = self.getUserDestinationDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdestinationdetail \
-		(extension_id, total_calls, total_minutes, cost, destination_group_id, date) \
-		VALUES(%s, %s, %s, %s, %s, %s)"
+		(total_calls, total_minutes, cost, destination_group_id, date) \
+		VALUES(%s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
 		print "----------------------------------------"

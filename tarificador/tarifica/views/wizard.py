@@ -77,7 +77,7 @@ def results(request):
     return render(request, 'tarifica/wizard/results.html', {
         'import_results': import_results,
         'unconfigured_calls': unconfigured_calls,
-        'percentage_not_processed': import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)
+        'percentage_not_processed': (import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)) * 100
     })
 
 def run(request):
