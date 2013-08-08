@@ -19,7 +19,8 @@ def createDestinationGroup(request, provider_id):
             	provider=provider, 
             	destination_name=DestinationName.objects.get(id=form.cleaned_data['destination_name']), 
             	destination_country=form.cleaned_data['destination_country'], 
-            	prefix=form.cleaned_data['prefix'], 
+                prefix=form.cleaned_data['prefix'], 
+            	billing_interval=form.cleaned_data['billing_interval'], 
                 minute_fee=form.cleaned_data['minute_fee'],
                 connection_fee=form.cleaned_data['connection_fee'],
             	notes=form.cleaned_data['notes'],
@@ -32,6 +33,7 @@ def createDestinationGroup(request, provider_id):
             'destination_country': user_info.country,
             'minute_fee': 0.00,
             'connection_fee': 0.00,
+            'billing_interval': 60,
         }) # An unbound form
 
     return render(request, 'tarifica/destinationGroups/destinationGroupCreate.html', {
@@ -52,6 +54,7 @@ def updateDestinationGroup(request, destination_group_id):
             destination_group.prefix = form.cleaned_data['prefix'], 
             destination_group.minute_fee = form.cleaned_data['minute_fee'],
             destination_group.connection_fee = form.cleaned_data['connection_fee'],
+            destination_group.billing_interval = form.cleaned_data['billing_interval'],
             destination_group.notes = form.cleaned_data['notes'],
             destination_group.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
@@ -63,6 +66,7 @@ def updateDestinationGroup(request, destination_group_id):
             'notes': destination_group.notes,
             'minute_fee': destination_group.minute_fee,
             'connection_fee': destination_group.connection_fee,
+            'billing_interval': destination_group.billing_interval,
         })
 
     return render(request, 'tarifica/destinationGroups/destinationGroupUpdate.html', {

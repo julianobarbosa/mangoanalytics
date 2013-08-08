@@ -59,6 +59,7 @@ def setup(request, provider_id = 0):
 
 def realtime(request):
     import subprocess, re
+    user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     try:
         process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
@@ -78,7 +79,8 @@ def realtime(request):
             # print t
             d.append(t.time().strftime("%H:%M:%S"))
             provider = Provider.objects.get(asterisk_name = d[2])
-            destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('prefix')
+            destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
+            print destination_groups
             for dest in destination_groups:
                 try:
                     pos = d[3].index(dest.prefix)
@@ -100,11 +102,13 @@ def realtime(request):
         graphData = []
 
     return render(request, 'tarifica/general/realtime.html', {
+        'user_info' : user_info,
         'data' : data,
         'graphData' : json.dumps(graphData),
     })
 
 def dashboard(request):
+    user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     timedelta = datetime.timedelta(days=1)
     start_date = (datetime.datetime(year=today.year, month=today.month, day=1) - timedelta).replace(tzinfo=utc)
@@ -149,6 +153,7 @@ def dashboard(request):
     #Information for graph
 
     return render(request, 'tarifica/general/dashboard.html', {
+        'user_info' : user_info,
         'total_cost' : total_cost,
         'provider_daily_costs' : provider_daily_costs,
         'locales' : locales,

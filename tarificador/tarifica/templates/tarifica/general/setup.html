@@ -46,7 +46,7 @@
                         </td>
                         <td>{{prov.provider_tech}}</td>
                         <td>{{prov.period_end}}</td>
-                        <td>{{ user_info.currency_symbol }}{{prov.monthly_cost}}</td>
+                        <td>{{ user_info.currency_symbol }}{{prov.monthly_cost|floatformat:2}}</td>
                         <td>
                             <a href="{% url 'tarifica:destinations_create' prov.id %}">
                                 Add Base Tariffs
@@ -166,8 +166,8 @@
                                 {{loc.destination_name.name}}
                             </td>
                             <td>{{loc.prefix}}</td>
-                            <td>{{ user_info.currency_symbol }}{{loc.connection_fee}} {{ user_info.currency_code }}</td>
-                            <td>{{ user_info.currency_symbol }}{{loc.minute_fee}} {{ user_info.currency_code }}</td>
+                            <td>{{ user_info.currency_symbol }}{{loc.connection_fee|floatformat:2}} {{ user_info.currency_code }}</td>
+                            <td>{{ user_info.currency_symbol }}{{loc.minute_fee|floatformat:2}} {{ user_info.currency_code }}</td>
                             <td>
                                 {% if loc.has_bundles %}
                                 <i class="icon-ok"></i>
@@ -258,7 +258,7 @@
                 {% for bun in bundles %}
                 <tr>
                     <td>{{bun.name}}</td>
-                    <td>{{ user_info.currency_symbol }}{{bun.cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{bun.cost|floatformat:2}}</td>
                     <td>{{bun.priority}}</td>
                     <td><a href="{% url 'tarifica:bundles_update' bun.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Edit">
                             <i class="icon-pencil icon-white"></i>

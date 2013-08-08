@@ -5,7 +5,7 @@
 {% block content %}
 <h1>Status check</h1>
 	{% if user_info.is_first_import_finished %}
-	<h3>Test-run finished successfully!.</h3>
+	<h3>Test-run finished successfully!</h3>
 	<p>
 		<a href="{% url 'tarifica:wizard_results' %}" class="btn btn-primary">
 			Go To Results

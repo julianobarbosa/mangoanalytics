@@ -100,11 +100,11 @@
             <tbody>
                 <tr>
                     <th>Billing cycle usage</th>
-                    <td>${{thisBillingPeriod}}</a></td>
+                    <td>{{ user_info.currency_symbol }}{{thisBillingPeriod | floatformat:"2"}} {{ user_info.currency_code }}</a></td>
                 </tr>
                 <tr>
                     <th>Month's usage</th>
-                    <td>${{total_cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{total_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
                 </tr>
             </tbody>
         </table>
@@ -132,7 +132,7 @@
             <thead>
                 <tr>
                     <th>BILLING INTERVAL</th>
-                    <th>TOTAL COST</th>
+                    <th>TOTAL COST {{ user_info.currency_code }}</th>
                     <th>TOTAL CALLS</th>
                     <th>TOTAL MINUTES</th>
                 </tr>
@@ -144,9 +144,9 @@
                             <i class="icon-arrow-up"></i> {{ b.date_start }} - <i class="icon-arrow-down"></i> {{ b.date_end }}</td>
                         {% for d in b.data %}
                             {% if d.total_cost == None %}
-                            <td>0</td>
+                            <td>{{ user_info.currency_symbol }}0.00</td>
                             {% else %}
-                            <td>{{ d.total_cost }}</td>
+                            <td>{{ user_info.currency_symbol }}{{ d.total_cost | floatformat:"2"}}</td>
                             {% endif %}
                             {% if d.total_calls == None %}
                             <td>0</td>
@@ -184,7 +184,7 @@
                     <th>TIME</th>
                     <th>DESTINATION</th>
                     <th>MINUTES</th>
-                    <th>COST</th>
+                    <th>COST {{ user_info.currency_code }}</th>
                     <th>EXT</th>
                     <th>DIALED NUMBER</th>
                 </tr>
@@ -196,7 +196,7 @@
                     <td>{{ call.date | date:"H:i:s" }}</td>
                     <td>{{ call.name }}</td>
                     <td>{{ call.duration }}</td>
-                    <td>{{ call.cost }}</td>
+                    <td>{{ user_info.currency_symbol }}{{ call.cost|floatformat:"2" }}</td>
                     <td>{{ call.extension_number }}</td>
                     <td>{{ call.dialed_number }}</td>
                 </tr>

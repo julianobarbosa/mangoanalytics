@@ -36,7 +36,8 @@ class DestinationGroup(models.Model):
     prefix = models.CharField(max_length = 255, blank=True, default="")
     notes = models.TextField(null=True, blank=True)
     connection_fee = models.FloatField()
-    minute_fee = models.FloatField()
+    minute_fee = models.FloatField(default=60)
+    billing_interval = models.IntegerField()
     destination_name = models.ForeignKey(DestinationName, blank=True, null=True)
     destination_country = CountryField(max_length = 6)
     has_bundles = models.BooleanField(default=False)
@@ -55,6 +56,7 @@ class Bundle(models.Model):
 class Call(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
+    asterisk_unique_id = models.CharField(max_length = 255)
     duration = models.IntegerField()
     cost = models.FloatField()
     date = models.DateTimeField()
@@ -123,6 +125,7 @@ class UserInformation(models.Model):
 class UnconfiguredCall(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
+    asterisk_unique_id = models.CharField(max_length = 255)
     duration = models.IntegerField()
     provider = models.CharField(max_length = 255)
     date = models.DateTimeField()

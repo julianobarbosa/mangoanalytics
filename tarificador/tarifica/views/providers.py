@@ -32,10 +32,12 @@ def createProvider(request, asterisk_id):
     })
 
 def getProvider(request, provider_id):
-	provider = get_object_or_404(Provider, id = provider_id)
-	destination_groups = DestinationGroup.objects.filter(provider = provider)
-	bundles = Bundle.objects.filter(destination_group__in = destination_groups)
-	return render(request, 'tarifica/providers/providerGet.html', {
+    user_info = get_object_or_404(UserInformation, id = 1)
+    provider = get_object_or_404(Provider, id = provider_id)
+    destination_groups = DestinationGroup.objects.filter(provider = provider)
+    bundles = Bundle.objects.filter(destination_group__in = destination_groups)
+    return render(request, 'tarifica/providers/providerGet.html', {
+        'user_info': user_info,
         'provider': provider,
         'destination_groups': destination_groups,
         'bundles': bundles,

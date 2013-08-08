@@ -59,7 +59,7 @@
         </div>
 
         <div id="container" style="float:right;text-align:center">
-            <h5>Average cost for this extension is <font color="red">${{average}}</font></h5>
+            <h5>Average cost for this extension is <font color="red">{{ user_info.currency_symbol }}{{average | floatformat:"2"}} {{ user_info.currency_code }}</font></h5>
         </div>
 
     </div>
@@ -90,7 +90,7 @@
                 <tr>
                     <th>COUNTRY</th>
                     <th>DESTINATION</th>
-                    <th>COST</th>
+                    <th>COST {{ user_info.currency_code }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -98,7 +98,7 @@
                 <tr>
                     <td><img src="{{ d.destination_country.flag }}"></td>
                     <td>{{d.destname}}</td>
-                    <td>${{d.cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{d.cost | floatformat:"2"}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -131,7 +131,7 @@
                     <th>TIME</th>
                     <th>DESTINATION</th>
                     <th>MINUTES</th>
-                    <th>COST</th>
+                    <th>COST {{ user_info.currency_code }}</th>
                     <th>Dialed NUMBER</th>
                 </tr>
             </thead>
@@ -142,7 +142,7 @@
                     <td>{{call.time}}</td>
                     <td>{{call.name}}</td>
                     <td>{{call.duration}}</td>
-                    <td>${{call.cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{call.cost | floatformat:"2"}}</td>
                     <td>{{call.dialed_number}}</td>
                 </tr>
                 {% endfor %}

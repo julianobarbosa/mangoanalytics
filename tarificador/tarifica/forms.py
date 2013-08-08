@@ -35,7 +35,10 @@ class createDestinationGroup(forms.Form):
                             'required':'Please input a connection fee',
                             'invalid':'Please input a valid number'}, 
                             widget=forms.TextInput(attrs={'class':'input-small'}))
-
+    billing_interval = forms.IntegerField(label = 'Block', error_messages={
+                            'required':'Please input a valid block type.',
+                            'invalid':'Please input a valid integer number.'}, 
+                            widget=forms.TextInput(attrs={'class':'input-small'}))
 
 class createBundle(forms.Form):
     name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Por favor proporciona el nombre del paquete'})

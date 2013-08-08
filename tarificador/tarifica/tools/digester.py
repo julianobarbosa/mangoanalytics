@@ -54,11 +54,9 @@ class Digester:
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_minutes, \
 			COUNT(tarifica_call.id) as total_calls, \
-			tarifica_extension.id as extension_number, \
 			tarifica_call.date as date, \
 			tarifica_call.destination_group_id as destination_group_id \
-			FROM tarifica_call JOIN tarifica_extension \
-			ON tarifica_call.extension_number = tarifica_extension.extension_number \
+			FROM tarifica_call \
 			WHERE date > %s AND date < %s \
 			GROUP BY tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
