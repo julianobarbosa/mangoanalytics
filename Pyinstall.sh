@@ -27,10 +27,9 @@ source /opt/NEXTOR/tarificador/bin/activate
 
 #Installing django
 pip install django MySQL-python
-pip install django-countries
-python tools/initialMySQLSetup.py
+python nextor-tarificador/tools/initialMySQLSetup.py
 
 mkdir /opt/NEXTOR/tarificador/django-tarificador
-cp -R src /opt/NEXTOR/tarificador/django-tarificador/tarificador
+cp -R nextor-tarificador/src /opt/NEXTOR/tarificador/django-tarificador/tarificador
 python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
 python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runserver 0.0.0.0:8000

@@ -69,7 +69,16 @@ def checkTestRunStatus(request):
 
 def results(request):
     user_info = get_object_or_404(UserInformation, id = 1)
-    return render(request, 'tarifica/start/step3.html', {})
+    user_info.is_first_import_finished = False
+    user_info.save()
+
+    import_results = ImportResults.objects.get(id = 1)
+    unconfigured_calls = UnconfiguredCall.objects.all()
+    return render(request, 'tarifica/wizard/results.html', {
+        'import_results': import_results,
+        'unconfigured_calls': unconfigured_calls,
+        'percentage_not_processed': import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)
+    })
 
 def run(request):
     import subprocess
@@ -79,14 +88,14 @@ def run(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     importer_script_path = current_directory+"/../tools/"
     try:
-        # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', user_info.notification_email])
-        p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', user_info.notification_email])
+        # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py'])
+        p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
     except Exception, e:
         print "Error while digesting:",e
         p = None
     user_info.first_import_started = datetime.datetime.now()
     user_info.save()
-    return render(request, 'tarifica/start/step4.html', {'p': p, 'cd': importer_script_path })
+    return render(request, 'tarifica/wizard/run.html', {'p': p, 'cd': importer_script_path })
 
 def checkProcessingStatus(request):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -117,7 +126,7 @@ def checkProcessingStatus(request):
         lapsedMinutes = 0
         minutesRemaining = 'infinite'
 
-    return render(request, 'tarifica/start/checkProcessingStatus.html', {
+    return render(request, 'tarifica/wizard/checkProcessingStatus.html', {
         'user_info': user_info,
         'percentage_imported': percentage_imported,
         'lapsedMinutes': lapsedMinutes,

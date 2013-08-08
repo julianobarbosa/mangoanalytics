@@ -15,9 +15,11 @@ def saveImportFinishStatus():
     am = AsteriskMySQLManager()
     am.connect('nextor_tarificador')
     sql = "UPDATE tarifica_userinformation \
-        SET tarifica_userinformation.is_first_import_finished = %s"
-    print am.cursor.execute(sql, (True,))
-    print am.db.commit()
+        SET tarifica_userinformation.is_first_import_finished = 1 \
+        WHERE tarifica_userinformation.id = %s"
+    am.cursor.execute(sql, (1))
+    am.db.commit()
+    return am.db.close()
 
 def saveImportResults(calls_saved, calls_not_saved):
     am = AsteriskMySQLManager()
@@ -25,10 +27,67 @@ def saveImportResults(calls_saved, calls_not_saved):
     sql = "INSERT INTO tarifica_importresults(calls_saved, calls_not_saved) \
         VALUES(%s, %s)"
     am.cursor.execute(sql, (calls_saved, calls_not_saved))
-    return am.db.commit()
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllCalls():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_call"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
         
+def deleteAllUnconfiguredCalls():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_unconfiguredcall"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllUserDailyDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_userdailydetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllUserDestinationDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_userdestinationdetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllUserDestinationNumberDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_userdestinationnumberdetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllProviderDailyDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_providerdailydetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllProviderDestinationDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_providerdestinationdetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
 # This file processes two month's worth of data, using assignCallCost and Digester
-# We go two months back... back in time!
+# We go six months back... back in time!
 
 today = date.today()
 six_months_back = today - timedelta(days = 140) # One more just if
@@ -36,6 +95,23 @@ cca = CallCostAssigner()
 dig = Digester()
 calls_saved = 0
 calls_not_saved = 0
+testRun = False
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == '--testrun':
+        testRun = True
+#Comenzamos borrando tooooodo
+if testRun:
+        deleteAllUnconfiguredCalls()
+else:   
+    deleteAllCalls()
+    deleteAllUserDailyDetail()
+    deleteAllUserDestinationDetail()
+    deleteAllUserDestinationNumberDetail()
+    deleteAllProviderDailyDetail()
+    deleteAllProviderDestinationDetail()
+print "Deleted all previous data."
+
 while six_months_back != today:
     print "Digesting data from", six_months_back.strftime('%Y-%m-%d')
     
@@ -44,7 +120,7 @@ while six_months_back != today:
     calls_saved += result['total_calls_saved']
     calls_not_saved += result['total_calls_not_saved']
     
-    if sys.argv[1] == '--testrun':
+    if testRun:
         print "Call cost assigned, not saving (--testrun)."    
     else:    
         dig.saveUserDailyDetail(six_months_back)
@@ -55,11 +131,11 @@ while six_months_back != today:
 
     six_months_back = six_months_back + timedelta(days = 1)
 
-saveImportFinishStatus()
-if sys.argv[1] == '--testrun':
+print saveImportFinishStatus()
+if testRun:
     saveImportResults(calls_saved, calls_not_saved)
     print "----------------------------------------"
-    print "Testrun finished."    
+    print "Testrun finished."
 else:
     print "----------------------------------------"
     print "Import status set as finished."
