@@ -155,6 +155,7 @@ def dashboard(request):
         'extensions' : extensions
     })
 
+
 def dictfetchall(cursor):
     desc = cursor.description
     return [

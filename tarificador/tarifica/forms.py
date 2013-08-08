@@ -73,3 +73,9 @@ class getUserInfo(forms.Form):
                     'required':u'Por favor proporciona el código del tipo de moneda'})
     currency_symbol = forms.CharField(max_length = 1, error_messages={
                     'required':u'Por favor proporciona el símbolo del tipo de moneda'})
+
+class loginForm(forms.Form):
+    email = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Por favor proporciona tu correo'})
+    password = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Por favor proporciona una contraseña'})
