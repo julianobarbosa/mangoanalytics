@@ -60,7 +60,7 @@
 
         <div id="container" style="float:right;text-align:center">
             <h5>Historical Averages</h5>
-            <h5>Average monthly cost by user is <font color="red">${{average}}</font></h5>
+            <h5>Average monthly cost by user is <font color="red">{{ user_info.currency_symbol }}{{average | floatformat:"2"}} {{ user_info.currency_code }}</font></h5>
         </div>
 
     </div>
@@ -78,7 +78,7 @@
                 <tr>
                     <th>EXT/PIN</th>
                     <th>NAME</th>
-                    <th>COST</th>
+                    <th>COST {{ user_info.currency_code }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,7 +86,7 @@
                 <tr>
                     <td>{{ext.extension_number}}</td>
                     <td>{{ext.name}}</td>
-                    <td>${{ext.cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{ext.cost | floatformat:"2"}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -115,7 +115,7 @@
                     <th>EXT/PIN</th>
                     <th>TOTAL MINUTES</th>
                     <th>TOTAL CALLS</th>
-                    <th>PERIOD TOTAL</th>
+                    <th>PERIOD TOTAL {{ user_info.currency_code }}</th>
                     <th>DETAIL</th>
                 </tr>
             </thead>
@@ -126,7 +126,7 @@
                     <td>{{user.extension_number}}</td>
                     <td>{{user.minutes}}</td>
                     <td>{{user.calls}}</td>
-                    <td>${{user.cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{user.cost | floatformat:"2"}}</td>
                     <td><a href="{% url 'tarifica:users_detail' user.extid%}">More</a></td>
                 </tr>
                 {% endfor %}

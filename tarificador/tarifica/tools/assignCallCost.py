@@ -95,7 +95,6 @@ class CallCostAssigner:
 					dailyCallDetail.append(callCostInfo['callInfo'])
 				else:
 					unsavedDailyCallDetail.append(callCostInfo['callInfo'])
-				break
 					
 		print "----------------------------------------------------"
 		print "Total calls found:", totalCallsFound
@@ -119,16 +118,17 @@ class CallCostAssigner:
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_call \
-		(dialed_number, extension_number, duration, cost, date, destination_group_id, provider_id) \
-		VALUES(%s, %s, %s, %s, %s, %s, %s)"
+		(dialed_number, extension_number, duration, cost, date, \
+		destination_group_id, provider_id, asterisk_unique_id) \
+		VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
 
 	def saveUnconfiguredCalls(self, calls):
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_unconfiguredcall \
-		(dialed_number, extension_number, duration, provider, date) \
-		VALUES(%s, %s, %s, %s, %s)"
+		(dialed_number, extension_number, duration, provider, date, asterisk_unique_id) \
+		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
 
@@ -231,8 +231,9 @@ class CallCostAssigner:
 						# Y no se aplicó a ninguno, por tanto 
 						# calculamos el costo con la tarifa base:
 						print "Billing with base tariff..."
-						print "Billed minutes:",ceil(call['billsec'] / 60)
-						cost = ( ceil(call['billsec'] / 60) * float(d['minute_fee']) ) + d['connection_fee']
+						print "Base tariff bills by interval of",d['billing_interval'],"seconds."
+						print "Billed intervals:",ceil(call['billsec'] / d['billing_interval'])
+						cost = ( ceil(call['billsec'] / d['billing_interval']) * float(d['minute_fee']) / 60 ) + float(d['connection_fee'])
 						print "Calculated cost:", cost
 						save = True
 						costAssigned = True
@@ -254,7 +255,8 @@ class CallCostAssigner:
 						second=call['calldate'].second
 					),
 					destination_group_id,
-					provider_id
+					provider_id,
+					call['uniqueid']
 				),
 				'save': True
 			}	
@@ -274,12 +276,13 @@ class CallCostAssigner:
 						minute=call['calldate'].minute,
 						second=call['calldate'].second
 					),
+					call['uniqueid']
 				),
 				'save': False
 			}
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=6)
+	week = week - datetime.timedelta(days=15)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)

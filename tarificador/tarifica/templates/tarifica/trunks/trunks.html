@@ -62,36 +62,29 @@
 
 
 <div class="row-fluid">
-
     <div class="span6 well well-small">
-
         <h5> Usage </h5>
-
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <tbody>
                 {% for prov in providers %}
                 <tr>
                     <th>{{prov.provider.name}}</th>
                     <td>{% if prov.total_cost == None %}
-                            $0.00
+                            {{ user_info.currency_symbol }}0.00 {{ user_info.currency_code }}
                         {% else %}
-                            ${{ prov.total_cost }}
+                            {{ user_info.currency_symbol }}{{ prov.total_cost | floatformat:"2" }} {{ user_info.currency_code }}
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <h5> Gross consumption of today ${{totalTrunksCost}}</h5>
-
+        <h5> Gross consumption of today {{ user_info.currency_symbol }}{{totalTrunksCost | floatformat:"2"}} {{ user_info.currency_code }}</h5>
     </div>
 
     <div class="span6 well well-small">
-
         <img src="http://placehold.it/700x196">
-
     </div>
-
 </div>
 
 
@@ -103,7 +96,7 @@
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
-                    <th>PROVIDER</th>
+                    <th><h5>Provider</h5></th>
                     <td>{{prov.provider.name}}
                         <div id="container" style="float:right"> 
                             <a href="{% url 'tarifica:providers_get' prov.provider.id %}">Info</a>
@@ -111,39 +104,35 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>TRUNK NAME</th>
+                    <th>Trunk Name</th>
                     <td>{{prov.provider.asterisk_name}}</td>
                 </tr>
                 <tr>
-                    <th>TRUNK TYPE</th>
+                    <th>Trunk Type</th>
                     <td>{{prov.provider.provider_tech}}</td>
                 </tr>
                 <tr>
-                    <th>BILLING CYCLE</th>
+                    <th>Billing Interval</th>
                     <td>{{prov.provider.period_end}} of every month</td>
                 </tr>
                 <tr>
-                    <th>BILLING DUE</th>
-                    <td>{{prov.provider.period_end}}</td>
-                </tr>
-                <tr>
-                    <th>PAYMENT TYPE</th>
+                    <th>Payment Type</th>
                     <td>{{prov.provider.payment_type}}</td>
                 </tr>
             </tbody>
         </table>
 
-        <h5><br><strong>AVERAGE MONTHLY COST</strong></h5>
+        <h5><br>Average Monthly Cost</h5>
 
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
                     <th>Billing cycle usage</th>
-                    <td>${{prov.thisBillingPeriod}}</a></td>
+                    <td>{{ user_info.currency_symbol }}{{prov.thisBillingPeriod | floatformat:"2"}} {{ user_info.currency_code }}</a></td>
                 </tr>
                 <tr>
-                    <th>Month's usage</th>
-                    <td>${{prov.total_cost}}</td>
+                    <th>This Month's usage</th>
+                    <td>{{ user_info.currency_symbol }}{{prov.total_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
                 </tr>
             </tbody>
         </table>

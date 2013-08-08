@@ -12,6 +12,7 @@ from tarifica.views.general import dictfetchall
 
 def general(request, period_id="thisMonth"):
     # Required for getting this month's, last month's and custom start and end dates
+    user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     form = forms.getDate(initial=
         {'start_date': datetime.date(year = today.year, month=today.month , day=1),
@@ -71,6 +72,7 @@ def general(request, period_id="thisMonth"):
         })
 
     return render(request, 'tarifica/trunks/trunks.html', {
+        'user_info' : user_info,
         'providers' : providersData,
         'form' : form,
         'totalTrunksCost' : totalTrunksCost,
@@ -80,6 +82,7 @@ def general(request, period_id="thisMonth"):
 
 
 def getTrunk(request, trunk_id, period_id="thisMonth"):
+    user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = trunk_id)
 
     # Required for getting this month's, last month's and custom start and end dates
@@ -131,6 +134,7 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
     return render(request, 'tarifica/trunks/trunksGet.html', {
+        'user_info' : user_info,
         'provider' : provider,
         'billingPeriods': billingPeriods,
         'calls': calls,

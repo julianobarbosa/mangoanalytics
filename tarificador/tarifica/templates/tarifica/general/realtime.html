@@ -19,6 +19,9 @@
 <li>
     <a href="{% url 'tarifica:wizard_start' %}">Call Wizard</a>
 </li>
+<li>
+    <a href="{% url 'tarifica:config' %}"><i class="icon-cog"></i> Config</a>
+</li>
 {% endblock %}
 
 {% load staticfiles %}
@@ -43,12 +46,12 @@
         <table class="table table-bordered table-striped table-hovered">
             <thead>
                 <tr>
-                    <th>EXT/PIN</th>
-                    <th>TIPO DESTINO</th>
-                    <th>NUMERO</th>
-                    <th>TRONCAL</th>
-                    <th>INICIO</th>
-                    <th>TIEMPO ACTIVA</th>
+                    <th>Extension</th>
+                    <th>Destination</th>
+                    <th>Dialed Number</th>
+                    <th>Provider</th>
+                    <th>Start</th>
+                    <th>Active Time</th>
                 </tr>
             </thead>
             <tbody>

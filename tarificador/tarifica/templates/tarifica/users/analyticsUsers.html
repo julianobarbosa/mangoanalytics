@@ -32,7 +32,7 @@
                 <tr>
                     <th>Destination</th>
                     <th>Minutes</th>
-                    <th>Cost</th>
+                    <th>Cost {{ user_info.currency_code }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +40,7 @@
                 <tr>
                     <td>{{call.dialed_number}}</td>
                     <td>{{call.duration}}</td>
-                    <td>${{call.cost}}</td>
+                    <td>{{ user_info.currency_symbol }}{{call.cost | floatformat:"2"}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -126,7 +126,7 @@
                             <th>Time</th>
                             <th>Destination</th>
                             <th>Minutes</th>
-                            <th>Cost</th>
+                            <th>Cost {{ user_info.currency_code }}</th>
                             <th>Dialed Number</th>
                         </tr>
                     </thead>
@@ -137,7 +137,7 @@
                             <td>{{call.time}}</td>
                             <td>{{call.name}}</td>
                             <td>{{call.duration}}</td>
-                            <td>${{call.cost}}</td>
+                            <td>{{ user_info.currency_symbol }}{{call.cost | floatformat:"2"}}</td>
                             <td>{{call.dialed_number}}</td>
                         </tr>
                 {% endfor %}

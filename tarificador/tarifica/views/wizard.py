@@ -22,8 +22,8 @@ def testrun(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     importer_script_path = current_directory+"/../tools/"
     try:
-        # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', '--testrun'])
-        p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', '--testrun'])
+        p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', '--testrun'])
+        # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', '--testrun'])
     except Exception, e:
         print "Error while dry running:",e
         p = None
@@ -72,7 +72,7 @@ def results(request):
     user_info.is_first_import_finished = False
     user_info.save()
 
-    import_results = ImportResults.objects.get(id = 1)
+    import_results = ImportResults.objects.order_by('-id')[0]
     unconfigured_calls = UnconfiguredCall.objects.all()
     return render(request, 'tarifica/wizard/results.html', {
         'import_results': import_results,
@@ -88,8 +88,8 @@ def run(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     importer_script_path = current_directory+"/../tools/"
     try:
-        # p = subprocess.Popen(['python2.7', importer_script_path+'importer.py'])
-        p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
+        p = subprocess.Popen(['python2.7', importer_script_path+'importer.py'])
+        # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
     except Exception, e:
         print "Error while digesting:",e
         p = None

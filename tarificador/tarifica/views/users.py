@@ -12,6 +12,7 @@ import json
 
 
 def generalUsers(request, period_id="thisMonth"):
+    user_info = get_object_or_404(UserInformation, id = 1)
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     form = forms.getDate(initial=
@@ -71,6 +72,7 @@ def generalUsers(request, period_id="thisMonth"):
     data = getBarChartInfoByExt(cursor)
 
     return render(request, 'tarifica/users/generalUsers.html', {
+        'user_info' : user_info,
         'extensions' : extensions,
         'all_users' : all_users,
         'average' : average,
@@ -84,6 +86,7 @@ def generalUsers(request, period_id="thisMonth"):
     })
 
 def detailUsers(request, extension_id, period_id="thisMonth"):
+    user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -139,6 +142,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
     if n: average = average/n
     data = getBarChartInfoByLocale(cursor, Ext.id)
     return render(request, 'tarifica/users/detailUsers.html', {
+              'user_info' : user_info,
               'destinations' : destinations,
               'all_calls' : all_calls,
               'average' : average,
@@ -151,6 +155,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
 
 
 def analyticsUsers(request, extension_id, period_id="thisMonth"):
+    user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -200,6 +205,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     return render(request, 'tarifica/users/analyticsUsers.html', {
+              'user_info' : user_info,
               'all_calls' : all_calls,
               'top_calls' : top_calls,
               'last_month' : last_month,

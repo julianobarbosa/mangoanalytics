@@ -49,6 +49,14 @@
         </div>
     </div>
     <div class="control-group">
+        {{ form.billing_interval.errors }}
+        <label class="control-label" for="id_billing_interval">Billing interval</label>
+        <div class="controls">
+            {{ form.billing_interval }}
+            <span class="help-inline">Billing intervals in seconds. If your provider bills you by minute, input '60' here. If your provider bills you by second, input '1'. If your provider bills you by 'x' seconds at a time, input 'x'.</span>
+        </div>
+    </div>
+    <div class="control-group">
         {{ form.connection_fee.errors }}
         <label class="control-label" for="id_connection_fee">Connection Fee</label>
         <div class="controls">
