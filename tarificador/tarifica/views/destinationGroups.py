@@ -49,13 +49,13 @@ def updateDestinationGroup(request, destination_group_id):
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            destination_group.destination_name = DestinationName.objects.get(id=form.cleaned_data['destination_name']), 
-            destination_group.destination_country = form.cleaned_data['destination_country'], 
-            destination_group.prefix = form.cleaned_data['prefix'], 
-            destination_group.minute_fee = form.cleaned_data['minute_fee'],
-            destination_group.connection_fee = form.cleaned_data['connection_fee'],
-            destination_group.billing_interval = form.cleaned_data['billing_interval'],
-            destination_group.notes = form.cleaned_data['notes'],
+            destination_group.destination_name = DestinationName.objects.get(id=form.cleaned_data['destination_name'])
+            destination_group.destination_country = form.cleaned_data['destination_country']
+            destination_group.prefix = form.cleaned_data['prefix']
+            destination_group.minute_fee = form.cleaned_data['minute_fee']
+            destination_group.connection_fee = form.cleaned_data['connection_fee']
+            destination_group.billing_interval = form.cleaned_data['billing_interval']
+            destination_group.notes = form.cleaned_data['notes']
             destination_group.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
     else:
