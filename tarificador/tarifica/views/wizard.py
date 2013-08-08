@@ -94,6 +94,7 @@ def run(request):
         print "Error while digesting:",e
         p = None
     user_info.first_import_started = datetime.datetime.now()
+    user_info.is_first_import_finished = False
     user_info.save()
     return render(request, 'tarifica/wizard/run.html', {'p': p, 'cd': importer_script_path })
 

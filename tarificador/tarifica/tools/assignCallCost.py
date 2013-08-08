@@ -232,8 +232,13 @@ class CallCostAssigner:
 						# calculamos el costo con la tarifa base:
 						print "Billing with base tariff..."
 						print "Base tariff bills by interval of",d['billing_interval'],"seconds."
-						print "Billed intervals:",ceil(call['billsec'] / d['billing_interval'])
-						cost = ( ceil(call['billsec'] / d['billing_interval']) * float(d['minute_fee']) / 60 ) + float(d['connection_fee'])
+						print "Call Duration:",call['billsec']
+						intervals = ceil(call['billsec'] / d['billing_interval'])
+						print "Billed intervals:",intervals
+						per_second_tariff = float(d['minute_fee']) / 60
+						per_interval_tariff = per_second_tariff * d['billing_interval']
+						print "Tariff per interval:",per_interval_tariff
+						cost = ( intervals * per_interval_tariff ) + float(d['connection_fee'])
 						print "Calculated cost:", cost
 						save = True
 						costAssigned = True
@@ -283,6 +288,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=15)
+	week = week - datetime.timedelta(days=7)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
