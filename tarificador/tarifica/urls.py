@@ -24,9 +24,9 @@ urlpatterns = patterns('',
 
    url(r'^trunks$', trunks.general, name = 'trunks'),
    url(r'^trunks/(?P<period_id>\w+)$', trunks.general, name = 'trunks_period'),
-   url(r'^trunks/get/(?P<trunk_id>\d+)$', trunks.getTrunk, name = 'trunks_get'),
-   url(r'^trunks/get/(?P<trunk_id>\d+)/(?P<period_id>\w+)$', trunks.getTrunk, name = 'trunks_get_period'),
-   url(r'^trunks/download/(?P<trunk_id>\d+)/(?P<period_id>\w+)$', trunks.downloadTrunkCDR, name = 'trunks_download_cdr'),
+   url(r'^trunks/get/(?P<provider_id>\d+)$', trunks.getTrunk, name = 'trunks_get'),
+   url(r'^trunks/get/(?P<provider_id>\d+)/(?P<period_id>\w+)$', trunks.getTrunk, name = 'trunks_get_period'),
+   url(r'^trunks/download/(?P<provider_id>\d+)/(?P<start_date>\w+)/(?P<end_date>\w+)$', trunks.downloadTrunkCDR, name = 'trunks_download_cdr'),
 
    url(r'^realtime$', general.realtime, name = 'realtime'),
 

@@ -10,6 +10,7 @@ from tarifica import forms
 from django.db import connection, transaction
 from tarifica.views.general import dictfetchall
 from dateutil.relativedelta import *
+import json
 from csv import *
 
 def general(request, period_id="thisMonth"):
@@ -43,6 +44,8 @@ def general(request, period_id="thisMonth"):
     averageMonthlyCost = 0
     totalTrunksCost = 0
     providersData = []
+    providersGraphs = []
+    providersGraphsTicks = []
     monthUsage = 0
     thisBillingPeriod = 0
     for p in providers:
@@ -61,10 +64,24 @@ def general(request, period_id="thisMonth"):
         if bundlesCost[0]['cost'] is None:
             bundlesCost[0]['cost'] = 0
         total_cost = bundlesCost[0]['cost'] + current_interval_cost
+        
+        graph_data = []
         for b in billingPeriods:
+            providersGraphsTicks.append(b['date_end'].strftime('%B'))
             if b['data'][0]['total_cost'] is not None:
                 averageMonthlyCost += b['data'][0]['total_cost']
-            average_cost = averageMonthlyCost / len(billingPeriods)
+                #Agregamos tambien la informacion pa las graphs
+                graph_data.append(b['data'][0]['total_cost'])
+            else:
+                graph_data.append(0.0)
+
+        providersGraphs.append({
+            'provider_id': p.id,
+            'provider_name': p.name,
+            'data': graph_data
+        })
+
+        average_cost = averageMonthlyCost / len(billingPeriods)
         totalTrunksCost = totalTrunksCost + total_cost
         providersData.append({
             'provider': p, 
@@ -73,6 +90,13 @@ def general(request, period_id="thisMonth"):
             'thisBillingPeriod' : thisBillingPeriod,
         })
 
+    print providersGraphs
+
+    destinationInfo = getAllProvidersDestinationCDR(start_date, end_date)
+    destinationGraph = []
+    for d in destinationInfo:
+        destinationGraph.append([d['destination_name'], d['total_cost']])
+
     return render(request, 'tarifica/trunks/trunks.html', {
         'user_info' : user_info,
         'providers' : providersData,
@@ -80,11 +104,14 @@ def general(request, period_id="thisMonth"):
         'totalTrunksCost' : totalTrunksCost,
         'custom' : custom,
         'last_month' : last_month,
+        'destinationGraph' : json.dumps(destinationGraph),
+        'providersGraphs' : json.dumps(providersGraphs),
+        'providersGraphsTicks' : json.dumps(providersGraphsTicks)
     })
 
-def getTrunk(request, trunk_id, period_id="thisMonth"):
+def getTrunk(request, provider_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
-    provider = get_object_or_404(Provider, id = trunk_id)
+    provider = get_object_or_404(Provider, id = provider_id)
 
     # Required for getting this month's, last month's and custom start and end dates
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -138,6 +165,8 @@ def getTrunk(request, trunk_id, period_id="thisMonth"):
         'provider' : provider,
         'billingPeriods': billingPeriods,
         'period_id': period_id,
+        'start_date': start_date.strftime("%Y/%m/%d %H:%M:%S"),
+        'end_date': end_date.strftime("%Y/%m/%d %H:%M:%S"),
         'averageMonthlyCost': averageMonthlyCost,
         'currentPeriodCost': currentPeriodCost[0]['total_cost'],
         'total_cost' : total_cost,
@@ -157,6 +186,36 @@ def getTrunkCDR(provider_id, start_date, end_date):
         WHERE tarifica_providerdailydetail.provider_id = %s \
         AND date > %s AND date < %s"
     cursor.execute(sql, (provider_id, start_date, end_date))
+    return dictfetchall(cursor)
+
+def getDestinationCDR(provider_id, start_date, end_date):
+    cursor = connection.cursor()
+    sql = "SELECT \
+        SUM(tarifica_providerdailydetail.cost) as total_cost, \
+        tarifica_destinationname.name as destination_name \
+        FROM tarifica_providerdailydetail \
+        LEFT JOIN tarifica_destinationgroup ON \
+        tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON \
+        tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        WHERE tarifica_providerdailydetail.provider_id = %s \
+        AND date > %s AND date < %s"
+    cursor.execute(sql, (provider_id, start_date, end_date))
+    return dictfetchall(cursor)
+
+def getAllProvidersDestinationCDR(start_date, end_date):
+    cursor = connection.cursor()
+    sql = "SELECT \
+        SUM(tarifica_providerdestinationdetail.cost) as total_cost, \
+        tarifica_destinationname.name as destination_name \
+        FROM tarifica_providerdestinationdetail \
+        LEFT JOIN tarifica_destinationgroup ON \
+        tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        LEFT JOIN tarifica_destinationname ON \
+        tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        WHERE date > %s AND date < %s \
+        GROUP BY tarifica_providerdestinationdetail.provider_id"
+    cursor.execute(sql, (start_date, end_date))
     return dictfetchall(cursor)
 
 def getTrunkCurrentIntervalCost(provider_id, start_date, end_date):
@@ -229,15 +288,30 @@ def getBundlesCost(provider_id):
     cursor.execute(sql, (provider_id))
     return dictfetchall(cursor)
 
-def downloadTrunkCDR(request, trunk_id, period_id):
-    filename = '/opt/NEXTOR/tarificador/django-tarificador/tarificador'
+def downloadTrunkCDR(request, provider_id, start_date, end_date):
+    file_path = '/opt/NEXTOR/tarificador/django-tarificador/tarificador'
+    file_name = 'trunk_cdr.csv'
     temp_file = file.open(filename, 'w', buffering)
 
-    response = HttpResponse(my_data, content_type='application/csv')
-    response['Content-Disposition'] = 'attachment; filename="foo.xls"'
-    return response
+    provider = get_object_or_404(Provider, id = provider_id)
+    timedelta = datetime.timedelta(days = 1)
+    try:
+        end_date = datetime.date(start_date) + timedelta
+        start_date = datetime.date(end_date) - timedelta
+    except Exception as e:
+        print "Error while parsing dates:",e
+        return HttpResponseServerError('Error while saving .csv')
 
-    with open('some.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(someiterable)
-    pass
+    call_info = getTrunkCalls(provider_id, start_date, end_date)
+
+    try:
+        with open(file_path + file_name, 'wb') as f:
+            writer = csv.writer(f)
+            writer.writerows(someiterable)
+    except Exception as e:
+        print "Error while writing file:",e
+        return HttpResponseServerError('Error while saving .csv')
+
+    response = HttpResponse(my_data, content_type='application/csv')
+    response['Content-Disposition'] = 'attachment; filename="file_path + file_name"'
+    return response

@@ -83,16 +83,14 @@
     </div>
 
     <div class="span6 well well-small">
-        <img src="http://placehold.it/700x196">
+        <div id="graph1"></div>
     </div>
 </div>
 
 
 {% for prov in providers %}
 <div class="row-fluid">
-
     <div class="span6 well well-small">
-
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
@@ -121,9 +119,7 @@
                 </tr>
             </tbody>
         </table>
-
         <h5><br>Average Monthly Cost</h5>
-
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
@@ -137,16 +133,11 @@
             </tbody>
         </table>
         <div id="container" style="float:right"><a href="{% url 'tarifica:trunks_get' prov.provider.id %}" class="btn btn-primary"></i>More</a></div>
-
     </div>
-
     <div class="span6 well well-small">
-
         <h5><strong>Monthly behavior of {{prov.provider.name}}</strong></h5>
-        <img src="http://placehold.it/700x343">
-
+        <div id="graph_provider_{{ prov.provider.id }}"></div>
     </div>
-
 </div>
 
 {% endfor %}
@@ -157,9 +148,10 @@
     {{ block.super }}
     <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
     <script src="{% static "tarifica/js/jquery.jqplot.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.pieRenderer.min.js" %}"></script>
     <script src="{% static "tarifica/js/plugins/jqplot.barRenderer.min.js" %}"></script>
     <script src="{% static "tarifica/js/plugins/jqplot.categoryAxisRenderer.min.js" %}"></script>
-    <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.pointLabels.min.js" %}"></script>
 
     <script type="text/javascript">
         $(function() {
@@ -181,5 +173,70 @@
             // Find form and submit it
             $('#modal-form').submit();
         });
+
+        // Graphs:
+        // Graph1: Destination detail of this month:
+        var data = $.parseJSON('{{ destinationGraph | safe }}');
+        var plot1 = $.jqplot ('graph1', [data], 
+        { 
+            seriesDefaults: {
+                // Make this a pie chart.
+                renderer: jQuery.jqplot.PieRenderer, 
+                rendererOptions: {
+                    // Put data labels on the pie slices.
+                    // By default, labels show the percentage of the slice.
+                    showDataLabels: true
+                }
+            }, 
+            legend: { show:true, location: 'e' }
+        });
+
+        // Provider Graphs:
+        var ticks = $.parseJSON('{{ providersGraphsTicks | safe }}').reverse();
+        var providerData = $.parseJSON('{{ providersGraphs | safe }}');
+
+        for (var i = 0; i < providerData.length; i++) {
+            console.log(providerData[i]);
+            var data = providerData[i].data.reverse();
+            var provider_id = providerData[i].provider_id;
+            var provider_name = providerData[i].provider_name;
+             
+            var plot1 = $.jqplot('graph_provider_'+provider_id, [data], {
+                // The "seriesDefaults" option is an options object that will
+                // be applied to all series in the chart.
+                seriesDefaults:{
+                    renderer:$.jqplot.BarRenderer,
+                    rendererOptions: {fillToZero: true}
+                },
+                // Custom labels for the series are specified with the "label"
+                // option on the series option.  Here a series option object
+                // is specified for each series.
+                series:[
+                    {label:provider_name},
+                ],
+                // Show the legend and put it outside the grid, but inside the
+                // plot container, shrinking the grid to accomodate the legend.
+                // A value of "outside" would not shrink the grid and allow
+                // the legend to overflow the container.
+                legend: {
+                    show: true,
+                    placement: 'inside'
+                },
+                axes: {
+                    // Use a category axis on the x axis and use our custom ticks.
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: ticks
+                    },
+                    // Pad the y axis just a little so bars can get close to, but
+                    // not touch, the grid boundaries.  1.2 is the default padding.
+                    yaxis: {
+                        pad: 1.05,
+                        min: 0,
+                        tickOptions: {formatString: '$%d'}
+                    }
+                }
+            });
+        };
     </script>
 {% endblock %}
