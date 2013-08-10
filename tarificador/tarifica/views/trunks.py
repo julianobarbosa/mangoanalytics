@@ -92,6 +92,8 @@ def general(request, period_id="thisMonth"):
             'total_cost': total_cost, 
             'average_cost': average_cost,
             'thisBillingPeriod' : thisBillingPeriod,
+            'current_interval_cost' : current_interval_cost,
+            'bundlesCost' : bundlesCost[0]['cost'],
         })
 
     destinationInfo = getAllProvidersDestinationCDR(start_date, end_date)
@@ -127,7 +129,7 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     custom = False
     last_month = False
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1)
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True

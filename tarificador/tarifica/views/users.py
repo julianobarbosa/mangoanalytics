@@ -1,6 +1,7 @@
 #Views for providers
 
 import datetime
+from calendar import monthrange
 from django.utils.timezone import utc
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -98,7 +99,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
     custom = False
     timedelta = datetime.timedelta(days = 1)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1)
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
@@ -141,6 +142,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
     data = getBarChartInfoByLocale(cursor, Ext.id)
+    day_data = getBarChartInfoByExtForMonth(cursor, Ext.id, start_date, end_date)
     return render(request, 'tarifica/users/detailUsers.html', {
               'user_info' : user_info,
               'destinations' : destinations,
@@ -151,6 +153,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'form': form,
               'extension' : Ext,
               'data' : json.dumps(data),
+              'day_data' : json.dumps(day_data),
               })
 
 
@@ -168,8 +171,8 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
     timedelta = datetime.timedelta(days = 1)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
     start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
-    start_date_year = datetime.date(year=today.year, month=1, day=1) - timedelta
-    end_date_year = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
+    start_date_month = start_date
+    end_date_month = end_date
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
@@ -182,18 +185,22 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date'] - timedelta
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
-    print start_date.isoformat()
-    print end_date.isoformat()
+    #print start_date.isoformat()
+    #print end_date.isoformat()
     sql = "SELECT tarifica_call.id,\
         SUM(tarifica_call.cost) AS cost,\
         tarifica_call.dialed_number,\
-        SUM(tarifica_call.duration) AS duration \
+        SUM(tarifica_call.duration) AS duration, \
+        COUNT(dialed_number) AS times_dialed\
         FROM tarifica_call\
         WHERE date > %s AND date < %s AND extension_number = %s \
         GROUP BY dialed_number ORDER BY SUM(cost) DESC"
-    cursor.execute(sql,[start_date_year,end_date_year, Ext.extension_number])
+    cursor.execute(sql,[start_date_month,end_date_month, Ext.extension_number])
     top_calls = dictfetchall(cursor)[:10]
-    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number,\
+    data = []
+    for n in top_calls :
+        data.append([n['dialed_number'], n['cost']])
+    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration, \
         tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
@@ -212,6 +219,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
               'custom' : custom,
               'form': form,
               'extension' : Ext,
+              'data' : json.dumps(data),
               })
 
 def dictfetchall(cursor):
@@ -294,6 +302,35 @@ def getBarChartInfoByExt(cursor):
     return data
 
 
+def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
+    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    data = []
+    aux = []
+    aux.append("Cost")
+    data.append(aux)
+    aux = []
+    sdate = start_date
+    fdate = end_date
+    timedelta = datetime.timedelta(days=1)
+    while sdate != fdate :
+        date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
+        print date.isoformat()
+        cursor.execute(
+            'SELECT SUM(tarifica_userdailydetail.cost) AS cost \
+            FROM tarifica_userdailydetail \
+            WHERE date = %s AND extension_id = %s ',
+            [date,extension_id])
+        day = dictfetchall(cursor)
+        if day[0]['cost'] is None:
+            aux.append([sdate.day, 0])
+        else:
+            aux.append([sdate.day, day[0]['cost']])
+        print day
+        data.append(aux)
+        sdate += timedelta
+    return data
+
+
 def getBarChartInfoByLocale(cursor, extension_id):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     timedelta = datetime.timedelta(days = 1)
@@ -330,7 +367,7 @@ def getBarChartInfoByLocale(cursor, extension_id):
     for u in users:
         aux[u['destid']-1] = u['cost']
     data.append(aux)
-    print aux
+    #print aux
     aux = []
     end_date = datetime.date(year=today.year, month=today.month, day=1)
     start_date = datetime.date(year=t1.year, month=t1.month, day=1) - timedelta
@@ -347,7 +384,7 @@ def getBarChartInfoByLocale(cursor, extension_id):
     for u in users:
         aux[u['destid']-1] = u['cost']
     data.append(aux)
-    print aux
+    #print aux
     aux = []
     end_date = datetime.date(year=t1.year, month=t1.month, day=1)
     start_date = datetime.date(year=t2.year, month=t2.month, day=1) - timedelta
