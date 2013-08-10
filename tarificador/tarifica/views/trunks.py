@@ -151,6 +151,9 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     total_cost = bundlesCost[0]['cost'] + current_interval_cost
     averageMonthlyCost = 0
     currentPeriodCost = 0
+
+    cost_graph = []
+    minutes_graph = []
     billingPeriods = getBillingPeriods(provider)
     thisBillingPeriod = billingPeriods[0]['data'][0]['total_cost']
     if thisBillingPeriod is None :
@@ -159,8 +162,19 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     for b in billingPeriods:
         if b['data'][0]['total_cost'] is not None:
             averageMonthlyCost += b['data'][0]['total_cost']
-    averageMonthlyCost = averageMonthlyCost / len(billingPeriods)
+            cost = b['data'][0]['total_cost']
+        else:
+            cost = 0
 
+        if b['data'][0]['total_minutes'] is not None:
+            minutes = int(b['data'][0]['total_minutes'])
+        else:
+            minutes = 0
+
+        cost_graph.append([b['date_start'].strftime('%B'), cost ])
+        minutes_graph.append([b['date_start'].strftime('%B'), minutes ])
+
+    averageMonthlyCost = averageMonthlyCost / len(billingPeriods)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
     destinationInfo = getProviderDestinationCDR(provider.id, start_date, end_date)
@@ -182,6 +196,8 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
         'custom' : custom,
         'last_month' : last_month,
         'destinationGraph' : json.dumps(destinationGraph),
+        'cost_graph' : json.dumps(cost_graph),
+        'minutes_graph' : json.dumps(minutes_graph),
         'form' : form
     })
 
