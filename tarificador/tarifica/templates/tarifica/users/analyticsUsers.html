@@ -22,7 +22,7 @@
 <div class="row-fluid well well-small">
 {% if top_calls %}
     <div class="span6">
-        <h5>TOP 10 DIALED NUMBERS OF THE YEAR</h5>
+        <h5>TOP 10 MOST EXPENSIVE DIALED NUMBERS OF THE MONTH</h5>
         <img src="http://placehold.it/650x305">
     </div>
 
@@ -31,6 +31,7 @@
             <thead>
                 <tr>
                     <th>Destination</th>
+                    <th>Total Calls</th>
                     <th>Minutes</th>
                     <th>Cost {{ user_info.currency_code }}</th>
                 </tr>
@@ -39,6 +40,7 @@
                 {% for call in top_calls%}
                 <tr>
                     <td>{{call.dialed_number}}</td>
+                    <td>{{call.times_dialed}}</td>
                     <td>{{call.duration}}</td>
                     <td>{{ user_info.currency_symbol }}{{call.cost | floatformat:"2"}}</td>
                 </tr>
@@ -183,6 +185,27 @@
             $('#datetimepicker2').datetimepicker({
                 pickTime: false
             });
+        });
+
+        $(document).ready(function(){
+            var data = [
+                ['Heavy Industry', 12],['Retail', 9], ['Light Industry', 14], 
+                ['Out of home', 16],['Commuting', 7], ['Orientation', 9]
+            ];
+            var plot1 = jQuery.jqplot ('graph1', [data], 
+            {
+                seriesDefaults: {
+                // Make this a pie chart.
+                renderer: jQuery.jqplot.PieRenderer, 
+                rendererOptions: {
+                  // Put data labels on the pie slices.
+                  // By default, labels show the percentage of the slice.
+                  showDataLabels: true
+                }
+            },
+              legend: { show:true, location: 'e' }
+            }
+          );
         });
     </script>
 {% endblock %}
