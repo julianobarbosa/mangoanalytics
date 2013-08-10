@@ -55,14 +55,17 @@ class Digester:
 			SUM(tarifica_call.duration) as total_minutes, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.date as date, \
+			tarifica_extension.id as extension_number, \
 			tarifica_call.destination_group_id as destination_group_id \
 			FROM tarifica_call \
+			LEFT JOIN tarifica_extension ON \
+			tarifica_call.extension_number = tarifica_extension.extension_number \
 			WHERE date > %s AND date < %s \
-			GROUP BY tarifica_call.destination_group_id"
+			GROUP BY tarifica_call.extension_number, tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
 		for row in self.am.cursor.fetchall():
 			callDetail.append((
-				# row['extension_number'],
+				row['extension_number'],
 				row['total_calls'],
 				row['total_minutes'],
 				row['cost'],
@@ -75,8 +78,8 @@ class Digester:
 		callData = self.getUserDestinationDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdestinationdetail \
-		(total_calls, total_minutes, cost, destination_group_id, date) \
-		VALUES(%s, %s, %s, %s, %s)"
+		(extension_id, total_calls, total_minutes, cost, destination_group_id, date) \
+		VALUES(%s, %s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
 		print "----------------------------------------"
@@ -197,7 +200,7 @@ class Digester:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=100)
+	week = week - datetime.timedelta(days=7)
 	print week
 	d = Digester()
 	d.saveUserDailyDetail(week)

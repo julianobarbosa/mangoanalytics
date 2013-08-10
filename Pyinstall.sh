@@ -26,7 +26,7 @@ virtualenv /opt/NEXTOR/tarificador
 source /opt/NEXTOR/tarificador/bin/activate
 
 #Installing django
-pip install django MySQL-python
+pip install django MySQL-python python-dateutil
 python nextor-tarificador/tools/initialMySQLSetup.py
 
 mkdir /opt/NEXTOR/tarificador/django-tarificador
