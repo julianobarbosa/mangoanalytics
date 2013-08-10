@@ -23,7 +23,8 @@
 {% if top_calls %}
     <div class="span6">
         <h5>TOP 10 MOST EXPENSIVE DIALED NUMBERS OF THE MONTH</h5>
-        <img src="http://placehold.it/650x305">
+        <div id="number-graph" class="span6 well well-small" style="height:310px; min-height:310px">
+        </div>
     </div>
 
     <div class="span6">
@@ -164,6 +165,7 @@
     <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
     <script src="{% static "tarifica/js/jquery.jqplot.min.js" %}"></script>
     <script src="{% static "tarifica/js/plugins/jqplot.barRenderer.min.js" %}"></script>
+    <script src="{% static "tarifica/js/plugins/jqplot.pieRenderer.min.js" %}"></script>
     <script src="{% static "tarifica/js/plugins/jqplot.categoryAxisRenderer.min.js" %}"></script>
     <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
     <script type="text/javascript">
@@ -188,21 +190,18 @@
         });
 
         $(document).ready(function(){
-            var data = [
-                ['Heavy Industry', 12],['Retail', 9], ['Light Industry', 14], 
-                ['Out of home', 16],['Commuting', 7], ['Orientation', 9]
-            ];
-            var plot1 = jQuery.jqplot ('graph1', [data], 
+            var data = $.parseJSON('{{ data | safe }}');
+            var plot1 = jQuery.jqplot ('number-graph', [data], 
             {
                 seriesDefaults: {
                 // Make this a pie chart.
-                renderer: jQuery.jqplot.PieRenderer, 
-                rendererOptions: {
+                    renderer: jQuery.jqplot.PieRenderer, 
+                    rendererOptions: {
                   // Put data labels on the pie slices.
                   // By default, labels show the percentage of the slice.
-                  showDataLabels: true
-                }
-            },
+                      showDataLabels: true
+                    }
+                },
               legend: { show:true, location: 'e' }
             }
           );

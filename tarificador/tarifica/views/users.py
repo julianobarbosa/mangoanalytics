@@ -142,7 +142,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
     data = getBarChartInfoByLocale(cursor, Ext.id)
-    day_data = getBarChartInfoByExtForMonth(cursor, Ext.id)
+    day_data = getBarChartInfoByExtForMonth(cursor, Ext.id, start_date, end_date)
     return render(request, 'tarifica/users/detailUsers.html', {
               'user_info' : user_info,
               'destinations' : destinations,
@@ -198,8 +198,8 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
     cursor.execute(sql,[start_date_month,end_date_month, Ext.extension_number])
     top_calls = dictfetchall(cursor)[:10]
     data = []
-    data.append(top_calls['dialed_number'])
-    data.append(top_calls['cost'])
+    for n in top_calls :
+        data.append([n['dialed_number'], n['cost']])
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration, \
         tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
@@ -302,21 +302,19 @@ def getBarChartInfoByExt(cursor):
     return data
 
 
-def getBarChartInfoByExtForMonth(cursor, extension_id):
+def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
-    totalDays = monthrange(today.year, today.month)
     data = []
     aux = []
     aux.append("Cost")
     data.append(aux)
     aux = []
-    days = range(1, totalDays[1])
-    for n in days:
-        aux.append(n)
-    data.append(aux)
-    aux = []
-    for n in days:
-        date = datetime.date(year=today.year, month=today.month, day=n)
+    sdate = start_date
+    fdate = end_date
+    timedelta = datetime.timedelta(days=1)
+    while sdate != fdate :
+        date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
+        print date.isoformat()
         cursor.execute(
             'SELECT SUM(tarifica_userdailydetail.cost) AS cost \
             FROM tarifica_userdailydetail \
@@ -324,11 +322,12 @@ def getBarChartInfoByExtForMonth(cursor, extension_id):
             [date,extension_id])
         day = dictfetchall(cursor)
         if day[0]['cost'] is None:
-            aux.append(0)
+            aux.append([sdate.day, 0])
         else:
-            aux.append(day[0]['cost'])
+            aux.append([sdate.day, day[0]['cost']])
         print day
-    data.append(aux)
+        data.append(aux)
+        sdate += timedelta
     return data
 
 
