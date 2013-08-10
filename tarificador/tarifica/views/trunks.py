@@ -46,6 +46,7 @@ def general(request, period_id="thisMonth"):
     providersData = []
     providersGraphs = []
     providersGraphsTicks = []
+    ticksAssigned = False
     monthUsage = 0
     thisBillingPeriod = 0
     for p in providers:
@@ -67,13 +68,16 @@ def general(request, period_id="thisMonth"):
         
         graph_data = []
         for b in billingPeriods:
-            providersGraphsTicks.append(b['date_end'].strftime('%B'))
+            if not ticksAssigned:
+                providersGraphsTicks.append(b['date_end'].strftime('%B'))
             if b['data'][0]['total_cost'] is not None:
                 averageMonthlyCost += b['data'][0]['total_cost']
                 #Agregamos tambien la informacion pa las graphs
                 graph_data.append(b['data'][0]['total_cost'])
             else:
                 graph_data.append(0.0)
+
+        ticksAssigned = True
 
         providersGraphs.append({
             'provider_id': p.id,
@@ -90,9 +94,8 @@ def general(request, period_id="thisMonth"):
             'thisBillingPeriod' : thisBillingPeriod,
         })
 
-    print providersGraphs
-
     destinationInfo = getAllProvidersDestinationCDR(start_date, end_date)
+    print destinationInfo
     destinationGraph = []
     for d in destinationInfo:
         destinationGraph.append([d['destination_name'], d['total_cost']])
@@ -160,19 +163,25 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
 
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
+    destinationInfo = getProviderDestinationCDR(provider.id, start_date, end_date)
+    destinationGraph = []
+    for d in destinationInfo:
+        destinationGraph.append([d['destination_name'], d['total_cost']])
+
     return render(request, 'tarifica/trunks/trunksGet.html', {
         'user_info' : user_info,
         'provider' : provider,
         'billingPeriods': billingPeriods,
         'period_id': period_id,
-        'start_date': start_date.strftime("%Y/%m/%d %H:%M:%S"),
-        'end_date': end_date.strftime("%Y/%m/%d %H:%M:%S"),
+        'start_date': start_date.strftime("%Y-%m-%d"),
+        'end_date': end_date.strftime("%Y-%m-%d"),
         'averageMonthlyCost': averageMonthlyCost,
         'currentPeriodCost': currentPeriodCost[0]['total_cost'],
         'total_cost' : total_cost,
         'thisBillingPeriod' : thisBillingPeriod,
         'custom' : custom,
         'last_month' : last_month,
+        'destinationGraph' : json.dumps(destinationGraph),
         'form' : form
     })
 
@@ -188,18 +197,19 @@ def getTrunkCDR(provider_id, start_date, end_date):
     cursor.execute(sql, (provider_id, start_date, end_date))
     return dictfetchall(cursor)
 
-def getDestinationCDR(provider_id, start_date, end_date):
+def getProviderDestinationCDR(provider_id, start_date, end_date):
     cursor = connection.cursor()
     sql = "SELECT \
-        SUM(tarifica_providerdailydetail.cost) as total_cost, \
+        SUM(tarifica_providerdestinationdetail.cost) as total_cost, \
         tarifica_destinationname.name as destination_name \
-        FROM tarifica_providerdailydetail \
+        FROM tarifica_providerdestinationdetail \
         LEFT JOIN tarifica_destinationgroup ON \
         tarifica_providerdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON \
         tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE tarifica_providerdailydetail.provider_id = %s \
-        AND date > %s AND date < %s"
+        WHERE tarifica_providerdestinationdetail.provider_id = %s \
+        AND date > %s AND date < %s \
+        GROUP BY tarifica_destinationname.id"
     cursor.execute(sql, (provider_id, start_date, end_date))
     return dictfetchall(cursor)
 
@@ -214,7 +224,7 @@ def getAllProvidersDestinationCDR(start_date, end_date):
         LEFT JOIN tarifica_destinationname ON \
         tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
         WHERE date > %s AND date < %s \
-        GROUP BY tarifica_providerdestinationdetail.provider_id"
+        GROUP BY tarifica_destinationname.id"
     cursor.execute(sql, (start_date, end_date))
     return dictfetchall(cursor)
 
