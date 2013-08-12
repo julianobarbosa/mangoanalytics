@@ -3,6 +3,7 @@
 #!/usr/bin/env python2.7
 from __future__ import division
 from asteriskMySQLManager import AsteriskMySQLManager
+from assignCallCost import CallCostAssigner
 from assignCallCost import getStartOfDay, getEndOfDay
 import datetime
 from dateutil.relativedelta import *
@@ -199,7 +200,8 @@ class Digester:
 
 	def saveProviderMonthlyCost(self):
 		today = datetime.datetime.today()
-		for provider in self.am.getAllConfiguredProviders():
+		cca = CallCostAssigner()
+		for provider in cca.getAllConfiguredProviders():
 			if provider['period_end'] == today.day:
 				print "End date of provider", provider['name']
 				# Definimos inicio y fin:
@@ -221,14 +223,20 @@ class Digester:
 				data = self.am.cursor.fetchall()
 
 				# Revisamos paquetes y reseteamos:
-				for bundle in self.am.getAllBundlesFromProvider(provider['id']):
-					# Revisamos que aún aplique el paquete
-					bundle['usage'] = 0
-					try:
-						self.am.saveBundleUsage(bundle)
-						print "Bundle "+bundle['name']+" reset."
-					except Exception, e:
-						print "Error while saving bundle: ", e
+				bundle_cost = 0
+				for bundle in cca.getActiveBundlesFromProvider(provider['id']):
+					# Revisamos que aún aplique el paquete:
+					if bundle['end_date'] > today:
+						bundle['usage'] = 0
+						try:
+							self.am.saveBundleUsage(bundle)
+							bundle_cost += bundle['cost']
+							print "Bundle "+bundle['name']+" reset."
+						except Exception, e:
+							print "Error while saving bundle: ", e
+					else:
+						#Ya acabo el paquete, ya no se contabiliza y se desactiva
+						self.am.deactivateBundle(bundle)
 
 				sql = "INSERT INTO tarifica_providermonthlydetail \
 				(provider_id, call_cost, bundle_cost, total_calls, total_minutes, date_start, date_end) \
@@ -236,7 +244,7 @@ class Digester:
 				totalRowsSaved = self.am.cursor.executemany(sql, 
 					data['provider'],
 					data['call_cost'],
-					0,
+					bundle_cost,
 					data['total_calls'],
 					data['total_minutes'],
 					date_start,
@@ -249,7 +257,7 @@ class Digester:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=13)
+	week = week - datetime.timedelta(days=0)
 	print week
 	d = Digester()
 	d.saveProviderMonthlyCost()
