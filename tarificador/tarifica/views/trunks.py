@@ -8,7 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
-from tarifica.views.general import dictfetchall
 from dateutil.relativedelta import *
 import json
 from csv import *
@@ -50,34 +49,23 @@ def general(request, period_id="thisMonth"):
     monthUsage = 0
     thisBillingPeriod = 0
     for p in providers:
-        bundlesCost = getBundlesCost(p.id)
-        if bundlesCost[0]['cost'] is None:
-            bundlesCost[0]['cost'] = 0
+        # Obtenemos los periodos de cobro:
         billingPeriods = getBillingPeriods(p)
-        thisBillingPeriod = billingPeriods[0]['data'][0]['total_cost']
-        if thisBillingPeriod is None :
-            thisBillingPeriod = 0
-        thisBillingPeriod += bundlesCost[0]['cost']
-        total_cost = 0
+        thisBillingPeriod = billingPeriods[0]
         current_interval_cost = getTrunkCurrentIntervalCost(p.id, start_date, end_date)[0]['total_cost']
         if current_interval_cost is None:
             current_interval_cost = 0
-        if bundlesCost[0]['cost'] is None:
-            bundlesCost[0]['cost'] = 0
         total_cost = bundlesCost[0]['cost'] + current_interval_cost
         
         graph_data = []
         for b in billingPeriods:
             if not ticksAssigned:
-                providersGraphsTicks.append(b['date_end'].strftime('%B'))
-            if b['data'][0]['total_cost'] is not None:
-                averageMonthlyCost += b['data'][0]['total_cost']
-                #Agregamos tambien la informacion pa las graphs
-                graph_data.append(b['data'][0]['total_cost'])
-            else:
-                graph_data.append(0.0)
+                providersGraphsTicks.append(b['date_start'].strftime('%b')+" - "+b['date_end'].strftime('%b'))
 
-        ticksAssigned = True
+            averageMonthlyCost += b['data'][0]['total_cost']
+            #Agregamos tambien la informacion pa las graphs
+            graph_data.append(b['data'][0]['total_cost'])
+            ticksAssigned = True
 
         providersGraphs.append({
             'provider_id': p.id,
@@ -173,8 +161,14 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
         else:
             minutes = 0
 
-        cost_graph.append([b['date_start'].strftime('%B'), cost ])
-        minutes_graph.append([b['date_start'].strftime('%B'), minutes ])
+        cost_graph.append([
+            b['date_start'].strftime('%b')+" - "+b['date_end'].strftime('%b'),
+            cost 
+        ])
+        minutes_graph.append([
+            b['date_start'].strftime('%b')+" - "+b['date_end'].strftime('%b'),
+            minutes
+        ])
 
     averageMonthlyCost = averageMonthlyCost / len(billingPeriods)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
@@ -217,7 +211,8 @@ def getTrunkCDR(provider_id, start_date, end_date):
         WHERE tarifica_providerdailydetail.provider_id = %s \
         AND date > %s AND date < %s"
     cursor.execute(sql, (provider_id, start_date, end_date))
-    return dictfetchall(cursor)
+    result = dictfetchall(cursor)
+    return result[0]
 
 def getProviderDestinationCDR(provider_id, start_date, end_date):
     cursor = connection.cursor()
@@ -289,6 +284,19 @@ def getBillingPeriods(provider):
             'date_end': endCurrentBillingPeriod,
             'data': getTrunkCDR(provider.id, startCurrentBillingPeriod, endCurrentBillingPeriod)
         }
+
+        # Adding bundle costs to each month
+        bundleCosts = getBundlesCost(provider.id)
+        if bundleCosts['cost'] is None:
+            bundleCosts['cost'] = 0
+        if billingPeriodData['data']['total_cost'] is None:
+            billingPeriodData['data']['total_cost'] = 0
+        if billingPeriodData['data']['total_minutes'] is None:
+            billingPeriodData['data']['total_minutes'] = 0
+        if billingPeriodData['data']['total_calls'] is None:
+            billingPeriodData['data']['total_calls'] = 0
+        billingPeriodData['data']['total_cost'] += bundleCosts['cost']
+        
         billingPeriods.append(billingPeriodData)
     return billingPeriods
 
@@ -318,7 +326,8 @@ def getBundlesCost(provider_id):
         ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
         WHERE tarifica_destinationgroup.provider_id = %s "
     cursor.execute(sql, (provider_id))
-    return dictfetchall(cursor)
+    results = dictfetchall(cursor)
+    return results[0]
 
 def downloadTrunkCDR(request, provider_id, start_date, end_date):
     file_path = '/opt/NEXTOR/tarificador/django-tarificador/tarificador'
@@ -347,3 +356,10 @@ def downloadTrunkCDR(request, provider_id, start_date, end_date):
     response = HttpResponse(my_data, content_type='application/csv')
     response['Content-Disposition'] = 'attachment; filename="file_path + file_name"'
     return response
+
+def dictfetchall(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]

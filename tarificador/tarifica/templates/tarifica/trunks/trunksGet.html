@@ -245,16 +245,16 @@
                 },
                 x2axis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
-                    min:0
+                    min:0,
                 },
                 yaxis: {
                     autoscale:true,
-                    label:'Cost ({{ user_info.currency_code }})'
+                    tickOptions: {formatString: '$%d {{ user_info.currency_code }}'},
                 },
                 y2axis: {
                     autoscale:true,
                     min:0,
-                    label:'Minutes'
+                    tickOptions: {formatString: '%d min.'},
                 }
             }
         });

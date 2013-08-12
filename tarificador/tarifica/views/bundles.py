@@ -1,5 +1,7 @@
 #Views for bundles
 
+from django.utils.timezone import utc
+import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica import forms
@@ -16,21 +18,30 @@ def createBundle(request, destination_group_id):
             tariff_mode = TariffMode.objects.get(id=form.cleaned_data['tariff_mode'])
             cost = form.cleaned_data['cost']
             amount = form.cleaned_data['amount']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            priority = form.cleaned_data['priority']
             destination_group.has_bundles=True
             destination_group.save()
-            priority = form.cleaned_data['priority']
             b = Bundle(
                 priority = priority,
                 name=name,
                 destination_group=destination_group,
                 tariff_mode=tariff_mode,
                 cost=cost,
-                amount=amount
+                amount=amount,
+                start_date=start_date,
+                end_date=end_date
                 )
             b.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
     else:
-        form = forms.createBundle() # An unbound form
+        start_date = datetime.datetime.utcnow().replace(tzinfo=utc)
+        end_date = start_date + datetime.timedelta(weeks=104)
+        form = forms.createBundle(initial={
+            'start_date': start_date,
+            'end_date': end_date
+        }) # An unbound form
 
     return render(request, 'tarifica/bundles/bundleCreate.html', {
         'form': form,
@@ -49,6 +60,7 @@ def updateBundle(request, bundle_id):
             b.cost = form.cleaned_data['cost']
             b.amount = form.cleaned_data['amount']
             b.priority = form.cleaned_data['priority']
+            b.end_date = form.cleaned_data['end_date']
             b.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
     else:
@@ -59,6 +71,8 @@ def updateBundle(request, bundle_id):
          'cost': b.cost,
          'amount': b.amount,
          'priority': b.priority,
+         'start_date': b.start_date,
+         'end_date': b.end_date,
         }) # An unbound form
 
     return render(request, 'tarifica/bundles/bundleUpdate.html', {

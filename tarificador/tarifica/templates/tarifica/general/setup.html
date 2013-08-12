@@ -139,7 +139,7 @@
         <h4><strong>Configured Tariffs</strong></h4>
         <ul class="nav nav-tabs">
             {% for prov in configured %}
-                <li><a href="#{{ prov.id }}" data-toggle="tab">{{ prov.name }}</a></li>
+                <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ prov.id }}" data-toggle="tab">{{ prov.name }}</a></li>
             {% endfor %}
         </ul>
         <div class="tab-content">

@@ -5,6 +5,7 @@ from __future__ import division
 from asteriskMySQLManager import AsteriskMySQLManager
 from assignCallCost import getStartOfDay, getEndOfDay
 import datetime
+from dateutil.relativedelta import *
 
 class Digester:
 	am = None
@@ -196,15 +197,64 @@ class Digester:
 		print "----------------------------------------"
 		print "Provider Destination Detail saved:", totalRowsSaved
 
+	def saveProviderMonthlyCost(self):
+		today = datetime.datetime.today()
+		for provider in self.am.getAllConfiguredProviders():
+			if provider['period_end'] == today.day:
+				print "End date of provider", provider['name']
+				# Definimos inicio y fin:
+				# Inicio: today - 1 month
+				start_date = today - relativedelta(months=1)
+				# Fin: today - 1 day
+				end_date = today - timedelta(days=1)
+				# Obtenemos totales:
+				callDetail = []	
+				self.am.connect('nextor_tarificador')
+				sql = "SELECT SUM(tarifica_call.cost) as call_cost, \
+					SUM(tarifica_call.duration) as total_minutes, \
+					COUNT(tarifica_call.id) as total_calls, \
+					tarifica_call.provider_id as provider \
+					FROM tarifica_call \
+					WHERE date > %s AND date < %s \
+					WHERE tarifica_call.provider_id = %s"
+				self.am.cursor.execute(sql, (start_date, end_date, provider['id']))
+				data = self.am.cursor.fetchall()
+
+				# Revisamos paquetes y reseteamos:
+				for bundle in self.am.getAllBundlesFromProvider(provider['id']):
+					# Revisamos que aún aplique el paquete
+					bundle['usage'] = 0
+					try:
+						self.am.saveBundleUsage(bundle)
+						print "Bundle "+bundle['name']+" reset."
+					except Exception, e:
+						print "Error while saving bundle: ", e
+
+				sql = "INSERT INTO tarifica_providermonthlydetail \
+				(provider_id, call_cost, bundle_cost, total_calls, total_minutes, date_start, date_end) \
+				VALUES(%s, %s, %s, %s, %s, %s, %s)"
+				totalRowsSaved = self.am.cursor.executemany(sql, 
+					data['provider'],
+					data['call_cost'],
+					0,
+					data['total_calls'],
+					data['total_minutes'],
+					date_start,
+					date_end,
+				)
+				self.am.db.commit()
+				print "----------------------------------------"
+				print "Provider Monthly Detail saved:", totalRowsSaved
 
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=7)
+	week = week - datetime.timedelta(days=13)
 	print week
 	d = Digester()
-	d.saveUserDailyDetail(week)
-	d.saveUserDestinationDetail(week)
-	d.saveUserDestinationNumberDetail(week)
-	d.saveProviderDailyDetail(week)
-	d.saveProviderDestinationDetail(week)
+	d.saveProviderMonthlyCost()
+	#d.saveUserDailyDetail(week)
+	#d.saveUserDestinationDetail(week)
+	#d.saveUserDestinationNumberDetail(week)
+	#d.saveProviderDailyDetail(week)
+	#d.saveProviderDestinationDetail(week)

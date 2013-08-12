@@ -206,6 +206,8 @@ class CallCostAssigner:
 							if appliedToBundle:
 								break
 
+							if b['usage'] is None:
+								b['usage'] = 0
 							#Si el bundle actual ya se agotó, seguimos
 							if b['usage'] == b['amount']:
 								print "Bundle",b['name'],"usage has reached its limit."
