@@ -211,23 +211,23 @@ class Digester:
 				# Obtenemos totales:
 				callDetail = []	
 				self.am.connect('nextor_tarificador')
-				sql = "SELECT SUM(tarifica_call.cost) as call_cost, \
-					SUM(tarifica_call.duration) as total_minutes, \
-					COUNT(tarifica_call.id) as total_calls, \
-					tarifica_call.provider_id as provider \
-					FROM tarifica_call \
-					WHERE tarifica_call.provider_id = %s \
+				sql = "SELECT SUM(tarifica_providerdailydetail.cost) as call_cost, \
+					SUM(tarifica_providerdailydetail.total_minutes) as total_minutes, \
+					SUM(tarifica_providerdailydetail.total_calls) as total_calls \
+					FROM tarifica_providerdailydetail \
+					WHERE tarifica_providerdailydetail.provider_id = %s \
 					AND date > %s AND date < %s"
 				self.am.cursor.execute(sql, (provider['id'], start_date, end_date))
 				data = self.am.cursor.fetchall()[0]
+				print data
 
 				# Revisamos paquetes y reseteamos:
 				bundle_cost = 0
 				for bundle in cca.getActiveBundlesFromProvider(provider['id']):
 					# Revisamos que aún aplique el paquete:
-					if not bundle['start_date'] > start_date.date():
-						# El paquete ya comenzó a aplicarse
-						if bundle['end_date'] > today.date():
+					if bundle['start_date'] <= today:
+						# El paquete ya comenzó a aplicarse (aplica a este periodo)
+						if bundle['end_date'] > today:
 							#... y no termina hoy
 							bundle['usage'] = 0
 							cca.saveBundleUsage(bundle)
@@ -236,6 +236,8 @@ class Digester:
 						else:
 							#Ya acabo el paquete, ya no se contabiliza y se desactiva
 							self.am.deactivateBundle(bundle)
+					else:
+						print "Bundle must not be applied yet."
 
 				if data['call_cost'] is None:
 					data['call_cost'] = 0
@@ -248,7 +250,7 @@ class Digester:
 				(provider_id, call_cost, bundle_cost, total_calls, total_minutes, date_start, date_end) \
 				VALUES(%s, %s, %s, %s, %s, %s, %s)"
 				args = (
-					data['provider'],
+					provider['id'],
 					data['call_cost'],
 					bundle_cost,
 					data['total_calls'],
@@ -267,7 +269,9 @@ if __name__ == '__main__':
 	week = week + datetime.timedelta(days=0)
 	print week
 	d = Digester()
-	d.saveProviderMonthlyCost(week)
+	today = datetime.today()
+	today = today + datetime.timedelta(days=0)
+	d.saveProviderMonthlyCost(today)
 	#d.saveUserDailyDetail(week)
 	#d.saveUserDestinationDetail(week)
 	#d.saveUserDestinationNumberDetail(week)
