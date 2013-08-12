@@ -5,8 +5,13 @@
 {% block content %}
 
 <div class="row-fluid well well-small">
-    <div class="span12">
+    <div class="span10">
         <h4>Add base tariff to provider {{provider.name}}</h4>
+    </div>
+    <div class="span2">
+        <a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
+            Return to setup
+        </a>
     </div>
 </div>
 
@@ -123,11 +128,5 @@
     </div>
 </div>
 
-<div class="well well-small">
-    <p>
-        <a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
-            Return to setup
-        </a>
-    </p>
-</div>
+
 {% endblock %}

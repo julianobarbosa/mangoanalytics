@@ -170,14 +170,14 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
     custom = False
     timedelta = datetime.timedelta(days = 1)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1)
     start_date_month = start_date
     end_date_month = end_date
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
         end_date = datetime.date(year=today.year, month=today.month, day=1)
-        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
+        start_date = datetime.date(year=t.year, month=t.month, day=1)
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
@@ -211,6 +211,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
     for cost in all_calls:
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
+    year_data = getBarChartInfoByExtForYear(cursor, Ext.id)
     return render(request, 'tarifica/users/analyticsUsers.html', {
               'user_info' : user_info,
               'all_calls' : all_calls,
@@ -220,6 +221,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
               'form': form,
               'extension' : Ext,
               'data' : json.dumps(data),
+              'year_data' : json.dumps(year_data),
               })
 
 def dictfetchall(cursor):
@@ -406,32 +408,33 @@ def getBarChartInfoByLocale(cursor, extension_id):
 
 
 
-def getBarChartInfoByExtForYear(cursor, extension_id, start_date, end_date):
+def getBarChartInfoByExtForYear(cursor, extension_id):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    start_date = datetime.datetime(day = 1, month=1, year=today.year).replace(tzinfo=utc)
+    end_date = datetime.datetime(day=monthrange(today.year, today.month)[1], month=today.month, year=today.year).replace(tzinfo=utc)
     data = []
     aux = []
     aux.append("Cost")
     data.append(aux)
     aux = []
-    sdate = start_date
-    fdate = end_date
+    sDate = start_date
     timedelta = datetime.timedelta(days=1)
-    while sdate != fdate :
-        date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
-        print date.isoformat()
+    while sDate.month <= end_date.month :
+        monthDays= monthrange(sDate.year, sDate.month)[1]
+        fDate = datetime.datetime(day=monthDays, month=sDate.month, year = sDate.year).replace(tzinfo=utc)
         cursor.execute(
-            'SELECT SUM(tarifica_userdailydetail.cost) AS cost \
-            FROM tarifica_userdailydetail \
-            WHERE date = %s AND extension_id = %s ',
-            [date,extension_id])
-        day = dictfetchall(cursor)
-        if day[0]['cost'] is None:
-            aux.append([sdate.day, 0])
+            'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost \
+            FROM tarifica_userdailydetail WHERE date >= %s AND date <= %s AND extension_id = %s ',
+            [sDate, fDate ,extension_id])
+        monthCost = dictfetchall(cursor)
+        month = getMonthName(sDate.month)
+        if monthCost[0]['cost'] is None:
+            aux.append([month, 0])
         else:
-            aux.append([sdate.day, day[0]['cost']])
-        print day
-        data.append(aux)
-        sdate += timedelta
+            aux.append([month, monthCost[0]['cost']])
+        print aux
+        sDate = datetime.datetime(day=1, month=fDate.month+1, year=fDate.year).replace(tzinfo=utc)
+    data.append(aux)
     return data
 
 
