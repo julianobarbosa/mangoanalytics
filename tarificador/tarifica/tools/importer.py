@@ -85,11 +85,19 @@ def deleteAllProviderDestinationDetail():
     am.db.commit()
     return am.db.close()
 
-# This file processes two month's worth of data, using assignCallCost and Digester
+def deleteAllProviderMonthlyDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_providermonthlydetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+# This file processes from january first's worth of data, using assignCallCost and Digester
 # We go six months back... back in time!
 
 today = date.today()
-six_months_back = today - timedelta(days = 190) # Half a year
+start = date(year = today.year, month=1, day=1)
 cca = CallCostAssigner()
 dig = Digester()
 calls_saved = 0
@@ -109,25 +117,30 @@ else:
     deleteAllUserDestinationDetail()
     deleteAllUserDestinationNumberDetail()
     deleteAllProviderDailyDetail()
+    deleteAllProviderMonthlyDetail()
     deleteAllProviderDestinationDetail()
 print "Deleted all previous data."
 
-while six_months_back != today:
-    print "Digesting data from", six_months_back.strftime('%Y-%m-%d')
+while start != today:
+    print "Digesting data from", start.strftime('%Y-%m-%d')
     
+    if not testRun:
+        # Check if it's the end date of providers:
+        dig.saveProviderMonthlyCost(start)
+
     # Assign call costs to selected day
-    result = cca.getDailyAsteriskCalls(six_months_back)
+    result = cca.getDailyAsteriskCalls(start)
     calls_saved += result['total_calls_saved']
     calls_not_saved += result['total_calls_not_saved']
     
     if not testRun:    
-        dig.saveUserDailyDetail(six_months_back)
-        dig.saveUserDestinationDetail(six_months_back)
-        dig.saveUserDestinationNumberDetail(six_months_back)
-        dig.saveProviderDailyDetail(six_months_back)
-        dig.saveProviderDestinationDetail(six_months_back)
+        dig.saveUserDailyDetail(start)
+        dig.saveUserDestinationDetail(start)
+        dig.saveUserDestinationNumberDetail(start)
+        dig.saveProviderDailyDetail(start)
+        dig.saveProviderDestinationDetail(start)
 
-    six_months_back = six_months_back + timedelta(days = 1)
+    start = start + timedelta(days = 1)
 
 print saveImportFinishStatus()
 if testRun:

@@ -250,6 +250,9 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Provider</th>
+                    <th>Destination</th>
+                    <th>Amount</th>
                     <th>Cost ({{ user_info.currency_code }})</th>
                     <th>Apply priority</th>
                 </tr>
@@ -258,6 +261,9 @@
                 {% for bun in bundles %}
                 <tr>
                     <td>{{bun.name}}</td>
+                    <td>{{bun.destination_group.provider.name}}</td>
+                    <td>{{bun.destination_group.destination_name.name}}</td>
+                    <td>{{bun.amount}} {{bun.tariff_mode.name}}s</td>
                     <td>{{ user_info.currency_symbol }}{{bun.cost|floatformat:2}}</td>
                     <td>{{bun.priority}}</td>
                     <td><a href="{% url 'tarifica:bundles_update' bun.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Edit">

@@ -28,14 +28,14 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (destination_group_id,))
 		return self.am.cursor.fetchall()
 
-	def getAllBundlesFromProvider(self, provider_id):
+	def getActiveBundlesFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_bundle \
 			LEFT JOIN tarifica_destinationgroup \
 			ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
 			WHERE tarifica_destinationgroup.provider_id = %s AND \
 			tarifica_bundle.is_active = %s"
-		self.am.cursor.execute(sql, (provider_id,))
+		self.am.cursor.execute(sql, (provider_id, True))
 		return self.am.cursor.fetchall()
 
 	def getAllConfiguredProviders(self):
@@ -69,7 +69,6 @@ class CallCostAssigner:
 		print "Script running on day "+getStartOfDay(date)+"."
 		# Obtenemos las extensiones configuradas:
 		extensions = self.am.getUserInformation()
-		self.resetBundleUsage()
 		self.am.connect('asteriskcdrdb')
 		sql = "SELECT * from cdr WHERE callDate > %s AND callDate < %s AND lastapp = %s \
 		AND disposition = %s"
@@ -116,6 +115,12 @@ class CallCostAssigner:
 		WHERE tarifica_bundle.id = %s"
 		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
 
+	def deactivateBundle(self, bundle):
+		self.am.connect('nextor_tarificador')
+		sql = "UPDATE tarifica_bundle SET tarifica_bundle.is_active = %s \
+		WHERE tarifica_bundle.id = %s"
+		self.am.cursor.execute(sql, (False, bundle['id']))
+
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_call \
@@ -132,18 +137,6 @@ class CallCostAssigner:
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
-
-	def resetBundleUsage(self):
-		today = datetime.datetime.today()
-		for provider in self.getAllConfiguredProviders():
-			if provider['period_end'] == today.day:
-				for bundle in self.getAllBundlesFromProvider(provider['id']):
-					bundle['usage'] = 0
-					try:
-						self.saveBundleUsage(bundle)
-						print "Bundle "+bundle['name']+" reset."
-					except Exception, e:
-						print "Error while saving bundle: ", e
 
 	def assignCost(self, call):
 		#Obtenemos la informacion necesaria:
@@ -205,6 +198,10 @@ class CallCostAssigner:
 						for b in bundles:
 							#Si ya se aplicó, salimos
 							if appliedToBundle:
+								break
+
+							#Si el paquete no está activo, salimos:
+							if not b['is_active']:
 								break
 
 							if b['usage'] is None:

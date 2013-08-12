@@ -56,6 +56,19 @@
         </div>
     </div>
     <div class="control-group">
+        {{ form.start_date.errors }}
+        <label class="control-label" for="id_start_date">Start Date</label>
+        <div class="controls">
+            <div id="start_date_datepicker" class="input-append">
+                {{ form.start_date }}
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                </span>
+            </div>
+            <span class="help-inline">Date when your provider begins applying this bundle.</span>
+        </div>
+    </div>
+    <div class="control-group">
         {{ form.end_date.errors }}
         <label class="control-label" for="id_end_date">End Date</label>
         <div class="controls">
