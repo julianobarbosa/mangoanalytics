@@ -129,7 +129,7 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     custom = False
     last_month = False
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
@@ -179,7 +179,11 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     averageMonthlyCost = averageMonthlyCost / len(billingPeriods)
     currentPeriodCost = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
 
+    print provider.id
+    print start_date
+    print end_date
     destinationInfo = getProviderDestinationCDR(provider.id, start_date, end_date)
+    print destinationInfo
     destinationGraph = []
     for d in destinationInfo:
         destinationGraph.append([d['destination_name'], d['total_cost']])
