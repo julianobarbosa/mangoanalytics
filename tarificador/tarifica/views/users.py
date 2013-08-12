@@ -109,7 +109,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date'] - timedelta
+                start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
     #print start_date.isoformat()
@@ -314,18 +314,19 @@ def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
     timedelta = datetime.timedelta(days=1)
     while sdate != fdate :
         date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
-        print date.isoformat()
+        #print date.isoformat()
         cursor.execute(
             'SELECT SUM(tarifica_userdailydetail.cost) AS cost \
             FROM tarifica_userdailydetail \
             WHERE date = %s AND extension_id = %s ',
             [date,extension_id])
         day = dictfetchall(cursor)
+        sday = date.strftime('%d/%b')
         if day[0]['cost'] is None:
-            aux.append([sdate.day, 0])
+            aux.append([sday, 0])
         else:
-            aux.append([sdate.day, day[0]['cost']])
-        print day
+            aux.append([sday, day[0]['cost']])
+        #print day
         data.append(aux)
         sdate += timedelta
     return data
