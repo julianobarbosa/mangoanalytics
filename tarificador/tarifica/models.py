@@ -52,6 +52,9 @@ class Bundle(models.Model):
     usage = models.IntegerField(blank=True, null=True)
     amount = models.IntegerField()
     priority = models.IntegerField()
+    is_active = models.BooleanField(default=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
 
 class Call(models.Model):
     dialed_number = models.CharField(max_length = 255)
@@ -98,6 +101,15 @@ class ProviderDailyDetail(models.Model):
     total_calls = models.IntegerField()
     total_minutes = models.IntegerField()
     date = models.DateField()
+
+class ProviderMonthlyDetail(models.Model):
+    provider = models.ForeignKey(Provider, blank=True, null=True)
+    call_cost = models.FloatField()
+    bundle_cost = models.FloatField()
+    total_calls = models.IntegerField()
+    total_minutes = models.IntegerField()
+    date_start = models.DateField()
+    date_end = models.DateField()
 
 class ProviderDestinationDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)

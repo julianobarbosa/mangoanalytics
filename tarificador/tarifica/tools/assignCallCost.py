@@ -33,7 +33,8 @@ class CallCostAssigner:
 		sql = "SELECT * from tarifica_bundle \
 			LEFT JOIN tarifica_destinationgroup \
 			ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
-			WHERE tarifica_destinationgroup.provider_id = %s"
+			WHERE tarifica_destinationgroup.provider_id = %s AND \
+			tarifica_bundle.is_active = %s"
 		self.am.cursor.execute(sql, (provider_id,))
 		return self.am.cursor.fetchall()
 
@@ -206,6 +207,8 @@ class CallCostAssigner:
 							if appliedToBundle:
 								break
 
+							if b['usage'] is None:
+								b['usage'] = 0
 							#Si el bundle actual ya se agotó, seguimos
 							if b['usage'] == b['amount']:
 								print "Bundle",b['name'],"usage has reached its limit."

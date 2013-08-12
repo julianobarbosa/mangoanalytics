@@ -1,5 +1,7 @@
 #coding=UTF-8
 from django import forms
+from django.utils.timezone import utc
+import datetime
 from tarifica.django_countries.countries import COUNTRIES
 from tarifica.models import PaymentType, TariffMode, DestinationGroup, DestinationName
 
@@ -53,7 +55,36 @@ class createBundle(forms.Form):
     priority = forms.IntegerField(error_messages={
                             'required':u'Por favor proporciona la prioridad del paquete en cuestión',
                             'invalid':'Por favor proporciona un entero válido'})
+    start_date = forms.DateField(error_messages={
+        'required':'Please input a start date.',
+        'invalid':'Please input a valid date.'
+    })
+    end_date = forms.DateField(error_messages={
+        'required':'Please input a start date.',
+        'invalid':'Please input a valid date.'
+    })
 
+    def clean_start_date(self):
+        data = self.cleaned_data['start_date']
+        today = datetime.datetime.utcnow().replace(tzinfo=utc)
+        today = today - datetime.timedelta(days=1)
+        if data < today.date():
+            raise forms.ValidationError("Start date must be equal or later than today.")
+
+        # Always return the cleaned data, whether you have changed it or
+        # not.
+        return data
+
+    def clean_end_date(self):
+        data = self.cleaned_data['end_date']
+        try:
+            start = self.cleaned_data['start_date']
+        except Exception, e:
+            raise forms.ValidationError("Start date must be valid to validate end date.")
+        if data < start:
+            raise forms.ValidationError("End date must be later than selected start date.")
+
+        return data
 
 class getDate(forms.Form):
     start_date = forms.DateField(label = 'Fecha inicial', error_messages={

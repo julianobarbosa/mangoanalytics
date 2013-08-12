@@ -9,6 +9,7 @@ from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
 import json
+from tarifica.views.trunks import getBillingPeriods, dictfetchall
 
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -117,6 +118,9 @@ def dashboard(request):
     provider_daily_costs = []
     total_cost = 0
     providers = Provider.objects.filter(is_configured=True)
+    general_6_month_graph = []
+    ticks = []
+    ticksAssigned = False
     for prov in providers:
         detail = ProviderDailyDetail.objects.filter(date__range=(start_date,end_date)).filter(provider = prov)
         provider_total_cost = 0
@@ -124,6 +128,24 @@ def dashboard(request):
             provider_total_cost = e.cost + provider_total_cost
         provider_daily_costs.append((prov,provider_total_cost))
         total_cost += provider_total_cost
+
+        provider_data = getBillingPeriods(prov)
+        cost_data = []
+        for p in provider_data:
+            print p
+            cost_data.append(p['data']['total_cost'])
+
+            if not ticksAssigned:
+                ticks.append(p['date_start'].strftime('%b')+" - "+p['date_end'].strftime('%b'))
+            
+        ticksAssigned = True
+
+        general_6_month_graph.append({
+            'provider': prov.name, 
+            'cost': cost_data
+        })
+
+
     sql = "SELECT tarifica_providerdestinationdetail.id, \
         SUM(tarifica_providerdestinationdetail.cost) AS cost, \
         tarifica_destinationname.name as destination_name, \
@@ -157,7 +179,9 @@ def dashboard(request):
         'total_cost' : total_cost,
         'provider_daily_costs' : provider_daily_costs,
         'locales' : locales,
-        'extensions' : extensions
+        'extensions' : extensions,
+        'general_6_month_graph': json.dumps(general_6_month_graph),
+        'ticks': json.dumps(ticks),
     })
 
 

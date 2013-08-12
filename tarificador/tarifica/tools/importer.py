@@ -89,7 +89,7 @@ def deleteAllProviderDestinationDetail():
 # We go six months back... back in time!
 
 today = date.today()
-six_months_back = today - timedelta(days = 140) # One more just if
+six_months_back = today - timedelta(days = 190) # Half a year
 cca = CallCostAssigner()
 dig = Digester()
 calls_saved = 0
@@ -104,6 +104,7 @@ if testRun:
         deleteAllUnconfiguredCalls()
 else:   
     deleteAllCalls()
+    deleteAllUnconfiguredCalls()
     deleteAllUserDailyDetail()
     deleteAllUserDestinationDetail()
     deleteAllUserDestinationNumberDetail()

@@ -1,4 +1,11 @@
 {% extends "setup.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
+    <link href="{% static "tarifica/css/jquery.jqplot.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}Update bundle {{ bundle.name }}{% endblock %}
 
@@ -6,7 +13,7 @@
 
 <div class="row-fluid well well-small">
     <div class="span12">
-        <h4>Updating bundle {{ bundle.name }} of {{ destination_group }} </h4>
+        <h4>Updating bundle {{ bundle.name }} of destination {{ destination_group }} </h4>
     </div>
 </div>
 
@@ -49,6 +56,19 @@
         </div>
     </div>
     <div class="control-group">
+        {{ form.end_date.errors }}
+        <label class="control-label" for="id_end_date">End Date</label>
+        <div class="controls">
+            <div id="end_date_datepicker" class="input-append">
+                {{ form.end_date }}
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                </span>
+            </div>
+            <span class="help-inline">By default, each bundle has a life span of 2 years. If you know, however, that this bundle lasts only for a fixed amount of months, select an end date here.</span>
+        </div>
+    </div>
+    <div class="control-group">
         {{ form.priority.errors }}
         <label class="control-label" for="id_amount">Priority</label>
         <div class="controls">
@@ -62,4 +82,24 @@
     </div>
 </form>
 
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#start_date_datepicker').datetimepicker({
+            pickTime: false,
+            format: 'yyyy-MM-dd',
+        });
+    });
+
+    $(function() {
+        $('#end_date_datepicker').datetimepicker({
+            pickTime: false,
+            format: 'yyyy-MM-dd',
+        });
+    });
+    </script>
 {% endblock %}
