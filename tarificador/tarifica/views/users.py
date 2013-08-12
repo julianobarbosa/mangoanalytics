@@ -405,6 +405,37 @@ def getBarChartInfoByLocale(cursor, extension_id):
 
 
 
+def getBarChartInfoByExtForYear(cursor, extension_id, start_date, end_date):
+    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    data = []
+    aux = []
+    aux.append("Cost")
+    data.append(aux)
+    aux = []
+    sdate = start_date
+    fdate = end_date
+    timedelta = datetime.timedelta(days=1)
+    while sdate != fdate :
+        date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
+        print date.isoformat()
+        cursor.execute(
+            'SELECT SUM(tarifica_userdailydetail.cost) AS cost \
+            FROM tarifica_userdailydetail \
+            WHERE date = %s AND extension_id = %s ',
+            [date,extension_id])
+        day = dictfetchall(cursor)
+        if day[0]['cost'] is None:
+            aux.append([sdate.day, 0])
+        else:
+            aux.append([sdate.day, day[0]['cost']])
+        print day
+        data.append(aux)
+        sdate += timedelta
+    return data
+
+
+
+
 def getMonthName(n):
     if n == 1:
         return "January"
