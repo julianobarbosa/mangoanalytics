@@ -88,46 +88,48 @@
         </form>
     </div>
 
-    <div class="span5 well well-small">
-        <h4>Tariffs configured for provider {{ provider.name }}</h4>
-        <hr>
-        <table class="table table-striped table-condensed table-hovered">
-            <thead>
-                <tr>
-                    <th>Destination</th>
-                    <th>Prefix</th>
-                    <th>Connection Fee</th>
-                    <th>Minute Fee</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for dest in destinations %}
-                <tr>
-                    <td>
-                        <img src="{{ dest.destination_country.flag }}">
-                        {{ dest.destination_name.name }}
-                    </td>
-                    <td>
-                        {% if dest.prefix = "" %}
-                            Default
-                        {% else %}
-                            {{ dest.prefix }}
-                        {% endif %}
-                    </td>
-                    <td>{{ user_info.currency_symbol }}{{ dest.connection_fee }} {{ user_info.currency_code }}</td>
-                    <td>{{ user_info.currency_symbol }}{{ dest.minute_fee }} {{ user_info.currency_code }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+    <div class="span5">
+        <div class="well well-small">
+            <p>
+                <a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
+                    Return to setup
+                </a>
+            </p>
+        </div>
 
-<div class="well well-small">
-    <p>
-        <a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
-            Return to setup
-        </a>
-    </p>
+        <div class="well well-small">
+            <h4>Tariffs configured for provider {{ provider.name }}</h4>
+            <hr>
+            <table class="table table-striped table-condensed table-hovered">
+                <thead>
+                    <tr>
+                        <th>Destination</th>
+                        <th>Prefix</th>
+                        <th>Connection Fee</th>
+                        <th>Minute Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dest in destinations %}
+                    <tr>
+                        <td>
+                            <img src="{{ dest.destination_country.flag }}">
+                            {{ dest.destination_name.name }}
+                        </td>
+                        <td>
+                            {% if dest.prefix = "" %}
+                                Default
+                            {% else %}
+                                {{ dest.prefix }}
+                            {% endif %}
+                        </td>
+                        <td>{{ user_info.currency_symbol }}{{ dest.connection_fee }} {{ user_info.currency_code }}</td>
+                        <td>{{ user_info.currency_symbol }}{{ dest.minute_fee }} {{ user_info.currency_code }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

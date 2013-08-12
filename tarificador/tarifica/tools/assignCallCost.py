@@ -35,7 +35,7 @@ class CallCostAssigner:
 			ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
 			WHERE tarifica_destinationgroup.provider_id = %s AND \
 			tarifica_bundle.is_active = %s"
-		self.am.cursor.execute(sql, (provider_id,))
+		self.am.cursor.execute(sql, (provider_id, True))
 		return self.am.cursor.fetchall()
 
 	def getAllConfiguredProviders(self):
@@ -198,6 +198,10 @@ class CallCostAssigner:
 						for b in bundles:
 							#Si ya se aplicó, salimos
 							if appliedToBundle:
+								break
+
+							#Si el paquete no está activo, salimos:
+							if not b['is_active']:
 								break
 
 							if b['usage'] is None:

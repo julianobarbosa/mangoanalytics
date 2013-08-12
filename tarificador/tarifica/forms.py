@@ -69,7 +69,8 @@ class createBundle(forms.Form):
         today = datetime.datetime.utcnow().replace(tzinfo=utc)
         today = today - datetime.timedelta(days=1)
         if data < today.date():
-            raise forms.ValidationError("Start date must be equal or later than today.")
+            print "Not valid!"
+            #raise forms.ValidationError("Start date must be equal or later than today.")
 
         # Always return the cleaned data, whether you have changed it or
         # not.

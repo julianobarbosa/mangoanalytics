@@ -198,8 +198,7 @@ class Digester:
 		print "----------------------------------------"
 		print "Provider Destination Detail saved:", totalRowsSaved
 
-	def saveProviderMonthlyCost(self):
-		today = datetime.datetime.today()
+	def saveProviderMonthlyCost(self, today=datetime.datetime.today()):
 		cca = CallCostAssigner()
 		for provider in cca.getAllConfiguredProviders():
 			if provider['period_end'] == today.day:
@@ -208,7 +207,7 @@ class Digester:
 				# Inicio: today - 1 month
 				start_date = today - relativedelta(months=1)
 				# Fin: today - 1 day
-				end_date = today - timedelta(days=1)
+				end_date = today - datetime.timedelta(days=1)
 				# Obtenemos totales:
 				callDetail = []	
 				self.am.connect('nextor_tarificador')
@@ -217,39 +216,47 @@ class Digester:
 					COUNT(tarifica_call.id) as total_calls, \
 					tarifica_call.provider_id as provider \
 					FROM tarifica_call \
-					WHERE date > %s AND date < %s \
-					WHERE tarifica_call.provider_id = %s"
-				self.am.cursor.execute(sql, (start_date, end_date, provider['id']))
-				data = self.am.cursor.fetchall()
+					WHERE tarifica_call.provider_id = %s \
+					AND date > %s AND date < %s"
+				self.am.cursor.execute(sql, (provider['id'], start_date, end_date))
+				data = self.am.cursor.fetchall()[0]
 
 				# Revisamos paquetes y reseteamos:
 				bundle_cost = 0
 				for bundle in cca.getActiveBundlesFromProvider(provider['id']):
 					# Revisamos que aún aplique el paquete:
-					if bundle['end_date'] > today:
-						bundle['usage'] = 0
-						try:
-							self.am.saveBundleUsage(bundle)
+					if not bundle['start_date'] > start_date.date():
+						# El paquete ya comenzó a aplicarse
+						if bundle['end_date'] > today.date():
+							#... y no termina hoy
+							bundle['usage'] = 0
+							cca.saveBundleUsage(bundle)
 							bundle_cost += bundle['cost']
 							print "Bundle "+bundle['name']+" reset."
-						except Exception, e:
-							print "Error while saving bundle: ", e
-					else:
-						#Ya acabo el paquete, ya no se contabiliza y se desactiva
-						self.am.deactivateBundle(bundle)
+						else:
+							#Ya acabo el paquete, ya no se contabiliza y se desactiva
+							self.am.deactivateBundle(bundle)
+
+				if data['call_cost'] is None:
+					data['call_cost'] = 0
+				if data['total_calls'] is None:
+					data['total_calls'] = 0
+				if data['total_minutes'] is None:
+					data['total_minutes'] = 0
 
 				sql = "INSERT INTO tarifica_providermonthlydetail \
 				(provider_id, call_cost, bundle_cost, total_calls, total_minutes, date_start, date_end) \
 				VALUES(%s, %s, %s, %s, %s, %s, %s)"
-				totalRowsSaved = self.am.cursor.executemany(sql, 
+				args = (
 					data['provider'],
 					data['call_cost'],
 					bundle_cost,
 					data['total_calls'],
 					data['total_minutes'],
-					date_start,
-					date_end,
+					start_date,
+					end_date
 				)
+				totalRowsSaved = self.am.cursor.execute(sql, args)
 				self.am.db.commit()
 				print "----------------------------------------"
 				print "Provider Monthly Detail saved:", totalRowsSaved
@@ -257,10 +264,10 @@ class Digester:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=0)
+	week = week + datetime.timedelta(days=0)
 	print week
 	d = Digester()
-	d.saveProviderMonthlyCost()
+	d.saveProviderMonthlyCost(week)
 	#d.saveUserDailyDetail(week)
 	#d.saveUserDestinationDetail(week)
 	#d.saveUserDestinationNumberDetail(week)
