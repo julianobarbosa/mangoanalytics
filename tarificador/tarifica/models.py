@@ -52,7 +52,7 @@ class Bundle(models.Model):
     usage = models.IntegerField(blank=True, null=True)
     amount = models.IntegerField()
     priority = models.IntegerField()
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     start_date = models.DateField()
     end_date = models.DateField()
 
