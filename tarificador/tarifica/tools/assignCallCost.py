@@ -66,6 +66,7 @@ class CallCostAssigner:
 			assigned a cost are the only ones saved.
 		"""
 		# Primero revisamos si es el día de corte.
+		self.checkBundles()
 		print "Script running on day "+getStartOfDay(date)+"."
 		# Obtenemos las extensiones configuradas:
 		extensions = self.am.getUserInformation()
@@ -109,11 +110,21 @@ class CallCostAssigner:
 			'total_calls_saved': len(dailyCallDetail),
 		}
 
-	def saveBundleUsage(self, bundle):
+	def checkBundles(self):
+		today=datetime.datetime.today()
+		for provider in self.getAllConfiguredProviders():
+			if provider['period_end'] == today.day:
+				print "End date of provider", provider['name']
+				for bundle in self.getActiveBundlesFromProvider(provider['id']):
+					bundle['usage'] = 0
+					self.saveBundleUsage(bundle['id'], 0)
+					print "Bundle "+bundle['name']+" reset."
+
+	def saveBundleUsage(self, bundle_id, usage):
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s \
 		WHERE tarifica_bundle.id = %s"
-		self.am.cursor.execute(sql, (bundle['usage'], bundle['id']))
+		self.am.cursor.execute(sql, (usage, bundle_id))
 
 	def deactivateBundle(self, bundle):
 		self.am.connect('nextor_tarificador')
@@ -220,7 +231,7 @@ class CallCostAssigner:
 									b['usage'] += ceil(call['billsec'] / 60)
 								print "Usage after: ", b['usage']
 								#Guardamos los cambios
-								self.saveBundleUsage(b)
+								self.saveBundleUsage(b['id'], b['usage'])
 								appliedToBundle = True
 								costAssigned = True
 								save = True
@@ -288,6 +299,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=7)
+	week = week - datetime.timedelta(days=15)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)

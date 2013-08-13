@@ -132,8 +132,7 @@ def dashboard(request):
         provider_data = getBillingPeriods(prov)
         cost_data = []
         for p in provider_data:
-            print p
-            cost_data.append(p['data']['total_cost'])
+            cost_data.append(p['total_cost'])
 
             if not ticksAssigned:
                 ticks.append(p['date_start'].strftime('%b')+" - "+p['date_end'].strftime('%b'))

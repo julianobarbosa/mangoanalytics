@@ -84,10 +84,6 @@
                     <td>{{provider.period_end}} of every month</td>
                 </tr>
                 <tr>
-                    <th>BILLING DUE</th>
-                    <td>{{provider.period_end}}</td>
-                </tr>
-                <tr>
                     <th>PAYMENT TYPE</th>
                     <td>{{provider.payment_type}}</td>
                 </tr>
@@ -99,12 +95,12 @@
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
-                    <th>Billing cycle usage</th>
-                    <td>{{ user_info.currency_symbol }}{{thisBillingPeriod | floatformat:"2"}} {{ user_info.currency_code }}</a></td>
+                    <th>This Month's Usage</th>
+                    <td>{{ user_info.currency_symbol }}{{ this_month_total_usage.total_cost | floatformat:"2"}} {{ user_info.currency_code }}</a></td>
                 </tr>
                 <tr>
-                    <th>Month's usage</th>
-                    <td>{{ user_info.currency_symbol }}{{total_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
+                    <th>Average Usage</th>
+                    <td>{{ user_info.currency_symbol }}{{average_monthly_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
                 </tr>
             </tbody>
         </table>
@@ -135,7 +131,7 @@
             <thead>
                 <tr>
                     <th>BILLING INTERVAL</th>
-                    <th>TOTAL COST {{ user_info.currency_code }}</th>
+                    <th>TOTAL COST</th>
                     <th>TOTAL CALLS</th>
                     <th>TOTAL MINUTES</th>
                 </tr>
@@ -144,24 +140,11 @@
                 {% for b in billingPeriods %}
                     <tr>
                         <td>
-                            <i class="icon-arrow-up"></i> {{ b.date_start }} - <i class="icon-arrow-down"></i> {{ b.date_end }}</td>
-                        {% for d in b.data %}
-                            {% if d.total_cost == None %}
-                            <td>{{ user_info.currency_symbol }}0.00</td>
-                            {% else %}
-                            <td>{{ user_info.currency_symbol }}{{ d.total_cost | floatformat:"2"}}</td>
-                            {% endif %}
-                            {% if d.total_calls == None %}
-                            <td>0</td>
-                            {% else %}
-                            <td>{{ d.total_calls }}</td>
-                            {% endif %}
-                            {% if d.total_minutes == None %}
-                            <td>0</td>
-                            {% else %}
-                            <td>{{ d.total_minutes }}</td>
-                            {% endif %}
-                        {% endfor %}
+                            <i class="icon-arrow-up"></i> {{ b.date_start }} - <i class="icon-arrow-down"></i> {{ b.date_end }}
+                        </td>
+                        <td>{{ user_info.currency_symbol }}{{ b.total_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
+                        <td>{{ b.total_calls }}</td>
+                        <td>{{ b.total_minutes }}</td>
                     </tr>
                     {% endfor %}
             </tbody>
@@ -170,7 +153,7 @@
 </div>
 
 <div class="well well-small">
-    <a class="btn btn-large" href="#">
+    <a class="btn btn-large" href="{% url 'tarifica:trunks_download_cdr' provider_id=provider.id start_date=start_date end_date=end_date %}">
         Download Complete Call Detail Report (CDR)
     </a>
 </div>
