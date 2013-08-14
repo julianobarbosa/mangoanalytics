@@ -68,26 +68,26 @@
             <thead>
                 <tr>
                     <th>Provider</th>
-                    <th>Bundles</th>
-                    <th>Calls</th>
-                    <th>Total</th>
+                    <th>Bundles Cost</th>
+                    <th>Calls Cost</th>
+                    <th>Total Cost</th>
                 </tr>
             </thead>
             <tbody>
                 {% for prov in providers %}
                 <tr>
                     <td>{{prov.provider.name}}</td>
-                    <td>{{ user_info.currency_symbol }}{{ prov.bundlesCost | floatformat:"2" }} {{ user_info.currency_code }}
+                    <td>{{ user_info.currency_symbol }}{{ prov.thisBillingPeriod.total_bundle_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
-                    <td>{{ user_info.currency_symbol }}{{ prov.current_interval_cost | floatformat:"2" }} {{ user_info.currency_code }}
+                    <td>{{ user_info.currency_symbol }}{{ prov.thisBillingPeriod.total_call_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
-                    <td>{{ user_info.currency_symbol }}{{ prov.total_cost | floatformat:"2" }} {{ user_info.currency_code }}
+                    <td>{{ user_info.currency_symbol }}{{ prov.thisBillingPeriod.total_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <h5> Gross consumption as of today {{ user_info.currency_symbol }}{{totalTrunksCost | floatformat:"2"}} {{ user_info.currency_code }}</h5>
+        <h5> Gross consumption as of today {{ user_info.currency_symbol }}{{ total_trunks_month_usage | floatformat:"2"}} {{ user_info.currency_code }}</h5>
     </div>
 
     <div class="span6 well well-small">
@@ -131,12 +131,12 @@
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
-                    <th>Billing cycle usage</th>
-                    <td>{{ user_info.currency_symbol }}{{prov.thisBillingPeriod | floatformat:"2"}} {{ user_info.currency_code }}</a></td>
+                    <th>This Month's Usage</th>
+                    <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_cost | floatformat:"2"}} {{ user_info.currency_code }}</a></td>
                 </tr>
                 <tr>
-                    <th>This Month's usage</th>
-                    <td>{{ user_info.currency_symbol }}{{prov.total_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
+                    <th>Average Usage</th>
+                    <td>{{ user_info.currency_symbol }}{{prov.average_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
                 </tr>
             </tbody>
         </table>

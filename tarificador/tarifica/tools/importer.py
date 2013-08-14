@@ -123,10 +123,6 @@ print "Deleted all previous data."
 
 while start != today:
     print "Digesting data from", start.strftime('%Y-%m-%d')
-    
-    if not testRun:
-        # Check if it's the end date of providers:
-        dig.saveProviderMonthlyCost(start)
 
     # Assign call costs to selected day
     result = cca.getDailyAsteriskCalls(start)
