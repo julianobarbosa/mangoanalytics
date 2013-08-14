@@ -354,7 +354,8 @@ def getBarChartInfoByLocale(cursor, extension_id):
         FROM tarifica_destinationname\
          ORDER BY id')
     users = dictfetchall(cursor)
-    for u in users: aux.append(u['name'])
+    n=0
+    for u in users: aux.append([u['name'], n])
     data.append(aux)
     aux = []
     cursor.execute(
@@ -369,8 +370,8 @@ def getBarChartInfoByLocale(cursor, extension_id):
     for n in data[1]: aux.append(0)
     for n in data[1]:
         for u in users:
-            if n == u['name']:
-                aux[u['destid']-1] = u['cost']
+            if n[0] == u['name']:
+                aux[n[1]] = u['cost']
     data.append(aux)
     aux = []
     end_date = datetime.date(year=today.year, month=today.month, day=1)
@@ -387,8 +388,8 @@ def getBarChartInfoByLocale(cursor, extension_id):
     for n in data[1]: aux.append(0)
     for n in data[1]:
         for u in users:
-            if n == u['name']:
-                aux[u['destid']-1] = u['cost']
+            if n[0] == u['name']:
+                aux[n[1]] = u['cost']
     data.append(aux)
     #print aux
     aux = []
@@ -406,9 +407,17 @@ def getBarChartInfoByLocale(cursor, extension_id):
     for n in data[1]: aux.append(0)
     for n in data[1]:
         for u in users:
-            if n == u['name']:
-                aux[u['destid']-1] = u['cost']
+            if n[0] == u['name']:
+                aux[n[1]] = u['cost']
     data.append(aux)
+    aux = []
+    cursor.execute(
+        'SELECT tarifica_destinationname.name , tarifica_destinationname.id\
+        FROM tarifica_destinationname\
+         ORDER BY id')
+    users = dictfetchall(cursor)
+    for u in users: aux.append(u['name'])
+    data[1] = aux
     return data
 
 
