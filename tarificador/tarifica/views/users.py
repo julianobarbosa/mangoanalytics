@@ -99,7 +99,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
     custom = False
     timedelta = datetime.timedelta(days = 1)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1)
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
@@ -120,7 +120,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
         ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id \
+        WHERE date >= %s AND date <= %s AND extension_id = %s GROUP BY destination_group_id \
         ORDER BY cost DESC',
         [start_date,end_date, Ext.id])
     destinations = dictfetchall(cursor)
@@ -130,7 +130,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date > %s AND date < %s AND extension_number = %s ORDER BY dat',
+        WHERE date >= %s AND date <= %s AND extension_number = %s ORDER BY dat',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
     average = 0
@@ -312,7 +312,7 @@ def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
     aux.append("Cost")
     data.append(aux)
     aux = []
-    sdate = start_date + timedelta
+    sdate = start_date
     fdate = end_date
     while sdate != fdate :
         date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
@@ -355,7 +355,9 @@ def getBarChartInfoByLocale(cursor, extension_id):
          ORDER BY id')
     users = dictfetchall(cursor)
     n=0
-    for u in users: aux.append([u['name'], n])
+    for u in users: 
+        aux.append([u['name'], n])
+        n += 1
     data.append(aux)
     aux = []
     cursor.execute(
