@@ -99,7 +99,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
     custom = False
     timedelta = datetime.timedelta(days = 1)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1)
+    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
@@ -306,14 +306,14 @@ def getBarChartInfoByExt(cursor):
 
 def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    timedelta = datetime.timedelta(days=1)
     data = []
     aux = []
     aux.append("Cost")
     data.append(aux)
     aux = []
-    sdate = start_date
+    sdate = start_date + timedelta
     fdate = end_date
-    timedelta = datetime.timedelta(days=1)
     while sdate != fdate :
         date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
         #print date.isoformat()
@@ -329,8 +329,8 @@ def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
         else:
             aux.append([sday, day[0]['cost']])
         #print day
-        data.append(aux)
         sdate += timedelta
+    data.append(aux)
     return data
 
 
@@ -358,8 +358,8 @@ def getBarChartInfoByLocale(cursor, extension_id):
     data.append(aux)
     aux = []
     cursor.execute(
-        'SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
-        tarifica_destinationgroup.id AS destid \
+        'SELECT SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
         ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
@@ -367,16 +367,17 @@ def getBarChartInfoByLocale(cursor, extension_id):
         [start_date,end_date,extension_id])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
-    for u in users:
-        aux[u['destid']-1] = u['cost']
+    for n in data[1]:
+        for u in users:
+            if n == u['name']:
+                aux[u['destid']-1] = u['cost']
     data.append(aux)
-    #print aux
     aux = []
     end_date = datetime.date(year=today.year, month=today.month, day=1)
     start_date = datetime.date(year=t1.year, month=t1.month, day=1) - timedelta
     cursor.execute(
-        'SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
-        tarifica_destinationgroup.id AS destid \
+        'SELECT SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
         ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
@@ -384,16 +385,18 @@ def getBarChartInfoByLocale(cursor, extension_id):
         [start_date,end_date,extension_id])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
-    for u in users:
-        aux[u['destid']-1] = u['cost']
+    for n in data[1]:
+        for u in users:
+            if n == u['name']:
+                aux[u['destid']-1] = u['cost']
     data.append(aux)
     #print aux
     aux = []
     end_date = datetime.date(year=t1.year, month=t1.month, day=1)
     start_date = datetime.date(year=t2.year, month=t2.month, day=1) - timedelta
     cursor.execute(
-        'SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
-        tarifica_destinationgroup.id AS destid \
+        'SELECT SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
         FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
         ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
@@ -401,8 +404,10 @@ def getBarChartInfoByLocale(cursor, extension_id):
         [start_date,end_date,extension_id])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
-    for u in users:
-        aux[u['destid']-1] = u['cost']
+    for n in data[1]:
+        for u in users:
+            if n == u['name']:
+                aux[u['destid']-1] = u['cost']
     data.append(aux)
     return data
 
