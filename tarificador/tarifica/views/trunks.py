@@ -299,7 +299,7 @@ def getTrunkCalls(provider_id, start_date, end_date):
         LEFT JOIN tarifica_provider \
         ON tarifica_call.provider_id = tarifica_provider.id \
         WHERE tarifica_call.provider_id = %s \
-        AND date >= %s AND date <= %s ORDER BY date"
+        AND date > %s AND date < %s ORDER BY date"
     cursor.execute(sql, (provider_id, start_date, end_date))
     return dictfetchall(cursor)
 
@@ -327,14 +327,13 @@ def downloadTrunkCDR(request, provider_id, start_date, end_date):
     provider = get_object_or_404(Provider, id = provider_id)
     timedelta = datetime.timedelta(days = 1)
     try:
-        start_date = start_date
-        end_date = end_date
+        start_date = start_date.date()
+        end_date = end_date.date()
     except Exception as e:
         print "Error while parsing dates:",e
         return HttpResponseServerError('Error while saving .csv')
 
     call_info = getTrunkCalls(provider_id, start_date, end_date)
-    print call_info
     header = {
         'date': 'Date',
         'dialed_number': 'Dialed Number',
