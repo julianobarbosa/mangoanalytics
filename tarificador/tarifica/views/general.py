@@ -61,7 +61,7 @@ def setup(request, provider_id = 0):
 def realtime(request):
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.today()
     print today
     try:
         process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
@@ -88,7 +88,7 @@ def realtime(request):
                 try:
                     pos = d[3].index(dest.prefix)
                 except ValueError,e :
-                    post = None
+                    pos = None
                 if pos == 0:
                     d[1] = dest
                     break
