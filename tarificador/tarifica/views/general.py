@@ -101,8 +101,12 @@ def realtime(request):
             if not accountedFor:
                 graphData.append([d[1].destination_name.name, 1])
     except Exception as e:
+        print "Exception!: ",e
         data = []
         graphData = []
+
+    print 'data:',data
+    print 'graphData:',graphData
 
     return render(request, 'tarifica/general/realtime.html', {
         'user_info' : user_info,
