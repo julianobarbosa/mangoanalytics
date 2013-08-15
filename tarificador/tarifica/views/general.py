@@ -89,6 +89,7 @@ def realtime(request):
                     post = None
                 if pos == 0:
                     d[1] = dest
+                    break
                 else:
                     continue
             accountedFor = False
