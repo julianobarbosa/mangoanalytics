@@ -96,7 +96,7 @@
             <tbody>
                 {% for d in destinations %}
                 <tr>
-                    <td><img src="{{ d.destination_country.flag }}"></td>
+                    <td><img src="{{ d.destination_country.flag }}"> {{d.destination_country.name}}</td>
                     <td>{{d.destname}}</td>
                     <td>{{ user_info.currency_symbol }}{{d.cost | floatformat:"2"}}</td>
                 </tr>

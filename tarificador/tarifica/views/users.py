@@ -10,6 +10,7 @@ from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
 import json
+from tarifica.django_countries.fields import Country
 
 
 def generalUsers(request, period_id="thisMonth"):
@@ -124,7 +125,10 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         ORDER BY cost DESC',
         [start_date,end_date, Ext.id])
     destinations = dictfetchall(cursor)
-    #for d in destinations: print d
+    for d in destinations: 
+        d['destination_country'] = Country(d['destination_country'])
+    print destinations
+
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration,\
         tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
