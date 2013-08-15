@@ -53,11 +53,7 @@ def general(request, period_id="thisMonth"):
         graph_data = []
         for b in billingPeriods:
             if not ticksAssigned:
-                print b
                 providersGraphsTicks.append(b['date_start'].strftime('%b')+" - "+b['date_end'].strftime('%b'))
-
-            if b['date_start'] < today.date() and b['date_end'] > today.date():
-                thisBillingPeriod = b
 
             averageMonthlyCost += b['total_cost']
             #Agregamos tambien la informacion pa las graphs
@@ -71,12 +67,12 @@ def general(request, period_id="thisMonth"):
         })
 
         average_cost = averageMonthlyCost / len(billingPeriods)
-        this_month_total_usage = getTrunkCurrentIntervalCost(p.id, start_date, end_date)
+        this_month_total_usage = getTrunkCurrentIntervalData(p, start_date, end_date)
+        print this_month_total_usage
         total_trunks_month_usage += this_month_total_usage['total_cost']
         providersData.append({
             'provider': p, 
             'average_cost': average_cost,
-            'thisBillingPeriod' : thisBillingPeriod,
             'this_month_total_usage' : this_month_total_usage,
         })
 
@@ -95,7 +91,9 @@ def general(request, period_id="thisMonth"):
         'providers' : providersData,
         'destinationGraph' : json.dumps(destinationGraph),
         'providersGraphs' : json.dumps(providersGraphs),
-        'providersGraphsTicks' : json.dumps(providersGraphsTicks)
+        'providersGraphsTicks' : json.dumps(providersGraphsTicks),
+        'start_date': start_date + datetime.timedelta(days=1),
+        'end_date': end_date - datetime.timedelta(days=1),
     })
 
 def getTrunk(request, provider_id, period_id="thisMonth"):
@@ -150,7 +148,7 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
             minutes
         ])
     
-    this_month_total_usage = getTrunkCurrentIntervalCost(provider.id, start_date, end_date)
+    this_month_total_usage = getTrunkCurrentIntervalData(provider, start_date, end_date)
     average_monthly_cost = billing_period_cost / len(billingPeriods)
 
     destinationInfo = getProviderDestinationCDR(provider.id, start_date, end_date)
@@ -220,14 +218,20 @@ def getAllProvidersDestinationCDR(start_date, end_date):
     cursor.execute(sql, (start_date, end_date))
     return dictfetchall(cursor)
 
-def getTrunkCurrentIntervalCost(provider_id, start_date, end_date):
+def getTrunkCurrentIntervalData(provider, start_date, end_date):
     cursor = connection.cursor()
-    sql = "SELECT SUM(tarifica_providerdailydetail.cost) as total_cost \
+    sql = "SELECT SUM(tarifica_providerdailydetail.cost) as total_call_cost, \
+        SUM(tarifica_providerdailydetail.total_calls) as total_calls, \
+        SUM(tarifica_providerdailydetail.total_minutes) as total_minutes, \
+        tarifica_providerdailydetail.date as date \
         FROM tarifica_providerdailydetail \
         WHERE tarifica_providerdailydetail.provider_id = %s \
         AND date >= %s AND date <= %s"
-    cursor.execute(sql, (provider_id, start_date, end_date))
-    return dictfetchall(cursor)[0]
+    cursor.execute(sql, (provider.id, start_date, end_date))
+    intervalData = dictfetchall(cursor)[0]
+    intervalData.update(getProviderBundleCost(provider, start_date, end_date))
+    intervalData.update({'total_cost': intervalData['total_call_cost'] + intervalData['total_bundle_cost']})
+    return intervalData
 
 def getBillingPeriods(provider):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -300,7 +304,7 @@ def getTrunkCalls(provider_id, start_date, end_date):
         ON tarifica_call.provider_id = tarifica_provider.id \
         WHERE tarifica_call.provider_id = %s \
         AND date > %s AND date < %s ORDER BY date"
-    cursor.execute(sql, (provider_id, start_date, end_date))
+    cursor.execute(sql, (provider_id, start_date+" 23:59:59", end_date+" 00:00:00"))
     return dictfetchall(cursor)
 
 def getProviderBundleCost(provider, start_date, end_date):
@@ -327,8 +331,8 @@ def downloadTrunkCDR(request, provider_id, start_date, end_date):
     provider = get_object_or_404(Provider, id = provider_id)
     timedelta = datetime.timedelta(days = 1)
     try:
-        start_date = start_date.date()
-        end_date = end_date.date()
+        start_date = start_date
+        end_date = end_date
     except Exception as e:
         print "Error while parsing dates:",e
         return HttpResponseServerError('Error while saving .csv')

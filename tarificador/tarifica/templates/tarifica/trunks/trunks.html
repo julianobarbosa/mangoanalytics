@@ -63,7 +63,7 @@
 
 <div class="row-fluid">
     <div class="span6 well well-small">
-        <h5> Usage </h5>
+        <h5> Usage ({{start_date | date:"d/M"}} - {{end_date | date:"d/M"}})</h5>
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <thead>
                 <tr>
@@ -77,11 +77,11 @@
                 {% for prov in providers %}
                 <tr>
                     <td>{{prov.provider.name}}</td>
-                    <td>{{ user_info.currency_symbol }}{{ prov.thisBillingPeriod.total_bundle_cost | floatformat:"2" }} {{ user_info.currency_code }}
+                    <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_bundle_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
-                    <td>{{ user_info.currency_symbol }}{{ prov.thisBillingPeriod.total_call_cost | floatformat:"2" }} {{ user_info.currency_code }}
+                    <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_call_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
-                    <td>{{ user_info.currency_symbol }}{{ prov.thisBillingPeriod.total_cost | floatformat:"2" }} {{ user_info.currency_code }}
+                    <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
                 </tr>
                 {% endfor %}
