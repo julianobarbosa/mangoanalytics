@@ -71,6 +71,7 @@ def realtime(request):
             [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
             for d in processed_data if re.search("/",d[6])
             ]
+        print data
         graphData = []
         for d in data:
             t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
