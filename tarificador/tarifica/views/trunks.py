@@ -334,6 +334,7 @@ def downloadTrunkCDR(request, provider_id, start_date, end_date):
         return HttpResponseServerError('Error while saving .csv')
 
     call_info = getTrunkCalls(provider_id, start_date, end_date)
+    print call_info
     header = {
         'date': 'Date',
         'dialed_number': 'Dialed Number',

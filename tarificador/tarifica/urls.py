@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, start, wizard, config
+from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, wizard, config
 
 urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
