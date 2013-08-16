@@ -5,9 +5,6 @@
     <a href="{% url 'tarifica:dashboard' %}">Home</a>
 </li>
 <li>
-    <a href="{% url 'tarifica:setup' %}">Setup</a>
-</li>
-<li>
     <a href="{% url 'tarifica:realtime' %}">Realtime</a>
 </li>
 <li>
@@ -16,10 +13,10 @@
 <li>
     <a href="{% url 'tarifica:users_general' %}">Users</a>
 </li>
-<li>
-    <a href="{% url 'tarifica:wizard_start' %}">Call Wizard</a>
+<li class="pull-right active">
+    <a href="{% url 'tarifica:config' %}">My Settings</a>
 </li>
-<li class="active">
-    <a href="{% url 'tarifica:config' %}"><i class="icon-cog"></i> Config</a>
+<li class="pull-right">
+    <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
 </li>
 {% endblock %}

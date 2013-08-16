@@ -11,15 +11,21 @@
         That's it! Now the only thing left to do, once you've configured all your trunks is to import the current call information, assign a cost to each call, and begin calculating monthly costs for a faster access.
     </p>
     <p>
-        To return to the initial wizard page, click the button below. 
+        Now, let's do a test-run. This means we'll assign costs to each call, but won't save them to the database yet, so you can review the results and check that every tariff you need has already been configured.
     </p>
     <p>
-        <a class="btn btn-primary" href="{% url 'tarifica:wizard_start' %}">
-            Return to initial setup
-        </a>.
+        <a href="" class="btn btn-primary">
+            Start Test-run!
+        </a>
     </p>
 </div>
 {% endif %}
+<div>
+    <ul class="nav nav-pills">
+        <li><a href="{% url 'tarifica:wizard_test_run' %}">Start Test-run</a></li>
+        <li><a href="{% url 'tarifica:wizard_run' %}">Delete all imported data and run again</a></li>
+    </ul>
+</div>
 
 {% if configured %}
 <div class="row-fluid">
