@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, wizard, config
+from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, wizard, config, pinsets
 
 urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
@@ -45,4 +45,11 @@ urlpatterns = patterns('',
    url(r'^wizard/results$', wizard.results, name = "wizard_results"),
    url(r'^wizard/run$', wizard.run, name = "wizard_run"),
    url(r'^wizard/checkProcessingStatus$', wizard.checkProcessingStatus, name = "wizard_check_processing_status"),
+
+   url(r'^pinsets/general$', pinsets.generalPinsets, name = 'pinsets_general'),
+   url(r'^pinsets/general/(?P<period_id>\w+)$', pinsets.generalPinsets, name = 'pinsets_general_period'),
+   url(r'^pinsets/detail/(?P<extension_id>\d+)$',pinsets.detailPinsets, name = 'pinsets_detail'),
+   url(r'^pinsets/detail/(?P<extension_id>\d+)/(?P<period_id>\w+)$', pinsets.detailPinsets, name = 'pinsets_detail_period'),
+   url(r'^pinsets/analytics/(?P<extension_id>\d+)$', pinsets.analyticsPinsets, name = 'pinsets_analytics'),
+   url(r'^pinsets/analytics/(?P<extension_id>\d+)/(?P<period_id>\w+)$', pinsets.analyticsPinsets, name = 'pinsets_analytics_period'),
 )
