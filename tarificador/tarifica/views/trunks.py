@@ -133,9 +133,6 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     billingPeriods = getBillingPeriods(provider)        
     graph_data = []
     for b in billingPeriods:
-        if b['date_start'] < today.date() and b['date_end'] > today.date():
-            thisBillingPeriod = b
-
         minutes = int(b['total_minutes'])
         cost = float(b['total_cost'])
         billing_period_cost += b['total_cost']
@@ -168,7 +165,6 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
         'start_date': start_date.strftime("%Y-%m-%d"),
         'end_date': end_date.strftime("%Y-%m-%d"),
         'billingPeriods' : billingPeriods,
-        'thisBillingPeriod' : thisBillingPeriod,
         'destinationGraph' : json.dumps(destinationGraph),
         'cost_graph' : json.dumps(cost_graph),
         'minutes_graph' : json.dumps(minutes_graph),

@@ -49,7 +49,6 @@ class AsteriskMySQLManager:
 					continue
 				else:
 					passwordsData.extend(res)
-		print passwordsData
 		return passwordsData
 
 if __name__ == '__main__':
