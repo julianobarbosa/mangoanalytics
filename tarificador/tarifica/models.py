@@ -69,12 +69,10 @@ class Call(models.Model):
 
 class Pinset(models.Model):
     pinset_number = models.CharField(max_length = 255)
-    calls = models.ForeignKey(Call, blank=True, null=True)
 
 class Extension(models.Model):
     extension_number = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
-    calls = models.ForeignKey(Call, blank=True, null=True)
 
 class UserDailyDetail(models.Model):
     extension = models.ForeignKey(Extension, blank=True, null=True)
