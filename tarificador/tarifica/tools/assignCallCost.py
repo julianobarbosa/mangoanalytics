@@ -164,6 +164,7 @@ class CallCostAssigner:
 			dialedNoForProvider = separated[2]
 		except IndexError:
 			print "No dialed number present! Skipping..."
+		print "Call from", call['src'],"with pinset", call['accountcode']
 
 		configuedProviders = self.getAllConfiguredProviders()
 		if len(configuedProviders) == 0:
@@ -189,8 +190,6 @@ class CallCostAssigner:
 				for d in destinations:
 					if costAssigned:
 						break
-
-					print "Trying to fit into destination group",d['name']
 					try:
 						pos = dialedNoForProvider.index(d['prefix'])
 						print "Call prefix fits into destination group",d['name']
@@ -201,7 +200,7 @@ class CallCostAssigner:
 
 					# Se encontro el prefijo!
 					numberDialed = dialedNoForProvider[pos + len(d['prefix']):]
-					print "Number called according to trunk:",numberDialed
+					# print "Number called according to trunk:",numberDialed
 					destination_group_id = d['id']
 					bundles = self.getAllBundlesFromDestinationGroup(d['id'])
 					appliedToBundle = False
