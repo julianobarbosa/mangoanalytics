@@ -31,21 +31,16 @@ def setup(request, provider_id = 0):
             except Extension.MultipleObjectsReturned:
                 print "extensiones repetidas!"
     pinsets = a_mysql_m.getPinsetInformation()
-    for u in pinsets:
-        if u['passwords']:
-            # Separamos los passwords
-            
+    # Revisamos que haya pinsets configurados
+    if len(pinsets) > 0:
+        for u in pinsets:
             try:
-                e = Pinset.objects.get(id = u['id'])
+                e = Pinset.objects.get(pinset_number = u)
             except Pinset.DoesNotExist:
-                e = Pinset(
-                    asterisk_id = u['id'],
-                    pinset_number = u['passwords'],
-                    name = u['description'],
-                    )
+                e = Pinset(pinset_number = u)
                 e.save()
             except Pinset.MultipleObjectsReturned:
-                print "extensiones repetidas!"
+                print "pinsets repetidos!"
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
         if x['name']:

@@ -69,7 +69,6 @@ class Call(models.Model):
 
 class Pinset(models.Model):
     pinset_number = models.CharField(max_length = 255)
-    asterisk_id = models.IntegerField()
     calls = models.ForeignKey(Call, blank=True, null=True)
 
 class Extension(models.Model):
