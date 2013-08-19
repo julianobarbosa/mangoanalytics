@@ -30,6 +30,22 @@ def setup(request, provider_id = 0):
                 e.save()
             except Extension.MultipleObjectsReturned:
                 print "extensiones repetidas!"
+    pinsets = a_mysql_m.getPinsetInformation()
+    for u in pinsets:
+        if u['passwords']:
+            # Separamos los passwords
+            
+            try:
+                e = Pinset.objects.get(id = u['id'])
+            except Pinset.DoesNotExist:
+                e = Pinset(
+                    asterisk_id = u['id'],
+                    pinset_number = u['passwords'],
+                    name = u['description'],
+                    )
+                e.save()
+            except Pinset.MultipleObjectsReturned:
+                print "extensiones repetidas!"
     trunks = a_mysql_m.getTrunkInformation()
     for x in trunks:
         if x['name']:
@@ -190,6 +206,19 @@ def dashboard(request):
         'ticks': json.dumps(ticks),
     })
 
+def generalCDR(request, page):
+    limit = 100;
+    user_info = get_object_or_404(UserInformation, id = 1)
+
+    return render(request, 'tarifica/general/dashboard.html', {
+        'user_info' : user_info,
+        'total_cost' : total_cost,
+        'provider_daily_costs' : provider_daily_costs,
+        'locales' : locales,
+        'extensions' : extensions,
+        'general_6_month_graph': json.dumps(general_6_month_graph),
+        'ticks': json.dumps(ticks),
+    })
 
 def dictfetchall(cursor):
     desc = cursor.description

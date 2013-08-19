@@ -59,12 +59,18 @@ class Bundle(models.Model):
 class Call(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
+    pinset_number = models.CharField(max_length = 255)
     asterisk_unique_id = models.CharField(max_length = 255)
     duration = models.IntegerField()
     cost = models.FloatField()
     date = models.DateTimeField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
     provider = models.ForeignKey(Provider, blank=True, null=True)
+
+class Pinset(models.Model):
+    pinset_number = models.CharField(max_length = 255)
+    asterisk_id = models.IntegerField()
+    calls = models.ForeignKey(Call, blank=True, null=True)
 
 class Extension(models.Model):
     extension_number = models.CharField(max_length = 255)
@@ -102,21 +108,36 @@ class ProviderDailyDetail(models.Model):
     total_minutes = models.IntegerField()
     date = models.DateField()
 
-class ProviderMonthlyDetail(models.Model):
-    provider = models.ForeignKey(Provider, blank=True, null=True)
-    call_cost = models.FloatField()
-    bundle_cost = models.FloatField()
-    total_calls = models.IntegerField()
-    total_minutes = models.IntegerField()
-    date_start = models.DateField()
-    date_end = models.DateField()
-
 class ProviderDestinationDetail(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
     cost = models.FloatField()
     total_calls = models.IntegerField()
     total_minutes = models.IntegerField()
     destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    date = models.DateField()
+
+class PinsetDailyDetail(models.Model):
+    pinset = models.ForeignKey(Pinset, blank=True, null=True)
+    total_calls = models.IntegerField()
+    total_minutes = models.IntegerField()
+    cost = models.FloatField()
+    date = models.DateField()
+
+class PinsetDestinationDetail(models.Model):
+    pinset = models.ForeignKey(Pinset, blank=True, null=True)
+    total_calls = models.IntegerField()
+    total_minutes = models.IntegerField()
+    cost = models.FloatField()
+    destination_group = models.ForeignKey(DestinationGroup, blank=True, null=True)
+    date = models.DateField()
+
+class PinsetDestinationNumberDetail(models.Model):
+    pinset = models.ForeignKey(Pinset, blank=True, null=True)
+    total_calls = models.IntegerField()
+    total_minutes = models.IntegerField()
+    cost = models.FloatField()
+    prefix = models.CharField(max_length = 255)
+    number = models.CharField(max_length = 255)
     date = models.DateField()
 
 class UserInformation(models.Model):
@@ -137,6 +158,7 @@ class UserInformation(models.Model):
 class UnconfiguredCall(models.Model):
     dialed_number = models.CharField(max_length = 255)
     extension_number = models.CharField(max_length = 255)
+    pinset_number = models.CharField(max_length = 255)
     asterisk_unique_id = models.CharField(max_length = 255)
     duration = models.IntegerField()
     provider = models.CharField(max_length = 255)

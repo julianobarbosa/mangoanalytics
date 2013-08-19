@@ -135,17 +135,17 @@ class CallCostAssigner:
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_call \
-		(dialed_number, extension_number, duration, cost, date, \
+		(dialed_number, extension_number, pinset_number, duration, cost, date, \
 		destination_group_id, provider_id, asterisk_unique_id) \
-		VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+		VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
 
 	def saveUnconfiguredCalls(self, calls):
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_unconfiguredcall \
-		(dialed_number, extension_number, duration, provider, date, asterisk_unique_id) \
-		VALUES(%s, %s, %s, %s, %s, %s)"
+		(dialed_number, extension_number, pinset_number, duration, provider, date, asterisk_unique_id) \
+		VALUES(%s, %s, %s, %s, %s, %s, %s)"
 		self.am.cursor.executemany(sql, calls)
 		return self.am.db.commit()
 
@@ -260,6 +260,7 @@ class CallCostAssigner:
 				(
 					dialedNoForProvider, 
 					call['src'], 
+					call['accountcode'],
 					ceil(call['billsec'] / 60), 
 					cost, 
 					datetime.datetime(
@@ -282,6 +283,7 @@ class CallCostAssigner:
 				(
 					call['dst'], 
 					call['src'], 
+					call['accountcode'], 
 					ceil(call['billsec'] / 60),
 					callInfoList[1],
 					datetime.datetime(

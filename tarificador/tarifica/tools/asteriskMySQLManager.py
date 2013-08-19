@@ -37,5 +37,20 @@ class AsteriskMySQLManager:
 		self.cursor.execute('SELECT extension,name from users')
 		return self.cursor.fetchall()
 
+	def getPinsetInformation(self):
+		self.connect(self.dbName)
+		self.cursor.execute('SELECT passwords from pinsets')
+		passwords = self.cursor.fetchall()
+		passwordsData = []
+		for p in passwords:
+			res = p['passwords'].split("\n")
+			for r in res:
+				if r in passwordsData:
+					continue
+				else:
+					passwordsData.extend(res)
+		print passwordsData
+		return passwordsData
+
 if __name__ == '__main__':
 	print 'running'

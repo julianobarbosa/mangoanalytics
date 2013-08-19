@@ -45,6 +45,14 @@ def deleteAllUnconfiguredCalls():
     am.db.commit()
     return am.db.close()
 
+def deleteLastImportResults():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_importresults"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
 def deleteAllUserDailyDetail():
     am = AsteriskMySQLManager()
     am.connect('nextor_tarificador')
@@ -85,10 +93,26 @@ def deleteAllProviderDestinationDetail():
     am.db.commit()
     return am.db.close()
 
-def deleteAllProviderMonthlyDetail():
+def deleteAllPinsetDailyDetail():
     am = AsteriskMySQLManager()
     am.connect('nextor_tarificador')
-    sql = "DELETE FROM tarifica_providermonthlydetail"
+    sql = "DELETE FROM tarifica_pinsetdailydetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllPinsetDestinationDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_pinsetdestinationdetail"
+    am.cursor.execute(sql, ())
+    am.db.commit()
+    return am.db.close()
+
+def deleteAllPinsetDestinationNumberDetail():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "DELETE FROM tarifica_pinsetdestinationnumberdetail"
     am.cursor.execute(sql, ())
     am.db.commit()
     return am.db.close()
@@ -110,6 +134,7 @@ if len(sys.argv) > 1:
 #Comenzamos borrando tooooodo
 if testRun:
         deleteAllUnconfiguredCalls()
+        deleteLastImportResults()
 else:   
     deleteAllCalls()
     deleteAllUnconfiguredCalls()
@@ -117,8 +142,10 @@ else:
     deleteAllUserDestinationDetail()
     deleteAllUserDestinationNumberDetail()
     deleteAllProviderDailyDetail()
-    deleteAllProviderMonthlyDetail()
     deleteAllProviderDestinationDetail()
+    deleteAllPinsetDailyDetail()
+    deleteAllPinsetDestinationDetail()
+    deleteAllPinsetDestinationNumberDetail()
 print "Deleted all previous data."
 
 while start != today:
@@ -135,6 +162,9 @@ while start != today:
         dig.saveUserDestinationNumberDetail(start)
         dig.saveProviderDailyDetail(start)
         dig.saveProviderDestinationDetail(start)
+        dig.savePinsetDailyDetail(start)
+        dig.savePinsetDestinationDetail(start)
+        dig.savePinsetDestinationNumberDetail(start)
 
     start = start + timedelta(days = 1)
 
