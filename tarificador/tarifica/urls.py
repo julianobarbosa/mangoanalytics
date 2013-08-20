@@ -48,8 +48,8 @@ urlpatterns = patterns('',
 
    url(r'^pinsets/general$', pinsets.generalPinsets, name = 'pinsets_general'),
    url(r'^pinsets/general/(?P<period_id>\w+)$', pinsets.generalPinsets, name = 'pinsets_general_period'),
-   url(r'^pinsets/detail/(?P<extension_id>\d+)$',pinsets.detailPinsets, name = 'pinsets_detail'),
-   url(r'^pinsets/detail/(?P<extension_id>\d+)/(?P<period_id>\w+)$', pinsets.detailPinsets, name = 'pinsets_detail_period'),
-   url(r'^pinsets/analytics/(?P<extension_id>\d+)$', pinsets.analyticsPinsets, name = 'pinsets_analytics'),
-   url(r'^pinsets/analytics/(?P<extension_id>\d+)/(?P<period_id>\w+)$', pinsets.analyticsPinsets, name = 'pinsets_analytics_period'),
+   url(r'^pinsets/detail/(?P<pinset_id>\d+)$',pinsets.detailPinsets, name = 'pinsets_detail'),
+   url(r'^pinsets/detail/(?P<pinset_id>\d+)/(?P<period_id>\w+)$', pinsets.detailPinsets, name = 'pinsets_detail_period'),
+   url(r'^pinsets/analytics/(?P<pinset_id>\d+)$', pinsets.analyticsPinsets, name = 'pinsets_analytics'),
+   url(r'^pinsets/analytics/(?P<pinset_id>\d+)/(?P<period_id>\w+)$', pinsets.analyticsPinsets, name = 'pinsets_analytics_period'),
 )

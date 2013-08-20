@@ -16,12 +16,12 @@
     <div class="span12 well well-small">
 
         {% if custom %}
-            <a href="{% url 'tarifica:users_detail' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+            <a href="{% url 'tarifica:pinsets_detail' pinset.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
         {% else %}
             {% if last_month %}
-            <a href="{% url 'tarifica:users_detail' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+            <a href="{% url 'tarifica:pinsets_detail' pinset.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
             {% else %}
-            <a href="{% url 'tarifica:users_detail_period' extension_id=extension.id period_id='lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Last Month</a>
+            <a href="{% url 'tarifica:pinsets_detail_period' pinset_id=pinset.id period_id='lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Last Month</a>
             {% endif %}
         {% endif %}
         <a href="#custom" class="btn btn-primary" data-toggle="modal"></i>Custom</a>
@@ -32,7 +32,7 @@
                 <h3>Customize</h3>
             </div>
             <div class="modal-body">
-                <form id="modal-form" action="{% url 'tarifica:users_detail_period' extension.id 'custom' %}" method="post" class="form-vertical">{% csrf_token %}
+                <form id="modal-form" action="{% url 'tarifica:pinsets_detail_period' pinset.id 'custom' %}" method="post" class="form-vertical">{% csrf_token %}
                     {{ form.non_field_errors }}
                     <div id="datetimepicker1" class="input-append">
                         <label for="id_start_date">Start date</label>
@@ -69,14 +69,14 @@
 <div class="row-fluid">
     <div class="span6 well well-small">
         <div style="float:right">
-            <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"></i>Usage analysis</a>
+            <a href="{% url 'tarifica:pinsets_analytics' pinset.id %}" class="btn btn-primary"></i>Usage analysis</a>
         </div>
         <h5><strong> Pinset Detail </strong></h5>
         <table class="table table-hovered table-condensed" border="0">
             <tbody>
                 <tr>
                     <th>Number</th>
-                    <td>{{extension.extension_number}}</td>
+                    <td>{{pinset.pinset_number}}</td>
                 </tr>
             </tbody>
         </table>
@@ -112,7 +112,7 @@
 </div>
 
 <div class="well well-small">
-    <h5>{{extension.name}}'s daily cost</h5>
+    <h5> Pinset {{pinset.pinset_number}} daily cost</h5>
     <div id="day_graph" style="height:300px; min-height:300px">
     </div>
 </div>

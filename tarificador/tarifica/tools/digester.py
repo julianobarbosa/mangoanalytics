@@ -247,7 +247,7 @@ class Digester:
 			FROM tarifica_call \
 			LEFT JOIN tarifica_pinset ON \
 			tarifica_call.pinset_number = tarifica_pinset.pinset_number \
-			WHERE date > %s AND date < %s \
+			WHERE date > %s AND date < %s AND tarifica_call.pinset_number IS NOT NULL\
 			GROUP BY tarifica_call.pinset_number, tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
 		for row in self.am.cursor.fetchall():

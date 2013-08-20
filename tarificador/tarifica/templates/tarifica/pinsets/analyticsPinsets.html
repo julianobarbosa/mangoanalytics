@@ -14,7 +14,7 @@
 
 <div class="row-fluid">
     <div class="span12 well well-small">
-        <h4>Monthly user behavior</h4>
+        <h4>Monthly pinset behavior</h4>
         <div id="monthly-graph" style="height:310px; min-height:310px">
         </div>
     </div>
@@ -68,14 +68,14 @@
         <div id="container" style="float:right">
             {% if custom %}
 
-                <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+                <a href="{% url 'tarifica:pinsets_analytics' pinset.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
 
             {% else %}
 
                 {% if last_month %}
-                <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
+                <a href="{% url 'tarifica:pinsets_analytics' pinset.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
                 {% else %}
-                <a href="{% url 'tarifica:users_analytics_period' extension_id=extension.id period_id='lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Last Month</a>
+                <a href="{% url 'tarifica:pinsets_analytics_period' pinset_id=pinset.id period_id='lastMonth' %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> Last Month</a>
                 {% endif %}
 
             {% endif %}
@@ -88,7 +88,7 @@
                     <h3>Customize</h3>
                 </div>
                 <div class="modal-body">
-                    <form id="modla-form" action="{% url 'tarifica:users_analytics_period' extension.id 'custom' %}" method="post" class="form-vertical">
+                    <form id="modla-form" action="{% url 'tarifica:pinsets_analytics_period' pinset.id 'custom' %}" method="post" class="form-vertical">
                         {% csrf_token %}
                         {{ form.non_field_errors }}
                         <div id="datetimepicker1" class="input-append">

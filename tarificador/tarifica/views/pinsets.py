@@ -70,7 +70,7 @@ def generalPinsets(request, period_id="thisMonth"):
     lastMonth = 'June'
     lastTwoMonths = 'May'
 
-    data = getBarChartInfoByExt(cursor)
+    data = getBarChartInfoByPin(cursor)
 
     return render(request, 'tarifica/pinsets/generalPinsets.html', {
         'user_info' : user_info,
@@ -86,9 +86,9 @@ def generalPinsets(request, period_id="thisMonth"):
         'data' : json.dumps(data),
     })
 
-def detailPinsets(request, extension_id, period_id="thisMonth"):
+def detailPinsets(request, pinset_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
-    Ext = get_object_or_404(Extension, id = extension_id)
+    Pin = get_object_or_404(Pinset, id = pinset_id)
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     form = forms.getDate(initial=
@@ -114,15 +114,15 @@ def detailPinsets(request, extension_id, period_id="thisMonth"):
         custom = True
     #print start_date.isoformat()
     #print end_date.isoformat()
-    cursor.execute('SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
+    cursor.execute('SELECT tarifica_pinsetdestinationdetail.id, SUM(tarifica_pinsetdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname, \
         tarifica_destinationgroup.destination_country \
-        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
-        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        FROM tarifica_pinsetdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_pinsetdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date >= %s AND date <= %s AND extension_id = %s GROUP BY destination_group_id \
+        WHERE date >= %s AND date <= %s AND pinset_id = %s GROUP BY destination_group_id \
         ORDER BY cost DESC',
-        [start_date,end_date, Ext.id])
+        [start_date,end_date, Pin.id])
     destinations = dictfetchall(cursor)
     for d in destinations: 
         d['destination_country'] = Country(d['destination_country'])
@@ -133,8 +133,8 @@ def detailPinsets(request, extension_id, period_id="thisMonth"):
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date >= %s AND date <= %s AND extension_number = %s ORDER BY dat',
-        [start_date,end_date, Ext.extension_number])
+        WHERE date >= %s AND date <= %s AND pinset_number = %s ORDER BY dat',
+        [start_date,end_date, Pin.pinset_number])
     all_calls = dictfetchall(cursor)
     average = 0
     n = 0
@@ -144,8 +144,8 @@ def detailPinsets(request, extension_id, period_id="thisMonth"):
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
     if n: average = average/n
-    data = getBarChartInfoByLocale(cursor, Ext.id)
-    day_data = getBarChartInfoByExtForMonth(cursor, Ext.id, start_date, end_date)
+    data = getBarChartInfoByLocale(cursor, Pin.id)
+    day_data = getBarChartInfoByPinForMonth(cursor, Pin.id, start_date, end_date)
     return render(request, 'tarifica/pinsets/detailPinsets.html', {
               'user_info' : user_info,
               'destinations' : destinations,
@@ -154,15 +154,15 @@ def detailPinsets(request, extension_id, period_id="thisMonth"):
               'last_month' : last_month,
               'custom' : custom,
               'form': form,
-              'extension' : Ext,
+              'pinset' : Pin,
               'data' : json.dumps(data),
               'day_data' : json.dumps(day_data),
               })
 
 
-def analyticsPinsets(request, extension_id, period_id="thisMonth"):
+def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
-    Ext = get_object_or_404(Extension, id = extension_id)
+    Pin = get_object_or_404(Pinset, id = pinset_id)
     cursor = connection.cursor()
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     form = forms.getDate(initial=
@@ -196,9 +196,9 @@ def analyticsPinsets(request, extension_id, period_id="thisMonth"):
         SUM(tarifica_call.duration) AS duration, \
         COUNT(dialed_number) AS times_dialed\
         FROM tarifica_call\
-        WHERE date > %s AND date < %s AND extension_number = %s \
+        WHERE date > %s AND date < %s AND pinset_number = %s \
         GROUP BY dialed_number ORDER BY SUM(cost) DESC"
-    cursor.execute(sql,[start_date_month,end_date_month, Ext.extension_number])
+    cursor.execute(sql,[start_date_month,end_date_month, Pin.pinset_number])
     top_calls = dictfetchall(cursor)[:10]
     data = []
     for n in top_calls :
@@ -208,13 +208,13 @@ def analyticsPinsets(request, extension_id, period_id="thisMonth"):
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date > %s AND date < %s AND extension_number = %s ORDER BY dat',
-        [start_date,end_date, Ext.extension_number])
+        WHERE date > %s AND date < %s AND pinset_number = %s ORDER BY dat',
+        [start_date,end_date, Pin.pinset_number])
     all_calls = dictfetchall(cursor)
     for cost in all_calls:
         cost['dat'] = cost['dat'].strftime('%d %B %Y')
         cost['time'] = cost['time'].strftime('%H:%M:%S')
-    year_data = getBarChartInfoByExtForYear(cursor, Ext.id)
+    year_data = getBarChartInfoByPinForYear(cursor, Pin.id)
     return render(request, 'tarifica/pinsets/analyticsPinsets.html', {
               'user_info' : user_info,
               'all_calls' : all_calls,
@@ -222,7 +222,7 @@ def analyticsPinsets(request, extension_id, period_id="thisMonth"):
               'last_month' : last_month,
               'custom' : custom,
               'form': form,
-              'extension' : Ext,
+              'pinset' : Pin,
               'data' : json.dumps(data),
               'year_data' : json.dumps(year_data),
               })
@@ -234,7 +234,7 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-def getBarChartInfoByExt(cursor):
+def getBarChartInfoByPin(cursor):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
@@ -307,7 +307,7 @@ def getBarChartInfoByExt(cursor):
     return data
 
 
-def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
+def getBarChartInfoByPinForMonth(cursor, pinset_id, start_date, end_date):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     timedelta = datetime.timedelta(days=1)
     data = []
@@ -321,10 +321,10 @@ def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
         date = datetime.date(year=sdate.year, month=sdate.month, day=sdate.day)
         #print date.isoformat()
         cursor.execute(
-            'SELECT SUM(tarifica_userdailydetail.cost) AS cost \
-            FROM tarifica_userdailydetail \
-            WHERE date = %s AND extension_id = %s ',
-            [date,extension_id])
+            'SELECT SUM(tarifica_pinsetdailydetail.cost) AS cost \
+            FROM tarifica_pinsetdailydetail \
+            WHERE date = %s AND pinset_id = %s ',
+            [date,pinset_id])
         day = dictfetchall(cursor)
         sday = date.strftime('%d/%b')
         if day[0]['cost'] is None:
@@ -337,7 +337,7 @@ def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
     return data
 
 
-def getBarChartInfoByLocale(cursor, extension_id):
+def getBarChartInfoByLocale(cursor, pinset_id):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
@@ -364,13 +364,13 @@ def getBarChartInfoByLocale(cursor, extension_id):
     data.append(aux)
     aux = []
     cursor.execute(
-        'SELECT SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        'SELECT SUM(tarifica_pinsetdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
-        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
-        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        FROM tarifica_pinsetdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_pinsetdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id ',
-        [start_date,end_date,extension_id])
+        WHERE date > %s AND date < %s AND pinset_id = %s GROUP BY destination_group_id ',
+        [start_date,end_date,pinset_id])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
     for n in data[1]:
@@ -382,13 +382,13 @@ def getBarChartInfoByLocale(cursor, extension_id):
     end_date = datetime.date(year=today.year, month=today.month, day=1)
     start_date = datetime.date(year=t1.year, month=t1.month, day=1) - timedelta
     cursor.execute(
-        'SELECT SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        'SELECT SUM(tarifica_pinsetdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
-        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
-        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        FROM tarifica_pinsetdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_pinsetdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id ',
-        [start_date,end_date,extension_id])
+        WHERE date > %s AND date < %s AND pinset_id = %s GROUP BY destination_group_id ',
+        [start_date,end_date,pinset_id])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
     for n in data[1]:
@@ -401,13 +401,13 @@ def getBarChartInfoByLocale(cursor, extension_id):
     end_date = datetime.date(year=t1.year, month=t1.month, day=1)
     start_date = datetime.date(year=t2.year, month=t2.month, day=1) - timedelta
     cursor.execute(
-        'SELECT SUM(tarifica_userdestinationdetail.cost) AS cost,\
+        'SELECT SUM(tarifica_pinsetdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
-        FROM tarifica_userdestinationdetail LEFT JOIN tarifica_destinationgroup \
-        ON tarifica_userdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
+        FROM tarifica_pinsetdestinationdetail LEFT JOIN tarifica_destinationgroup \
+        ON tarifica_pinsetdestinationdetail.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date > %s AND date < %s AND extension_id = %s GROUP BY destination_group_id ',
-        [start_date,end_date,extension_id])
+        WHERE date > %s AND date < %s AND pinset_id = %s GROUP BY destination_group_id ',
+        [start_date,end_date,pinset_id])
     users = dictfetchall(cursor)
     for n in data[1]: aux.append(0)
     for n in data[1]:
@@ -427,7 +427,7 @@ def getBarChartInfoByLocale(cursor, extension_id):
 
 
 
-def getBarChartInfoByExtForYear(cursor, extension_id):
+def getBarChartInfoByPinForYear(cursor, pinset_id):
     today = datetime.datetime.utcnow().replace(tzinfo=utc)
     start_date = datetime.datetime(day = 1, month=1, year=today.year).replace(tzinfo=utc)
     end_date = datetime.datetime(day=monthrange(today.year, today.month)[1], month=today.month, year=today.year).replace(tzinfo=utc)
@@ -442,9 +442,9 @@ def getBarChartInfoByExtForYear(cursor, extension_id):
         monthDays= monthrange(sDate.year, sDate.month)[1]
         fDate = datetime.datetime(day=monthDays, month=sDate.month, year = sDate.year).replace(tzinfo=utc)
         cursor.execute(
-            'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost \
-            FROM tarifica_userdailydetail WHERE date >= %s AND date <= %s AND extension_id = %s ',
-            [sDate, fDate ,extension_id])
+            'SELECT tarifica_pinsetdailydetail.id, SUM(tarifica_pinsetdailydetail.cost) AS cost \
+            FROM tarifica_pinsetdailydetail WHERE date >= %s AND date <= %s AND pinset_id = %s ',
+            [sDate, fDate ,pinset_id])
         monthCost = dictfetchall(cursor)
         month = getMonthName(sDate.month)
         if monthCost[0]['cost'] is None:
