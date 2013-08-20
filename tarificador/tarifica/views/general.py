@@ -73,7 +73,7 @@ def realtime(request):
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.today()
-    print today
+    #print today
     try:
         process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
         #process ='Channel              Context              Extension        Prio State   Application  Data                      CallerID        Duration Accountcode PeerAccount BridgedTo\nIP/469-000002aa     macro-dialout-trunk  s                  19 Up      Dial         SIP/Nextor/525555543001,3 469             00:00:25                         SIP/Nextor-000002ab\nSIP/464-000002ac     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525555458610,3 464             00:00:13                         (None)\nSIP/4680-000002b0    from-internal        555                 3 Up      Wait         1                         4680            00:00:00                         (None)\nSIP/Nextor-000002ab  from-pstn                                1 Up      AppDial      (Outgoing Line)           755543001       00:00:25                         SIP/469-000002aa\nSIP/Nextor-000002af  from-pstn            752909139           1 Down    AppDial      (Outgoing Line)           752909139       00:00:09                         (None)\nSIP/Nextor-000002ad  from-pstn            755458610           1 Down    AppDial      (Outgoing Line)           755458610       00:00:13                         (None)\nSIP/470-000002ae     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525552909139,3 470             00:00:09                         (None)\n\n7 active channels\n4 active calls\n412 calls processed'
@@ -83,18 +83,18 @@ def realtime(request):
             [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
             for d in processed_data if re.search("/",d[6])
             ]
-        print data
+        #print data
         graphData = []
         for d in data:
             t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
-            print t1
+            #print t1
             timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
             t = today - timedelta
-            print t
+            #print t
             d.append(t.time().strftime("%H:%M:%S"))
             provider = Provider.objects.get(asterisk_name = d[2])
             destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
-            print destination_groups
+            #print destination_groups
             for dest in destination_groups:
                 try:
                     pos = d[3].index(dest.prefix)

@@ -68,7 +68,7 @@ def general(request, period_id="thisMonth"):
 
         average_cost = averageMonthlyCost / len(billingPeriods)
         this_month_total_usage = getTrunkCurrentIntervalData(p, start_date, end_date)
-        print this_month_total_usage
+        #print this_month_total_usage
         total_trunks_month_usage += this_month_total_usage['total_cost']
         providersData.append({
             'provider': p, 
@@ -77,7 +77,7 @@ def general(request, period_id="thisMonth"):
         })
 
     destinationInfo = getAllProvidersDestinationCDR(start_date, end_date)
-    print destinationInfo
+    #print destinationInfo
     destinationGraph = []
     for d in destinationInfo:
         destinationGraph.append([d['destination_name'], d['total_cost']])

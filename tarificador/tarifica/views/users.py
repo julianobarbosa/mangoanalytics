@@ -452,7 +452,7 @@ def getBarChartInfoByExtForYear(cursor, extension_id):
             aux.append([month, 0])
         else:
             aux.append([month, monthCost[0]['cost']])
-        print aux
+        #print aux
         sDate = datetime.datetime(day=1, month=fDate.month+1, year=fDate.year).replace(tzinfo=utc)
     data.append(aux)
     return data

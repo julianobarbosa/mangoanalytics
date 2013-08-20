@@ -126,6 +126,11 @@
                         </td>
                         <td>{{ user_info.currency_symbol }}{{ dest.connection_fee }} {{ user_info.currency_code }}</td>
                         <td>{{ user_info.currency_symbol }}{{ dest.minute_fee }} {{ user_info.currency_code }}</td>
+                        <td>
+                            <a href="{% url 'tarifica:destinations_update' dest.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Edit">
+                                <i class="icon-pencil icon-white"></i>
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

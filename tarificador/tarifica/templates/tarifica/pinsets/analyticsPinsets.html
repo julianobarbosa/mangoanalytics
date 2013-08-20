@@ -11,10 +11,18 @@
 
 
 {% block content %}
+<div class="row-fluid">
+    <ul class="breadcrumb">
+        <li><a href="{% url 'tarifica:pinsets_general' %}">Pinsets</a> <span class="divider">/</span></li>
+        <li><a href="{% url 'tarifica:pinsets_detail' pinset.id %}">Pinset {{pinset.pinset_number}}</a> <span class="divider">/</span></li>
+        <li class="active">Analytics</li>
+    </ul>
+</div>
+
 
 <div class="row-fluid">
     <div class="span12 well well-small">
-        <h4>Monthly pinset behavior</h4>
+        <h4>Pinset {{pinset.pinset_number}} monthly behavior</h4>
         <div id="monthly-graph" style="height:310px; min-height:310px">
         </div>
     </div>

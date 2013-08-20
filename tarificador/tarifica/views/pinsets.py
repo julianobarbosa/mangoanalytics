@@ -47,7 +47,7 @@ def generalPinsets(request, period_id="thisMonth"):
         WHERE date > %s AND date < %s GROUP BY pinset_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
     pinsets = dictfetchall(cursor)[:5]
-    for e in pinsets : print e
+    #for e in pinsets : print e
     cursor.execute(
         'SELECT tarifica_pinsetdailydetail.id, SUM(tarifica_pinsetdailydetail.cost) AS cost, \
         SUM(tarifica_pinsetdailydetail.total_calls) AS calls , \
@@ -126,7 +126,7 @@ def detailPinsets(request, pinset_id, period_id="thisMonth"):
     destinations = dictfetchall(cursor)
     for d in destinations: 
         d['destination_country'] = Country(d['destination_country'])
-    print destinations
+    #print destinations
 
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration,\
         tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
@@ -451,7 +451,7 @@ def getBarChartInfoByPinForYear(cursor, pinset_id):
             aux.append([month, 0])
         else:
             aux.append([month, monthCost[0]['cost']])
-        print aux
+        #print aux
         sDate = datetime.datetime(day=1, month=fDate.month+1, year=fDate.year).replace(tzinfo=utc)
     data.append(aux)
     return data
