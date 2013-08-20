@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
+    <style type="text/css">
+    label{
+    	display: inline;
+    	float:left;
+    	margin-right: 5px;
+    	font-size: 12px;
+    	vertical-align: middle;
+    	width: 102px;
+    	padding-top: 5px;
+    }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+<li>
+    <a href="{% url 'tarifica:dashboard' %}">Home</a>
+</li>
+<li>
+    <a href="{% url 'tarifica:realtime' %}">Realtime</a>
+</li>
+<li>
+    <a href="{% url 'tarifica:trunks' %}">Trunks</a>
+</li>
+<li>
+    <a href="{% url 'tarifica:users_general' %}">Users</a>
+</li>
+<li>
+    <a href="{% url 'tarifica:pinsets_general' %}">Pinsets</a>
+</li>
+<li class="active">
+    <a href="{% url 'tarifica:cdr' %}">General CDR</a>
+</li>
+<li class="pull-right">
+    <a href="{% url 'tarifica:config' %}">My Settings</a>
+</li>
+<li class="pull-right">
+    <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
+</li>
+{% endblock %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+
+<div class="well well-small">
+    <h4>General Cost Detail Report</h4>
+</div>
+
+<div class="well well-small">
+	<form action="{% url 'tarifica:cdr' %}" method="post" id="filter-form">{% csrf_token %}
+		{% if form.non_field_errors %}
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			{{ form.non_field_errors }}
+		</div>
+		{% endif %}
+		<div class="row-fluid">
+			<div class="span5">
+				<div id="datetimepicker1" class="input-append">
+                    <label for="id_start_date">Start date</label>
+                    {{ form.start_date_comparison }} {{ form.start_date }}
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                        </i>
+                    </span>
+                </div>
+                <div id="datetimepicker2" class="input-append">
+                    <label for="id_end_date">End date</label>
+                    {{ form.end_date_comparison }} {{ form.end_date }}
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                        </i>
+                    </span>
+                </div>
+                <div>
+                    <label for="id_dialed_number">Dialed Number</label>
+                    {{ form.dialed_number_comparison }} {{ form.dialed_number }}
+                </div>
+                <div>
+                    <label for="id_extension_number">Extension Number</label>
+                    {{ form.extension_number_comparison }} {{ form.extension_number }}
+                </div>
+                <div>
+                    <label for="id_pinset_number">Pinset Number</label>
+                    {{ form.pinset_number_comparison }} {{ form.pinset_number }}
+                </div>
+			</div>
+			<div class="span5">
+				<div>
+                    <label for="id_provider">Provider</label>
+                    {{ form.provider_comparison }} {{ form.provider }}
+                </div>
+                <div>
+                    <label for="id_destination_group">Destination</label>
+                    {{ form.destination_group_comparison }} {{ form.destination_group }}
+                </div>
+                <div>
+                    <label for="id_duration">Duration</label>
+                    {{ form.duration_comparison }} {{ form.duration }}
+                </div>
+                <div>
+                    <label for="id_cost">Cost</label>
+                    {{ form.cost_comparison }} {{ form.cost }}
+                </div>
+                <div>
+                	{{ form.action }}
+                	<button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+			</div>
+			<div class="span2">
+                <p class="pull-right">
+			    	<button class="btn" id="download_cdr">
+			    	<i class="icon-download"></i> Download Current Data
+			    	</button>
+			    </p>
+			</div>
+		</div>
+	</form>
+	<div>
+		<div class="pagination">
+			<ul>
+				<li><a href="{% url 'tarifica:cdr' previousPage %}">Prev</a></li>
+				{% for p in pages %}
+					<li {% if p == page %}class="active"{% endif %}>
+						<a href="{% url 'tarifica:cdr' p %}">{{ p }}</a>
+					</li>
+				{% endfor %}
+				<li><a href="{% url 'tarifica:cdr' nextPage %}">Next</a></li>
+			</ul>
+			<span class="pull-right well well-small">
+				<strong>Showing page {{ page }} of {{ pages_number }}</strong>
+			</span>
+		</div>
+	</div>
+	<table class="table table-ordered table-striped table-bordered table-hovered table-condensed">
+		<thead>
+			<th>Date</th>
+			<th>Dialed Number</th>
+			<th>Extension</th>
+			<th>Pinset</th>
+			<th>Provider</th>
+			<th>Destination</th>
+			<th>Duration</th>
+			<th>Cost</th>
+		</thead>
+		<tbody>
+			{% for call in calls %}
+			<tr>
+				<td>{{ call.date | date:"d/M/Y H:i:s" }}</td>
+				<td>{{ call.dialed_number }}</td>
+				<td>{{ call.extension_number }}</td>
+				<td>{{ call.pinset_number }}</td>
+				<td>{{ call.provider.name }}</td>
+				<td>{{ call.destination_group.destination_name.name }}</td>
+				<td>{{ call.duration }} min.</td>
+				<td>{{ user_info.currency_symbol }}{{ call.cost }} {{ user_info.currency_code }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#datetimepicker1').datetimepicker({
+                format: 'yyyy-MM-dd',
+                pickTime: false
+            });
+        });
+
+        $(function() {
+            $('#datetimepicker2').datetimepicker({
+                format: 'yyyy-MM-dd',
+                pickTime: false
+            });
+        });
+
+        $(function(){
+        	$('#download_cdr').on('click', function(e){
+        		e.preventDefault();
+        		$("#id_action").val("download");
+        		$("#filter-form").submit();
+        	});
+        });
+    </script>
+{% endblock %}

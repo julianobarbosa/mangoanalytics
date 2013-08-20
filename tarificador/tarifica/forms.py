@@ -114,3 +114,49 @@ class loginForm(forms.Form):
                     'required':u'Por favor proporciona tu correo'})
     password = forms.CharField(max_length = 255, error_messages={
                     'required':u'Por favor proporciona una contraseña'})
+
+class filterCDR(forms.Form):
+    comparison_choices = [
+        ('exact', '='),
+        ('gt', '>'),
+        ('lt', '<'),
+        ('exclude', '!=')
+    ]
+    action = forms.CharField(required=True, 
+        widget=forms.HiddenInput())
+    start_date = forms.DateField(label = 'Fecha inicial', required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    start_date_comparison = forms.ChoiceField(choices = comparison_choices[1:], required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    end_date = forms.DateField(label = 'Fecha final', required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    end_date_comparison = forms.ChoiceField(choices = comparison_choices[1:], required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    dialed_number = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    dialed_number_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    extension_number = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    extension_number_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    pinset_number = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    pinset_number_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    provider = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    provider_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    destination_group = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    destination_group_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    duration = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    duration_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))
+    cost = forms.CharField(max_length = 255, required=False, 
+        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    cost_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+        widget=forms.Select(attrs={'class':'span2'}))

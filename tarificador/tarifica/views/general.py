@@ -201,20 +201,6 @@ def dashboard(request):
         'ticks': json.dumps(ticks),
     })
 
-def generalCDR(request, page):
-    limit = 100;
-    user_info = get_object_or_404(UserInformation, id = 1)
-
-    return render(request, 'tarifica/general/dashboard.html', {
-        'user_info' : user_info,
-        'total_cost' : total_cost,
-        'provider_daily_costs' : provider_daily_costs,
-        'locales' : locales,
-        'extensions' : extensions,
-        'general_6_month_graph': json.dumps(general_6_month_graph),
-        'ticks': json.dumps(ticks),
-    })
-
 def dictfetchall(cursor):
     desc = cursor.description
     return [

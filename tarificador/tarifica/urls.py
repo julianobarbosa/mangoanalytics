@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, wizard, config, pinsets
+from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, wizard, config, pinsets, cdr
 
 urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
@@ -31,6 +31,9 @@ urlpatterns = patterns('',
    url(r'^realtime$', general.realtime, name = 'realtime'),
 
    url(r'^dashboard$', general.dashboard, name = 'dashboard'),
+   
+   url(r'^cdr$', cdr.general, name = 'cdr'),
+   url(r'^cdr/page/(?P<page>\w+)$', cdr.general, name = 'cdr'),
 
    url(r'^users/general$', users.generalUsers, name = 'users_general'),
    url(r'^users/general/(?P<period_id>\w+)$', users.generalUsers, name = 'users_general_period'),

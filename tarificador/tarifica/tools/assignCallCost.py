@@ -159,7 +159,11 @@ class CallCostAssigner:
 		dialedNoForProvider = call['dst']
 		separated = []
 		for a in callInfoList:
-			separated = separated + a.split(',')
+			if len(a.split(',')) == 1:
+				#No fue, hay que separar con pipes
+				separated = separated + a.split('|')
+			else:
+				separated = separated + a.split(',')
 		try:
 			dialedNoForProvider = separated[2]
 		except IndexError:
@@ -300,6 +304,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=0)
+	week = week - datetime.timedelta(days=1)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
