@@ -170,12 +170,12 @@
 
             var data = $.parseJSON('{{ data | safe }}');
 
-            var thisMonth = data[2];
-            var lastMonth = data[3];
-            var lastTwoMonths = data[4];
+            var thisMonth = data[2].slice(0,6);
+            var lastMonth = data[3].slice(0,6);
+            var lastTwoMonths = data[4].slice(0,6);
             // Can specify a custom tick Array.
             // Ticks should match up one for each y value (category) in the series.
-            var ticks = data[1];
+            var ticks = data[1].slice(0,6);
              
             var plot1 = $.jqplot('graph', [thisMonth, lastMonth, lastTwoMonths], {
                 // The "seriesDefaults" option is an options object that will
