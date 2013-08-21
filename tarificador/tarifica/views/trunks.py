@@ -226,7 +226,13 @@ def getTrunkCurrentIntervalData(provider, start_date, end_date):
     cursor.execute(sql, (provider.id, start_date, end_date))
     intervalData = dictfetchall(cursor)[0]
     intervalData.update(getProviderBundleCost(provider, start_date, end_date))
-    intervalData.update({'total_cost': intervalData['total_call_cost'] + intervalData['total_bundle_cost']})
+    call_cost = intervalData['total_call_cost']
+    if call_cost is None:
+        call_cost = 0
+    bundle_cost = intervalData['total_bundle_cost']
+    if bundle_cost is None:
+        bundle_cost = 0
+    intervalData.update({'total_cost': call_cost + bundle_cost})
     return intervalData
 
 def getBillingPeriods(provider):
