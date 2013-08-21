@@ -258,6 +258,7 @@ class CallCostAssigner:
 						costAssigned = True
 			
 		if save:
+			print "Saving call..."
 			return {
 				'callInfo':
 				(
@@ -281,6 +282,7 @@ class CallCostAssigner:
 				'save': True
 			}	
 		else:
+			print "Saving unconfigured call..."
 			return {
 				'callInfo':
 				(

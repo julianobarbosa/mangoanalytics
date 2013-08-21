@@ -160,3 +160,7 @@ class filterCDR(forms.Form):
         widget=forms.TextInput(attrs={'class':'input-medium'}))
     cost_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
         widget=forms.Select(attrs={'class':'span2'}))
+
+class getImportStartDate(forms.Form):
+    start_date = forms.DateField(label = 'Fecha inicial', error_messages={
+                'required':u'Please select a valid date.'})

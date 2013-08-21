@@ -7,9 +7,6 @@ from assignCallCost import CallCostAssigner
 from digester import Digester
 import subprocess
 import sys
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 def saveImportFinishStatus():
     am = AsteriskMySQLManager()
@@ -129,8 +126,12 @@ calls_not_saved = 0
 testRun = False
 
 if len(sys.argv) > 1:
-    if sys.argv[1] == '--testrun':
+    if sys.argv[1] != '':
+        #We try to create a new date
+        start = date(sys.argv[1])
+    if sys.argv[2] == '--testrun':
         testRun = True
+
 #Comenzamos borrando tooooodo
 if testRun:
         deleteAllUnconfiguredCalls()

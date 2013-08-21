@@ -44,9 +44,11 @@ urlpatterns = patterns('',
 
    url(r'^wizard/start$', wizard.start, name = "wizard_start"),
    url(r'^wizard/testRun$', wizard.testrun, name = "wizard_test_run"),
+   url(r'^wizard/testRun/(?P<default>\w+)$', wizard.testrun, name = "wizard_test_run"),
    url(r'^wizard/checkTestRunStatus$', wizard.checkTestRunStatus, name = "wizard_check_test_run_status"),
    url(r'^wizard/results$', wizard.results, name = "wizard_results"),
    url(r'^wizard/run$', wizard.run, name = "wizard_run"),
+   url(r'^wizard/run/(?P<default>\w+)$', wizard.run, name = "wizard_run"),
    url(r'^wizard/checkProcessingStatus$', wizard.checkProcessingStatus, name = "wizard_check_processing_status"),
 
    url(r'^pinsets/general$', pinsets.generalPinsets, name = 'pinsets_general'),

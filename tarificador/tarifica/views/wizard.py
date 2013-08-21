@@ -8,28 +8,51 @@ from django.core.exceptions import ObjectDoesNotExist
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 from tarifica import forms
+from dateutil.relativedelta import *
 from math import ceil
 
 def start(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     return render(request, 'tarifica/wizard/start.html', {})
 
-def testrun(request):
+def testrun(request, default="none"):
     import subprocess
     import os
+
+    start_date = datetime.date.today()
+    start_date = start_date - relativedelta(months=6)
+
+    if request.method == 'POST': 
+        form = forms.getImportStartDate(request.POST) 
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            default = 'default'
+    else:
+        form = forms.getImportStartDate(initial={
+            'start_date': start_date
+        })
+
     current_directory = os.path.dirname(os.path.realpath(__file__))
 
     user_info = get_object_or_404(UserInformation, id = 1)
     importer_script_path = current_directory+"/../tools/"
-    try:
-        p = subprocess.Popen(['python2.7', importer_script_path+'importer.py', '--testrun'])
-        # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', '--testrun'])
-    except Exception, e:
-        print "Error while dry running:",e
-        p = None
-    user_info.first_import_started = datetime.datetime.now()
-    user_info.save()
-    return render(request, 'tarifica/wizard/testRun.html', {'p': p })
+    if default == 'default':
+        try:
+            p = subprocess.Popen(
+                ['python2.7', importer_script_path+'importer.py', start_date, '--testrun']
+            )
+            # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', '--testrun'])
+        except Exception, e:
+            print "Error while dry running:",e
+            p = None
+        user_info.first_import_started = datetime.datetime.now()
+        user_info.save()
+
+    return render(request, 'tarifica/wizard/testRun.html', {
+        'form': form, 
+        'start_date': start_date,
+        'default': default
+    })
 
 def checkTestRunStatus(request):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -80,23 +103,43 @@ def results(request):
         'percentage_not_processed': (import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)) * 100
     })
 
-def run(request):
+def run(request, default="none"):
     import subprocess
     import os
+
+    start_date = datetime.date.today()
+    start_date = start_date - relativedelta(months=6)
+
+    if request.method == 'POST': 
+        form = forms.getImportStartDate(request.POST) 
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            default = 'default'
+    else:
+        form = forms.getImportStartDate(initial={
+            'start_date': start_date
+        })
+
     current_directory = os.path.dirname(os.path.realpath(__file__))
 
     user_info = get_object_or_404(UserInformation, id = 1)
     importer_script_path = current_directory+"/../tools/"
-    try:
-        p = subprocess.Popen(['python2.7', importer_script_path+'importer.py'])
-        # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
-    except Exception, e:
-        print "Error while digesting:",e
-        p = None
-    user_info.first_import_started = datetime.datetime.now()
-    user_info.is_first_import_finished = False
-    user_info.save()
-    return render(request, 'tarifica/wizard/run.html', {'p': p, 'cd': importer_script_path })
+    if default == 'default':
+        try:
+            p = subprocess.Popen(['python2.7', importer_script_path+'importer.py'])
+            # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
+        except Exception, e:
+            print "Error while digesting:",e
+            p = None
+        user_info.first_import_started = datetime.datetime.now()
+        user_info.is_first_import_finished = False
+        user_info.save()
+
+    return render(request, 'tarifica/wizard/run.html', {
+        'form': form, 
+        'start_date': start_date,
+        'default': default
+    })
 
 def checkProcessingStatus(request):
     user_info = get_object_or_404(UserInformation, id = 1)

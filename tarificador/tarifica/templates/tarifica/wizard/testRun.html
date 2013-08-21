@@ -1,14 +1,59 @@
 {% extends "wizard.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
+{% endblock %}
 
 {% block title %} Wizard - Test-run progress! {% endblock %}
 
 {% block content %}
-<h3>Test-run started successfully.</h3>
-<p>
-	You can check the current test-run progress <a href="{% url 'tarifica:wizard_check_test_run_status' %}">here</a>.
-</p>
-<p>
-	<h4>Output:</h4>
-	{{ p }}
-</p>
+	{% if default != 'default' %}
+	<div class="well well-small">
+		<h3>Select a date from which to start processing your data. By default, we'll start 6 months back.</h3>
+	</div>
+	<div class="row-fluid">
+		<div class="span6">
+			<a href="{% url 'tarifica:wizard_test_run' 'default' %}" class="btn btn-primary">Start Test Run from {{ start_date | date:"d/M/Y" }}</a>
+		</div>
+		<div class="span6">
+			<form id="modal-form" action="{% url 'tarifica:wizard_test_run' %}" method="post" class="form-horizontal">{% csrf_token %}
+	            {{ form.non_field_errors }}
+	            <div id="datetimepicker1" class="input-append">
+	                <label for="id_start_date">Select start date:</label>
+	                {{ form.start_date }}
+	                <span class="add-on">
+	                    <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+	                    </i>
+	                </span>
+	            </div>
+	            <p>
+	            </p>
+	            <div>
+	            	<button type="submit" class="btn">Start!</button>
+	            </div>
+	        </form>
+		</div>
+	</div>
+	{% else %}
+	<div class="well well-small">
+		<h4>
+			You can check the current test-run progress <a href="{% url 'tarifica:wizard_check_test_run_status' %}">here</a>.
+		</h4>
+	</div>
+	{% endif %}
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#datetimepicker1').datetimepicker({
+           	format: 'yyyy-MM-dd',
+            pickTime: false
+        });
+    });
+	</script>
 {% endblock %}
