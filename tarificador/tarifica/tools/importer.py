@@ -128,7 +128,10 @@ testRun = False
 if len(sys.argv) > 1:
     if sys.argv[1] != '':
         #We try to create a new date
-        start = date(sys.argv[1])
+        start = datetime.strptime(sys.argv[1], "%Y-%m-%d").date()
+        print start
+
+if len(sys.argv) > 2:
     if sys.argv[2] == '--testrun':
         testRun = True
 

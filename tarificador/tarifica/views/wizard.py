@@ -38,9 +38,12 @@ def testrun(request, default="none"):
     importer_script_path = current_directory+"/../tools/"
     if default == 'default':
         try:
-            p = subprocess.Popen(
-                ['python2.7', importer_script_path+'importer.py', start_date, '--testrun']
-            )
+            p = subprocess.Popen([
+                'python2.7', 
+                importer_script_path+'importer.py', 
+                start_date.strftime("%Y-%m-%d"), 
+                '--testrun'
+            ])
             # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py', '--testrun'])
         except Exception, e:
             print "Error while dry running:",e
@@ -126,7 +129,11 @@ def run(request, default="none"):
     importer_script_path = current_directory+"/../tools/"
     if default == 'default':
         try:
-            p = subprocess.Popen(['python2.7', importer_script_path+'importer.py'])
+            p = subprocess.Popen([
+                'python2.7', 
+                importer_script_path+'importer.py',
+                start_date.strftime("%Y-%m-%d")
+            ])
             # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
         except Exception, e:
             print "Error while digesting:",e

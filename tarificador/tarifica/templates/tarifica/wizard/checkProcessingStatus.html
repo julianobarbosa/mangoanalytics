@@ -14,12 +14,12 @@
 	<p>
 		<div class="progress progress-striped active" style="width:50%">
 			<div class="bar" style="width: {{ percentage_imported }}%;">
-				<span style="text-align:center;"><strong>{{ percentage_imported }}%</strong></span>
+				<span style="text-align:center;"><strong>{{ percentage_imported | floatformat:"2" }}%</strong></span>
 			</div>
 		</div>
 	</p>
 	<p>
-		Currently, we've processed {{ percentage_imported }}% of your data and it's taken us {{ lapsedMinutes }} minutes, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining }} minutes to finish.
+		Currently, we've processed {{ percentage_imported | floatformat:"2" }}% of your data and it's taken us {{ lapsedMinutes | floatformat:"2" }} minutes, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining | floatformat:"2" }} minutes to finish.
 	</p>
 	{% endif %}
 {% endblock %}
