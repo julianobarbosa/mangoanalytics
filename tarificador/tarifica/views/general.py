@@ -14,49 +14,50 @@ from tarifica.views.trunks import getBillingPeriods, dictfetchall
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
     if user_info.first_time_user:
+        #Import users, trunks and pinsets at first use...
+        a_mysql_m = AsteriskMySQLManager()
+        users = a_mysql_m.getUserInformation()
+        for u in users:
+            if u['name']:
+                try:
+                    e = Extension.objects.get(name = u['name'])
+                except Extension.DoesNotExist:
+                    e = Extension(
+                        name = u['name'],
+                        extension_number = u['extension'],
+                        )
+                    e.save()
+                except Extension.MultipleObjectsReturned:
+                    print "extensiones repetidas!"
+        pinsets = a_mysql_m.getPinsetInformation()
+        # Revisamos que haya pinsets configurados
+        if len(pinsets) > 0:
+            for u in pinsets:
+                try:
+                    e = Pinset.objects.get(pinset_number = u)
+                except Pinset.DoesNotExist:
+                    e = Pinset(pinset_number = u)
+                    e.save()
+                except Pinset.MultipleObjectsReturned:
+                    print "pinsets repetidos!"
+        trunks = a_mysql_m.getTrunkInformation()
+        for x in trunks:
+            if x['name']:
+                try:
+                    e = Provider.objects.get(asterisk_id = x['trunkid'])
+                except Provider.DoesNotExist:
+                    p = Provider(
+                        asterisk_id = x['trunkid'],
+                        asterisk_name = x['name'],
+                        name = x['name'],
+                        provider_tech = x['tech'],
+                        asterisk_channel_id = x['channelid']
+                        )
+                    p.save()
+                except Provider.MultipleObjectsReturned:
+                    print "troncales repetidas!"
         return HttpResponseRedirect('/config/initial') # Redirect after POST
 
-    a_mysql_m = AsteriskMySQLManager()
-    users = a_mysql_m.getUserInformation()
-    for u in users:
-        if u['name']:
-            try:
-                e = Extension.objects.get(name = u['name'])
-            except Extension.DoesNotExist:
-                e = Extension(
-                    name = u['name'],
-                    extension_number = u['extension'],
-                    )
-                e.save()
-            except Extension.MultipleObjectsReturned:
-                print "extensiones repetidas!"
-    pinsets = a_mysql_m.getPinsetInformation()
-    # Revisamos que haya pinsets configurados
-    if len(pinsets) > 0:
-        for u in pinsets:
-            try:
-                e = Pinset.objects.get(pinset_number = u)
-            except Pinset.DoesNotExist:
-                e = Pinset(pinset_number = u)
-                e.save()
-            except Pinset.MultipleObjectsReturned:
-                print "pinsets repetidos!"
-    trunks = a_mysql_m.getTrunkInformation()
-    for x in trunks:
-        if x['name']:
-            try:
-                e = Provider.objects.get(asterisk_id = x['trunkid'])
-            except Provider.DoesNotExist:
-                p = Provider(
-                    asterisk_id = x['trunkid'],
-                    asterisk_name = x['name'],
-                    name = x['name'],
-                    provider_tech = x['tech'],
-                    asterisk_channel_id = x['channelid']
-                    )
-                p.save()
-            except Provider.MultipleObjectsReturned:
-                print "troncales repetidas!"
     providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
     providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
     bundles = Bundle.objects.all().order_by('name')
