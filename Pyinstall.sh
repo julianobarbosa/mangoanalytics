@@ -33,3 +33,6 @@ mkdir /opt/NEXTOR/tarificador/django-tarificador
 cp -R nextor-tarificador/src /opt/NEXTOR/tarificador/django-tarificador/tarificador
 python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
 python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runserver 0.0.0.0:8000
+
+#Adding cron job...
+echo "5 * * * * python2.7 /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/importer.py" >> /var/spool/cron/root
