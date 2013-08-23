@@ -19,10 +19,8 @@
 <li>
     <a href="{% url 'tarifica:cdr' %}">General CDR</a>
 </li>
-<li class="pull-right active">
-    <a href="{% url 'tarifica:config' %}">My Settings</a>
-</li>
-<li class="pull-right">
-    <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
-</li>
+{% endblock %}
+
+{% block localization %}
+    <a class="brand" style="margin-left: 10px; text-align:vertical;" href="{% url 'tarifica:dashboard' %}">Dashboard</a>
 {% endblock %}

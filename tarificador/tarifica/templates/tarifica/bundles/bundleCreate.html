@@ -9,55 +9,69 @@
 
 {% block title %}Add bundles to {{ destination_group }}{% endblock %}
 
+{% block page-title %}
+    <a style="margin-left: 10px; text-align:vertical;" href="{% url 'tarifica:dashboard' %}">   Adding bundles to provider {{ destination_group.provider.name }} for destination {{ destination_group.destination_name.name }}
+    </a>
+{% endblock %}
+
 {% block content %}
-
-<div class="row-fluid well well-small">
-    <div class="span12">
-        <h4> Adding bundles to provider {{ destination_group.provider.name }} for destination {{ destination_group.destination_name.name }} </h4>
-    </div>
-</div>
-
 <form action="{% url 'tarifica:bundles_create' destination_group.id %}" method="post" class="form-horizontal">{% csrf_token %}
     {{ form.non_field_errors }}
     <div class="control-group">
         {{ form.name.errors }}
-        <label class="control-label" for="id_name">Name</label>
+        <label class="control-label" for="id_name">Name
+            <a class="help" href="#" data-toggle="popover" data-original-title="Bundle Name" data-content="Custom name for this bundle.">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             {{ form.name }}
-            <span class="help-inline">Custom name for this bundle.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.tariff_mode.errors }}
-        <label class="control-label" for="id_tariff_mode">Billing Mode</label>
+        <label class="control-label" for="id_tariff_mode">Billing Mode
+            <a class="help" href="#" data-toggle="popover" data-original-title="Billing Mode" data-content="Is this bundle billed per sesion or per minute?">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             {{ form.tariff_mode }}
-            <span class="help-inline">Is this bundle billed per sesion or per minute?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.cost.errors }}
-        <label class="control-label" for="id_cost">Cost</label>
+        <label class="control-label" for="id_cost">Cost
+            <a class="help" href="#" data-toggle="popover" data-original-title="Monthly Cost" data-content="The monthly fee charged by your provider for this bundle.">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             <div class="input-prepend input-append">
                 <span class="add-on">{{ user_info.currency_symbol }}</span>
                 {{ form.cost }}
                 <span class="add-on">{{ user_info.currency_code }}</span>
             </div>
-            <span class="help-inline">The monthly fee charged by your provider for this bundle.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.amount.errors }}
-        <label class="control-label" for="id_amount">Amount of minutes/sessions</label>
+        <label class="control-label" for="id_amount">Amount of minutes/sessions
+            <a class="help" href="#" data-toggle="popover" data-original-title="Minutes/Sessions" data-content="How many minutes/sessions are included in this bundle?">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             {{ form.amount }}
-            <span class="help-inline">How many minutes/sessions does this bundle have?</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.start_date.errors }}
-        <label class="control-label" for="id_start_date">Start Date</label>
+        <label class="control-label" for="id_start_date">Start Date
+            <a class="help" href="#" data-toggle="popover" data-original-title="Start Date" data-content="Date when your provider begins applying this bundle.">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             <div id="start_date_datepicker" class="input-append">
                 {{ form.start_date }}
@@ -65,12 +79,15 @@
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
             </div>
-            <span class="help-inline">Date when your provider begins applying this bundle.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.end_date.errors }}
-        <label class="control-label" for="id_end_date">End Date</label>
+        <label class="control-label" for="id_end_date">End Date
+            <a class="help" href="#" data-toggle="popover" data-original-title="End Date" data-content="By default, each bundle has a life span of 2 years. If you know, however, that this bundle lasts only for a fixed amount of months, select an end date here.">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             <div id="end_date_datepicker" class="input-append">
                 {{ form.end_date }}
@@ -78,15 +95,17 @@
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
             </div>
-            <span class="help-inline">By default, each bundle has a life span of 2 years. If you know, however, that this bundle lasts only for a fixed amount of months, select an end date here.</span>
         </div>
     </div>
     <div class="control-group">
         {{ form.priority.errors }}
-        <label class="control-label" for="id_amount">Priority</label>
+        <label class="control-label" for="id_priority">Apply Priority
+            <a class="help" href="#" data-toggle="popover" data-original-title="Bundle Apply Priority" data-content="If you have several bundles that include a common destination, which should be applied first? If priority is set to 1, it will be the first one to be applied.">
+                <i class="icon-question-sign"></i>
+            </a>
+        </label>
         <div class="controls">
             {{ form.priority }}
-            <span class="help-inline">If you have several bundles that include a common destination, which should be applied first?</span>
         </div>
     </div>
     <div class="form-actions">
@@ -112,6 +131,15 @@
         $('#end_date_datepicker').datetimepicker({
             pickTime: false,
             format: 'yyyy-MM-dd',
+        });
+    });
+
+    $(function() {
+        $('a.help').each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
         });
     });
     </script>

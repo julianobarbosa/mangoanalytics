@@ -72,13 +72,13 @@
 <div class="row-fluid">
 {% if extensions %}
     <div class="span6 well">
-        <h4> Usuarios con mayor uso </h4>
+        <h4>Most costly users</h4>
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <thead>
                 <tr>
-                    <th>EXT/PIN</th>
-                    <th>NAME</th>
-                    <th>COST {{ user_info.currency_code }}</th>
+                    <th>Extension</th>
+                    <th>Name</th>
+                    <th>Cost ({{ user_info.currency_code }})</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,12 +111,12 @@
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <thead>
                 <tr>
-                    <th>NAME</th>
-                    <th>EXT/PIN</th>
-                    <th>TOTAL MINUTES</th>
-                    <th>TOTAL CALLS</th>
-                    <th>PERIOD TOTAL {{ user_info.currency_code }}</th>
-                    <th>DETAIL</th>
+                    <th>Name</th>
+                    <th>Extension</th>
+                    <th>Total Minutes</th>
+                    <th>Total Calls</th>
+                    <th>Period Total ({{ user_info.currency_code }})</th>
+                    <th>Detail</th>
                 </tr>
             </thead>
             <tbody>

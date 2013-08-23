@@ -71,7 +71,11 @@
                     </span>
                 </div>
                 <div id="datetimepicker2" class="input-append">
-                    <label for="id_end_date">End date</label>
+                    <label for="id_end_date">
+                        End date <a class="help" href="#" data-toggle="popover" data-original-title="Want to show calls from one day only?" data-content="Select as start date a day before and as end date a day after the day you want to search.">
+                            <i class="icon-question-sign"></i>
+                        </a>
+                    </label>
                     {{ form.end_date_comparison }} {{ form.end_date }}
                     <span class="add-on">
                         <i data-time-icon="icon-time" data-date-icon="icon-calendar">
@@ -136,6 +140,11 @@
 			<span class="pull-right well well-small">
 				<strong>Showing page {{ page }} of {{ pages_number }}</strong>
 			</span>
+            <span class="pull-right well well-small" style="margin-right:10px;">
+                <strong>Total Calls:</strong> {{ items }} |
+                <strong>Total Minutes:</strong> {{ total_minutes }} |
+                <strong>Total Cost:</strong> {{ user_info.currency_symbol }}{{ total_cost }} {{ user_info.currency_code }}
+            </span>
 		</div>
 	</div>
 	<table class="table table-ordered table-striped table-bordered table-hovered table-condensed">
@@ -191,6 +200,13 @@
         		$("#id_action").val("download");
         		$("#filter-form").submit();
         	});
+
+            $(".help").each(function(){
+                $(this).popover({
+                    html: true,
+                    trigger: 'hover'
+                });
+            })
         });
     </script>
 {% endblock %}

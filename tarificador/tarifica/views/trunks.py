@@ -74,6 +74,7 @@ def general(request, period_id="thisMonth"):
             'provider': p, 
             'average_cost': average_cost,
             'this_month_total_usage' : this_month_total_usage,
+            'next_month_end_date': p.period_end - 1
         })
 
     destinationInfo = getAllProvidersDestinationCDR(start_date, end_date)

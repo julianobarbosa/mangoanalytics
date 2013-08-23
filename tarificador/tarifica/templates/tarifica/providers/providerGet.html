@@ -35,6 +35,14 @@
                 <td>{{ user_info.currency_symbol }}{{ dest.minute_fee }} {{ user_info.currency_code }}</td>
                 <td>{{ user_info.currency_symbol }}{{ dest.connection_fee|floatformat:2 }} {{ user_info.currency_code }}</td>
                 <td>{{ dest.billing_interval }}</td>
+                <td>
+                    <a href="{% url 'tarifica:destinations_update' dest.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Update">
+                        <i class="icon-pencil icon-white"></i>
+                    </a>
+                    <a href="{% url 'tarifica:destinations_delete' dest.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Delete">
+                        <i class="icon-remove-sign icon-white"></i>
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -62,6 +70,13 @@
                 <td>{{ user_info.currency_symbol }}{{ bundle.cost|floatformat:2 }}</td>
                 <td>{{ bundle.amount }}</td>
                 <td>{{ bundle.priority }}</td>
+                <td>
+                    <a href="{% url 'tarifica:bundles_update' bundle.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Edit">
+                        <i class="icon-pencil icon-white"></i>
+                    </a>
+                    <a href="{% url 'tarifica:bundles_delete' bundle.id %}" class="btn btn-mini btn-danger" data-toggle="tooltip" title="Delete">
+                        <i class="icon-remove-sign icon-white"></i></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

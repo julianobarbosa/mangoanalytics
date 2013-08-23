@@ -8,6 +8,7 @@ from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
+from tarifica.django_countries.fields import Country
 import json
 from tarifica.views.trunks import getBillingPeriods, dictfetchall
 
@@ -189,6 +190,9 @@ def dashboard(request):
         GROUP BY tarifica_userdailydetail.extension_id ORDER BY SUM(cost) DESC'
     cursor.execute(sql, (start_date, end_date))
     extensions = dictfetchall(cursor)[:3]
+
+    for locale in locales:
+        locale['flag'] = Country(code=locale['country_name']).flag
 
     #Information for graph
 

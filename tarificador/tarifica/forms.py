@@ -95,7 +95,8 @@ class getDate(forms.Form):
 
 class getUserInfo(forms.Form):
     bussiness_name = forms.CharField(max_length = 255, error_messages={
-                    'required':u'Por favor proporciona el nombre de tu empresa'})
+                    'required':u'Por favor proporciona el nombre de tu empresa'},
+                    widget=forms.TextInput(attrs={'class':'input-xlarge'}))
     contact_first_name = forms.CharField(max_length = 255, error_messages={
                     'required':u'Por favor proporciona el primer nombre del contacto'})
     contact_last_name = forms.CharField(max_length = 255, error_messages={
@@ -105,9 +106,11 @@ class getUserInfo(forms.Form):
                         'invalid':u'Por favor proporciona un correo electrónico válido.'})
     country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country')
     currency_code = forms.CharField(max_length = 10, error_messages={
-                    'required':u'Por favor proporciona el código del tipo de moneda'})
+                    'required':u'Por favor proporciona el código del tipo de moneda'},
+                    widget=forms.TextInput(attrs={'class':'input-mini'}))
     currency_symbol = forms.CharField(max_length = 1, error_messages={
-                    'required':u'Por favor proporciona el símbolo del tipo de moneda'})
+                    'required':u'Por favor proporciona el símbolo del tipo de moneda'},
+                    widget=forms.TextInput(attrs={'class':'input-mini'}))
 
 class loginForm(forms.Form):
     email = forms.CharField(max_length = 255, error_messages={

@@ -91,6 +91,7 @@
     </div>
 
     <div class="span6 well well-small">
+        <h5>This month's destinations</h5>
         <div id="graph1"></div>
     </div>
 </div>
@@ -99,16 +100,20 @@
 {% for prov in providers %}
 <div class="row-fluid">
     <div class="span6 well well-small">
+        <div class="row-fluid">
+            <div class="span6">
+                <h5>Provider {{prov.provider.name}}</h5>
+            </div>
+            <div class="span6">
+                <span class="pull-right">
+                    <a href="{% url 'tarifica:providers_get' prov.provider.id %}" class="btn btn-primary" style="margin-bottom:10px;">
+                        Tariffs and Bundles
+                    </a>
+                </span>
+            </div>
+        </div>
         <table class="table table-hovered table-condensed">
             <tbody>
-                <tr>
-                    <th><h5>Provider</h5></th>
-                    <td><h5>{{prov.provider.name}}
-                        <div id="container" style="float:right"> 
-                            <a href="{% url 'tarifica:providers_get' prov.provider.id %}">Info</a>
-                        </div></h5>
-                    </td>
-                </tr>
                 <tr>
                     <th>Trunk Name</th>
                     <td>{{prov.provider.asterisk_name}}</td>
@@ -143,7 +148,12 @@
         <div id="container" style="float:right"><a href="{% url 'tarifica:trunks_get' prov.provider.id %}" class="btn btn-primary"></i>More</a></div>
     </div>
     <div class="span6 well well-small">
-        <h5><strong>Monthly behavior of {{prov.provider.name}}</strong></h5>
+        <h5>
+            <strong>Monthly behavior of {{prov.provider.name}}</strong>
+            <a class="help" href="#" data-toggle="popover" data-original-title="Monthly Behavior Graph" data-content="Shows provider {{prov.provider.name}} costs by billing periods (e.g. {{prov.provider.period_end}}/Jul - {{prov.next_month_end_date}}/Aug) of each month.">
+                <i class="icon-question-sign"></i>
+            </a>
+        </h5>
         <div id="graph_provider_{{ prov.provider.id }}"></div>
     </div>
 </div>
@@ -162,17 +172,21 @@
     <script src="{% static "tarifica/js/plugins/jqplot.pointLabels.min.js" %}"></script>
 
     <script type="text/javascript">
-        $(function() {
-            $('#datetimepicker1').datetimepicker({
-                pickTime: false
-            });
+    $(function() {
+        $('#datetimepicker1').datetimepicker({
+            pickTime: false
         });
 
-        $(function() {
-            $('#datetimepicker2').datetimepicker({
-                pickTime: false
-            });
+        $('#datetimepicker2').datetimepicker({
+            pickTime: false
         });
+
+        $(".help").each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
+        })
 
         $('#modal-form-submit').on('click', function(e){
             // We don't want this to act as a link so cancel the link action
@@ -246,5 +260,6 @@
                 }
             });
         };
+    });
     </script>
 {% endblock %}

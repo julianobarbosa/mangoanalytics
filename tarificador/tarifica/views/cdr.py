@@ -9,6 +9,7 @@ from tarifica import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from csv import *
 from math import ceil
+from django.db.models import Sum
 
 def general(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -128,7 +129,8 @@ def general(request, page=1):
     else:
         items = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).count()
         calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)[page:limit]
-
+        total_minutes = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('duration'))
+        total_cost = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('cost'))
     pages_number = int(ceil(items/limit))
     previousPage = page - 1
     if previousPage < 1:
@@ -148,7 +150,9 @@ def general(request, page=1):
         'limit': limit,
         'previousPage': previousPage,
         'nextPage': nextPage,
-        'pages_number': pages_number
+        'pages_number': pages_number,
+        'total_minutes': total_minutes['duration__sum'],
+        'total_cost': total_cost['cost__sum'],
     })
 
 def dictfetchall(cursor):

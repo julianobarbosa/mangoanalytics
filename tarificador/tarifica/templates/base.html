@@ -4,6 +4,7 @@
 <head>
     {% block css %}
         <link href="{% static "tarifica/css/bootstrap.css" %}" rel="stylesheet" media="screen">
+        <link href="{% static "tarifica/css/styles.css" %}" rel="stylesheet" media="screen">
     {% endblock %}
     <link rel="shortcut icon" href="images/favicon.ico">
     <title>{% block title %}NEXTOR Tarificador{% endblock %}</title>
@@ -16,13 +17,6 @@
 
 <body>
     <div id="navbar">
-        <div class="navbar navbar-inverse navbar-static-top">
-            <div class="navbar-inner" style="padding-top: 5px; padding-bottom: 5px;">
-                <img class="pull-left" src="{% static "tarifica/img/mango_image_logo.png" %}" alt="Hi!" style="height:40px; margin-right:5px;"/>
-                <img class="pull-left" src="{% static "tarifica/img/mango_text_logo.png" %}" alt="Hi!" />
-                <a class="brand" style="margin-left: 10px; text-align:vertical;" href="#">Trunks</a>
-            </div>
-        </div>
         <ul class="nav nav-pills well well-small">
             {% block navbar %}
             <li>
@@ -51,6 +45,34 @@
             </li>
             {% endblock %}
         </ul>
+    </div>
+    <div class="navbar">
+        <div class="navbar-inner" style="padding-top: 5px; padding-bottom: 5px;">
+            <a href="{% url 'tarifica:dashboard' %}">
+                <img class="pull-left" src="{% static "tarifica/img/mango_image_logo.png" %}" alt="Hi!" style="height:40px; margin-right:5px;"/>
+            </a>
+            <a href="{% url 'tarifica:dashboard' %}">
+                <img class="pull-left" src="{% static "tarifica/img/mango_text_logo.png" %}" 
+                alt="Hi!" />
+            </a>
+            {% block localization %}
+                <a class="brand" style="margin-left: 10px; text-align:vertical;" href="{% url 'tarifica:dashboard' %}">Dashboard</a>
+            {% endblock %}
+            <ul class="nav">
+                <li>
+                {% block page-title %}
+                {% endblock %}
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+                <li>
+                    <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
+                </li>
+                <li>
+                    <a href="{% url 'tarifica:config' %}">My Settings</a>
+                </li>
+            </ul>
+        </div>
     </div>
     {% block content %}{% endblock %}
     <footer class="footer">
