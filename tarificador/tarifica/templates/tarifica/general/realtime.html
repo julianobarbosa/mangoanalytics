@@ -88,7 +88,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <input type="hidden" id="graph_data" value="{{ graphData | safe }}">
         </div>
     </div>
     {% else %}
@@ -136,13 +135,12 @@
             $.ajax({
                 url: "{% url 'tarifica:realtime' 'update' %}",
                 type: 'GET',
-                dataType: 'html',
+                dataType: 'json',
             })
             .done(function(data) {
-                $('#container').html(data);
-                var graphData = $("input#graph_data").val();
-                console.log(graphData);
-                data = $.parseJSON(graphData);
+                $('#container').html(data.htmlData);
+                console.log(data.graphData);
+                data = $.parseJSON(data.graphData);
                 if(graphExists){
                     plot1.destroy();
                 }

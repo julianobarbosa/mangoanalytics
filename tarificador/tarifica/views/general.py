@@ -2,6 +2,7 @@
 
 import datetime
 from django.utils.timezone import utc
+from django.template import RequestContext, loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
@@ -123,11 +124,15 @@ def realtime(request, action="show"):
     print 'graphData:',graphData
 
     if action == "update":
-        return render(request, 'tarifica/general/updateRealtime.html', {
+        template = loader.get_template('tarifica/general/updateRealtime.html')
+        htmlData = template.render(RequestContext(request, {
             'user_info' : user_info,
             'data' : data,
+        }))
+        return HttpResponse(json.dumps({
+            'htmlData': htmlData,
             'graphData' : json.dumps(graphData),
-        })
+        }))
 
     return render(request, 'tarifica/general/realtime.html', {
         'user_info' : user_info,
