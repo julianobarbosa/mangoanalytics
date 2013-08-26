@@ -36,49 +36,50 @@
 			<strong>% Not Processed:</strong> {{ percentage_not_processed | floatformat:"2" }}
 		</p>
 	</div>
-	<div class="span10 well well-small">
-		<h5>Calls that could not be saved:</h5>
-		<table class="table table-condensed table-hovered table-striped">
-			<thead>
-				<tr>
-					<th>Date</th>
-					<th>Provider</th>
-					<th>Dialed Number</th>
-					<th>Extension</th>
-					<th>Seconds</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for call in unconfigured_calls %}
-				<tr>
-					<td>{{ call.date | date:"d/M/Y H:i:s" }}</td>
-					<td>{{ call.provider }}</td>
-					<td>{{ call.dialed_number }}</td>
-					<td>{{ call.extension_number }}</td>
-					<td>{{ call.duration }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-</div>
-
-<div class="row-fluid">
-	<div class="span6 well well-small">
-		<p>
-			If you're not satisfied with this results, you can add tariffs to even more specific prefixes.
-		</p>
-		<a class="btn btn-primary" href="{% url 'tarifica:setup' %}">
-			Go to Setup
-		</a>
-	</div>
-	<div class="span6 well well-small">
-		<p>
-			If everything is as it should be, you're set to go! Run this again to save all assigned costs and start analysing extracted information.
-		</p>
-		<a class="btn btn-primary" href="{% url 'tarifica:wizard_run' %}">
-			Run and save
-		</a>
+	<div class="span10">
+		<div class="well well-small">
+			<h5>Calls that could not be saved:</h5>
+			<table class="table table-condensed table-hovered table-striped">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Provider</th>
+						<th>Dialed Number</th>
+						<th>Extension</th>
+						<th>Seconds</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for call in unconfigured_calls %}
+					<tr>
+						<td>{{ call.date | date:"d/M/Y H:i:s" }}</td>
+						<td>{{ call.provider }}</td>
+						<td>{{ call.dialed_number }}</td>
+						<td>{{ call.extension_number }}</td>
+						<td>{{ call.duration }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div>
+			<div class="well well-small">
+				<p>
+					If you're not satisfied with this results, you can add tariffs to even more specific prefixes.
+				</p>
+				<a class="btn btn-primary" href="{% url 'tarifica:setup' %}">
+					Go to Setup
+				</a>
+			</div>
+			<div class="well well-small">
+				<p>
+					If everything is as it should be, you're set to go! Run this again to save all assigned costs and start analysing extracted information.
+				</p>
+				<a class="btn btn-primary" href="{% url 'tarifica:wizard_run' %}">
+					Run and save
+				</a>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

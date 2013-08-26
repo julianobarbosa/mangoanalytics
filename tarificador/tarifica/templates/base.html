@@ -66,12 +66,12 @@
                 <!-- Data processing status bar-->
                 {% if user_info.test_run_in_progress %}
                 <li>
-                    <a href="{% url 'tarifica:checkTestRunStatus' %}"><i class="icon-exclamation-sign"></i> Check Test Run Status</a>
+                    <a href="{% url 'tarifica:checkTestRunStatus' 'show' %}"><i class="icon-exclamation-sign"></i> Check Test Run Status</a>
                 </li>
                 {% endif %}
                 {% if user_info.processing_in_progress %}
                 <li>
-                    <a href="{% url 'tarifica:checkProcessingStatus' %}"><i class="icon-exclamation-sign"></i> Check Import Status</a>
+                    <a href="{% url 'tarifica:checkProcessingStatus' 'show' %}"><i class="icon-exclamation-sign"></i> Check Import Status</a>
                 </li>
                 {% endif %}
                 <li>

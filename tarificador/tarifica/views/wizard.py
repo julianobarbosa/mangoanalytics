@@ -53,7 +53,7 @@ def testrun(request, default="none"):
             p = None
         user_info.first_import_started = datetime.datetime.now()
         user_info.save()
-        return HttpResponseRedirect('/wizard/checkTestRunStatus')
+        return HttpResponseRedirect('/wizard/checkTestRunStatus/show')
 
     return render(request, 'tarifica/wizard/testRun.html', {
         'form': form, 
@@ -112,7 +112,7 @@ def results(request):
     user_info.save()
 
     import_results = ImportResults.objects.order_by('-id')[0]
-    unconfigured_calls = UnconfiguredCall.objects.all()
+    unconfigured_calls = UnconfiguredCall.objects.all()[:100]
     return render(request, 'tarifica/wizard/results.html', {
         'import_results': import_results,
         'unconfigured_calls': unconfigured_calls,
@@ -156,7 +156,7 @@ def run(request, default="none"):
         user_info.first_import_started = datetime.datetime.now()
         user_info.is_first_import_finished = False
         user_info.save()
-        return HttpResponseRedirect('/wizard/checkProcessingStatus')
+        return HttpResponseRedirect('/wizard/checkProcessingStatus/show')
 
     return render(request, 'tarifica/wizard/run.html', {
         'form': form, 
