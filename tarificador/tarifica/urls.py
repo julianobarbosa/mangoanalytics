@@ -29,6 +29,7 @@ urlpatterns = patterns('',
    url(r'^trunks/download/(?P<provider_id>\d+)/(?P<start_date>[A-Za-z0-9_\-]+)/(?P<end_date>[A-Za-z0-9_\-]+)$', trunks.downloadTrunkCDR, name = 'trunks_download_cdr'),
 
    url(r'^realtime$', general.realtime, name = 'realtime'),
+   url(r'^realtime/(?P<action>\w+)$', general.realtime, name = 'realtime'),
 
    url(r'^dashboard$', general.dashboard, name = 'dashboard'),
    
@@ -46,10 +47,12 @@ urlpatterns = patterns('',
    url(r'^wizard/testRun$', wizard.testrun, name = "wizard_test_run"),
    url(r'^wizard/testRun/(?P<default>\w+)$', wizard.testrun, name = "wizard_test_run"),
    url(r'^wizard/checkTestRunStatus$', wizard.checkTestRunStatus, name = "wizard_check_test_run_status"),
+   url(r'^wizard/checkTestRunStatus/(?P<action>\w+)$', wizard.checkTestRunStatus, name = "wizard_check_test_run_status"),
    url(r'^wizard/results$', wizard.results, name = "wizard_results"),
    url(r'^wizard/run$', wizard.run, name = "wizard_run"),
    url(r'^wizard/run/(?P<default>\w+)$', wizard.run, name = "wizard_run"),
    url(r'^wizard/checkProcessingStatus$', wizard.checkProcessingStatus, name = "wizard_check_processing_status"),
+   url(r'^wizard/checkProcessingStatus/(?P<action>\w+)$', wizard.checkProcessingStatus, name = "wizard_check_processing_status"),
 
    url(r'^pinsets/general$', pinsets.generalPinsets, name = 'pinsets_general'),
    url(r'^pinsets/general/(?P<period_id>\w+)$', pinsets.generalPinsets, name = 'pinsets_general_period'),

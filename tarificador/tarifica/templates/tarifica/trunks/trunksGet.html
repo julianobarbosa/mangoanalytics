@@ -9,13 +9,21 @@
 
 {% block title %} Trunks {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Trunk {{ provider.name }} Detail
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
-<div class="well well-small">
-    <ul class="breadcrumb">
-        <li><a href="{% url 'tarifica:trunks' %}">Trunks</a> <span class="divider">/</span></li>
-        <li class="active">{{ provider.name }}</li>
-    </ul>
-</div>
+
 <div class="row-fluid">
 
     <div class="span12 well well-small">
@@ -71,7 +79,7 @@
             <h5> Usage ({{start_date}} - {{end_date}})</h5>
             <tbody>
                 <tr>
-                    <th>PROVIDER</th>
+                    <th>Provider</th>
                     <td>{{provider.name}}
                         <div id="container" style="float:right"> 
                             <a href="{% url 'tarifica:providers_get' provider.id %}">Info</a>
@@ -79,25 +87,25 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>TRUNK NAME</th>
+                    <th>Trunk Name</th>
                     <td>{{provider.asterisk_name}}</td>
                 </tr>
                 <tr>
-                    <th>TRUNK TYPE</th>
+                    <th>Trunk Type</th>
                     <td>{{provider.provider_tech}}</td>
                 </tr>
                 <tr>
-                    <th>BILLING CYCLE</th>
+                    <th>Billing Cycle</th>
                     <td>{{provider.period_end}} of every month</td>
                 </tr>
                 <tr>
-                    <th>PAYMENT TYPE</th>
+                    <th>Payment Type</th>
                     <td>{{provider.payment_type}}</td>
                 </tr>
             </tbody>
         </table>
 
-        <h5><br><strong>AVERAGE MONTHLY COST</strong></h5>
+        <h5><br><strong>Average Monthly Cost</strong></h5>
 
         <table class="table table-hovered table-condensed">
             <tbody>
@@ -128,19 +136,19 @@
 
 <div class="row-fluid">
     <div class="span6 well well-small">
-        <h5><strong>TRAFIC SEGMENTATION BY COST</strong></h5>
+        <h5><strong>Traffic Segmentation by Cost</strong></h5>
         <div id="graph_destination"></div>
     </div>
 
     <div class="span6 well well-small">
-        <h5><strong>BILLING</strong></h5>
+        <h5><strong>Billing</strong></h5>
         <table class="table table-bordered table-striped table-hovered table-condensed">
             <thead>
                 <tr>
-                    <th>BILLING INTERVAL</th>
-                    <th>TOTAL COST</th>
-                    <th>TOTAL CALLS</th>
-                    <th>TOTAL MINUTES</th>
+                    <th>Billing Interval</th>
+                    <th>Total Cost</th>
+                    <th>Total Calls</th>
+                    <th>Total Seconds</th>
                 </tr>
             </thead>
             <tbody>
@@ -151,7 +159,7 @@
                         </td>
                         <td>{{ user_info.currency_symbol }}{{ b.total_cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
                         <td>{{ b.total_calls }}</td>
-                        <td>{{ b.total_minutes }}</td>
+                        <td>{{ b.total_seconds }}</td>
                     </tr>
                     {% endfor %}
             </tbody>
@@ -217,6 +225,10 @@
         // Billing period usage graphs:
         var cost = $.parseJSON('{{ cost_graph | safe }}');
         var minutes = $.parseJSON('{{ minutes_graph | safe }}');
+        console.log(minutes);
+        for (var i = 0; i < minutes.length; i++) {
+            minutes[i][1] = minutes[i][1] / 60;
+        };
          
         var plot1 = $.jqplot('graph_use', [cost, minutes], {
             series:[

@@ -35,11 +35,24 @@
 
 {% block title %} Dashboard {% endblock %}
 
-{% block content %}
+{% block localization %}
+    <a class="brand" style="margin-left: 10px; text-align:vertical;padding-right: 10px;" href="{% url 'tarifica:dashboard' %}">Dashboard</a>
+{% endblock %}
 
-<div class="well well-small">
-    <h3>Main Dashboard</h3>
-</div>
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Main Dashboard
+    </a>
+</li>
+{% endblock %}
+
+{% block content %}
 
 <div class="row-fluid">
     <div class="span6 well well-small">

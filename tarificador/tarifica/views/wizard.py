@@ -35,6 +35,9 @@ def testrun(request, default="none"):
     current_directory = os.path.dirname(os.path.realpath(__file__))
 
     user_info = get_object_or_404(UserInformation, id = 1)
+    user_info.test_run_in_progress = True
+    user_info.save()
+
     importer_script_path = current_directory+"/../tools/"
     if default == 'default':
         try:
@@ -50,6 +53,7 @@ def testrun(request, default="none"):
             p = None
         user_info.first_import_started = datetime.datetime.now()
         user_info.save()
+        return HttpResponseRedirect('/wizard/checkTestRunStatus')
 
     return render(request, 'tarifica/wizard/testRun.html', {
         'form': form, 
@@ -57,7 +61,7 @@ def testrun(request, default="none"):
         'default': default
     })
 
-def checkTestRunStatus(request):
+def checkTestRunStatus(request, action="show"):
     user_info = get_object_or_404(UserInformation, id = 1)
     # By default, we import 6 month's worth of data, so we can check how many
     # days are between today and the last date imported.
@@ -85,6 +89,15 @@ def checkTestRunStatus(request):
         percentage_imported = 0
         lapsedMinutes = 0
         minutesRemaining = 'infinite'
+
+    if action == 'update':
+        # AJAX request to show info
+        return render(request, 'tarifica/wizard/updateTestRunStatus.html', {
+            'user_info': user_info,
+            'percentage_imported': percentage_imported,
+            'lapsedMinutes': lapsedMinutes,
+            'minutesRemaining': minutesRemaining
+        })
 
     return render(request, 'tarifica/wizard/checkTestRunStatus.html', {
         'user_info': user_info,
@@ -126,6 +139,8 @@ def run(request, default="none"):
     current_directory = os.path.dirname(os.path.realpath(__file__))
 
     user_info = get_object_or_404(UserInformation, id = 1)
+    user_info.processing_in_progress = True
+    user_info.save()
     importer_script_path = current_directory+"/../tools/"
     if default == 'default':
         try:
@@ -141,6 +156,7 @@ def run(request, default="none"):
         user_info.first_import_started = datetime.datetime.now()
         user_info.is_first_import_finished = False
         user_info.save()
+        return HttpResponseRedirect('/wizard/checkProcessingStatus')
 
     return render(request, 'tarifica/wizard/run.html', {
         'form': form, 
@@ -148,7 +164,7 @@ def run(request, default="none"):
         'default': default
     })
 
-def checkProcessingStatus(request):
+def checkProcessingStatus(request, action="show"):
     user_info = get_object_or_404(UserInformation, id = 1)
     # By default, we import 6 month's worth of data, so we can check how many
     # days are between today and the last date imported.
@@ -176,6 +192,15 @@ def checkProcessingStatus(request):
         percentage_imported = 0
         lapsedMinutes = 0
         minutesRemaining = 'infinite'
+
+    if action == 'update':
+        # AJAX request to show info
+        return render(request, 'tarifica/wizard/updateProcessingStatus.html', {
+            'user_info': user_info,
+            'percentage_imported': percentage_imported,
+            'lapsedMinutes': lapsedMinutes,
+            'minutesRemaining': minutesRemaining
+        })
 
     return render(request, 'tarifica/wizard/checkProcessingStatus.html', {
         'user_info': user_info,

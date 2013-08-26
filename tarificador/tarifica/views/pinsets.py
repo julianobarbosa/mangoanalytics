@@ -51,7 +51,7 @@ def generalPinsets(request, period_id="thisMonth"):
     cursor.execute(
         'SELECT tarifica_pinsetdailydetail.id, SUM(tarifica_pinsetdailydetail.cost) AS cost, \
         SUM(tarifica_pinsetdailydetail.total_calls) AS calls , \
-        SUM(tarifica_pinsetdailydetail.total_minutes) AS minutes, tarifica_pinset.pinset_number, \
+        SUM(tarifica_pinsetdailydetail.total_seconds) AS seconds, tarifica_pinset.pinset_number, \
         tarifica_pinsetdailydetail.pinset_id AS pinid \
         FROM tarifica_pinsetdailydetail LEFT JOIN tarifica_pinset\
         ON tarifica_pinsetdailydetail.pinset_id = tarifica_pinset.id \

@@ -9,6 +9,19 @@
 
 {% block title %} Trunks {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        General
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
 
 <div class="row-fluid">
@@ -70,6 +83,7 @@
                     <th>Provider</th>
                     <th>Bundles Cost</th>
                     <th>Calls Cost</th>
+                    <th>Monthly Cost</th>
                     <th>Total Cost</th>
                 </tr>
             </thead>
@@ -80,6 +94,8 @@
                     <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_bundle_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
                     <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_call_cost | floatformat:"2" }} {{ user_info.currency_code }}
+                    </td>
+                    <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.monthly_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>
                     <td>{{ user_info.currency_symbol }}{{ prov.this_month_total_usage.total_cost | floatformat:"2" }} {{ user_info.currency_code }}
                     </td>

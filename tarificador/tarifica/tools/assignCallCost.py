@@ -265,7 +265,7 @@ class CallCostAssigner:
 					dialedNoForProvider, 
 					call['src'], 
 					call['accountcode'],
-					ceil(call['billsec'] / 60), 
+					call['billsec'], 
 					cost, 
 					datetime.datetime(
 						year=call['calldate'].year, 
@@ -289,7 +289,7 @@ class CallCostAssigner:
 					call['dst'], 
 					call['src'], 
 					call['accountcode'], 
-					ceil(call['billsec'] / 60),
+					call['billsec'], 
 					callInfoList[1],
 					datetime.datetime(
 						year=call['calldate'].year, 

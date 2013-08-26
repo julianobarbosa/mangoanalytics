@@ -9,6 +9,19 @@
 
 {% block title %} Pinsets {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        General
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
 <div class="row-fluid">
 
@@ -110,7 +123,7 @@
             <thead>
                 <tr>
                     <th>Pinset</th>
-                    <th>Total Minutes</th>
+                    <th>Total Seconds</th>
                     <th>Total Calls</th>
                     <th>Period Total ({{ user_info.currency_code }})</th>
                     <th>Detail</th>
@@ -120,7 +133,7 @@
                 {% for pin in all_pinsets %}
                 <tr>
                     <td>{{pin.pinset_number}}</td>
-                    <td>{{pin.minutes}}</td>
+                    <td>{{pin.seconds}}</td>
                     <td>{{pin.calls}}</td>
                     <td>{{ user_info.currency_symbol }}{{pin.cost | floatformat:"2"}}</td>
                     <td><a href="{% url 'tarifica:pinsets_detail' pin.pinid%}">More</a></td>

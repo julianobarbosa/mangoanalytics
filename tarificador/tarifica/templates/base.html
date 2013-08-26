@@ -56,44 +56,100 @@
                 alt="Hi!" />
             </a>
             {% block localization %}
-                <a class="brand" style="margin-left: 10px; text-align:vertical;" href="{% url 'tarifica:dashboard' %}">Dashboard</a>
+                <a class="brand" style="margin-left: 10px; text-align:vertical;padding-right: 10px;" href="{% url 'tarifica:dashboard' %}">Dashboard</a>
             {% endblock %}
             <ul class="nav">
-                <li>
                 {% block page-title %}
                 {% endblock %}
-                </li>
             </ul>
             <ul class="nav pull-right">
+                <!-- Data processing status bar-->
+                {% if user_info.test_run_in_progress %}
+                <li>
+                    <a href="{% url 'tarifica:setup' %}"><i class="icon-exclamation-sign"></i> Check Test Run Status</a>
+                </li>
+                {% endif %}
+                {% if user_info.processing_in_progress %}
+                <li>
+                    <a href="{% url 'tarifica:setup' %}"><i class="icon-exclamation-sign"></i> Check Import Status</a>
+                </li>
+                {% endif %}
                 <li>
                     <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
                 </li>
                 <li>
                     <a href="{% url 'tarifica:config' %}">My Settings</a>
                 </li>
+                <li>
+                    <a href="#myModal" role="button" data-toggle="modal">About</a>
+                </li>
             </ul>
         </div>
     </div>
     {% block content %}{% endblock %}
-    <footer class="footer">
-        <div class="container">
-            <p>NEXTOR Telecom.</p>
-            <p>Version 1.0</p>
+    <footer class="well well-small">
+        <div>
+            <ul class="footer-nav clearfix">
+                <li>
+                    <a href="">Home</a>
+                </li>
+                <li>|</li>
+                <li>
+                    <a href="">Settings</a>
+                </li>
+                <li>|</li>
+                <li>
+                    <a href="">Setup</a>
+                </li>
+                <li>|</li>
+                <li>
+                    <a href="">About</a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <p style="text-align: center;">
+                Mango Analytics is licensed under GPL by NZXT Telecomunicaciones de México, S.A., 2013
+            </p>
+            <p style="text-align: center;">
+                <strong>
+                NZXT Telecomunicaciones de México, S.A. | Version 1.0
+                </strong>
+            </p>
         </div>
     </footer>
 
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">About Mango Analytics</h3>
+        </div>
+        <div class="modal-body">
+            <h4>
+                Mango Analytics
+            </h4>
+            <p>
+                Copyright NZXT Telecomunicaciones de México, S.A., México Distrito Federal, 2013.
+            </p>
+            <p>
+                Versión 1.0
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+
 {% block js %}
     <script src="{% static "tarifica/js/jquery.min.js" %}"></script>
-    <script src="{% static "tarifica/js/jquery-ui-1.10.3.custom.min.js" %}"></script>
-    <script src="{% static "tarifica/js/jquery.ui.touch-punch.min.js" %}"></script>
     <script src="{% static "tarifica/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "tarifica/js/bootstrap-select.js" %}"></script>
-    <script src="{% static "tarifica/js/bootstrap-switch.js" %}"></script>
-    <script src="{% static "tarifica/js/flatui-checkbox.js" %}"></script>
-    <script src="{% static "tarifica/js/flatui-radio.js" %}"></script>
-    <script src="{% static "tarifica/js/jquery.tagsinput.js" %}"></script>
-    <script src="{% static "tarifica/js/jquery.placeholder.js" %}"></script>
-    <script src="{% static "tarifica/js/jquery.stacktable.js" %}"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('a#about').on('click', function(){
+
+        });
+    });
+    </script>
 {% endblock %}
 
 </body>

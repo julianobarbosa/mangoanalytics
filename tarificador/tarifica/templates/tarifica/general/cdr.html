@@ -46,11 +46,24 @@
 
 {% block title %} Dashboard {% endblock %}
 
-{% block content %}
+{% block localization %}
+    <a class="brand" style="margin-left: 10px; text-align:vertical;padding-right: 10px;" href="{% url 'tarifica:cdr' %}">General CDR</a>
+{% endblock %}
+            
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        General Cost Detail Report
+    </a>
+</li>
+{% endblock %}
 
-<div class="well well-small">
-    <h4>General Cost Detail Report</h4>
-</div>
+{% block content %}
 
 <div class="well well-small">
 	<form action="{% url 'tarifica:cdr' %}" method="post" id="filter-form">{% csrf_token %}
@@ -118,11 +131,18 @@
                 </div>
 			</div>
 			<div class="span2">
-                <p class="pull-right">
-			    	<button class="btn" id="download_cdr">
-			    	<i class="icon-download"></i> Download Current Data
-			    	</button>
-			    </p>
+                <div class="alert alert-info">
+                    <ul>
+                        <li>
+                            To search for a value higher than 
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <button class="btn" id="download_cdr">
+                    <i class="icon-download"></i> Download Current Data
+                    </button>
+                </div>
 			</div>
 		</div>
 	</form>
@@ -167,7 +187,7 @@
 				<td>{{ call.pinset_number }}</td>
 				<td>{{ call.provider.name }}</td>
 				<td>{{ call.destination_group.destination_name.name }}</td>
-				<td>{{ call.duration }} min.</td>
+				<td>{{ call.duration }} sec.</td>
 				<td>{{ user_info.currency_symbol }}{{ call.cost }} {{ user_info.currency_code }}</td>
 			</tr>
 			{% endfor %}

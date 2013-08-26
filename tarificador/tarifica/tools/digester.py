@@ -18,7 +18,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_extension.id as extension_number, \
 			tarifica_call.date as date \
@@ -31,7 +31,7 @@ class Digester:
 			d = (
 				row['extension_number'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['cost'],
 				row['date']
 			)
@@ -43,7 +43,7 @@ class Digester:
 		callData = self.getUserDailyDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdailydetail \
-		(extension_id, total_calls, total_minutes, cost, date) \
+		(extension_id, total_calls, total_seconds, cost, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -54,7 +54,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.date as date, \
 			tarifica_extension.id as extension_number, \
@@ -69,7 +69,7 @@ class Digester:
 			callDetail.append((
 				row['extension_number'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['cost'],
 				row['destination_group_id'],
 				row['date']
@@ -80,7 +80,7 @@ class Digester:
 		callData = self.getUserDestinationDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdestinationdetail \
-		(extension_id, total_calls, total_minutes, cost, destination_group_id, date) \
+		(extension_id, total_calls, total_seconds, cost, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -91,7 +91,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.dialed_number as dialed_number, \
 			tarifica_extension.id as extension_number, \
@@ -108,7 +108,7 @@ class Digester:
 			callDetail.append((
 				row['extension_number'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['cost'],
 				row['prefix'],
 				row['dialed_number'],
@@ -120,7 +120,7 @@ class Digester:
 		callData = self.getUserDestinationNumberDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_userdestinationnumberdetail \
-		(extension_id, total_calls, total_minutes, cost, prefix, number, date) \
+		(extension_id, total_calls, total_seconds, cost, prefix, number, date) \
 		VALUES(%s, %s, %s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -132,7 +132,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.date as date, \
 			tarifica_destinationgroup.provider_id as provider \
@@ -146,7 +146,7 @@ class Digester:
 				row['provider'],
 				row['cost'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['date']
 			))
 		return callDetail
@@ -155,7 +155,7 @@ class Digester:
 		callData = self.getProviderDailyDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_providerdailydetail \
-		(provider_id, cost, total_calls, total_minutes, date) \
+		(provider_id, cost, total_calls, total_seconds, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -166,7 +166,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.date as date, \
 			tarifica_call.destination_group_id as destination_group_id, \
@@ -181,7 +181,7 @@ class Digester:
 				row['provider'],
 				row['cost'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['destination_group_id'],
 				row['date']
 			))
@@ -191,7 +191,7 @@ class Digester:
 		callData = self.getProviderDestinationDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_providerdestinationdetail \
-		(provider_id, cost, total_calls, total_minutes, destination_group_id, date) \
+		(provider_id, cost, total_calls, total_seconds, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -203,7 +203,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_pinset.id as pinset_number, \
 			tarifica_call.date as date \
@@ -216,7 +216,7 @@ class Digester:
 			d = (
 				row['pinset_number'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['cost'],
 				row['date']
 			)
@@ -228,7 +228,7 @@ class Digester:
 		callData = self.getPinsetDailyDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_pinsetdailydetail \
-		(pinset_id, total_calls, total_minutes, cost, date) \
+		(pinset_id, total_calls, total_seconds, cost, date) \
 		VALUES(%s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -239,7 +239,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.date as date, \
 			tarifica_pinset.id as pinset_number, \
@@ -254,7 +254,7 @@ class Digester:
 			callDetail.append((
 				row['pinset_number'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['cost'],
 				row['destination_group_id'],
 				row['date']
@@ -265,7 +265,7 @@ class Digester:
 		callData = self.getPinsetDestinationDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_pinsetdestinationdetail \
-		(pinset_id, total_calls, total_minutes, cost, destination_group_id, date) \
+		(pinset_id, total_calls, total_seconds, cost, destination_group_id, date) \
 		VALUES(%s, %s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()
@@ -276,7 +276,7 @@ class Digester:
 		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
-			SUM(tarifica_call.duration) as total_minutes, \
+			SUM(tarifica_call.duration) as total_seconds, \
 			COUNT(tarifica_call.id) as total_calls, \
 			tarifica_call.dialed_number as dialed_number, \
 			tarifica_pinset.id as pinset_number, \
@@ -293,7 +293,7 @@ class Digester:
 			callDetail.append((
 				row['pinset_number'],
 				row['total_calls'],
-				row['total_minutes'],
+				row['total_seconds'],
 				row['cost'],
 				row['prefix'],
 				row['dialed_number'],
@@ -305,7 +305,7 @@ class Digester:
 		callData = self.getPinsetDestinationNumberDetail(day)
 		self.am.connect('nextor_tarificador')
 		sql = "INSERT INTO tarifica_pinsetdestinationnumberdetail \
-		(pinset_id, total_calls, total_minutes, cost, prefix, number, date) \
+		(pinset_id, total_calls, total_seconds, cost, prefix, number, date) \
 		VALUES(%s, %s, %s, %s, %s, %s, %s)"
 		totalRowsSaved = self.am.cursor.executemany(sql, callData)
 		self.am.db.commit()

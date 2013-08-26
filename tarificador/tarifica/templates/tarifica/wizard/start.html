@@ -2,27 +2,42 @@
 
 {% block title %} Wizard - Start {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Start
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
-<h3>Wizard - Start:</h3>
-<p>
-	This wizard will help you assign costs to all your calls. You can safely run this wizard again if your realize some prefix had the wrong tariff assigned, or other mistakes.
-</p>
+<div class="well well-small">
+	<h3>Wizard - Start:</h3>
+	<p>
+		This wizard will help you assign costs to all your calls. You can safely run this wizard again if your realize some prefix had the wrong tariff assigned, or other mistakes.
+	</p>
 
-<h4>Step 1:</h4>
-<p>
-	Begin by making sure all your trunks are configured and all the base tariffs and corresponding provider bundles are in. Don't worry, if after assigning costs to your calls you realize some tariff or prefix was missing, you can run this again.
-</p>
-<p>
-	<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
-		Configure Providers, Tariffs and Bundles
-	</a>
-</p>
+	<h4>Step 1:</h4>
+	<p>
+		Begin by making sure all your trunks are configured and all the base tariffs and corresponding provider bundles are in. Don't worry, if after assigning costs to your calls you realize some tariff or prefix was missing, you can run this again.
+	</p>
+	<p>
+		<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
+			Configure Providers, Tariffs and Bundles
+		</a>
+	</p>
 
-<h4>Step 2:</h4>
-<p>
-	Now, let's do a test-run. This means we'll assign costs to each call, but won't save them to the database yet, so you can review the results and check that every tariff you need has already been configured.
-</p>
-<p>
-	<a href="{% url 'tarifica:wizard_test_run' %}" class="btn btn-primary">Start Test-run!</a>
-</p>
+	<h4>Step 2:</h4>
+	<p>
+		Now, let's do a test-run. This means we'll assign costs to each call, but won't save them to the database yet, so you can review the results and check that every tariff you need has already been configured.
+	</p>
+	<p>
+		<a href="{% url 'tarifica:wizard_test_run' %}" class="btn btn-primary">Start Test-run!</a>
+	</p>
+</div>
 {% endblock %}

@@ -2,9 +2,22 @@
 
 {% block title %} Status check {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Processing Status Check
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
-<h1>Status check</h1>
-	{% if user_info.is_first_import_finished %}
+<div id="container" class="well well-small">
+	{% if not user_info.processing_in_progress %}
 	<h3>Congratulations! Initial call processing finished successfully.</h3>
 	<p>
 		You can start oogling at all the cool data <a href="{% url 'tarifica:dashboard' %}">here</a>.
@@ -22,4 +35,27 @@
 		Currently, we've processed {{ percentage_imported | floatformat:"2" }}% of your data and it's taken us {{ lapsedMinutes | floatformat:"2" }} minutes, so if you have a relatively constant number of calls, it should take us around {{ minutesRemaining | floatformat:"2" }} minutes to finish.
 	</p>
 	{% endif %}
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(document).ready(function(){
+		window.setInterval(function(){
+			$.ajax({
+				url: "{% url 'tarifica:wizard_check_processing_status' 'update' %}",
+				type: 'GET',
+				dataType: 'html',
+			})
+			.done(function(data) {
+				$('#container').html(data)
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			})			
+		}, 3000);
+	});
+    </script>
 {% endblock %}

@@ -71,7 +71,7 @@ def setup(request, provider_id = 0):
         'user_info' : user_info,
     })
 
-def realtime(request):
+def realtime(request, action="show"):
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.today()
@@ -121,6 +121,13 @@ def realtime(request):
 
     print 'data:',data
     print 'graphData:',graphData
+
+    if action == "update":
+        return render(request, 'tarifica/general/updateRealtime.html', {
+            'user_info' : user_info,
+            'data' : data,
+            'graphData' : json.dumps(graphData),
+        })
 
     return render(request, 'tarifica/general/realtime.html', {
         'user_info' : user_info,

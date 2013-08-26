@@ -9,6 +9,19 @@
 
 {% block title %} Users {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        General
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
 <div class="row-fluid">
 
@@ -113,7 +126,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Extension</th>
-                    <th>Total Minutes</th>
+                    <th>Total Seconds</th>
                     <th>Total Calls</th>
                     <th>Period Total ({{ user_info.currency_code }})</th>
                     <th>Detail</th>
@@ -124,7 +137,7 @@
                 <tr>
                     <td>{{user.name}}</td>
                     <td>{{user.extension_number}}</td>
-                    <td>{{user.minutes}}</td>
+                    <td>{{user.seconds}}</td>
                     <td>{{user.calls}}</td>
                     <td>{{ user_info.currency_symbol }}{{user.cost | floatformat:"2"}}</td>
                     <td><a href="{% url 'tarifica:users_detail' user.extid%}">More</a></td>

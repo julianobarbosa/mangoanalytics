@@ -129,7 +129,7 @@ def general(request, page=1):
     else:
         items = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).count()
         calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)[page:limit]
-        total_minutes = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('duration'))
+        total_seconds = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('duration'))
         total_cost = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('cost'))
     pages_number = int(ceil(items/limit))
     previousPage = page - 1
@@ -140,18 +140,24 @@ def general(request, page=1):
     if nextPage > pages_number:
         nextPage = pages_number
 
+    if total_seconds['duration__sum'] is None:
+        total_seconds['duration__sum'] = 0
+
+    if total_cost['cost__sum'] is None:
+        total_cost['cost__sum'] = 0
+
     return render(request, 'tarifica/general/cdr.html', {
         'user_info' : user_info,
         'calls' : calls,
         'form': form,
         'items': items,
         'page': page + 1,
-        'pages': range(1, pages_number+1),
+        'pages': range(page + 1, pages_number+1)[:10],
         'limit': limit,
         'previousPage': previousPage,
         'nextPage': nextPage,
         'pages_number': pages_number,
-        'total_minutes': total_minutes['duration__sum'],
+        'total_minutes': total_seconds['duration__sum'] / 60,
         'total_cost': total_cost['cost__sum'],
     })
 

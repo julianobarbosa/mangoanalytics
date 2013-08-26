@@ -9,14 +9,20 @@
 
 {% block title %} User Detail {% endblock %}
 
-{% block content %}
-<div class="row-fluid">
-    <ul class="breadcrumb">
-        <li><a href="{% url 'tarifica:users_general' %}">Users</a> <span class="divider">/</span></li>
-        <li class="active">{{extension.name}} Detail</li>
-    </ul>
-</div>
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        {{extension.name}} Detail
+    </a>
+</li>
+{% endblock %}
 
+{% block content %}
 
 <div class="row-fluid">
 

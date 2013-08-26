@@ -9,16 +9,20 @@
 
 {% block title %}Pinset Analytics{% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Pinset {{pinset.pinset_number}} Analytics
+    </a>
+</li>
+{% endblock %}
 
 {% block content %}
-<div class="row-fluid">
-    <ul class="breadcrumb">
-        <li><a href="{% url 'tarifica:pinsets_general' %}">Pinsets</a> <span class="divider">/</span></li>
-        <li><a href="{% url 'tarifica:pinsets_detail' pinset.id %}">Pinset {{pinset.pinset_number}}</a> <span class="divider">/</span></li>
-        <li class="active">Analytics</li>
-    </ul>
-</div>
-
 
 <div class="row-fluid">
     <div class="span12 well well-small">

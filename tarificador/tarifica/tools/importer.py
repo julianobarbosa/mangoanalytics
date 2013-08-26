@@ -12,8 +12,10 @@ def saveImportFinishStatus():
     am = AsteriskMySQLManager()
     am.connect('nextor_tarificador')
     sql = "UPDATE tarifica_userinformation \
-        SET tarifica_userinformation.is_first_import_finished = %s"
-    am.cursor.execute(sql, (True,))
+        SET tarifica_userinformation.is_first_import_finished = %s, \
+        tarifica_userinformation.test_run_in_progress = %s, \
+        tarifica_userinformation.processing_in_progress = %s"
+    am.cursor.execute(sql, (True, False, False))
     am.db.commit()
     return am.db.close()
 
@@ -172,7 +174,7 @@ while start != today:
 
     start = start + timedelta(days = 1)
 
-print saveImportFinishStatus()
+saveImportFinishStatus()
 if testRun:
     saveImportResults(calls_saved, calls_not_saved)
     print "----------------------------------------"

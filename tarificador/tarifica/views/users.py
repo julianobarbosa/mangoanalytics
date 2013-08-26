@@ -52,7 +52,7 @@ def generalUsers(request, period_id="thisMonth"):
     cursor.execute(
         'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
         SUM(tarifica_userdailydetail.total_calls) AS calls , \
-        SUM(tarifica_userdailydetail.total_minutes) AS minutes, tarifica_extension.name, \
+        SUM(tarifica_userdailydetail.total_seconds) AS seconds, tarifica_extension.name, \
         tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
         FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \

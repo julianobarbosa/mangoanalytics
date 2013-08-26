@@ -2,13 +2,20 @@
 
 {% block title %}Add tariff to {{provider.name}}{% endblock %}
 
-{% block content %}
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Add base tariff to provider {{provider.name}}
+    </a>
+</li>
+{% endblock %}
 
-<div class="row-fluid well well-small">
-    <div class="span12">
-        <h4>Add base tariff to provider {{provider.name}}</h4>
-    </div>
-</div>
+{% block content %}
 
 <div class="row-fluid">
     <div class="span6">

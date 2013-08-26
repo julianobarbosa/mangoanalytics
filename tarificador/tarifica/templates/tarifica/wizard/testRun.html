@@ -8,12 +8,25 @@
 
 {% block title %} Wizard - Test-run progress! {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Test Run Start
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
 	{% if default != 'default' %}
 	<div class="well well-small">
-		<h3>Select a date from which to start processing your data. By default, we'll start 6 months back.</h3>
+		<h4>Select a date from which to start processing your data. By default, we'll start 6 months back.</h4>
 	</div>
-	<div class="row-fluid">
+	<div class="row-fluid well well-small">
 		<div class="span6">
 			<a href="{% url 'tarifica:wizard_test_run' 'default' %}" class="btn btn-primary">Start Test Run from {{ start_date | date:"d/M/Y" }}</a>
 		</div>

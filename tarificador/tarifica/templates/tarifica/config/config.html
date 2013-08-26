@@ -2,11 +2,20 @@
 
 {% block title %} Update User Information {% endblock %}
 
-{% block content %}
-<div class="well well-small">
-    <h4>Updating user information</h4>
-</div>
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Updating user information
+    </a>
+</li>
+{% endblock %}
 
+{% block content %}
 <div class="well well-small">
     <form action="{% url 'tarifica:config_initial' %}" method="post" class="form-horizontal">{% csrf_token %}
         {{ form.non_field_errors }}

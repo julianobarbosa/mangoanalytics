@@ -28,7 +28,7 @@ class createDestinationGroup(forms.Form):
             }
         )
     prefix = forms.CharField(max_length = 255, label = 'Prefijo', required = False)
-    notes = forms.CharField(label = u'Notas', required = False, widget = forms.Textarea)
+    notes = forms.CharField(label = u'Notas', required = False)
     minute_fee = forms.FloatField(label = 'Minute Fee', error_messages={
                             'required':'Please input a minute fee',
                             'invalid':'Please input a valid number'}, 

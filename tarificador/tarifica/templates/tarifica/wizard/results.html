@@ -2,8 +2,20 @@
 
 {% block title %} Wizard - Results {% endblock %}
 
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Test Run Results
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
-<h4>Results from test-run:</h4>
 	
 <div class="row-fluid">
 	<div class="span2 well well-small">
@@ -33,7 +45,7 @@
 					<th>Provider</th>
 					<th>Dialed Number</th>
 					<th>Extension</th>
-					<th>Minutes</th>
+					<th>Seconds</th>
 				</tr>
 			</thead>
 			<tbody>
