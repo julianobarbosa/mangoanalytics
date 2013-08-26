@@ -56,41 +56,41 @@
 
 <div class="container">
     {% if data %}
-        <div class="well well-small">
-            <div id="graph"style="height:400px; min-height:400px, width:100%"></div>
+    <div class="well well-small">
+        <div id="graph"style="height:400px; min-height:400px, width:100%"></div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12 well well-small">
+            <table class="table table-bordered table-striped table-hovered">
+                <thead>
+                    <tr>
+                        <th>Extension</th>
+                        <th>Destination</th>
+                        <th>Dialed Number</th>
+                        <th>Provider</th>
+                        <th>Start</th>
+                        <th>Active Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in data %}
+                    <tr>
+                        <td>{{d.0}}</td>
+                        <td>
+                            <img src="{{ d.1.destination_country.flag }}">
+                            {{d.1.destination_name.name}}
+                        </td>
+                        <td>{{d.3}}</td>
+                        <td>{{d.2}}</td>
+                        <td>{{d.5}}</td>
+                        <td>{{d.4}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" id="graph_data" value="{{ graphData | safe }}">
         </div>
-        <div class="row-fluid">
-            <div class="span12 well well-small">
-                <table class="table table-bordered table-striped table-hovered">
-                    <thead>
-                        <tr>
-                            <th>Extension</th>
-                            <th>Destination</th>
-                            <th>Dialed Number</th>
-                            <th>Provider</th>
-                            <th>Start</th>
-                            <th>Active Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for d in data %}
-                        <tr>
-                            <td>{{d.0}}</td>
-                            <td>
-                                <img src="{{ d.1.destination_country.flag }}">
-                                {{d.1.destination_name.name}}
-                            </td>
-                            <td>{{d.3}}</td>
-                            <td>{{d.2}}</td>
-                            <td>{{d.5}}</td>
-                            <td>{{d.4}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <input type="hidden" id="graph_data" value="{{ graphData | safe }}">
+    </div>
     {% else %}
     <div class="well well-small">
         <div id="graph"style="height:400px; min-height:400px, width:100%"></div>
