@@ -84,7 +84,7 @@ def realtime(request, action="show"):
         print data
         processed_data = [re.split(" +", d, 9) for d in data if d[6] ]
         print processed_data
-        if processed_data[3] == 'Up':
+        if processed_data[0][3] == 'Up':
             data = [
                 [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
                 for d in processed_data if re.search("/",d[6])
