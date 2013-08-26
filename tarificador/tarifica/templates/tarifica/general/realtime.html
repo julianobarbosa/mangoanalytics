@@ -146,7 +146,11 @@
                 if(graphExists){
                     plot1.destroy();
                 }
-                plot1 = jQuery.jqplot ('graph', [data], options);
+                try{
+                    plot1 = jQuery.jqplot ('graph', [data], options);
+                }catch(Exception){
+                    console.log('exception when updating graph');
+                }
             })
             .fail(function() {
                 console.log("error");
