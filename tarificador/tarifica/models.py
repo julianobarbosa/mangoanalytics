@@ -166,3 +166,8 @@ class UnconfiguredCall(models.Model):
 class ImportResults(models.Model):
     calls_saved = models.IntegerField()
     calls_not_saved = models.IntegerField()
+
+class CDRFilter(models.Model):
+    comparison = models.CharField(max_length=10)
+    field_name = models.CharField(max_length=20)
+    value=models.CharField(max_length=100)

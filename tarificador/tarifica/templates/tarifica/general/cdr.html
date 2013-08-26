@@ -162,8 +162,8 @@
 			</span>
             <span class="pull-right well well-small" style="margin-right:10px;">
                 <strong>Total Calls:</strong> {{ items }} |
-                <strong>Total Minutes:</strong> {{ total_minutes }} |
-                <strong>Total Cost:</strong> {{ user_info.currency_symbol }}{{ total_cost }} {{ user_info.currency_code }}
+                <strong>Total Minutes:</strong> {{ total_minutes | floatformat:"2" }} |
+                <strong>Total Cost:</strong> {{ user_info.currency_symbol }}{{ total_cost | floatformat:"2" }} {{ user_info.currency_code }}
             </span>
 		</div>
 	</div>
@@ -188,7 +188,7 @@
 				<td>{{ call.provider.name }}</td>
 				<td>{{ call.destination_group.destination_name.name }}</td>
 				<td>{{ call.duration }} sec.</td>
-				<td>{{ user_info.currency_symbol }}{{ call.cost }} {{ user_info.currency_code }}</td>
+				<td>{{ user_info.currency_symbol }}{{ call.cost | floatformat:"2"}} {{ user_info.currency_code }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
