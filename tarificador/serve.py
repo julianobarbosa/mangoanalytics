@@ -105,9 +105,10 @@ class DjangoAppPlugin(plugins.SimplePlugin):
         self.bus.log("Setting up the static directory to be served")
         # We server static files through CherryPy directly
         # bypassing entirely Django
+
         static_handler = cherrypy.tools.staticdir.handler(section="/", dir="static",
-                                                          root=self.base_dir)
-        cherrypy.tree.mount(static_handler, '/static')
+                                                          root=os.path.abspath(os.path.split(settings.STATIC_ROOT)[0]))
+        cherrypy.tree.mount(static_handler, settings.STATIC_URL)
     
 class HTTPLogger(_cplogging.LogManager):
     def __init__(self, app):
