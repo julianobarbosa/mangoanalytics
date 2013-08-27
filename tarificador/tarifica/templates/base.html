@@ -66,12 +66,12 @@
                 <!-- Data processing status bar-->
                 {% if user_info.test_run_in_progress %}
                 <li>
-                    <a href="{% url 'tarifica:checkTestRunStatus' 'show' %}"><i class="icon-exclamation-sign"></i> Check Test Run Status</a>
+                    <a href="{% url 'tarifica:wizard_check_test_run_status' %}"><i class="icon-exclamation-sign"></i> Check Test Run Status</a>
                 </li>
                 {% endif %}
                 {% if user_info.processing_in_progress %}
                 <li>
-                    <a href="{% url 'tarifica:checkProcessingStatus' 'show' %}"><i class="icon-exclamation-sign"></i> Check Import Status</a>
+                    <a href="{% url 'tarifica:wizard_check_test_run_status' %}"><i class="icon-exclamation-sign"></i> Check Import Status</a>
                 </li>
                 {% endif %}
                 <li>
@@ -143,13 +143,6 @@
 {% block js %}
     <script src="{% static "tarifica/js/jquery.min.js" %}"></script>
     <script src="{% static "tarifica/js/bootstrap.min.js" %}"></script>
-    <script type="text/javascript">
-    $(function(){
-        $('a#about').on('click', function(){
-
-        });
-    });
-    </script>
 {% endblock %}
 
 </body>

@@ -106,6 +106,10 @@
     <script src="{% static "tarifica/js/plugins/jqplot.pieRenderer.min.js" %}"></script>
     <script type="text/javascript">
     $(document).ready(function(){
+        $.jqplot.config.enablePlugins = true;
+        $.jqplot.config.defaultColors = [
+            "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
+        ];
         var options = {
             seriesDefaults: {
                 // Make this a pie chart.

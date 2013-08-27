@@ -205,6 +205,11 @@
             $('#modal-form').submit();
         });
 
+        $.jqplot.config.enablePlugins = true;
+        $.jqplot.config.defaultColors = [
+            "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
+        ];
+            
         // Graphs:
         // Graph1: Destination detail of this month:
         var data = $.parseJSON('{{ destinationGraph | safe }}');

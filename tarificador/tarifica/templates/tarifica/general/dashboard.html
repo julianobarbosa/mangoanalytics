@@ -63,7 +63,7 @@
                 <tr>
                     <th>{{prov.name}}</th>
                     <td>{{ user_info.currency_symbol }}{{cost|floatformat:2}} {{ user_info.currency_code }}</td>
-                    <td><a href="{% url 'tarifica:trunks_get' prov.id %}">Ver Mas</a></td>
+                    <td><a href="{% url 'tarifica:trunks_get' prov.id %}">More</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -134,6 +134,11 @@
     <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            $.jqplot.config.enablePlugins = true;
+            $.jqplot.config.defaultColors = [
+                "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
+            ];
+
             var general_data = $.parseJSON('{{ general_6_month_graph | safe }}');
             var ticks = $.parseJSON('{{ ticks | safe }}');
             providers = []

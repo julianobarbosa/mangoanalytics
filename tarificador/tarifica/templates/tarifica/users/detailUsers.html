@@ -71,10 +71,9 @@
             </div>
         </div>
 
-        <div id="container" style="float:right;text-align:center">
-            <h5>Average cost for this extension is <font color="red">{{ user_info.currency_symbol }}{{average | floatformat:"2"}} {{ user_info.currency_code }}</font></h5>
-        </div>
-
+        <span class="pull-right">
+            <strong style="font-size:1.2em; line-height:30px;">Average cost for this extension is <font color="red">{{ user_info.currency_symbol }}{{average | floatformat:"2"}} {{ user_info.currency_code }}</font></strong>
+        </span>
     </div>
 
 </div>
@@ -198,6 +197,11 @@
             $('#datetimepicker2').datetimepicker({
                 pickTime: false
             });
+
+            $.jqplot.config.enablePlugins = true;
+            $.jqplot.config.defaultColors = [
+                "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
+            ];
 
             var data = $.parseJSON('{{ data | safe }}');
             var thisMonth = data[2];

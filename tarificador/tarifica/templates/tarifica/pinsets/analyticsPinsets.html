@@ -203,6 +203,11 @@
         });
 
         $(document).ready(function(){
+            $.jqplot.config.enablePlugins = true;
+            $.jqplot.config.defaultColors = [
+                "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
+            ];
+
             var data = $.parseJSON('{{ data | safe }}');
             var plot1 = jQuery.jqplot ('number-graph', [data], 
             {
