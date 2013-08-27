@@ -243,23 +243,27 @@ class CallCostAssigner:
 							if b['usage'] == b['amount']:
 								print "Bundle",b['name'],"usage has reached its limit."
 								continue
+
 							#Si no, agregamos la llamada al uso del bundle
-							elif b['usage'] < b['amount']:
-								print "Billing with bundle",b['name']
-								usage = b['usage']
-								print "Usage before: ", usage
-								if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
-									usage += 1
-								else:
-									#Redondeamos al minuto más cercano de la llamada
-									usage += ceil(call['billsec'] / 60)
-								print "Usage after: ", usage
-								#Guardamos los cambios
+							print "Billing with bundle",b['name']
+							usage = b['usage']
+							print "Usage before: ", usage
+							if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
+								usage += 1
+							else:
+								#Redondeamos al minuto más cercano de la llamada
+								usage += ceil(call['billsec'] / 60)
+							print "Usage after: ", usage
+
+							if b['usage'] < b['amount']:
+								#Si no se pasa del límite del paquete, la guardamos...
 								self.saveBundleUsage(b['id'], usage)
 								appliedToBundle = True
 								costAssigned = True
 								save = True
 								print "Call applied to bundle",b['name']
+							else:
+								print "Not applied to bundle because it would surpass the amount set."
 
 					if not appliedToBundle:
 						# Y no se aplicó a ninguno, por tanto 
