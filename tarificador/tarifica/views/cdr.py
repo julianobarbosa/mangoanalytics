@@ -24,63 +24,144 @@ def general(request, page=1):
     if request.method == 'POST': # If the form has been submitted...
         form = forms.filterCDR(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            filters = []
-            action = form.cleaned_data['action']
-            start_date = form.cleaned_data['start_date']
-            start_date_comparison = form.cleaned_data['start_date_comparison']
-            if start_date is not None:
-                start_date = start_date.strftime("%Y-%m-%d 00:00:00")
-                filters.append({'field_name': 'date', 'comparison': start_date_comparison, 'value': start_date})
-            end_date = form.cleaned_data['end_date']
-            end_date_comparison = form.cleaned_data['end_date_comparison']
-            if end_date is not None:
-                end_date = end_date.strftime("%Y-%m-%d 00:00:00")
-                filters.append({'field_name': 'date', 'comparison': end_date_comparison, 'value': end_date})
-            dialed_number = form.cleaned_data['dialed_number']
-            dialed_number_comparison = form.cleaned_data['dialed_number_comparison']
-            if dialed_number != '':
-                filters.append({'field_name': 'dialed_number', 'comparison': dialed_number_comparison, 'value': dialed_number})
-            extension_number = form.cleaned_data['extension_number']
-            extension_number_comparison = form.cleaned_data['extension_number_comparison']
-            if extension_number != '':
-                filters.append({'field_name': 'extension_number', 'comparison': extension_number_comparison, 'value': extension_number})
-            pinset_number = form.cleaned_data['pinset_number']
-            pinset_number_comparison = form.cleaned_data['pinset_number_comparison']
-            if pinset_number != '':
-                filters.append({'field_name': 'pinset_number', 'comparison': pinset_number_comparison, 'value': pinset_number})
-            provider = form.cleaned_data['provider']
-            field_name = 'provider__name'
-            provider_comparison = form.cleaned_data['provider_comparison']
-            if provider != '':
-                filters.append({'field_name': field_name, 'comparison': provider_comparison, 'value': provider})
-            destination_group = form.cleaned_data['destination_group']
-            field_name = 'destination_group__destination_name__name'
-            destination_group_comparison = form.cleaned_data['destination_group_comparison']
-            if destination_group != '':
-                filters.append({'field_name': field_name, 'comparison': destination_group_comparison, 'value': destination_group})
-            duration = form.cleaned_data['duration']
-            duration_comparison = form.cleaned_data['duration_comparison']
-            if duration != '':
-                filters.append({'field_name': 'duration', 'comparison': duration_comparison, 'value': duration})
-            cost = form.cleaned_data['cost']
-            cost_comparison = form.cleaned_data['cost_comparison']
-            if cost != '':
-                filters.append({'field_name': 'cost', 'comparison': cost_comparison, 'value': cost})
+            #Delete all existing filters 
+            CDRFilter.objects.all().delete()
+            for possible_filter in form.cleaned_data:
+                #If its the indicator of wether to show or download, ignore:
+                if possible_filter == 'action':
+                    action = form.cleaned_data[possible_filter]
+                    continue
+                #Checking if its a comparator
+                if possible_filter.count('comparison') == 0:
 
-            for f in filters:
-                if f['comparison'] == 'exclude':
-                    exclude_kwargs.update(
-                        {'{0}__{1}'.format(f['field_name'], 'exact'): f['value']}
-                    )
-                else:
-                    filter_kwargs.update(
-                        {'{0}__{1}'.format(f['field_name'], f['comparison']): f['value']}
-                    )
+                    #Try and find an existing filter:
+                    field_name_val = possible_filter
+                    extras_val = ''
+                    if possible_filter == 'start_date' or possible_filter == 'end_date':
+                        field_name_val = 'date'
+                        if possible_filter == 'start_date':
+                            extras_val = 'start'
+                        if possible_filter == 'end_date':
+                            extras_val = 'end'
+                    if possible_filter == 'provider':
+                        field_name_val = 'provider__name'
+                    if possible_filter == 'destination_group':
+                        field_name_val = 'destination_group__destination_name__name'
+
+                    try:
+                        real_filter = CDRFilter.objects.get(field_name=field_name_val, extras=extras_val)
+                        print "Real filter found for", field_name_val
+                    except:
+                        print "Real filter not found for", field_name_val
+                        real_filter = CDRFilter()
+
+                    real_filter.comparison = form.cleaned_data[possible_filter+'_comparison']
+                    real_filter.field_name = field_name_val
+                    real_filter.value = form.cleaned_data[possible_filter]
+
+                    #Check start and end dates:
+                    if possible_filter == 'start_date' or possible_filter == 'end_date':
+                        if form.cleaned_data[possible_filter] is not None:
+                            real_filter.value = form.cleaned_data[possible_filter].strftime("%Y-%m-%d")
+                            if possible_filter == 'start_date':
+                                real_filter.extras = 'start'
+                            if possible_filter == 'end_date':
+                                real_filter.extras = 'end'
+                                        
+                    #Check that we only save as filters the fields that have a valid value
+                    if real_filter.value == '':
+                        continue
+                    if real_filter.value is None:
+                        continue 
+
+                    print "Field:", real_filter.field_name
+                    print "Comparison:", real_filter.comparison
+                    print "Value:", real_filter.value
+                    real_filter.save()
+                    print "Saved new filter"
+
     else:
-        print "NOT POST"
+        start_date_value = ''
+        start_date_comparison_value = ''
+        end_date_value = ''
+        end_date_comparison_value = ''
+        dialed_number_value = ''
+        dialed_number_comparison_value = ''
+        extension_number_value = ''
+        extension_number_comparison_value = ''
+        pinset_number_value = ''
+        pinset_number_comparison_value = ''
+        duration_value = ''
+        duration_comparison_value = ''
+        cost_value = ''
+        cost_comparison_value = ''
+        destination_group_value = ''
+        destination_group_comparison_value = ''
+        provider_value = ''
+        provider_comparison_value = ''
+
+        for f in CDRFilter.objects.all():
+            if f.field_name == 'date' and f.extras == 'start':
+                start_date_value = datetime.datetime.strptime(f.value, "%Y-%m-%d")
+                start_date_comparison_value = f.comparison
+            if f.field_name == 'date' and f.extras == 'end':
+                end_date_value = datetime.datetime.strptime(f.value, "%Y-%m-%d")
+                end_date_comparison_value = f.comparison
+            if f.field_name == 'dialed_number':
+                dialed_number_value = f.value 
+                dialed_number_comparison_value = f.comparison
+            if f.field_name == 'extension_number':
+                extension_number_value = f.value 
+                extension_number_comparison_value = f.comparison
+            if f.field_name == 'pinset_number':
+                pinset_number_value = f.value
+                pinset_number_comparison_value = f.comparison
+            if f.field_name == 'duration':
+                duration_value = f.value 
+                duration_comparison_value = f.comparison
+            if f.field_name == 'cost':
+                cost_value = f.value 
+                cost_comparison_value = f.comparison
+            if f.field_name == 'destination_group__destination_name__name':
+                destination_group_value = f.value 
+                destination_group_comparison_value = f.comparison
+            if f.field_name == 'provider__name':
+                provider_value = f.value 
+                provider_comparison_value = f.comparison
+
         form = forms.filterCDR(initial={
-            'action': 'show'
+            'action': 'show',
+            'start_date': start_date_value,
+            'start_date_comparison': start_date_comparison_value,
+            'end_date': end_date_value,
+            'end_date_comparison': end_date_comparison_value,
+            'dialed_number': dialed_number_value,
+            'dialed_number_comparison': dialed_number_comparison_value,
+            'extension_number': extension_number_value,
+            'extension_number_comparison': extension_number_comparison_value,
+            'pinset_number': pinset_number_value,
+            'pinset_number_comparison': pinset_number_comparison_value,
+            'duration': duration_value,
+            'duration_comparison': duration_comparison_value,
+            'cost': cost_value,
+            'cost_comparison': cost_comparison_value,
+            'destination_group': destination_group_value,
+            'destination_group_comparison': destination_group_comparison_value,
+            'provider': provider_value,
+            'provider_comparison': provider_comparison_value,
         }) # An unbound form
+
+    #Gettings saved filters
+    filters = CDRFilter.objects.all()
+    for f in filters:
+        if f.comparison == 'exclude':
+            exclude_kwargs.update(
+                {'{0}__{1}'.format(f.field_name, 'exact'): f.value}
+            )
+        else:
+            filter_kwargs.update(
+                {'{0}__{1}'.format(f.field_name, f.comparison): f.value}
+            )
 
     if action == "download":
         calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)
@@ -152,7 +233,7 @@ def general(request, page=1):
         'form': form,
         'items': items,
         'page': page + 1,
-        'pages': range(page + 1, pages_number+1)[:10],
+        'pages': range(1, pages_number+1)[:10],
         'limit': limit,
         'previousPage': previousPage,
         'nextPage': nextPage,

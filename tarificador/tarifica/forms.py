@@ -122,19 +122,19 @@ class filterCDR(forms.Form):
     comparison_choices = [
         ('exact', '='),
         ('contains', 'has'),
+        ('exclude', '!='),
         ('gt', '>'),
         ('lt', '<'),
-        ('exclude', '!=')
     ]
     action = forms.CharField(required=True, 
         widget=forms.HiddenInput())
     start_date = forms.DateField(label = 'Fecha inicial', required=False, 
         widget=forms.TextInput(attrs={'class':'input-medium'}))
-    start_date_comparison = forms.ChoiceField(choices = comparison_choices[2:], required=False,
+    start_date_comparison = forms.ChoiceField(choices = comparison_choices[3:], required=False,
         widget=forms.Select(attrs={'class':'span2'}))
     end_date = forms.DateField(label = 'Fecha final', required=False, 
         widget=forms.TextInput(attrs={'class':'input-medium'}))
-    end_date_comparison = forms.ChoiceField(choices = comparison_choices[2:], required=False,
+    end_date_comparison = forms.ChoiceField(choices = comparison_choices[3:], required=False,
         widget=forms.Select(attrs={'class':'span2'}))
     dialed_number = forms.CharField(max_length = 255, required=False, 
         widget=forms.TextInput(attrs={'class':'input-medium'}))

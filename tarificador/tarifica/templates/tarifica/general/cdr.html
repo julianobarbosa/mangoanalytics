@@ -127,17 +127,10 @@
                 </div>
                 <div>
                 	{{ form.action }}
-                	<button type="submit" class="btn btn-primary">Filter</button>
+                	<button type="submit" id="filter_cdr" class="btn btn-primary">Filter</button>
                 </div>
 			</div>
 			<div class="span2">
-                <div class="alert alert-info">
-                    <ul>
-                        <li>
-                            To search for a value higher than 
-                        </li>
-                    </ul>
-                </div>
                 <div>
                     <button class="btn" id="download_cdr">
                     <i class="icon-download"></i> Download Current Data
@@ -215,6 +208,12 @@
         });
 
         $(function(){
+            $('#filter_cdr').on('click', function(e){
+                e.preventDefault();
+                $("#id_action").val("show");
+                $("#filter-form").submit();
+            });
+
         	$('#download_cdr').on('click', function(e){
         		e.preventDefault();
         		$("#id_action").val("download");

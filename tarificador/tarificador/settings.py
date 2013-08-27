@@ -61,7 +61,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-# Cambiar esta dirección por cada compu!!!
+# Cambiar esta direccion por cada compu!!!
 STATIC_ROOT = '/home/luis/.virtualenvs/myvenvs/django-tarificador/tarificador/static'
 
 # URL prefix for static files.
