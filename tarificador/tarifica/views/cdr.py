@@ -48,13 +48,7 @@ def general(request, page=1):
                     if possible_filter == 'destination_group':
                         field_name_val = 'destination_group__destination_name__name'
 
-                    try:
-                        real_filter = CDRFilter.objects.get(field_name=field_name_val, extras=extras_val)
-                        print "Real filter found for", field_name_val
-                    except:
-                        print "Real filter not found for", field_name_val
-                        real_filter = CDRFilter()
-
+                    real_filter = CDRFilter()
                     real_filter.comparison = form.cleaned_data[possible_filter+'_comparison']
                     real_filter.field_name = field_name_val
                     real_filter.value = form.cleaned_data[possible_filter]
