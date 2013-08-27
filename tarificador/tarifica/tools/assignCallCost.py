@@ -5,6 +5,7 @@ from __future__ import division
 from asteriskMySQLManager import AsteriskMySQLManager
 import datetime
 import string
+from dateutil.relativedelta import *
 from math import ceil
 
 def getStartOfDay(date):
@@ -113,24 +114,42 @@ class CallCostAssigner:
 	def checkBundles(self):
 		today=datetime.datetime.today()
 		for provider in self.getAllConfiguredProviders():
-			if provider['period_end'] == today.day:
-				print "End date of provider", provider['name']
-				for bundle in self.getActiveBundlesFromProvider(provider['id']):
-					bundle['usage'] = 0
-					self.saveBundleUsage(bundle['id'], 0)
-					print "Bundle "+bundle['name']+" reset."
+			# We get all bundles and check if they should be active, based on their dates
+			for bundle in self.getActiveBundlesFromProvider(provider['id']):
+				provider_period_start = datetime.date(
+					year=today.year, month=today.month, day=provider['period_end']
+				)
+				provider_period_end = provider_period_start + relativedelta(months=1)
+				self.changeBundleStatus(bundle['id'], False)
+
+				#Bundle should start before or the same day of provider's billing period
+				if bundle['start_date'] <= provider_period_start:
+					#Bundle should end after or the same day of provider's billing period
+					if bundle['end_date'] >= provider_period_end:
+						self.changeBundleStatus(bundle['id'], True)
+						print "Bundle",bundle['name'],"active."
+
+						#Now that we know that this bundle is indeed active, we continue
+						if provider['period_end'] == today.day:
+							print "End date of provider", provider['name']
+							bundle['usage'] = 0
+							self.saveBundleUsage(bundle['id'], 0)
+							print "Bundle "+bundle['name']+" reset."
 
 	def saveBundleUsage(self, bundle_id, usage):
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s \
 		WHERE tarifica_bundle.id = %s"
+		print sql
 		self.am.cursor.execute(sql, (usage, bundle_id))
+		return self.am.db.commit()
 
-	def deactivateBundle(self, bundle):
+	def changeBundleStatus(self, bundle_id, status):
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundle SET tarifica_bundle.is_active = %s \
 		WHERE tarifica_bundle.id = %s"
-		self.am.cursor.execute(sql, (False, bundle['id']))
+		self.am.cursor.execute(sql, (status, bundle_id))
+		return self.am.db.commit()
 
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
@@ -226,18 +245,20 @@ class CallCostAssigner:
 								continue
 							#Si no, agregamos la llamada al uso del bundle
 							elif b['usage'] < b['amount']:
-								print "Usage before: ", b['usage']
+								usage = b['usage']
+								print "Usage before: ", usage
 								if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
-									b['usage'] += 1
+									usage += 1
 								else:
 									#Redondeamos al minuto más cercano de la llamada
-									b['usage'] += ceil(call['billsec'] / 60)
-								print "Usage after: ", b['usage']
+									usage += ceil(call['billsec'] / 60)
+								print "Usage after: ", usage
 								#Guardamos los cambios
-								self.saveBundleUsage(b['id'], b['usage'])
+								self.saveBundleUsage(b['id'], usage)
 								appliedToBundle = True
 								costAssigned = True
 								save = True
+								print "Call applied to bundle",b['name']
 							else:
 								print "Bundle",b['name'],"has overstepped its limits!"
 

@@ -209,7 +209,7 @@ def general(request, page=1):
         return response
     else:
         items = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).count()
-        calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)[page:limit]
+        calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)[page*limit:page*limit + limit]
         total_seconds = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('duration'))
         total_cost = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('cost'))
     pages_number = int(ceil(items/limit))

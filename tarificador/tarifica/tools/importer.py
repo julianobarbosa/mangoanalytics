@@ -120,7 +120,7 @@ def deleteAllPinsetDestinationNumberDetail():
 # We go six months back... back in time!
 
 today = date.today()
-start = date(year = today.year, month=1, day=1)
+start = date(year = today.year, month=8, day=1)
 cca = CallCostAssigner()
 dig = Digester()
 calls_saved = 0
