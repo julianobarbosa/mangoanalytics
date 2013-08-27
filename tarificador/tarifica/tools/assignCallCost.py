@@ -93,6 +93,7 @@ class CallCostAssigner:
 				print "Outgoing call found, assigning cost..."
 				totalOutgoingCalls += 1
 				callCostInfo = self.assignCost(row)
+				print callCostInfo
 				if callCostInfo['save']:
 					dailyCallDetail.append(callCostInfo['callInfo'])
 				else:
@@ -140,7 +141,6 @@ class CallCostAssigner:
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s \
 		WHERE tarifica_bundle.id = %s"
-		print sql
 		self.am.cursor.execute(sql, (usage, bundle_id))
 		return self.am.db.commit()
 
@@ -245,6 +245,7 @@ class CallCostAssigner:
 								continue
 							#Si no, agregamos la llamada al uso del bundle
 							elif b['usage'] < b['amount']:
+								print "Billing with bundle",b['name']
 								usage = b['usage']
 								print "Usage before: ", usage
 								if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
@@ -259,8 +260,6 @@ class CallCostAssigner:
 								costAssigned = True
 								save = True
 								print "Call applied to bundle",b['name']
-							else:
-								print "Bundle",b['name'],"has overstepped its limits!"
 
 					if not appliedToBundle:
 						# Y no se aplicó a ninguno, por tanto 

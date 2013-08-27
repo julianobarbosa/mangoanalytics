@@ -6,25 +6,25 @@ from tarifica.django_countries.countries import COUNTRIES
 from tarifica.models import PaymentType, TariffMode, DestinationGroup, DestinationName
 
 class createProvider(forms.Form):
-    name = forms.CharField(label = 'Nombre', error_messages={'required':'Por favor proporciona un nombre para el Troncal'})
+    name = forms.CharField(label = 'Nombre', error_messages={'required':'Please input a name for this trunk.'})
     monthly_cost = forms.FloatField(label = 'Renta Mensual', error_messages={
-                                    'required':'Por favor proporciona la renta mensual del Troncal seleccionado',
-                                    'invalid':'Por favor proporciona un número válido'
+                                    'required':'Please input the monthly fee charged by your provider for this trunk.',
+                                    'invalid':'Please input a valid number.'
                                     })
     period_end = forms.IntegerField(label = 'Dia de Corte', max_value=31, min_value=1, error_messages={
-                                    'required':'Por favor proporciona el día de corte del Troncal',
-                                    'invalid':'Por favor proporciona un número válido',
-                                    'max_value':'Por favor proporcione un número entre 1 y 31',
-                                    'min_value':'Por favor proporcione un número entre 1 y 31'})
+                                    'required':'Please input the day when each billing period ends.',
+                                    'invalid':'Please input a valid number.',
+                                    'max_value':'Please input a number between 1 and 31.',
+                                    'min_value':'Please input a number between 1 and 31.'})
     payment_type = forms.ChoiceField(choices = [(e.id, e.name) for e in PaymentType.objects.all()], label = 'Modalidad de Pago')
-    channels = forms.IntegerField(label = 'Canales', error_messages={'required':u'Por favor proporciona el número de canales'})
+    channels = forms.IntegerField(label = 'Canales', error_messages={'required':u'Please input the number of channels available for this trunk.'})
 
 
 class createDestinationGroup(forms.Form):
     destination_name = forms.ChoiceField(choices = [(e.id, e.name) for e in DestinationName.objects.all()], label = 'Localidad')
     destination_country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country',
         error_messages={
-            'required':'Please select a valid country option'
+            'required':'Please select a valid country option.'
             }
         )
     prefix = forms.CharField(max_length = 255, label = 'Prefijo', required = False)
@@ -43,18 +43,18 @@ class createDestinationGroup(forms.Form):
                             widget=forms.TextInput(attrs={'class':'input-small'}))
 
 class createBundle(forms.Form):
-    name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Por favor proporciona el nombre del paquete'})
+    name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Please input a name for this bundle.'})
     tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')
     cost = forms.FloatField(label = 'Costo', error_messages={
-                            'required':u'Por favor proporciona el costo del paquete',
-                            'invalid':'Por favor proporciona un número válido'},
+                            'required':u"Please input this bundle's cost.",
+                            'invalid':'Please input a valid number.'},
                             widget=forms.TextInput(attrs={'class':'input-small'}))
     amount = forms.IntegerField(error_messages={
-                            'required':u'Por favor proporciona la cantidad de minutos/sesiones',
-                            'invalid':'Por favor proporciona un entero válido'})
+                            'required':u'Please input the amount of minutes/sessions this bundle includes.',
+                            'invalid':'Please input a valid number.'})
     priority = forms.IntegerField(error_messages={
-                            'required':u'Por favor proporciona la prioridad del paquete en cuestión',
-                            'invalid':'Por favor proporciona un entero válido'})
+                            'required':u"Please input a number indicating the priority of this bundle. That is, which bundle should be applied first, in case two or more match the call's destination",
+                            'invalid':'Please input a valid number.'})
     start_date = forms.DateField(error_messages={
         'required':'Please input a start date.',
         'invalid':'Please input a valid date.'
@@ -89,34 +89,34 @@ class createBundle(forms.Form):
 
 class getDate(forms.Form):
     start_date = forms.DateField(label = 'Fecha inicial', error_messages={
-                            'required':u'Por favor proporciona una fecha inicial'})
+                            'required':u'Please input a start date.'})
     end_date = forms.DateField(label = 'Fecha final', error_messages={
-                            'required':u'Por favor proporciona una fecha final'})
+                            'required':u'Please input an end date.'})
 
 class getUserInfo(forms.Form):
     bussiness_name = forms.CharField(max_length = 255, error_messages={
-                    'required':u'Por favor proporciona el nombre de tu empresa'},
+                    'required':u'Please input a name for your company.'},
                     widget=forms.TextInput(attrs={'class':'input-xlarge'}))
     contact_first_name = forms.CharField(max_length = 255, error_messages={
-                    'required':u'Por favor proporciona el primer nombre del contacto'})
+                    'required':u'Please input your first name.'})
     contact_last_name = forms.CharField(max_length = 255, error_messages={
-                    'required':u'Por favor proporciona el segundo nombre del contacto'})
+                    'required':u'Please input your last name'})
     notification_email = forms.EmailField(label = 'Email', error_messages={
-                        'required':u'Por favor proporciona un correo electrónico.',
-                        'invalid':u'Por favor proporciona un correo electrónico válido.'})
+                        'required':u'Please input your e-mail address.',
+                        'invalid':u'Please input a valid e-mail address.'})
     country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country')
     currency_code = forms.CharField(max_length = 10, error_messages={
-                    'required':u'Por favor proporciona el código del tipo de moneda'},
+                    'required':u"Please input your currency's code."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
     currency_symbol = forms.CharField(max_length = 1, error_messages={
-                    'required':u'Por favor proporciona el símbolo del tipo de moneda'},
+                    'required':u"Please input your currency's symbol."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
 
 class loginForm(forms.Form):
     email = forms.CharField(max_length = 255, error_messages={
-                    'required':u'Por favor proporciona tu correo'})
+                    'required':u'Please provide your email address.'})
     password = forms.CharField(max_length = 255, error_messages={
-                    'required':u'Por favor proporciona una contraseña'})
+                    'required':u'Please provide a password.'})
 
 class filterCDR(forms.Form):
     comparison_choices = [

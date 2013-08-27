@@ -65,16 +65,18 @@
                 <th>Billing Mode</th>
                 <th>Cost {{ user_info.currency_code }}</th>
                 <th>Minutes/Sessions</th>
+                <th>Used</th>
                 <th>Priority</th>
             </tr>
         </thead>
         <tbody>
             {% for bundle in bundles %}
             <tr>
-                <td>{{ bundle.destination_group.name }}</td>
+                <td><img src="{{ bundle.destination_group.destination_country.flag }}"> {{ bundle.destination_group.destination_name.name }}</td>
                 <td>{{ bundle.tariff_mode }}</td>
                 <td>{{ user_info.currency_symbol }}{{ bundle.cost|floatformat:2 }}</td>
                 <td>{{ bundle.amount }}</td>
+                <td>{{ bundle.usage }}</td>
                 <td>{{ bundle.priority }}</td>
                 <td>
                     <a href="{% url 'tarifica:bundles_update' bundle.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Edit">
