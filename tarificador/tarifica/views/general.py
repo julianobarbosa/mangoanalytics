@@ -143,7 +143,7 @@ def realtime(request, action="show"):
 
 def dashboard(request):
     user_info = get_object_or_404(UserInformation, id = 1)
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)
     start_date = (datetime.datetime(year=today.year, month=today.month, day=1) - timedelta).replace(tzinfo=utc)
     end_date = (datetime.datetime(year=today.year, month=today.month, day=today.day) + timedelta).replace(tzinfo=utc)

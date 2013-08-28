@@ -36,7 +36,7 @@ def createBundle(request, destination_group_id):
             b.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
     else:
-        start_date = datetime.datetime.utcnow().replace(tzinfo=utc)
+        start_date = datetime.datetime.now()
         end_date = start_date + datetime.timedelta(weeks=104)
         form = forms.createBundle(initial={
             'start_date': start_date,

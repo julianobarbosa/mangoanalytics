@@ -15,7 +15,7 @@ from csv import *
 def general(request, period_id="thisMonth"):
     # Required for getting this month's, last month's and custom start and end dates
     user_info = get_object_or_404(UserInformation, id = 1)
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     form = forms.getDate(initial=
         {'start_date': datetime.date(year = today.year, month=today.month , day=1),
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
@@ -102,7 +102,7 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     provider = get_object_or_404(Provider, id = provider_id)
 
     # Required for getting this month's, last month's and custom start and end dates
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     form = forms.getDate(initial=
         {'start_date': datetime.date(year = today.year, month=today.month , day=1),
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
@@ -238,7 +238,7 @@ def getTrunkCurrentIntervalData(provider, start_date, end_date):
     return intervalData
 
 def getBillingPeriods(provider):
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     startCurrentBillingPeriod = datetime.date(
         year = today.year,
         month = today.month,

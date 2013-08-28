@@ -15,7 +15,7 @@ from tarifica.django_countries.fields import Country
 def generalPinsets(request, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     cursor = connection.cursor()
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     form = forms.getDate(initial=
         {'start_date': datetime.date(year = today.year, month=today.month , day=1),
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
@@ -90,7 +90,7 @@ def detailPinsets(request, pinset_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Pin = get_object_or_404(Pinset, id = pinset_id)
     cursor = connection.cursor()
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     form = forms.getDate(initial=
         {'start_date': datetime.date(year = today.year, month=today.month , day=1),
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
@@ -164,7 +164,7 @@ def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Pin = get_object_or_404(Pinset, id = pinset_id)
     cursor = connection.cursor()
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     form = forms.getDate(initial=
         {'start_date': datetime.date(year = today.year, month=today.month , day=1),
          'end_date': datetime.date(year = today.year, month=today.month , day=today.day),
@@ -235,7 +235,7 @@ def dictfetchall(cursor):
     ]
 
 def getBarChartInfoByPin(cursor):
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
     t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
@@ -308,7 +308,7 @@ def getBarChartInfoByPin(cursor):
 
 
 def getBarChartInfoByPinForMonth(cursor, pinset_id, start_date, end_date):
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)
     data = []
     aux = []
@@ -338,7 +338,7 @@ def getBarChartInfoByPinForMonth(cursor, pinset_id, start_date, end_date):
 
 
 def getBarChartInfoByLocale(cursor, pinset_id):
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
     t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
@@ -428,7 +428,7 @@ def getBarChartInfoByLocale(cursor, pinset_id):
 
 
 def getBarChartInfoByPinForYear(cursor, pinset_id):
-    today = datetime.datetime.utcnow().replace(tzinfo=utc)
+    today = datetime.datetime.now()
     start_date = datetime.datetime(day = 1, month=1, year=today.year).replace(tzinfo=utc)
     end_date = datetime.datetime(day=monthrange(today.year, today.month)[1], month=today.month, year=today.year).replace(tzinfo=utc)
     data = []

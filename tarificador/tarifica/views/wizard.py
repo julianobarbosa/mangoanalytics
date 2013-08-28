@@ -66,7 +66,7 @@ def checkTestRunStatus(request, action="show"):
     # By default, we import 6 month's worth of data, so we can check how many
     # days are between today and the last date imported.
     try:
-        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        now = datetime.datetime.now()
         lastCall = Call.objects.latest('date')
         lapsedTime = now - user_info.first_import_started
         lapsedSeconds = lapsedTime.total_seconds()
@@ -169,7 +169,7 @@ def checkProcessingStatus(request, action="show"):
     # By default, we import 6 month's worth of data, so we can check how many
     # days are between today and the last date imported.
     try:
-        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        now = datetime.datetime.now()
         lastProviderDailyDetail = ProviderDailyDetail.objects.latest('date')
         lapsedTime = now - user_info.first_import_started
         lapsedSeconds = lapsedTime.total_seconds()
