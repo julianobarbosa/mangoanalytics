@@ -63,7 +63,7 @@
                 <tr>
                     <th>{{prov.name}}</th>
                     <td>{{ user_info.currency_symbol }}{{cost|floatformat:2}} {{ user_info.currency_code }}</td>
-                    <td><a href="{% url 'tarifica:trunks_get' prov.id %}">More</a></td>
+                    <td><a href="{% url 'tarifica:trunks_get' prov.id %}" class="btn btn-mini btn-primary">More</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -91,7 +91,7 @@
             <tbody>
                 {% for l in locales %}
                 <tr>
-                    <td><img src="{% static l.flag %}"> {{ l.country_name }}</td>
+                    <td><img src="{% static l.country.flag %}"> {{ l.country.name }}</td>
                     <td>{{ l.destination_name }}</td>
                     <td>{{ user_info.currency_symbol }}{{l.cost|floatformat:2}} {{ user_info.currency_code }}</td>
                 </tr>

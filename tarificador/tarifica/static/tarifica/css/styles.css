@@ -21,6 +21,16 @@ ul.footer-nav li{
   padding: 0 10px;
 }
 
+ul.nav-tabs{
+  margin-bottom: 0px;
+}
+
+div.tab-pane{
+  background: white;
+  border-left-color: #DDD;
+  border-left-style: solid;
+  border-left-width: 1px;
+}
 /* FLAT UI Icons */
 
 @font-face {

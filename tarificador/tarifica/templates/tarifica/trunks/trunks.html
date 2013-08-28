@@ -116,18 +116,7 @@
 {% for prov in providers %}
 <div class="row-fluid">
     <div class="span6 well well-small">
-        <div class="row-fluid">
-            <div class="span6">
-                <h5>Provider {{prov.provider.name}}</h5>
-            </div>
-            <div class="span6">
-                <span class="pull-right">
-                    <a href="{% url 'tarifica:providers_get' prov.provider.id %}" class="btn btn-primary" style="margin-bottom:10px;">
-                        Tariffs and Bundles
-                    </a>
-                </span>
-            </div>
-        </div>
+        <h5>Provider {{prov.provider.name}}</h5>
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
@@ -148,7 +137,7 @@
                 </tr>
             </tbody>
         </table>
-        <h5><br>Average Monthly Cost</h5>
+        <h5>Average Monthly Cost</h5>
         <table class="table table-hovered table-condensed">
             <tbody>
                 <tr>
@@ -161,7 +150,14 @@
                 </tr>
             </tbody>
         </table>
-        <div id="container" style="float:right"><a href="{% url 'tarifica:trunks_get' prov.provider.id %}" class="btn btn-primary"></i>More</a></div>
+        <div style="float:right">
+            <a href="{% url 'tarifica:providers_get' prov.provider.id %}" class="btn btn-primary">
+                Tariffs and Bundles
+            </a>
+            <a href="{% url 'tarifica:trunks_get' prov.provider.id %}" class="btn btn-primary">
+                Trunk Analysis
+            </a>
+        </div>
     </div>
     <div class="span6 well well-small">
         <h5>

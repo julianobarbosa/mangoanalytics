@@ -16,8 +16,39 @@
 {% endblock %}
 
 {% block content %}
+<div class="row-fluid well well-small">
+    <div class="span6">
+        <p>
+            Asterisk Channel Id: <strong>{{ provider.asterisk_channel_id }}</strong>
+        </p>
+        <p>
+            Asterisk Name: <strong>{{ provider.asterisk_name }}</strong>
+        </p>
+        <p>
+            Tech: <strong>{{ provider.provider_tech | upper }}</strong>
+        </p>
+        <p>
+            Channels: <strong>{{ provider.channels }}</strong>
+        </p>
+    </div>
+    <div class="span6">
+        <p>
+            Monthly Cost: <strong>{{ provider.monthly_cost }}</strong>
+        </p>
+        <p>
+            Payment Type: <strong>{{ provider.payment_type }}</strong>
+        </p>
+        <p>
+            Billing Period End: <strong>{{ provider.period_end }}</strong>
+        </p>
+    </div>
+</div>
+
 <div class="well well-small">
-    <h4>Tariffs</h4>
+    <h4 style="display:inline-block">Tariffs</h4>
+    <span class="pull-right">
+        <a href="{% url 'tarifica:destinations_create' provider.id %}" class="btn btn-primary">Add Base Tariff</a>
+    </span>
     <table class="table table-striped table-hovered table-condensed">
         <thead>
             <tr>
@@ -41,6 +72,11 @@
                 <td>{{ user_info.currency_symbol }}{{ dest.minute_fee }} {{ user_info.currency_code }}</td>
                 <td>{{ user_info.currency_symbol }}{{ dest.connection_fee|floatformat:2 }} {{ user_info.currency_code }}</td>
                 <td>{{ dest.billing_interval }}</td>
+                <td>
+                    <a href="{% url 'tarifica:bundles_create' dest.id %}">
+                        Assign Bundles
+                    </a>
+                </td>
                 <td>
                     <a href="{% url 'tarifica:destinations_update' dest.id %}" class="btn btn-mini btn-info" data-toggle="tooltip" title="Update">
                         <i class="icon-pencil icon-white"></i>

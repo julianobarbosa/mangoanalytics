@@ -10,6 +10,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from csv import *
 from math import ceil
 from django.db.models import Sum
+import subprocess
+import pytz
 
 def general(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -157,6 +159,11 @@ def general(request, page=1):
                 {'{0}__{1}'.format(f.field_name, f.comparison): f.value}
             )
 
+    #Getting elastix timezone...
+    php_timezone = subprocess.check_output("php -i | grep 'Default timezone'", shell=True)
+    php_tzinfo = php_timezone.strip('\n').split(' => ')[1]
+    print php_tzinfo
+
     if action == "download":
         calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)
         call_info = calls.values()
@@ -206,6 +213,14 @@ def general(request, page=1):
         calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)[page*limit:page*limit + limit]
         total_seconds = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('duration'))
         total_cost = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('cost'))
+
+    #php_timezone = pytz.timezone(php_tzinfo)
+    for call in calls:
+        print call.date.tzinfo
+        print call.date
+        #call.date = call.date.astimezone(php_timezone)
+        #print call.date
+
     pages_number = int(ceil(items/limit))
     previousPage = page - 1
     if previousPage < 1:

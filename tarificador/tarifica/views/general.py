@@ -188,7 +188,7 @@ def dashboard(request):
         LEFT JOIN tarifica_destinationname \
         ON tarifica_destinationname.id = tarifica_destinationgroup.destination_name_id \
         WHERE date > %s AND date < %s \
-        GROUP BY destination_group_id \
+        GROUP BY tarifica_destinationname.name \
         ORDER BY SUM(tarifica_providerdestinationdetail.cost) DESC"
     cursor.execute(sql, (start_date, end_date))
     locales = dictfetchall(cursor)[:3]
@@ -205,7 +205,7 @@ def dashboard(request):
     extensions = dictfetchall(cursor)[:3]
 
     for locale in locales:
-        locale['flag'] = Country(code=locale['country_name']).flag
+        locale['country'] = Country(code=locale['country_name'])
 
     #Information for graph
 
