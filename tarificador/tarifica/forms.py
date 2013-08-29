@@ -3,7 +3,7 @@ from django import forms
 from django.utils.timezone import utc
 import datetime
 from tarifica.django_countries.countries import COUNTRIES
-from tarifica.models import PaymentType, TariffMode, DestinationGroup, DestinationName
+from tarifica.models import PaymentType, TariffMode, DestinationGroup, DestinationName, Provider
 
 class createProvider(forms.Form):
     name = forms.CharField(label = 'Nombre', error_messages={'required':'Please input a name for this trunk.'})
@@ -126,6 +126,12 @@ class filterCDR(forms.Form):
         ('gt', '>'),
         ('lt', '<'),
     ]
+
+    provider_choices = [('0','')]
+    existing_providers = Provider.objects.all()
+    if len(existing_providers) > 0:
+        provider_choices.extend((e.id, e.name) for e in existing_providers)
+
     action = forms.CharField(required=True, 
         widget=forms.HiddenInput())
     start_date = forms.DateField(label = 'Fecha inicial', required=False, 
@@ -148,8 +154,8 @@ class filterCDR(forms.Form):
         widget=forms.TextInput(attrs={'class':'input-medium'}))
     pinset_number_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
         widget=forms.Select(attrs={'class':'span2'}))
-    provider = forms.CharField(max_length = 255, required=False, 
-        widget=forms.TextInput(attrs={'class':'input-medium'}))
+    provider = forms.ChoiceField(choices = provider_choices, required=False,
+        widget=forms.Select(attrs={'class':'input-medium'}))
     provider_comparison = forms.ChoiceField(choices = comparison_choices[0:3], required=False,
         widget=forms.Select(attrs={'class':'span2'}))
     destination_group = forms.CharField(max_length = 255, required=False, 

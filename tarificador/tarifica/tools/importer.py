@@ -116,6 +116,14 @@ def deleteAllPinsetDestinationNumberDetail():
     am.db.commit()
     return am.db.close()
 
+def resetBundleUsage():
+    am = AsteriskMySQLManager()
+    am.connect('nextor_tarificador')
+    sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s"
+    am.cursor.execute(sql, (0,))
+    am.db.commit()
+    return am.db.close()
+
 # This file processes from january first's worth of data, using assignCallCost and Digester
 # We go six months back... back in time!
 
@@ -152,7 +160,8 @@ else:
     deleteAllPinsetDailyDetail()
     deleteAllPinsetDestinationDetail()
     deleteAllPinsetDestinationNumberDetail()
-print "Deleted all previous data."
+    resetBundleUsage()
+print "Deleted all previous data & reset all bundles."
 
 while start != today:
     print "Digesting data from", start.strftime('%Y-%m-%d')

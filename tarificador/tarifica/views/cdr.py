@@ -34,7 +34,6 @@ def general(request, page=1):
                 #Checking if its a comparator
                 if possible_filter.count('comparison') == 0:
 
-                    #Try and find an existing filter:
                     field_name_val = possible_filter
                     extras_val = ''
                     if possible_filter == 'start_date' or possible_filter == 'end_date':
@@ -44,7 +43,11 @@ def general(request, page=1):
                         if possible_filter == 'end_date':
                             extras_val = 'end'
                     if possible_filter == 'provider':
-                        field_name_val = 'provider__name'
+                        #Check that we don't try to filter by id 0 (not selected)
+                        if form.cleaned_data[possible_filter] == '0':
+                            print "Provider not selected"
+                            continue
+                        field_name_val = 'provider_id'
                     if possible_filter == 'destination_group':
                         field_name_val = 'destination_group__destination_name__name'
 
