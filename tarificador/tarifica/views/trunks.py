@@ -322,15 +322,13 @@ def getProviderBundleCost(provider, start_date, end_date):
     for d in destinations:
         bundles = Bundle.objects.filter(destination_group = d)
         for bundle in bundles:
-            if bundle.start_date <= start_date:
-                #Comenzo antes, por tanto, aplica a este periodo
-                if bundle.end_date >= end_date:
-                    #Y termina despues de este periodo, por tanto si aplica
-                    bundle_costs += bundle.cost
-                else:
-                    print "Bundle", bundle.name, "not in end_date range."
+            if ( bundle.start_date <= start_date or 
+                (bundle.start_date >= start_date and bundle.start_date <= end_date) and
+                bundle.end_date >= end_date):
+                #Aplica a este periodo
+                bundle_costs += bundle.cost
             else:
-                print "Bundle", bundle.name, "not in start_date range."
+                print "Bundle", bundle.name, "not in range."
     return {'total_bundle_cost': bundle_costs}
 
 def downloadTrunkCDR(request, provider_id, start_date, end_date):
