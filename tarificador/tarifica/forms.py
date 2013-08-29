@@ -132,7 +132,9 @@ class filterCDR(forms.Form):
     print existing_providers
     print len(existing_providers)
     if len(existing_providers) > 0:
-        provider_choices.extend((e.id, e.name) for e in existing_providers)
+        for e in existing_providers:
+            print "extended with ",e.name
+            provider_choices.extend((e.id, e.name))
 
     action = forms.CharField(required=True, 
         widget=forms.HiddenInput())
