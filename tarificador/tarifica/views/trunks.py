@@ -322,9 +322,9 @@ def getProviderBundleCost(provider, start_date, end_date):
     for d in destinations:
         bundles = Bundle.objects.filter(destination_group = d)
         for bundle in bundles:
-            if bundle.start_date < start_date:
+            if bundle.start_date <= start_date:
                 #Comenzo antes, por tanto, aplica a este periodo
-                if bundle.end_date > end_date:
+                if bundle.end_date >= end_date:
                     #Y termina despues de este periodo, por tanto si aplica
                     bundle_costs += bundle.cost
                 else:
