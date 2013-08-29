@@ -58,7 +58,7 @@ def setup(request, provider_id = 0):
                     p.save()
                 except Provider.MultipleObjectsReturned:
                     print "troncales repetidas!"
-        return HttpResponseRedirect('/config/initial') # Redirect after POST
+        return HttpResponseRedirect('/wizard/start') # Redirect after POST
 
     providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
     providers_configured = Provider.objects.filter(is_configured=True).order_by('name')
