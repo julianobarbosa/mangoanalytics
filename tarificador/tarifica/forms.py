@@ -136,6 +136,9 @@ class filterCDR(forms.Form):
             print "extended with ",e.name
             provider_choices.extend((e.id, e.name))
 
+    print "provider_chouices"
+    print provider_choices
+
     action = forms.CharField(required=True, 
         widget=forms.HiddenInput())
     start_date = forms.DateField(label = 'Fecha inicial', required=False, 

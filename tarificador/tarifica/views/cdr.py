@@ -209,7 +209,6 @@ def general(request, page=1):
         calls = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs)[page*limit:page*limit + limit]
         total_seconds = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('duration'))
         total_cost = Call.objects.filter(**filter_kwargs).exclude(**exclude_kwargs).aggregate(Sum('cost'))
-        print "total_cost",total_cost
 
     pages_number = int(ceil(items/limit))
     previousPage = page - 1
