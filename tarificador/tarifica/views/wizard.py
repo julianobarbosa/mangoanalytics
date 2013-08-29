@@ -14,6 +14,8 @@ from tarifica.views.config import initial
 
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
+    user_info.first_time_user = False
+    user_info.save()
 
     if page == '3':
         if request.method == 'POST': # If the form has been submitted...
@@ -28,7 +30,7 @@ def start(request, page=1):
                 user_info.currency_symbol = form.cleaned_data['currency_symbol']
                 user_info.first_time_user = False
                 user_info.save()
-                return HttpResponseRedirect('/wizard/start') # Redirect after POST
+                return HttpResponseRedirect('/wizard/start/3') # Redirect after POST
         else:
             form = forms.getUserInfo(initial={
                 'country': user_info.country,
