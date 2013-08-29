@@ -52,14 +52,13 @@ class CallCostAssigner:
 		self.am.cursor.execute(sql, (destination_group_id,))
 		return self.am.cursor.fetchall()
 
-	def getActiveBundlesFromProvider(self, provider_id):
+	def getBundlesFromProvider(self, provider_id):
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT * from tarifica_bundle \
 			LEFT JOIN tarifica_destinationgroup \
 			ON tarifica_bundle.destination_group_id = tarifica_destinationgroup.id \
-			WHERE tarifica_destinationgroup.provider_id = %s AND \
-			tarifica_bundle.is_active = %s"
-		self.am.cursor.execute(sql, (provider_id, True))
+			WHERE tarifica_destinationgroup.provider_id = %s"
+		self.am.cursor.execute(sql, (provider_id,))
 		return self.am.cursor.fetchall()
 
 	def getAllConfiguredProviders(self):
@@ -90,7 +89,7 @@ class CallCostAssigner:
 			assigned a cost are the only ones saved.
 		"""
 		# Primero revisamos si es el día de corte.
-		self.checkBundles()
+		self.resetBundles()
 		print "Script running on day "+getStartOfDay(date)+"."
 		# Obtenemos las extensiones configuradas:
 		extensions = self.am.getUserInformation()
@@ -135,30 +134,16 @@ class CallCostAssigner:
 			'total_calls_saved': len(dailyCallDetail),
 		}
 
-	def checkBundles(self):
+	def resetBundles(self):
 		today=datetime.datetime.today()
 		for provider in self.getAllConfiguredProviders():
-			# We get all bundles and check if they should be active, based on their dates
-			for bundle in self.getActiveBundlesFromProvider(provider['id']):
-				provider_period_start = datetime.date(
-					year=today.year, month=today.month, day=provider['period_end']
-				)
-				provider_period_end = provider_period_start + relativedelta(months=1)
-				self.changeBundleStatus(bundle['id'], False)
-
-				#Bundle should start before or the same day of provider's billing period
-				if bundle['start_date'] <= provider_period_start:
-					#Bundle should end after or the same day of provider's billing period
-					if bundle['end_date'] >= provider_period_end:
-						self.changeBundleStatus(bundle['id'], True)
-						print "Bundle",bundle['name'],"active."
-
-						#Now that we know that this bundle is indeed active, we continue
-						if provider['period_end'] == today.day:
-							print "End date of provider", provider['name']
-							bundle['usage'] = 0
-							self.saveBundleUsage(bundle['id'], 0)
-							print "Bundle "+bundle['name']+" reset."
+			# We get all bundles and check if they should be reset, based on their dates
+			for bundle in self.getBundlesFromProvider(provider['id']):
+				if provider['period_end'] == today.day:
+					print "End date of provider", provider['name']
+					bundle['usage'] = 0
+					self.saveBundleUsage(bundle['id'], 0)
+					print "Bundle "+bundle['name']+" reset."
 
 	def saveBundleUsage(self, bundle_id, usage):
 		self.am.connect('nextor_tarificador')
@@ -257,36 +242,45 @@ class CallCostAssigner:
 								break
 
 							#Si el paquete no está activo, salimos:
-							if not b['is_active']:
-								break
+							today = datetime.datetime.today()
+							provider_period_start = datetime.date(
+								year=today.year, month=today.month, day=prov['period_end']
+							)
+							provider_period_end = provider_period_start + relativedelta(months=1)
+							provider_period_end = provider_period_end - relativedelta(days=1)
 
-							if b['usage'] is None:
-								b['usage'] = 0
-							#Si el bundle actual ya se agotó, seguimos
-							if b['usage'] == b['amount']:
-								print "Bundle",b['name'],"usage has reached its limit."
-								continue
+							#Bundle should start before or the same day of provider's billing period
+							if b['start_date'] <= provider_period_start:
+								#Bundle should end after or the same day of provider's billing period
+								if b['end_date'] >= provider_period_end:
+								
+									if b['usage'] is None:
+										b['usage'] = 0
+									#Si el bundle actual ya se agotó, seguimos
+									if b['usage'] == b['amount']:
+										print "Bundle",b['name'],"usage has reached its limit."
+										continue
 
-							#Si no, agregamos la llamada al uso del bundle
-							print "Billing with bundle",b['name']
-							usage = b['usage']
-							print "Usage before: ", usage
-							if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
-								usage += 1
-							else:
-								#Redondeamos al minuto más cercano de la llamada
-								usage += ceil(call['billsec'] / 60)
-							print "Usage after: ", usage
+									#Si no, agregamos la llamada al uso del bundle
+									print "Billing with bundle",b['name']
+									usage = b['usage']
+									print "Usage before: ", usage
+									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
+										usage += 1
+									else:
+										#Redondeamos al minuto más cercano de la llamada
+										usage += ceil(call['billsec'] / 60)
+									print "Usage after: ", usage
 
-							if b['usage'] < b['amount']:
-								#Si no se pasa del límite del paquete, la guardamos...
-								self.saveBundleUsage(b['id'], usage)
-								appliedToBundle = True
-								costAssigned = True
-								save = True
-								print "Call applied to bundle",b['name']
-							else:
-								print "Not applied to bundle because it would surpass the amount set."
+									if b['usage'] < b['amount']:
+										#Si no se pasa del límite del paquete, la guardamos...
+										self.saveBundleUsage(b['id'], usage)
+										appliedToBundle = True
+										costAssigned = True
+										save = True
+										print "Call applied to bundle",b['name']
+									else:
+										print "Not applied to bundle because it would surpass the amount set."
 
 					if not appliedToBundle:
 						# Y no se aplicó a ninguno, por tanto 
@@ -353,6 +347,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=1)
+	week = week - datetime.timedelta(days=10)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
