@@ -81,7 +81,7 @@
                     <a href="{% url 'tarifica:config' %}">My Settings</a>
                 </li>
                 <li>
-                    <a href="#myModal" role="button" data-toggle="modal">About</a>
+                    <a href="#myModal" role="button" data-toggle="modal"><i class="icon-question-sign"></i> About</a>
                 </li>
             </ul>
         </div>
@@ -91,30 +91,28 @@
         <div class="text-center">
             <ul class="inline">
                 <li>
-                    <a href="">Home</a>
+                    <a href="{% url 'tarifica:dashboard' %}">Dashboard</a>
                 </li>
                 <li>|</li>
                 <li>
-                    <a href="">Settings</a>
+                    <a href="{% url 'tarifica:config' %}">Settings</a>
                 </li>
                 <li>|</li>
                 <li>
-                    <a href="">Setup</a>
+                    <i class="icon-cog"></i> <a href="{% url 'tarifica:setup' %}">Setup</a>
                 </li>
                 <li>|</li>
                 <li>
-                    <a href="">About</a>
+                    <i class="icon-question-sign"></i> <a href="#">About</a>
                 </li>
             </ul>
         </div>
         <div>
-            <p style="text-align: center;">
-                Mango Analytics is licensed under GPL by NZXT Telecomunicaciones de México, S.A., 2013
+            <p class="text-center">
+                <a href="http://www.mangoanalytics.org">Mango Analytics</a> is licensed under GPLv3 by <a href="http://www.nextortelecom.com">NZXT Telecomunicaciones de México, S.A.</a>, 2013
             </p>
-            <p style="text-align: center;">
-                <strong>
-                NZXT Telecomunicaciones de México, S.A. | Version 1.0
-                </strong>
+            <p class="text-center">
+                <strong>Version 1.0</strong>
             </p>
         </div>
     </footer>
@@ -125,14 +123,30 @@
             <h3 id="myModalLabel">About Mango Analytics</h3>
         </div>
         <div class="modal-body">
-            <h4>
-                Mango Analytics
-            </h4>
+            <div class="text-center">
+                <a href="http://www.mangoanalytics.org">
+                    <img src="{% static 'tarifica/img/full_logo.png' %}">
+                </a>
+            </div>
             <p>
-                Copyright NZXT Telecomunicaciones de México, S.A., México Distrito Federal, 2013.
+                <a href="http://www.mangoanalytics.org">Mango Analytics</a> is an initiative by Nextor Telecom Mexico (NZXT TELECOMUNICACIONES DE MEXICO SA CV) 
             </p>
             <p>
-                Versión 1.0
+                Licensed under <a href="http://opensource.org/licenses/GPL-3.0">GPLv3</a>, Version 1.0
+            </p>
+            <p>
+                For support and general inquiries, please refer to our website <a href="http://www.mangoanalytics.org">http://www.mangoanalytics.org</a>
+            </p>
+            <p>
+                Please chip in. If you like the software and it helps you lower your phone bills, we would greatly appreciate your contribution, thanks!
+            </p>
+            <p class="text-center">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="text-center">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="BFP5VK7VQFZ7L">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1">
+                </form>
             </p>
         </div>
         <div class="modal-footer">

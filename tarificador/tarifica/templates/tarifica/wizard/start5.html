@@ -55,30 +55,40 @@
 	p{
 		margin: 20px;
 	}
+	div.show-button ul{
+		margin: 10px auto;
+		text-align: center;
+	}
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
 	<div class="well well-small">
-		<h4 class="text-center">Great!</h4>
+		<h4 class="text-center">After configuring...</h4>
 		<p>
-			What's left now is to configure all your active trunks, indicating how much your provider charges you as a monthly fee, and on which day of the month your provider considers a billing period to end.
+			Once you're certain all necessary trunks, destination tariffs and bundles are configured, you can test your configuration by selecting a "Test Run" of the import process:
+		</p>
+		<div class="text-center show-button">
+			<img src="{% static 'tarifica/img/test-run.jpg' %}">
+		</div>
+		<p>
+			Once the test run is complete, Mango Analytics will tell you how many outgoing calls it found in your Elastix call history, and how many of those it was able to process. It will also show you a brief summary of calls whose cost could not be assigned. 
 		</p>
 		<p>
-			You will also need to configure each one of your destination tariffs assigned by each provider, indicating the prefix that must be matched and its cost. In case you have call bundles provided, you should configure them too.
+			If everything you need was successfully found and processed, you can go ahead and start the import process pressing the button below. If not, you can always go back and review your configuration.
 		</p>
-		<p>
-			This step is the most important one: if you're unsure of how Mango Analytics matches calls to destination tariffs, please refer to the manual. Mango Analytics provides you with a way of testing if you've configured it correctly.
-		</p>
-		<p>
-			Please provide as much detail as you can while configuring destination tariffs. Be aware that in order to get the most accurate reports, your configuration must also be accurate.
-		</p>
+		<div class="text-center show-button">
+			<img src="{% static 'tarifica/img/import.jpg' %}">
+		</div>
+		<div class="alert alert-info" style="margin-top: 15px;">
+			<i class="icon-exclamation-sign"></i> Running this import process will replace all existing data. You can safely import your call data over and over again, there will be no duplicated information.
+		</div>
 		
 		<hr>
 		<div class="row-fluid">
 			<div class="span4 text-center">
-				<a href="{% url 'tarifica:wizard_start' 3 %}" class="btn btn-primary"><< Previous</a>
+				<a href="{% url 'tarifica:wizard_start' 4 %}" class="btn btn-primary"><< Previous</a>
 			</div>
 			<div class="span4 text-center">
 				<ul class="inline">
@@ -92,15 +102,15 @@
 						<a href="{% url 'tarifica:wizard_start' 3 %}" class="rounded-button"></a>
 					</li>
 					<li>
-						<a href="#" class="rounded-button active"></a>
+						<a href="{% url 'tarifica:wizard_start' 4 %}" class="rounded-button"></a>
 					</li>
 					<li>
-						<a href="{% url 'tarifica:wizard_start' 5 %}" class="rounded-button"></a>
+						<a href="#" class="rounded-button active"></a>
 					</li>
 				</ul>
 			</div>
 			<div class="span4 text-center">
-				<a href="{% url 'tarifica:wizard_start' 5 %}" class="btn btn-primary">Next >></a>
+				<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">Finish - Go to Setup</a>
 			</div>
 		</div>
 		<br>
