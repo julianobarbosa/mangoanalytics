@@ -141,6 +141,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Provider</th>
                     <th>Destination</th>
                     <th>Seconds</th>
                     <th>Cost {{ user_info.currency_code }}</th>
@@ -152,6 +153,7 @@
                 <tr>
                     <td>{{call.dat}}</td>
                     <td>{{call.time}}</td>
+                    <td>{{call.provider_name}}</td>
                     <td>{{call.name}}</td>
                     <td>{{call.duration}}</td>
                     <td>{{ user_info.currency_symbol }}{{call.cost | floatformat:"2"}}</td>

@@ -129,11 +129,12 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         d['destination_country'] = Country(d['destination_country'])
     print destinations
 
-    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration,\
+    cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_provider.name as provider_name, tarifica_call.dialed_number, tarifica_call.duration,\
         tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
+        LEFT JOIN tarifica_provider ON tarifica_call.provider_id = tarifica_provider.id \
         WHERE date >= %s AND date <= %s AND extension_number = %s ORDER BY dat',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
