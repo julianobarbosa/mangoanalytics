@@ -129,6 +129,7 @@ class filterCDR(forms.Form):
 
     provider_choices = [('0','')]
     existing_providers = Provider.objects.filter(is_configured = True)
+    print existing_providers
     if len(existing_providers) > 0:
         provider_choices.extend((e.id, e.name) for e in existing_providers)
 
