@@ -138,6 +138,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         WHERE date >= %s AND date <= %s AND extension_number = %s ORDER BY dat',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
+    print all_calls[0]
     average = 0
     n = 0
     for cost in all_calls:
