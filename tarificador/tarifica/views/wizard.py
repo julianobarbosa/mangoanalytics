@@ -11,9 +11,9 @@ from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
 
-def start(request):
+def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
-    return render(request, 'tarifica/wizard/start.html', {})
+    return render(request, 'tarifica/wizard/start'+str(page)+'.html', {})
 
 def testrun(request, default="none"):
     import subprocess

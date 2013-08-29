@@ -44,6 +44,7 @@ urlpatterns = patterns('',
    url(r'^users/analytics/(?P<extension_id>\d+)/(?P<period_id>\w+)$', users.analyticsUsers, name = 'users_analytics_period'),
 
    url(r'^wizard/start$', wizard.start, name = "wizard_start"),
+   url(r'^wizard/start/(?P<page>\w+)$', wizard.start, name = "wizard_start"),
    url(r'^wizard/testRun$', wizard.testrun, name = "wizard_test_run"),
    url(r'^wizard/testRun/(?P<default>\w+)$', wizard.testrun, name = "wizard_test_run"),
    url(r'^wizard/checkTestRunStatus$', wizard.checkTestRunStatus, name = "wizard_check_test_run_status"),
