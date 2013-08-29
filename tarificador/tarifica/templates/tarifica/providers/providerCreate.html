@@ -21,42 +21,57 @@
         {{ form.non_field_errors }}
         <div class="control-group">
             {{ form.name.errors }}
-            <label class="control-label" for="id_name">Name</label>
+            <label class="control-label" for="id_name">Alias
+                <a class="help" href="#" data-toggle="popover" data-original-title="Trunk Alias" data-content="Custom, friendly name for this trunk. Only used within Mango Analytics.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
             <div class="controls">
                 {{ form.name }}
-                <span class="help-inline">Custom name for this trunk.</span>
             </div>
         </div>
         <div class="control-group">
             {{ form.monthly_cost.errors }}
-            <label class="control-label" for="id_monthly_cost">Monthly Fee</label>
+            <label class="control-label" for="id_monthly_cost">Monthly Fee
+                <a class="help" href="#" data-toggle="popover" data-original-title="Monthly Fee" data-content="Monthly fee charged by this trunk's providers.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
             <div class="controls">
                 {{ form.monthly_cost }}
-                <span class="help-inline">Monthly fee charged by this trunk's providers.</span>
             </div>
         </div>
         <div class="control-group">
             {{ form.period_end.errors }}
-            <label class="control-label" for="id_period_end">Billing start date</label>
+            <label class="control-label" for="id_period_end">Billing start date
+                <a class="help" href="#" data-toggle="popover" data-original-title="Billing start date" data-content="Day of the month when billing starts.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
             <div class="controls">
                 {{ form.period_end }}
-                <span class="help-inline">Day of the month when billing starts.</span>
             </div>
         </div>
         <div class="control-group">
             {{ form.payment_type.errors }}
-            <label class="control-label" for="id_payment_type">Payment Method</label>
+            <label class="control-label" for="id_payment_type">Payment Method
+                <a class="help" href="#" data-toggle="popover" data-original-title="Payment Method" data-content="Do your provider charges you when your billing period ends, or do you need to pay beforehand in order to use their service?">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
             <div class="controls">
                 {{ form.payment_type }}
-                <span class="help-inline">Do your provider charges you when your billing period ends, or do you need to pay beforehand in order to use their service?</span>
             </div>
         </div>
         <div class="control-group">
             {{ form.channels.errors }}
-            <label class="control-label" for="id_channels">Channels</label>
+            <label class="control-label" for="id_channels">Channels
+                <a class="help" href="#" data-toggle="popover" data-original-title="Channel Number" data-content="How many calls can you make at the same time?">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
             <div class="controls">
                 {{ form.channels }}
-                <span class="help-inline">How many calls can you make at the same time?</span>
             </div>
         </div>
         <div class="form-actions">
@@ -66,4 +81,18 @@
     </form>
 </div>
 
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(function() {
+        $('a.help').each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
+        });
+    });
+    </script>
 {% endblock %}
