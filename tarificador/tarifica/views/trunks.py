@@ -68,6 +68,7 @@ def general(request, period_id="thisMonth"):
 
         average_cost = averageMonthlyCost / len(billingPeriods)
         this_month_total_usage = getTrunkCurrentIntervalData(p, start_date, end_date)
+        print this_month_total_usage
         #print this_month_total_usage
         total_trunks_month_usage += this_month_total_usage['total_cost']
         providersData.append({
@@ -227,12 +228,12 @@ def getTrunkCurrentIntervalData(provider, start_date, end_date):
     cursor.execute(sql, (provider.id, start_date, end_date))
     intervalData = dictfetchall(cursor)[0]
     intervalData.update(getProviderBundleCost(provider, start_date, end_date))
+    if intervalData['total_call_cost'] is None:
+        intervalData['total_call_cost'] = 0
     call_cost = intervalData['total_call_cost']
-    if call_cost is None:
-        call_cost = 0
+    if intervalData['total_bundle_cost'] is None:
+        intervalData['total_bundle_cost'] = 0
     bundle_cost = intervalData['total_bundle_cost']
-    if bundle_cost is None:
-        bundle_cost = 0
     intervalData.update({'monthly_cost': provider.monthly_cost })
     intervalData.update({'total_cost': call_cost + bundle_cost + provider.monthly_cost})
     return intervalData

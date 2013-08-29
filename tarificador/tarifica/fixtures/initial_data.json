@@ -31,14 +31,14 @@
     "model": "tarifica.DestinationName",
     "pk": 1,
     "fields": {
-      "name": "Local"
+      "name": "Local Landline"
     }
   },
   {
     "model": "tarifica.DestinationName",
     "pk": 2,
     "fields": {
-      "name": "National"
+      "name": "Domestic Landline"
     }
   },
   {
@@ -52,14 +52,14 @@
     "model": "tarifica.DestinationName",
     "pk": 4,
     "fields": {
-      "name": "Local Cellphone"
+      "name": "Local Mobile"
     }
   },
   {
     "model": "tarifica.DestinationName",
     "pk": 5,
     "fields": {
-      "name": "National Cellphone"
+      "name": "Domestic Mobile"
     } 
   },
   {
