@@ -150,11 +150,11 @@ class filterCDR(forms.Form):
         widget=forms.Select(attrs={'class':'span2'}))
     provider = forms.CharField(max_length = 255, required=False, 
         widget=forms.TextInput(attrs={'class':'input-medium'}))
-    provider_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+    provider_comparison = forms.ChoiceField(choices = comparison_choices[0:3], required=False,
         widget=forms.Select(attrs={'class':'span2'}))
     destination_group = forms.CharField(max_length = 255, required=False, 
         widget=forms.TextInput(attrs={'class':'input-medium'}))
-    destination_group_comparison = forms.ChoiceField(choices = comparison_choices, required=False,
+    destination_group_comparison = forms.ChoiceField(choices = comparison_choices[0:3], required=False,
         widget=forms.Select(attrs={'class':'span2'}))
     duration = forms.CharField(max_length = 255, required=False, 
         widget=forms.TextInput(attrs={'class':'input-medium'}))

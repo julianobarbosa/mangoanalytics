@@ -98,9 +98,10 @@
         <thead>
             <tr>
                 <th>Destination</th>
-                <th>Billing Mode</th>
                 <th>Cost {{ user_info.currency_code }}</th>
                 <th>Minutes/Sessions</th>
+                <th>Start</th>
+                <th>End</th>
                 <th>Used</th>
                 <th>Priority</th>
             </tr>
@@ -109,9 +110,10 @@
             {% for bundle in bundles %}
             <tr>
                 <td><img src="{{ bundle.destination_group.destination_country.flag }}"> {{ bundle.destination_group.destination_name.name }}</td>
-                <td>{{ bundle.tariff_mode }}</td>
                 <td>{{ user_info.currency_symbol }}{{ bundle.cost|floatformat:2 }}</td>
-                <td>{{ bundle.amount }}</td>
+                <td>{{ bundle.amount }} {{ bundle.tariff_mode }}s</td>
+                <td>{{ bundle.start_date | date:"d/M/Y" }}</td>
+                <td>{{ bundle.end_date | date:"d/M/Y" }}</td>
                 <td>{{ bundle.usage }}</td>
                 <td>{{ bundle.priority }}</td>
                 <td>

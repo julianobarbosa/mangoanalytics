@@ -22,9 +22,6 @@
 	.container {
 		font-size: 14px;
 	}
-	img.logo{
-		margin: 10px auto;
-	}
 	a.rounded-button{
 		padding: 1px 8px;
 		-moz-border-radius: 100%;
@@ -36,13 +33,19 @@
 		background: #eb871c;
 		line-height: 20px;
 	}
+	ul.inline a.active{
+		background: #ee3323;
+	}
 	ul.unstyled li{
 		line-height: 20px;
-		padding-bottom: 10px;
+		margin: 10px;
+	}
+	ul.text-points li{
+		padding: 10px;
 	}
 	h4{
 		font-size: 2em;
-		padding-bottom: 1.2em;
+		padding: 1.2em;
 	}
 	h5{
 		font-size: 1.2em;
@@ -53,46 +56,36 @@
 
 {% block content %}
 <div class="container">
-	<div class="text-center">
-		<img class="logo" src="{% static "tarifica/img/full_logo.png" %}" alt="Hi!" />
-	</div>
 	<div class="well well-small text-center">
 		<h4>Welcome to Mango Analytics!</h4>
-		<h5>Before continuing, please note that:</h5>
-		<ul class="text-left">
-			<li>Mango Analytics does not modify or delete any data in your PBX.</li>
-			<li>Once configured, it will run on 2:00 AM every day to keep all cost data in sync with the latest call information.</li>
-			<li>
-				The first import may take a lot of time, depending on the amount of calls placed and the physical resources of your PBX.
-			</li>
-		</ul>
-	</div>
-	<div>
+		<h5>Installation has been completed succesfully.</h5>
+		<h5>This wizard will guide you through configuring Mango Analytics.</h5>
+		<hr>
 		<div class="row-fluid">
 			<div class="span4 text-center">
-				<a href="#" class="btn btn-primary"><< Previous</a>
+				<a href="#" class="btn btn-primary disabled"><< Previous</a>
 			</div>
 			<div class="span4 text-center">
 				<ul class="inline">
 					<li>
-						<a href="#" class="rounded-button"></a>
+						<a href="#" class="rounded-button active"></a>
 					</li>
 					<li>
-						<a href="#" class="rounded-button"></a>
+						<a href="{% url 'tarifica:wizard_start' 2 %}" class="rounded-button"></a>
 					</li>
 					<li>
-						<a href="#" class="rounded-button"></a>
+						<a href="{% url 'tarifica:wizard_start' 3 %}" class="rounded-button"></a>
 					</li>
 					<li>
-						<a href="#" class="rounded-button"></a>
+						<a href="{% url 'tarifica:wizard_start' 4 %}" class="rounded-button"></a>
 					</li>
 					<li>
-						<a href="#" class="rounded-button"></a>
+						<a href="{% url 'tarifica:wizard_start' 5 %}" class="rounded-button"></a>
 					</li>
 				</ul>
 			</div>
 			<div class="span4 text-center">
-				<a href="#" class="btn btn-primary">Next >></a>
+				<a href="{% url 'tarifica:wizard_start' 2 %}" class="btn btn-primary">Next >></a>
 			</div>
 		</div>
 		<br>

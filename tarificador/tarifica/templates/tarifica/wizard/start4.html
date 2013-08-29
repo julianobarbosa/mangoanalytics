@@ -1,4 +1,5 @@
 {% extends "wizard.html" %}
+{% load staticfiles %}
 
 {% block title %} Wizard - Start {% endblock %}
 
@@ -10,34 +11,99 @@
 </li>
 <li>
     <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
-        Start
+        First Time Setup
     </a>
 </li>
 {% endblock %}
 
+{% block css %}
+{{ block.super }}
+<style type="text/css">
+	.container {
+		font-size: 14px;
+	}
+	a.rounded-button{
+		padding: 1px 8px;
+		-moz-border-radius: 100%;
+		-webkit-border-radius: 100%;
+		border-radius: 100%;
+		font-size: 12px;
+		border: 1px solid #CCC;
+		box-shadow: 1px 1px 5px #FFF;
+		background: #eb871c;
+		line-height: 20px;
+	}
+	ul.inline a.active{
+		background: #ee3323;
+	}
+	ul.unstyled li{
+		line-height: 20px;
+		margin: 10px;
+	}
+	ul.text-points li{
+		padding: 10px;
+	}
+	h4{
+		font-size: 2em;
+		padding: 1.2em;
+	}
+	h5{
+		font-size: 1.2em;
+		padding: 1em;
+		line-height: 1.5em;
+	}
+	p{
+		margin: 20px;
+	}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="well well-small">
-	<h3>Wizard - Start:</h3>
-	<p>
-		This wizard will help you assign costs to all your calls. You can safely run this wizard again if your realize some prefix had the wrong tariff assigned, or other mistakes.
-	</p>
-
-	<h4>Step 1:</h4>
-	<p>
-		Begin by making sure all your trunks are configured and all the base tariffs and corresponding provider bundles are in. Don't worry, if after assigning costs to your calls you realize some tariff or prefix was missing, you can run this again.
-	</p>
-	<p>
-		<a href="{% url 'tarifica:setup' %}" class="btn btn-primary">
-			Configure Providers, Tariffs and Bundles
-		</a>
-	</p>
-
-	<h4>Step 2:</h4>
-	<p>
-		Now, let's do a test-run. This means we'll assign costs to each call, but won't save them to the database yet, so you can review the results and check that every tariff you need has already been configured.
-	</p>
-	<p>
-		<a href="{% url 'tarifica:wizard_test_run' %}" class="btn btn-primary">Start Test-run!</a>
-	</p>
+<div class="container">
+	<div class="well well-small">
+		<h4 class="text-center">Great!</h4>
+		<p>
+			What's left now is to configure all your active trunks, indicating how much your provider charges you as a monthly fee, and on which day of the month your provider considers a billing period to end.
+		</p>
+		<p>
+			You will also need to configure each one of your destination tariffs assigned by each provider, indicating the prefix that must be matched and its cost. In case you have call bundles provided, you should configure them too.
+		</p>
+		<p>
+			This step is the most important one: if you're unsure of how Mango Analytics matches calls to destination tariffs, please refer to the manual. Mango Analytics provides you with a way of testing if you've configured it correctly.
+		</p>
+		<p>
+			Please provide as much detail as you can while configuring destination tariffs. Be aware that in order to get the most accurate reports, your configuration must also be accurate.
+		</p>
+		
+		<hr>
+		<div class="row-fluid">
+			<div class="span4 text-center">
+				<a href="{% url 'tarifica:wizard_start' 3 %}" class="btn btn-primary"><< Previous</a>
+			</div>
+			<div class="span4 text-center">
+				<ul class="inline">
+					<li>
+						<a href="{% url 'tarifica:wizard_start' 1 %}" class="rounded-button"></a>
+					</li>
+					<li>
+						<a href="{% url 'tarifica:wizard_start' 2 %}" class="rounded-button"></a>
+					</li>
+					<li>
+						<a href="{% url 'tarifica:wizard_start' 3 %}" class="rounded-button active"></a>
+					</li>
+					<li>
+						<a href="#" class="rounded-button"></a>
+					</li>
+					<li>
+						<a href="{% url 'tarifica:wizard_start' 5 %}" class="rounded-button"></a>
+					</li>
+				</ul>
+			</div>
+			<div class="span4 text-center">
+				<a href="{% url 'tarifica:wizard_start' 5 %}" class="btn btn-primary">Next >></a>
+			</div>
+		</div>
+		<br>
+	</div>
 </div>
 {% endblock %}
