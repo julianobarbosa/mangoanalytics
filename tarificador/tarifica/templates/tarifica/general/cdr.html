@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block title %}CDR General{% endblock %}
-
 {% block css %}
     {{ block.super }}
     <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
@@ -46,7 +44,7 @@
 </li>
 {% endblock %}
 
-{% block title %} Dashboard {% endblock %}
+{% block title %} General CDR {% endblock %}
 
 {% block localization %}
     <a class="brand" style="margin-left: 10px; text-align:vertical;padding-right: 10px;" href="{% url 'tarifica:cdr' %}">General CDR</a>
