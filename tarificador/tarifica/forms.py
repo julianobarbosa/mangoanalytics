@@ -134,7 +134,8 @@ class filterCDR(forms.Form):
     if len(existing_providers) > 0:
         for e in existing_providers:
             print "extended with ",e.name
-            provider_choices.extend((e.id, e.name))
+            p = (e.id, e.name)
+            provider_choices.extend(p)
 
     print "provider_chouices"
     print provider_choices
