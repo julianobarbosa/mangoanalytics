@@ -89,7 +89,7 @@ class CallCostAssigner:
 			assigned a cost are the only ones saved.
 		"""
 		# Primero revisamos si es el día de corte.
-		self.resetBundles()
+		self.resetBundles(date)
 		print "Script running on day "+getStartOfDay(date)+"."
 		# Obtenemos las extensiones configuradas:
 		extensions = self.am.getUserInformation()
@@ -133,16 +133,15 @@ class CallCostAssigner:
 			'total_calls_saved': len(dailyCallDetail),
 		}
 
-	def resetBundles(self):
-		today=datetime.datetime.today()
+	def resetBundles(self, date):
 		for provider in self.getAllConfiguredProviders():
 			# We get all bundles and check if they should be reset, based on their dates
 			for bundle in self.getBundlesFromProvider(provider['id']):
-				if provider['period_end'] == today.day:
+				if provider['period_end'] == date:
 					print "End date of provider", provider['name']
 					bundle['usage'] = 0
 					self.saveBundleUsage(bundle['id'], 0)
-					print "Bundle "+bundle['name']+" reset."
+					print "Bundle",bundle['name'],"reset."
 				#Checking that bundles have indeed been reset:
 
 	def saveBundleUsage(self, bundle_id, usage):
