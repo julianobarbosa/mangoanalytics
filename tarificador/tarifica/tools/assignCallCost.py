@@ -143,6 +143,9 @@ class CallCostAssigner:
 					bundle['usage'] = 0
 					self.saveBundleUsage(bundle['id'], 0)
 					print "Bundle "+bundle['name']+" reset."
+				#Checking that bundles have indeed been reset:
+				for bundle in self.getBundlesFromProvider(provider['id']):
+					print "Bundle",bundle['name']," usage is now",bundle['usage']
 
 	def saveBundleUsage(self, bundle_id, usage):
 		self.am.connect('nextor_tarificador')
