@@ -129,21 +129,28 @@
     {{ block.super }}
     <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
     <script type="text/javascript">
-    $(function() {
+    $(document).ready(function() {
+
+        var provider_period = {{ destination_group.provider.period_end }}
+
         $('#start_date_datepicker').datetimepicker({
             pickTime: false,
             format: 'yyyy-MM-dd',
         });
-    });
 
-    $(function() {
+        $('#start_date_datepicker').on('changeDate', function(e) {
+            console.log(e.date.toString());
+        });
+
         $('#end_date_datepicker').datetimepicker({
             pickTime: false,
             format: 'yyyy-MM-dd',
         });
-    });
 
-    $(function() {
+        $('#end_date_datepicker').on('changeDate', function(e) {
+            console.log(e.date.toString());
+        });
+
         $('a.help').each(function(){
             $(this).popover({
                 html: true,
