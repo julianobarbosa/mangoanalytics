@@ -115,7 +115,6 @@ class CallCostAssigner:
 				print "Outgoing call found, assigning cost..."
 				totalOutgoingCalls += 1
 				callCostInfo = self.assignCost(row)
-				print callCostInfo
 				if callCostInfo['save']:
 					dailyCallDetail.append(callCostInfo['callInfo'])
 				else:
@@ -239,16 +238,25 @@ class CallCostAssigner:
 						for b in bundles:
 							#Si ya se aplicó, salimos
 							if appliedToBundle:
+								print "Already has been applied to a bundle"
 								break
 
-							#Si el paquete no está activo, salimos:
+							# La llamada debe estar dentro de un billing period del proveedor
+							# Si además en ese billing period hay un paquete que lo abarque,
+							# Entonces se aplica.
+
 							today = datetime.datetime.today()
 							provider_period_start = datetime.date(
 								year=today.year, month=today.month, day=prov['period_end']
 							)
-							provider_period_end = provider_period_start + relativedelta(months=1)
-							provider_period_end = provider_period_end - relativedelta(days=1)
-
+							if provider_period_start > call['calldate'].date():
+								#Entonces el periodo es el anterior:
+								provider_period_end = provider_period_start - relativedelta(days=1)
+								provider_period_start = provider_period_start - relativedelta(months=1)
+							else:
+								provider_period_end = provider_period_start + relativedelta(months=1)
+								provider_period_end = provider_period_end - relativedelta(days=1)
+							#Now that we have which billing period the call falls into, we check that
 							#Bundle should start before or the same day of provider's billing period
 							if b['start_date'] <= provider_period_start:
 								#Bundle should end after or the same day of provider's billing period
@@ -281,6 +289,10 @@ class CallCostAssigner:
 										print "Call applied to bundle",b['name']
 									else:
 										print "Not applied to bundle because it would surpass the amount set."
+								else:
+									print "End Date of Bundle is less than the end of billing period!"
+							else:
+								print "Start Date of Bundle is less than the end of billing period!"
 
 					if not appliedToBundle:
 						# Y no se aplicó a ninguno, por tanto 
@@ -308,14 +320,7 @@ class CallCostAssigner:
 					call['accountcode'],
 					call['billsec'], 
 					cost, 
-					datetime.datetime(
-						year=call['calldate'].year, 
-						month=call['calldate'].month, 
-						day=call['calldate'].day,
-						hour=call['calldate'].hour,
-						minute=call['calldate'].minute,
-						second=call['calldate'].second
-					),
+					call['calldate'],
 					destination_group_id,
 					provider_id,
 					call['uniqueid']
@@ -332,14 +337,7 @@ class CallCostAssigner:
 					call['accountcode'], 
 					call['billsec'], 
 					callInfoList[1],
-					datetime.datetime(
-						year=call['calldate'].year, 
-						month=call['calldate'].month, 
-						day=call['calldate'].day,
-						hour=call['calldate'].hour,
-						minute=call['calldate'].minute,
-						second=call['calldate'].second
-					),
+					call['calldate'],
 					call['uniqueid']
 				),
 				'save': False
