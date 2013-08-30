@@ -48,7 +48,8 @@ def start(request, page=1):
 
     else:
         user_info = get_object_or_404(UserInformation, id = 1)
-        return render(request, 'tarifica/wizard/start'+str(page)+'.html', {})
+        referer = request.META.get('HTTP_REFERER')
+        return render(request, 'tarifica/wizard/start'+str(page)+'.html', {'referer':referer})
 
 def testrun(request, default="none"):
     import subprocess
