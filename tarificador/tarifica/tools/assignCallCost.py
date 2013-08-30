@@ -137,7 +137,9 @@ class CallCostAssigner:
 		for provider in self.getAllConfiguredProviders():
 			# We get all bundles and check if they should be reset, based on their dates
 			for bundle in self.getBundlesFromProvider(provider['id']):
-				if provider['period_end'] == date:
+				print "Date from provider reset check:",provider['period_end']
+				print "Date from bundle reset check:",date.day
+				if provider['period_end'] == date.day:
 					print "End date of provider", provider['name']
 					bundle['usage'] = 0
 					self.saveBundleUsage(bundle['id'], 0)
@@ -148,8 +150,8 @@ class CallCostAssigner:
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s \
 		WHERE tarifica_bundle.id = %s"
-		print self.am.cursor.execute(sql, (usage, bundle_id))
-		print self.am.db.commit()
+		self.am.cursor.execute(sql, (usage, bundle_id))
+		self.am.db.commit()
 		sql = "SELECT * FROM tarifica_bundle WHERE tarifica_bundle.id = %s"
 		self.am.cursor.execute(sql, (bundle_id,))
 		bundle = self.am.cursor.fetchone()
@@ -342,6 +344,6 @@ class CallCostAssigner:
 
 if __name__ == '__main__':
 	week = datetime.datetime.now()
-	week = week - datetime.timedelta(days=10)
+	week = week - datetime.timedelta(days=24)
 	c = CallCostAssigner()
 	c.getDailyAsteriskCalls(week)
