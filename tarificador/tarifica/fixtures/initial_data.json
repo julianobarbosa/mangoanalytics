@@ -10,7 +10,7 @@
     "model": "tarifica.TariffMode",
     "pk": 2,
     "fields": {
-      "name": "Session"
+      "name": "Call"
     }
   },
   {

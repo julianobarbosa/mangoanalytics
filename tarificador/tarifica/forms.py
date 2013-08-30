@@ -64,17 +64,17 @@ class createBundle(forms.Form):
         'invalid':'Please input a valid date.'
     })
 
-    def clean_start_date(self):
-        data = self.cleaned_data['start_date']
-        today = datetime.datetime.utcnow().replace(tzinfo=utc)
-        today = today - datetime.timedelta(days=1)
-        if data < today.date():
-            print "Not valid!"
+    #def clean_start_date(self):
+        #data = self.cleaned_data['start_date']
+        #today = datetime.datetime.now()
+        #today = today - datetime.timedelta(days=1)
+        #if data < today.date():
+            #print "Date is !"
             #raise forms.ValidationError("Start date must be equal or later than today.")
 
         # Always return the cleaned data, whether you have changed it or
         # not.
-        return data
+        #return data
 
     def clean_end_date(self):
         data = self.cleaned_data['end_date']

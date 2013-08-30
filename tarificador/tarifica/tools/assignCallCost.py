@@ -144,22 +144,17 @@ class CallCostAssigner:
 					self.saveBundleUsage(bundle['id'], 0)
 					print "Bundle "+bundle['name']+" reset."
 				#Checking that bundles have indeed been reset:
-				for bundle in self.getBundlesFromProvider(provider['id']):
-					print "Bundle",bundle['name']," usage is now",bundle['usage']
 
 	def saveBundleUsage(self, bundle_id, usage):
 		self.am.connect('nextor_tarificador')
 		sql = "UPDATE tarifica_bundle SET tarifica_bundle.usage = %s \
 		WHERE tarifica_bundle.id = %s"
-		self.am.cursor.execute(sql, (usage, bundle_id))
-		return self.am.db.commit()
-
-	def changeBundleStatus(self, bundle_id, status):
-		self.am.connect('nextor_tarificador')
-		sql = "UPDATE tarifica_bundle SET tarifica_bundle.is_active = %s \
-		WHERE tarifica_bundle.id = %s"
-		self.am.cursor.execute(sql, (status, bundle_id))
-		return self.am.db.commit()
+		print self.am.cursor.execute(sql, (usage, bundle_id))
+		print self.am.db.commit()
+		sql = "SELECT * FROM tarifica_bundle WHERE tarifica_bundle.id = %s"
+		self.am.cursor.execute(sql, (bundle_id,))
+		bundle = self.am.cursor.fetchone()
+		print "Bundle",bundle['name'],"usage is now",bundle['usage']
 
 	def saveCalls(self, calls):
 		self.am.connect('nextor_tarificador')
