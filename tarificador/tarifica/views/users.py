@@ -48,6 +48,7 @@ def generalUsers(request, period_id="thisMonth"):
         WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
     extensions = dictfetchall(cursor)[:5]
+    print extensions
     #for e in extensions : print e['extension_number']
     cursor.execute(
         'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
