@@ -76,15 +76,16 @@
                 <tbody>
                     {% for d in data %}
                     <tr>
-                        <td>{{d.0}}</td>
+                        <td>{{ d.callerID }}</td>
                         <td>
-                            <img src="{{ d.1.destination_country.flag }}">
-                            {{d.1.destination_name.name}}
+                            <img src="{{ d.destination_group.destination_country.flag }}">
+                            {{d.destination_group.destination_name.name}}
                         </td>
-                        <td>{{d.3}}</td>
-                        <td>{{d.2}}</td>
-                        <td>{{d.5}}</td>
-                        <td>{{d.4}}</td>
+                        <td>{{ d.dialed_number }}</td>
+                        <td>{{ d.Accountcode }}</td>
+                        <td>{{ d.provider.name }}</td>
+                        <td>{{ d.call_start }}</td>
+                        <td>{{ d.Duration }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

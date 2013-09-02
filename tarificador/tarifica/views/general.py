@@ -79,54 +79,104 @@ def realtime(request, action="show"):
     #print today
     try:
         process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
-        #process ='Channel              Context              Extension        Prio State   Application  Data                      CallerID        Duration Accountcode PeerAccount BridgedTo\nIP/469-000002aa     macro-dialout-trunk  s                  19 Up      Dial         SIP/Nextor/525555543001,3 469             00:00:25                         SIP/Nextor-000002ab\nSIP/464-000002ac     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525555458610,3 464             00:00:13                         (None)\nSIP/4680-000002b0    from-internal        555                 3 Up      Wait         1                         4680            00:00:00                         (None)\nSIP/Nextor-000002ab  from-pstn                                1 Up      AppDial      (Outgoing Line)           755543001       00:00:25                         SIP/469-000002aa\nSIP/Nextor-000002af  from-pstn            752909139           1 Down    AppDial      (Outgoing Line)           752909139       00:00:09                         (None)\nSIP/Nextor-000002ad  from-pstn            755458610           1 Down    AppDial      (Outgoing Line)           755458610       00:00:13                         (None)\nSIP/470-000002ae     macro-dialout-trunk  s                  19 Ring    Dial         SIP/Nextor/525552909139,3 470             00:00:09                         (None)\n\n7 active channels\n4 active calls\n412 calls processed'
-        data = re.split("\n+", process)[1:-4]
-        print process
-        #print "data", data
-        processed_data = [ re.split(" +", d, 9) for d in data if d[6] ]
-        #print "processed_data", processed_data
-        
-        data = [
-            [ d[7], "algo", re.split("/", d[6])[1],re.split(",", re.split("/", d[6])[2])[0], d[8] ] 
-            for d in processed_data if re.search("/",d[6])
-            ]
-        print "second data", data
-        #print data
+        lines = process.split('\n')[0:-4]
+
+        #There's trouble here... the thing is, these columns may contain space-separated words.
+        #So, we need to know the extension of the column (Name+whitespace)
+        #And check, before splitting by spaces, if we should do so, based on if the spaces that 
+        #would be separated plus the column contents equal de column width.
+
+        #We know the column names don't have spaces in them:
+        rege = re.compile("(\w+ +)")
+        columns = []
+        end_pos = len(lines[0])
+        start_pos = 0
+        i = 0
+        #Saving each column and its length:
+        while True:
+            col = rege.search(lines[0], start_pos, end_pos)
+            if not col: 
+                break
+            start_pos = col.end()
+            columns.append({
+                'name': col.group(0).strip(' '), 
+                'length': len(col.group(0)), 
+            })
+            i += 1
+
+        i = 0
+        data_row_columns = []
+
+        #Starting with the data columns only
+        for line in lines[1:]:
+            #Now, having how long are the columns, we can slice each line by each column width
+            #And after stripping it of ending newlines, we have our data!
+            start = 0
+            end = 0
+            for c in columns:
+                end = end + c['length']
+                data_row_columns.append({
+                    c['name']: line[start:end].strip(' ')
+                })
+                start += c['length']
+
         graphData = []
-        for d in data:
-            try:
-                t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
-                #print t1
-                timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
-                t = today - timedelta
-                #print t
-                d.append(t.time().strftime("%H:%M:%S"))
-                provider = Provider.objects.get(asterisk_name = d[2])
-                destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
-                #print destination_groups
-                for dest in destination_groups:
-                    try:
-                        pos = d[3].index(dest.prefix)
-                    except ValueError,e :
-                        pos = None
-                    if pos == 0:
-                        d[1] = dest
-                        break
-                    else:
-                        continue
-                accountedFor = False
-                for g in graphData:
-                    if g[0] == d[1].destination_name.name:
-                        accountedFor = True
-                        g[1] += 1
-                if not accountedFor:
-                    graphData.append([d[1].destination_name.name, 1])
-            except Exception as e:
-                print "Exception in call!"
-    except Exception as e:
-        print "Exception!: ",e
         data = []
-        graphData = []
+        for d in data_row_columns:
+            print d
+            #We first check if it is an outgoing call:
+            if d['Application'] == 'Dial':
+                configured_extensions = Extension.objects.all()
+                extension_list = [ e.extension_number for e in configured_extensions ]
+                if d['CallerID'] in extension_list:
+                    #This call went out from an extension and is outgoing...
+                    #Now, we get the dialed number...
+                    try:
+                        call_data = d['Data'].split('/')
+                        d.append( { 'provider': Provider.objects.get(asterisk_name = callData[1]) } )
+                        d.append( { 'dialed_number': call_data[2].split(',')[0] })
+                        if d['dialed_number'] not in extension_list:
+                            #Now we're sure its an outgoing call...
+                            #Calculating start time
+                            try:
+                                t1 = datetime.datetime.strptime(d['Duration'], "%H:%M:%S")
+                                #print t1
+                                timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
+                                t = today - timedelta
+                                #print t
+                                d.append( { 'call_start': t.time().strftime("%H:%M:%S") } )
+                            except Exception as e:
+                                print "Error while calculating start time",e
+                            #Obtaining destination group
+                            destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
+                            #print destination_groups
+                            for dest in destination_groups:
+                                try:
+                                    pos = d['dialed_number'].index(dest.prefix)
+                                except ValueError,e :
+                                    pos = None
+                                if pos == 0:
+                                    d.append( { 'destination_group': dest })
+                                    break
+                                else:
+                                    continue
+                            accountedFor = False
+                            for g in graphData:
+                                if g[0] == d['destination_group'].destination_name.name:
+                                    accountedFor = True
+                                    g[1] += 1
+                            if not accountedFor:
+                                graphData.append([d['destination_group'].destination_name.name, 1])
+                            #If all went well, we add this call to the list
+                            data.append(d)
+                        else:
+                            print "Called number in extension list, hence its not an outgoing call."
+                    except Exception as e:
+                        print "Could not parse call data, so it must not be a call."
+                else:
+                    print "Caller not in extension list, so it cannot be an outgoing call."
+            else:
+                print "Not a dial application."
 
     if action == "update":
         template = loader.get_template('tarifica/general/updateRealtime.html')
