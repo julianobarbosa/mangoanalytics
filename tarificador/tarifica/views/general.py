@@ -132,7 +132,6 @@ def realtime(request, action="show"):
     data = []
     for d in data_row_columns:
         print d
-        print d[0]
         #We first check if it is an outgoing call:
         if d['Application'] == 'Dial':
             configured_extensions = Extension.objects.all()
