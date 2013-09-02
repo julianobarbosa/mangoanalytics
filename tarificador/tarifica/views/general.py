@@ -141,7 +141,7 @@ def realtime(request, action="show"):
                 #Now, we get the dialed number...
                 try:
                     call_data = d['Data'].split('/')
-                    d.update( { 'provider': Provider.objects.get(asterisk_name = callData[1]) } )
+                    d.update( { 'provider': Provider.objects.get(asterisk_name = call_data[1]) } )
                     d.update( { 'dialed_number': call_data[2].split(',')[0] })
                     if d['dialed_number'] not in extension_list:
                         #Now we're sure its an outgoing call...
