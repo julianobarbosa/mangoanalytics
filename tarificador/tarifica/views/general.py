@@ -131,7 +131,6 @@ def realtime(request, action="show"):
     graphData = []
     data = []
     for d in data_row_columns:
-        d = d[0]
         print d
         #We first check if it is an outgoing call:
         if d['Application'] == 'Dial':
