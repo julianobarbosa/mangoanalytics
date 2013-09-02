@@ -144,11 +144,13 @@ def realtime(request, action="show"):
                     print call_data
                 except Exception as e:
                     print "Could not parse call data, so it must not be a call",e
+                    continue
 
                 try:
                     provider = Provider.objects.get(asterisk_name = call_data[1])
                 except Exception as e: 
                     "Could not find provider with name",call_data[1]
+                    continue
 
                 d.update( { 'provider': provider } )
                 d.update( { 'dialed_number': call_data[2].split(',')[0] })
@@ -164,6 +166,7 @@ def realtime(request, action="show"):
                         d.update( { 'call_start': t.time().strftime("%H:%M:%S") } )
                     except Exception as e:
                         print "Error while calculating start time",e
+                        continue
                     #Obtaining destination group
                     destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
                     #print destination_groups
