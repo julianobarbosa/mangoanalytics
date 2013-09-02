@@ -93,32 +93,35 @@ def realtime(request, action="show"):
         #print data
         graphData = []
         for d in data:
-            t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
-            #print t1
-            timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
-            t = today - timedelta
-            #print t
-            d.append(t.time().strftime("%H:%M:%S"))
-            provider = Provider.objects.get(asterisk_name = d[2])
-            destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
-            #print destination_groups
-            for dest in destination_groups:
-                try:
-                    pos = d[3].index(dest.prefix)
-                except ValueError,e :
-                    pos = None
-                if pos == 0:
-                    d[1] = dest
-                    break
-                else:
-                    continue
-            accountedFor = False
-            for g in graphData:
-                if g[0] == d[1].destination_name.name:
-                    accountedFor = True
-                    g[1] += 1
-            if not accountedFor:
-                graphData.append([d[1].destination_name.name, 1])
+            try:
+                t1 = datetime.datetime.strptime(d[4], "%H:%M:%S")
+                #print t1
+                timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
+                t = today - timedelta
+                #print t
+                d.append(t.time().strftime("%H:%M:%S"))
+                provider = Provider.objects.get(asterisk_name = d[2])
+                destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
+                #print destination_groups
+                for dest in destination_groups:
+                    try:
+                        pos = d[3].index(dest.prefix)
+                    except ValueError,e :
+                        pos = None
+                    if pos == 0:
+                        d[1] = dest
+                        break
+                    else:
+                        continue
+                accountedFor = False
+                for g in graphData:
+                    if g[0] == d[1].destination_name.name:
+                        accountedFor = True
+                        g[1] += 1
+                if not accountedFor:
+                    graphData.append([d[1].destination_name.name, 1])
+            except Exception as e:
+                print "Exception in call!"
     except Exception as e:
         print "Exception!: ",e
         data = []
