@@ -144,11 +144,12 @@ def realtime(request, action="show"):
                     print call_data
                 except Exception as e:
                     print "Could not parse call data, so it must not be a call",e
+
                 try:
-                    provider = Provider.objects.get(asterisk_name = call_data[1]
+                    provider = Provider.objects.get(asterisk_name = call_data[1])
                 except Exception as e: 
                     "Could not find provider with name",call_data[1]
-                    
+
                 d.update( { 'provider': provider } )
                 d.update( { 'dialed_number': call_data[2].split(',')[0] })
                 if d['dialed_number'] not in extension_list:
