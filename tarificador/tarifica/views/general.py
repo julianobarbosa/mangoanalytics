@@ -141,8 +141,8 @@ def realtime(request, action="show"):
                 #Now, we get the dialed number...
                 try:
                     call_data = d['Data'].split('/')
-                    d.append( { 'provider': Provider.objects.get(asterisk_name = callData[1]) } )
-                    d.append( { 'dialed_number': call_data[2].split(',')[0] })
+                    d.update( { 'provider': Provider.objects.get(asterisk_name = callData[1]) } )
+                    d.update( { 'dialed_number': call_data[2].split(',')[0] })
                     if d['dialed_number'] not in extension_list:
                         #Now we're sure its an outgoing call...
                         #Calculating start time
@@ -152,7 +152,7 @@ def realtime(request, action="show"):
                             timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
                             t = today - timedelta
                             #print t
-                            d.append( { 'call_start': t.time().strftime("%H:%M:%S") } )
+                            d.update( { 'call_start': t.time().strftime("%H:%M:%S") } )
                         except Exception as e:
                             print "Error while calculating start time",e
                         #Obtaining destination group
@@ -164,7 +164,7 @@ def realtime(request, action="show"):
                             except ValueError,e :
                                 pos = None
                             if pos == 0:
-                                d.append( { 'destination_group': dest })
+                                d.update( { 'destination_group': dest })
                                 break
                             else:
                                 continue
