@@ -180,7 +180,7 @@ def realtime(request, action="show"):
                     else:
                         print "Called number in extension list, hence its not an outgoing call."
                 except Exception as e:
-                    print "Could not parse call data, so it must not be a call."
+                    print "Could not parse call data, so it must not be a call",e
             else:
                 print "Caller not in extension list, so it cannot be an outgoing call."
         else:
