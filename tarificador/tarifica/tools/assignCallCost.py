@@ -233,6 +233,7 @@ class CallCostAssigner:
 					destination_group_id = d['id']
 					bundles = self.getAllBundlesFromDestinationGroup(d['id'])
 					appliedToBundle = False
+					seconds_left_to_count = call['billsec']
 					if len(bundles) > 0:
 						for b in bundles:
 							#Si ya se aplicó, salimos
@@ -274,20 +275,31 @@ class CallCostAssigner:
 									print "Usage before: ", usage
 									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
 										usage += 1
-									else:
-										#Redondeamos al minuto más cercano de la llamada
-										usage += ceil(call['billsec'] / 60)
-									print "Usage after: ", usage
-
-									if b['usage'] < b['amount']:
-										#Si no se pasa del límite del paquete, la guardamos...
-										self.saveBundleUsage(b['id'], usage)
 										appliedToBundle = True
-										costAssigned = True
-										save = True
-										print "Call applied to bundle",b['name']
 									else:
-										print "Not applied to bundle because it would surpass the amount set."
+										#Vemos cuantos minutos quedan:
+										call_minutes = ceil(call['billsec'] / 60)
+										minutes_available = b['amount'] - b['usage']
+										if minutes_available < call_minutes:
+											#No puede pasarse de los minutos disponibles
+											usage += minutes_available
+											#Ponemos que no fue completamente billeada:
+											appliedToBundle = False
+											#Revisamos cuanto queda por tarificar de la llamada
+											call['billsec'] = call['billsec'] - (call_minutes*60)
+											if call['billsec'] < 0:
+												call['billsec'] = 0
+											print "Call would overstep remaining minutes. Billed in bundle", minutes_available," minutes from",call_minutes
+										else:
+											#Todo bien, la guardamos normal:
+											usage += call_minutes
+											appliedToBundle = True
+
+									print "Usage after: ", usage
+									self.saveBundleUsage(b['id'], usage)
+									costAssigned = True
+									save = True
+									print "Call applied to bundle",b['name']
 								else:
 									print "End Date of Bundle is less than the end of billing period!"
 							else:
