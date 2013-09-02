@@ -76,17 +76,21 @@ def realtime(request, action="show"):
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.today()
-    #print today
+
     try:
         process = subprocess.check_output(["asterisk","-rx core show channels verbose"])
         lines = process.split('\n')[0:-4]
+    except Exception as e:
+        lines = []
+        "There was a problem getting asterisk call information..."
 
-        #There's trouble here... the thing is, these columns may contain space-separated words.
-        #So, we need to know the extension of the column (Name+whitespace)
-        #And check, before splitting by spaces, if we should do so, based on if the spaces that 
-        #would be separated plus the column contents equal de column width.
+    #There's trouble here... the thing is, these columns may contain space-separated words.
+    #So, we need to know the extension of the column (Name+whitespace)
+    #And check, before splitting by spaces, if we should do so, based on if the spaces that 
+    #would be separated plus the column contents equal de column width.
 
-        #We know the column names don't have spaces in them:
+    #We know the column names don't have spaces in them:
+    if len(lines) > 0:
         rege = re.compile("(\w+ +)")
         columns = []
         end_pos = len(lines[0])
@@ -119,19 +123,21 @@ def realtime(request, action="show"):
                     c['name']: line[start:end].strip(' ')
                 })
                 start += c['length']
+    else:
+        data_row_columns = []
 
-        graphData = []
-        data = []
-        for d in data_row_columns:
-            print d
-            #We first check if it is an outgoing call:
-            if d['Application'] == 'Dial':
-                configured_extensions = Extension.objects.all()
-                extension_list = [ e.extension_number for e in configured_extensions ]
-                if d['CallerID'] in extension_list:
-                    #This call went out from an extension and is outgoing...
-                    #Now, we get the dialed number...
-                    try:
+    graphData = []
+    data = []
+    for d in data_row_columns:
+        print d
+        #We first check if it is an outgoing call:
+        if d['Application'] == 'Dial':
+            configured_extensions = Extension.objects.all()
+            extension_list = [ e.extension_number for e in configured_extensions ]
+            if d['CallerID'] in extension_list:
+                #This call went out from an extension and is outgoing...
+                #Now, we get the dialed number...
+                try:
                         call_data = d['Data'].split('/')
                         d.append( { 'provider': Provider.objects.get(asterisk_name = callData[1]) } )
                         d.append( { 'dialed_number': call_data[2].split(',')[0] })
