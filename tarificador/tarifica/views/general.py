@@ -113,14 +113,14 @@ def realtime(request, action="show"):
 
         #Starting with the data columns only
         for line in lines[1:]:
-            data_row = []
+            data_row = {}
             #Now, having how long are the columns, we can slice each line by each column width
             #And after stripping it of ending newlines, we have our data!
             start = 0
             end = 0
             for c in columns:
                 end = end + c['length']
-                data_row.append({
+                data_row.update({
                     c['name']: line[start:end].strip(' ')
                 })
                 start += c['length']
