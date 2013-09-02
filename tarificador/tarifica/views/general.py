@@ -83,7 +83,7 @@ def realtime(request, action="show"):
         data = re.split("\n+", process)[1:-4]
         print process
         print "data", data
-        processed_data = [re.split(" +", d, 9) for d in data if d[6] ]
+        processed_data = [ re.split(" +", d, 9) for d in data if d[6] ]
         print "processed_data", processed_data
         
         data = [
