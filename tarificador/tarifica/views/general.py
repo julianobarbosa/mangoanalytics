@@ -143,7 +143,7 @@ def realtime(request, action="show"):
                     call_data = d['Data'].split('/')
                     try:
                         provider = Provider.objects.get(asterisk_name = call_data[1]
-                    except: 
+                    except Exception as e: 
                         "Could not find provider with name",call_data[1]
                     d.update( { 'provider': provider } )
                     d.update( { 'dialed_number': call_data[2].split(',')[0] })
