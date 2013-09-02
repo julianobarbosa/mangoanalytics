@@ -177,12 +177,12 @@ def realtime(request, action="show"):
                         data.append(d)
                     else:
                         print "Called number in extension list, hence its not an outgoing call."
-                    except Exception as e:
-                        print "Could not parse call data, so it must not be a call."
-                else:
-                    print "Caller not in extension list, so it cannot be an outgoing call."
+                except Exception as e:
+                    print "Could not parse call data, so it must not be a call."
             else:
-                print "Not a dial application."
+                print "Caller not in extension list, so it cannot be an outgoing call."
+        else:
+            print "Not a dial application."
 
     if action == "update":
         template = loader.get_template('tarifica/general/updateRealtime.html')
