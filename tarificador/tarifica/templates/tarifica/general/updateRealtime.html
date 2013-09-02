@@ -16,13 +16,13 @@
             <tbody>
                 {% for d in data %}
                 <tr>
-                    <td>{{ d.callerID }}</td>
+                    <td>{{ d.CallerID }}</td>
                     <td>
                         <img src="{{ d.destination_group.destination_country.flag }}">
                         {{d.destination_group.destination_name.name}}
                     </td>
                     <td>{{ d.dialed_number }}</td>
-                    <td>{{ d.Accountcode }}</td>
+                    <td>{% if d.Accountcode == '' %}-{% else %}{{ d.Accountcode }}{% endif %}</td>
                     <td>{{ d.provider.name }}</td>
                     <td>{{ d.call_start }}</td>
                     <td>{{ d.Duration }}</td>
