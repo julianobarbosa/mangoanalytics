@@ -17,7 +17,7 @@
 
 {% block content %}
 <div class="well well-small">
-    <form action="{% url 'tarifica:config_initial' %}" method="post" class="form-horizontal">{% csrf_token %}
+    <form action="{% url 'tarifica:config' %}" method="post" class="form-horizontal">{% csrf_token %}
         {{ form.non_field_errors }}
         <div class="control-group">
             {{ form.country.errors }}

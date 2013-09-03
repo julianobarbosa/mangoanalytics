@@ -3,8 +3,7 @@
 
 {% block css %}
     {{ block.super }}
-    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
-    <link href="{% static "tarifica/css/jquery.jqplot.css" %}" rel="stylesheet">
+    <link href="{% static "tarifica/css/datepicker.css" %}" type="text/css" rel="stylesheet" media="screen">
 {% endblock %}
 
 {% block title %}Update bundle {{ bundle.name }}{% endblock %}
@@ -127,7 +126,7 @@
 
 {% block js %}
     {{ block.super }}
-    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "tarifica/js/datepicker/bootstrap-datepicker.js" %}"></script>
     <script type="text/javascript">
     $(function() {
         $('#start_date_datepicker').datetimepicker({

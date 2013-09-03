@@ -38,6 +38,11 @@
             {% endif %}
         {% endif %}
         <a href="#custom" class="btn btn-primary" data-toggle="modal"></i>Custom</a>
+        <span class="well well-small">
+            <strong>
+                Current period: {{ start_date | date:"d/M/Y" }} - {{ end_date | date:"d/M/Y" }}
+            </strong>
+        </span>
 
         <div id="custom" class="modal hide fade">
             <div class="modal-header">

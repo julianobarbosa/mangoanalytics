@@ -84,6 +84,8 @@ def generalPinsets(request, period_id="thisMonth"):
         'lastMonth': lastMonth,
         'lastTwoMonths': lastTwoMonths,
         'data' : json.dumps(data),
+        'start_date': start_date + datetime.timedelta(days=1),
+        'end_date': end_date - datetime.timedelta(days=1),
     })
 
 def detailPinsets(request, pinset_id, period_id="thisMonth"):
@@ -157,6 +159,8 @@ def detailPinsets(request, pinset_id, period_id="thisMonth"):
               'pinset' : Pin,
               'data' : json.dumps(data),
               'day_data' : json.dumps(day_data),
+              'start_date': start_date + datetime.timedelta(days=1),
+              'end_date': end_date - datetime.timedelta(days=1),
               })
 
 
@@ -225,6 +229,8 @@ def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
               'pinset' : Pin,
               'data' : json.dumps(data),
               'year_data' : json.dumps(year_data),
+              'start_date': start_date + datetime.timedelta(days=1),
+              'end_date': end_date - datetime.timedelta(days=1),
               })
 
 def dictfetchall(cursor):

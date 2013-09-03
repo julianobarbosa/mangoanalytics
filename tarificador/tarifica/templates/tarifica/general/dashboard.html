@@ -72,7 +72,23 @@
     </div>
 
     <div class="span6 well well-small">
-        <div id="graph_general" style="height:300px; min-height:300px"></div>
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+                <a href="#monthly" class="help" data-toggle="popover" data-original-title="Billing Periods" data-content="Shows monthly costs (1st to 30/31th).">Monthly Costs <i class="icon-question-sign"></i></a>
+            </li>
+            <li>
+                <a href="#billing-period" class="help" data-toggle="popover" data-original-title="Billing Periods" data-content="Shows providers costs by billing periods (e.g. 4/Jul - 3/Aug) of each month.">Costs by Billing Period <i class="icon-question-sign"></i></a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="monthly">
+                <div id="graph_monthly" style="height:300px; min-height:300px"></div>
+            </div>
+            <div class="tab-pane" id="billing-period">
+                <div id="graph_billing_period" style="height:300px; min-height:300px"></div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -134,6 +150,18 @@
     <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            $(".help").each(function(){
+                $(this).popover({
+                    html: true,
+                    trigger: 'hover'
+                });
+            })
+
+            $('#myTab a').click(function (e) {
+              e.preventDefault();
+              $(this).tab('show');
+            })
+
             $.jqplot.config.enablePlugins = true;
             $.jqplot.config.defaultColors = [
                 "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
@@ -154,7 +182,42 @@
             // Can specify a custom tick Array.
             // Ticks should match up one for each y value (category) in the series.
              
-            var plot1 = $.jqplot('graph_general', providers, {
+            var plot1 = $.jqplot('graph_monthly', providers, {
+                // The "seriesDefaults" option is an options object that will
+                // be applied to all series in the chart.
+                seriesDefaults:{
+                    renderer:$.jqplot.BarRenderer,
+                    rendererOptions: {fillToZero: true}
+                },
+                // Custom labels for the series are specified with the "label"
+                // option on the series option.  Here a series option object
+                // is specified for each series.
+                series:labels,
+                // Show the legend and put it outside the grid, but inside the
+                // plot container, shrinking the grid to accomodate the legend.
+                // A value of "outside" would not shrink the grid and allow
+                // the legend to overflow the container.
+                legend: {
+                    show: true,
+                    placement: 'insideGrid'
+                },
+                axes: {
+                    // Use a category axis on the x axis and use our custom ticks.
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: ticks.reverse()
+                    },
+                    // Pad the y axis just a little so bars can get close to, but
+                    // not touch, the grid boundaries.  1.2 is the default padding.
+                    yaxis: {
+                        pad: 1.05,
+                        tickOptions: {formatString: '$%d'},
+                        min:0,
+                    }
+                }
+            });
+
+            var plot2 = $.jqplot('graph_billing_period', providers, {
                 // The "seriesDefaults" option is an options object that will
                 // be applied to all series in the chart.
                 seriesDefaults:{

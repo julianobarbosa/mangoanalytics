@@ -43,9 +43,9 @@ def initial(request):
 def config(request):
     user_info = UserInformation.objects.get(pk = 1)
     if request.method == 'POST': # If the form has been submitted...
-        form = forms.getUserInfo()
+        form = forms.getUserInfo(request.POST)
         if form.is_valid(): # All validation rules pass
-            user_info.country_code = form.cleaned_data['country_code']
+            user_info.country = form.cleaned_data['country']
             user_info.bussiness_name = form.cleaned_data['bussiness_name']
             user_info.contact_first_name = form.cleaned_data['contact_first_name']
             user_info.contact_last_name = form.cleaned_data['contact_last_name']

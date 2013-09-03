@@ -3,8 +3,7 @@
 
 {% block css %}
     {{ block.super }}
-    <link href="{% static "tarifica/css/bootstrap-datetimepicker.min.css" %}" type="text/css" rel="stylesheet" media="screen">
-    <link href="{% static "tarifica/css/jquery.jqplot.css" %}" rel="stylesheet">
+    <link href="{% static "tarifica/css/datepicker.css" %}" type="text/css" rel="stylesheet" media="screen">
 {% endblock %}
 
 {% block title %}Add bundles to {{ destination_group }}{% endblock %}
@@ -82,7 +81,7 @@
                 </a>
             </label>
             <div class="controls">
-                <div id="start_date_datepicker" class="input-append">
+                <div class="input-append datepicker" data-date="12-02-2012" data-date-format="yyyy-mm-dd">
                     {{ form.start_date }}
                     <span class="add-on">
                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
@@ -98,7 +97,7 @@
                 </a>
             </label>
             <div class="controls">
-                <div id="end_date_datepicker" class="input-append">
+                <div class="input-append datepicker" data-date="12-02-2012" data-date-format="yyyy-mm-dd">
                     {{ form.end_date }}
                     <span class="add-on">
                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
@@ -127,28 +126,16 @@
 
 {% block js %}
     {{ block.super }}
-    <script src="{% static "tarifica/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "tarifica/js/datepicker/bootstrap-datepicker.js" %}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
 
         var provider_period = {{ destination_group.provider.period_end }}
 
-        $('#start_date_datepicker').datetimepicker({
-            pickTime: false,
-            format: 'yyyy-MM-dd',
-        });
-
-        $('#start_date_datepicker').on('changeDate', function(e) {
-            console.log(e.date.toString());
-        });
-
-        $('#end_date_datepicker').datetimepicker({
-            pickTime: false,
-            format: 'yyyy-MM-dd',
-        });
-
-        $('#end_date_datepicker').on('changeDate', function(e) {
-            console.log(e.date.toString());
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            viewMode: 'months',
+            minViewMode: 'months'
         });
 
         $('a.help').each(function(){

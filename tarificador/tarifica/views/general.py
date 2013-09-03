@@ -217,8 +217,8 @@ def dashboard(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)
-    start_date = (datetime.datetime(year=today.year, month=today.month, day=1) - timedelta).replace(tzinfo=utc)
-    end_date = (datetime.datetime(year=today.year, month=today.month, day=today.day) + timedelta).replace(tzinfo=utc)
+    start_date = (datetime.datetime(year=today.year, month=today.month, day=1) - timedelta)
+    end_date = (datetime.datetime(year=today.year, month=today.month, day=today.day) + timedelta)
     cursor = connection.cursor()
     provider_daily_costs = []
     total_cost = 0
@@ -249,7 +249,7 @@ def dashboard(request):
             'cost': cost_data
         })
 
-
+    last_7_days = today - datetime.timedelta(days=7)
     sql = "SELECT tarifica_providerdestinationdetail.id, \
         SUM(tarifica_providerdestinationdetail.cost) AS cost, \
         tarifica_destinationname.name as destination_name, \
@@ -262,8 +262,8 @@ def dashboard(request):
         WHERE date > %s AND date < %s \
         GROUP BY tarifica_destinationname.name \
         ORDER BY SUM(tarifica_providerdestinationdetail.cost) DESC"
-    cursor.execute(sql, (start_date, end_date))
-    locales = dictfetchall(cursor)[:3]
+    cursor.execute(sql, (last_7_days, today))
+    locales = dictfetchall(cursor)[:5]
     sql = 'SELECT tarifica_userdailydetail.id, \
         SUM(tarifica_userdailydetail.cost) AS cost, \
         tarifica_extension.name, \
@@ -273,8 +273,8 @@ def dashboard(request):
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
         WHERE date > %s AND date < %s \
         GROUP BY tarifica_userdailydetail.extension_id ORDER BY SUM(cost) DESC'
-    cursor.execute(sql, (start_date, end_date))
-    extensions = dictfetchall(cursor)[:3]
+    cursor.execute(sql, (last_7_days, today))
+    extensions = dictfetchall(cursor)[:5]
 
     for locale in locales:
         locale['country'] = Country(code=locale['country_name'])
