@@ -62,7 +62,7 @@ class Server(object):
     def __init__(self):
         self.base_dir = os.path.join(os.path.abspath(os.getcwd()), "tarificador")
 
-        conf_path = os.path.join(self.base_dir, "..", "server.cfg")
+        conf_path = os.path.join("/opt/NEXTOR/tarificador/django-tarificador/tarificador/server.cfg")
         cherrypy.config.update(conf_path)
 
         # This registers a plugin to handle the Django app
