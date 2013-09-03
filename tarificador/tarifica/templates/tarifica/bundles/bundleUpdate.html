@@ -81,7 +81,7 @@
                 </a>
             </label>
             <div class="controls">
-                <div id="start_date_datepicker" class="input-append">
+                <div class="input-append datepicker" data-date="12-02-2012" data-date-format="yyyy-mm-dd">
                     {{ form.start_date }}
                     <span class="add-on">
                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
@@ -97,7 +97,7 @@
                 </a>
             </label>
             <div class="controls">
-                <div id="end_date_datepicker" class="input-append">
+                <div class="input-append datepicker" data-date="12-02-2012" data-date-format="yyyy-mm-dd">
                     {{ form.end_date }}
                     <span class="add-on">
                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
@@ -129,22 +129,12 @@
     <script src="{% static "tarifica/js/datepicker/bootstrap-datepicker.js" %}"></script>
     <script type="text/javascript">
     $(function() {
-        $('#start_date_datepicker').datetimepicker({
-            pickTime: false,
-            format: 'yyyy-MM-dd',
-            autoclose: true,
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            viewMode: 'months',
+            minViewMode: 'months'
         });
-    });
 
-    $(function() {
-        $('#end_date_datepicker').datetimepicker({
-            pickTime: false,
-            format: 'yyyy-MM-dd',
-            autoclose: true,
-        });
-    });
-
-    $(function() {
         $('a.help').each(function(){
             $(this).popover({
                 html: true,

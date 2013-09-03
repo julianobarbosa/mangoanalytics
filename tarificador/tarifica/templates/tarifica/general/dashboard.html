@@ -74,10 +74,10 @@
     <div class="span6 well well-small">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active">
-                <a href="#monthly" class="help" data-toggle="popover" data-original-title="Billing Periods" data-content="Shows monthly costs (1st to 30/31th).">Monthly Costs <i class="icon-question-sign"></i></a>
+                <a href="#monthly" data-toggle="tab" class="help" data-toggle="popover" data-original-title="Billing Periods" data-content="Shows monthly call costs (doesn't include bundle costs) (1st to 30/31th).">Monthly Call Costs <i class="icon-question-sign"></i></a>
             </li>
             <li>
-                <a href="#billing-period" class="help" data-toggle="popover" data-original-title="Billing Periods" data-content="Shows providers costs by billing periods (e.g. 4/Jul - 3/Aug) of each month.">Costs by Billing Period <i class="icon-question-sign"></i></a>
+                <a href="#billing-period" data-toggle="tab" class="help" data-toggle="popover" data-original-title="Billing Periods" data-content="Shows providers costs by billing periods (e.g. 4/Jul - 3/Aug) of each month.">Costs by Billing Period <i class="icon-question-sign"></i></a>
             </li>
         </ul>
 
@@ -150,6 +150,9 @@
     <script src="{% static "tarifica/js/plugins/jqplot.canvasAxisTickRenderer.min.js" %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            var monthly_plot = null;
+            var billing_plot = null;
+
             $(".help").each(function(){
                 $(this).popover({
                     html: true,
@@ -160,29 +163,37 @@
             $('#myTab a').click(function (e) {
               e.preventDefault();
               $(this).tab('show');
-            })
+            });
+
+            $('a[data-toggle="tab"]').on('shown', function (e) {
+                if($(e.target).attr('href') == '#monthly'){
+                    if(monthly_plot != null){
+                        monthly_plot.destroy();
+                    }
+                    monthly_plot = $.jqplot('graph_monthly', monthly_graph_providers, monthly_graph_options);
+                }
+                if($(e.target).attr('href') == '#billing-period'){
+                    if(billing_plot){
+                        billing_plot.destroy();
+                    }
+                    billing_plot = $.jqplot('graph_billing_period', billing_periods_providers, billing_periods_options);
+                }
+            });
 
             $.jqplot.config.enablePlugins = true;
             $.jqplot.config.defaultColors = [
                 "#eb871c", "#ee3323", "#54626b", "#7db0ca", "#b0ba21", "#45545e", "#afb5ba"
             ];
 
-            var general_data = $.parseJSON('{{ general_6_month_graph | safe }}');
-            var ticks = $.parseJSON('{{ ticks | safe }}');
-            providers = []
-            labels = []
-            for (var i = 0; i < general_data.length; i++) {
-                console.log(general_data[i])
-                console.log(general_data[i]['cost'])
-                providers.push(general_data[i]['cost'].reverse())
-                labels.push({label: general_data[i]['provider']})
+            var monthly_graph = $.parseJSON('{{ monthly_graph | safe }}');
+            var monthly_graph_ticks = $.parseJSON('{{ monthly_graph_ticks | safe }}');
+            monthly_graph_providers = []
+            monthly_graph_labels = []
+            for (var i = 0; i < monthly_graph.length; i++) {
+                monthly_graph_labels.push({label: monthly_graph[i].name});
+                monthly_graph_providers.push(monthly_graph[i].data.reverse());
             };
-            console.log(providers)
-
-            // Can specify a custom tick Array.
-            // Ticks should match up one for each y value (category) in the series.
-             
-            var plot1 = $.jqplot('graph_monthly', providers, {
+            var monthly_graph_options = {
                 // The "seriesDefaults" option is an options object that will
                 // be applied to all series in the chart.
                 seriesDefaults:{
@@ -192,7 +203,7 @@
                 // Custom labels for the series are specified with the "label"
                 // option on the series option.  Here a series option object
                 // is specified for each series.
-                series:labels,
+                series:monthly_graph_labels,
                 // Show the legend and put it outside the grid, but inside the
                 // plot container, shrinking the grid to accomodate the legend.
                 // A value of "outside" would not shrink the grid and allow
@@ -205,7 +216,7 @@
                     // Use a category axis on the x axis and use our custom ticks.
                     xaxis: {
                         renderer: $.jqplot.CategoryAxisRenderer,
-                        ticks: ticks.reverse()
+                        ticks: monthly_graph_ticks.reverse()
                     },
                     // Pad the y axis just a little so bars can get close to, but
                     // not touch, the grid boundaries.  1.2 is the default padding.
@@ -215,9 +226,19 @@
                         min:0,
                     }
                 }
-            });
+            };           
 
-            var plot2 = $.jqplot('graph_billing_period', providers, {
+            monthly_plot = $.jqplot('graph_monthly', monthly_graph_providers, monthly_graph_options);
+
+            var billing_periods = $.parseJSON('{{ billing_periods_graph | safe }}');
+            var billing_periods_ticks = $.parseJSON('{{ ticks | safe }}');
+            billing_periods_providers = []
+            billing_periods_labels = []
+            for (var i = 0; i < billing_periods.length; i++) {
+                billing_periods_providers.push(billing_periods[i]['cost'].reverse())
+                billing_periods_labels.push({label: billing_periods[i]['provider']})
+            };
+            var billing_periods_options = {
                 // The "seriesDefaults" option is an options object that will
                 // be applied to all series in the chart.
                 seriesDefaults:{
@@ -227,7 +248,7 @@
                 // Custom labels for the series are specified with the "label"
                 // option on the series option.  Here a series option object
                 // is specified for each series.
-                series:labels,
+                series:billing_periods_labels,
                 // Show the legend and put it outside the grid, but inside the
                 // plot container, shrinking the grid to accomodate the legend.
                 // A value of "outside" would not shrink the grid and allow
@@ -240,7 +261,7 @@
                     // Use a category axis on the x axis and use our custom ticks.
                     xaxis: {
                         renderer: $.jqplot.CategoryAxisRenderer,
-                        ticks: ticks.reverse()
+                        ticks: billing_periods_ticks.reverse()
                     },
                     // Pad the y axis just a little so bars can get close to, but
                     // not touch, the grid boundaries.  1.2 is the default padding.
@@ -250,7 +271,7 @@
                         min:0,
                     }
                 }
-            });
+            };
         });
     </script>
 {% endblock %}

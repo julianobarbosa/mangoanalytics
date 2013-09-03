@@ -12,6 +12,7 @@ from django.db import connection, transaction
 from tarifica.django_countries.fields import Country
 import json
 from tarifica.views.trunks import getBillingPeriods, dictfetchall
+from dateutil.relativedelta import *
 
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -223,7 +224,9 @@ def dashboard(request):
     provider_daily_costs = []
     total_cost = 0
     providers = Provider.objects.filter(is_configured=True)
-    general_6_month_graph = []
+    billing_periods_graph = []
+    monthly_graph = []
+    monthly_graph_ticks = []
     ticks = []
     ticksAssigned = False
     for prov in providers:
@@ -244,10 +247,43 @@ def dashboard(request):
             
         ticksAssigned = True
 
-        general_6_month_graph.append({
+        billing_periods_graph.append({
             'provider': prov.name, 
             'cost': cost_data
         })
+
+        #Monthly graph
+        monthly_graph.append({'name': prov.name, 'data': [], 'monthly_cost': prov.monthly_cost })
+
+    sql = "SELECT tarifica_providerdailydetail.id, \
+        SUM(tarifica_providerdailydetail.cost) AS cost, \
+        tarifica_provider.name AS name \
+        FROM tarifica_providerdailydetail \
+        LEFT JOIN tarifica_provider \
+        ON tarifica_providerdailydetail.provider_id = tarifica_provider.id \
+        WHERE date >= %s AND date <= %s \
+        GROUP BY tarifica_providerdailydetail.provider_id"
+
+    start_date = datetime.datetime(year=today.year, month=today.month, day=1)
+    #End of the month
+    end_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
+    
+    for x in xrange(0,6):
+        monthly_graph_ticks.append(start_date.strftime("%m"))
+        cursor.execute(sql, (start_date, end_date))
+        monthly_call_data = dictfetchall(cursor)
+
+        for prov in monthly_graph:
+            cost = prov['monthly_cost']
+            if monthly_call_data == []:
+                prov['data'].append(cost)
+            else:
+                for m_data in monthly_call_data:
+                    if m_data['name'] == prov['name']:
+                        prov['data'].append(m_data['cost'] + cost)
+
+        end_date = start_date - datetime.timedelta(days=1)
+        start_date -= relativedelta(months=1)
 
     last_7_days = today - datetime.timedelta(days=7)
     sql = "SELECT tarifica_providerdestinationdetail.id, \
@@ -287,7 +323,9 @@ def dashboard(request):
         'provider_daily_costs' : provider_daily_costs,
         'locales' : locales,
         'extensions' : extensions,
-        'general_6_month_graph': json.dumps(general_6_month_graph),
+        'billing_periods_graph': json.dumps(billing_periods_graph),
+        'monthly_graph': json.dumps(monthly_graph),
+        'monthly_graph_ticks': json.dumps(monthly_graph_ticks),
         'ticks': json.dumps(ticks),
     })
 

@@ -43,23 +43,34 @@ def generalUsers(request, period_id="thisMonth"):
     cursor.execute(
         'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
         tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
-        FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
+        FROM tarifica_userdailydetail LEFT OUTER JOIN tarifica_extension\
         ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
         WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
         [start_date,end_date])
     extensions = dictfetchall(cursor)[:5]
     #for e in extensions : print e['extension_number']
-    cursor.execute(
-        'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
-        SUM(tarifica_userdailydetail.total_calls) AS calls , \
-        SUM(tarifica_userdailydetail.total_seconds) AS seconds, tarifica_extension.name, \
-        tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
-        FROM tarifica_userdailydetail LEFT JOIN tarifica_extension\
-        ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
-        WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC',
-        [start_date,end_date])
+    #Se cambia lo siguiente: como deben mostrarse tooodas las extensiones,
+    #cambiamos los LEFT JOINS...
+    #sql = 
+    #'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
+        #SUM(tarifica_userdailydetail.total_calls) AS calls , \
+        #SUM(tarifica_userdailydetail.total_seconds) AS seconds, tarifica_extension.name, \
+        #tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
+        #FROM tarifica_userdailydetail RIGHT JOIN tarifica_extension\
+        #ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
+        #WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC'
+
+    sql = 'SELECT tarifica_extension.id, tarifica_extension.name, \
+    tarifica_extension.extension_number, \
+    SUM(tarifica_userdailydetail.cost) AS cost, \
+    SUM(tarifica_userdailydetail.total_calls) AS calls , \
+    SUM(tarifica_userdailydetail.total_seconds) AS seconds \
+    FROM tarifica_extension LEFT JOIN tarifica_userdailydetail \
+    ON tarifica_extension.id = tarifica_userdailydetail.extension_id \
+    WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC'
+    cursor.execute(sql, [start_date,end_date])
     all_users = dictfetchall(cursor)
-    #for a in all_users: print a
+    for a in all_users: print a
     average = 0
     n = 0
     for cost in all_users:
