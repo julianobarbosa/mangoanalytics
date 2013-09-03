@@ -26,13 +26,14 @@ virtualenv /opt/NEXTOR/tarificador
 source /opt/NEXTOR/tarificador/bin/activate
 
 #Installing django
-pip install django MySQL-python python-dateutil pytz
-python nextor-tarificador/tools/initialMySQLSetup.py
+pip install django MySQL-python python-dateutil cherrypy
+python tools/initialMySQLSetup.py
 
 mkdir /opt/NEXTOR/tarificador/django-tarificador
-cp -R nextor-tarificador/src /opt/NEXTOR/tarificador/django-tarificador/tarificador
+cp -R tarificador /opt/NEXTOR/tarificador/django-tarificador/tarificador
 python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
-python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runserver 0.0.0.0:8000
+python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py collectstatic
+python /opt/NEXTOR/tarificador/django-tarificador/tarificador/serve.py > /dev/null &
 
 #Adding cron job...
-echo "5 * * * * source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/importer.py >> /dev/null" >> /var/spool/cron/root
+echo "0 2 * * * source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/importer.py > /dev/null" >> /var/spool/cron/root

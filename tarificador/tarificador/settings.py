@@ -1,6 +1,6 @@
 # Django settings for tarificador project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -62,7 +62,7 @@ MEDIA_URL = ''
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
 # Cambiar esta direccion por cada compu!!!
-STATIC_ROOT = '/home/luis/.virtualenvs/myvenvs/django-tarificador/tarificador/static'
+STATIC_ROOT = '/opt/NEXTOR/tarificador/django-tarificador/tarificador/static'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
