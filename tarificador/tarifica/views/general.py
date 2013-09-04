@@ -43,7 +43,10 @@ def setup(request, provider_id = 0):
             except Pinset.MultipleObjectsReturned:
                 print "pinsets repetidos!"
     trunks = a_mysql_m.getTrunkInformation()
+    print 'trunks'
+    print trunks
     for x in trunks:
+        print x
         if x['trunkid']:
             try:
                 e = Provider.objects.get(asterisk_id = x['trunkid'])
@@ -56,8 +59,11 @@ def setup(request, provider_id = 0):
                     asterisk_channel_id = x['channelid']
                     )
                 p.save()
+                print "Saved trunk",x
             except Provider.MultipleObjectsReturned:
                 print "troncales repetidas!"
+
+    if user_info.first_time_user:
         return HttpResponseRedirect('/wizard/start') # Redirect after POST
 
     providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
