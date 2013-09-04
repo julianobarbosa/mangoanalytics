@@ -134,6 +134,10 @@
             minViewMode: 'months',
             autoclose: true,
             forceParse:false
+        }).on('changeDate', function(e){
+            current_date = $(this).getDate();
+            current_date.setDate(provider_period);
+            $(this).setDate(current_date);
         });
 
         $('div#end_date').datepicker({
