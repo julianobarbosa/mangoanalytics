@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
+from dateutil.relativedelta import *
 
 def createBundle(request, destination_group_id):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -36,8 +37,10 @@ def createBundle(request, destination_group_id):
             b.save()
             return HttpResponseRedirect('/setup') # Redirect after POST
     else:
+        provider = destination_group.provider
         start_date = datetime.datetime.now()
-        end_date = start_date + datetime.timedelta(weeks=104)
+        start_date = datetime.datetime(year=start_date.year, month=start_date.month, day=provider.period_end)
+        end_date = start_date + relativedelta(years=2)
         form = forms.createBundle(initial={
             'start_date': start_date,
             'end_date': end_date

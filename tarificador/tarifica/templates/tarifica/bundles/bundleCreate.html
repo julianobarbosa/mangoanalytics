@@ -127,17 +127,19 @@
     $(document).ready(function() {
 
         var provider_period = {{ destination_group.provider.period_end }}
+        console.log("Provider end: "+provider_period)
 
         $('div#start_date').datepicker({
             format: 'yyyy-mm-dd',
             viewMode: 'months',
             minViewMode: 'months',
             autoclose: true,
-            forceParse:false
         }).on('changeDate', function(e){
-            current_date = $(this).getDate();
+            current_date = e.date;
+            console.log(current_date);
             current_date.setDate(provider_period);
-            $(this).setDate(current_date);
+            console.log(current_date);
+            $('div#start_date').datepicker('setValue', current_date);
         });
 
         $('div#end_date').datepicker({
@@ -145,7 +147,12 @@
             viewMode: 'months',
             minViewMode: 'months',
             autoclose: true,
-            forceParse:false
+        }).on('changeDate', function(e){
+            current_date = e.date;
+            console.log(current_date);
+            current_date.setDate(provider_period);
+            console.log(current_date);
+            $('div#end_date').datepicker('setValue', current_date);
         });
 
         $('a.help').each(function(){
