@@ -16,53 +16,48 @@ from dateutil.relativedelta import *
 
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
-    if user_info.first_time_user:
-        #Import users, trunks and pinsets at first use...
-        a_mysql_m = AsteriskMySQLManager()
-        users = a_mysql_m.getUserInformation()
-        for u in users:
-            if u['extension']:
-                try:
-                    e = Extension.objects.get(extension_number = u['extension'])
-                except Extension.DoesNotExist:
-                    e = Extension(
-                        name = u['name'],
-                        extension_number = u['extension'],
-                        )
-                    e.save()
-                except Extension.MultipleObjectsReturned:
-                    print "extensiones repetidas!"
-        pinsets = a_mysql_m.getPinsetInformation()
-        # Revisamos que haya pinsets configurados
-        if len(pinsets) > 0:
-            for u in pinsets:
-                try:
-                    e = Pinset.objects.get(pinset_number = u)
-                except Pinset.DoesNotExist:
-                    e = Pinset(pinset_number = u)
-                    e.save()
-                except Pinset.MultipleObjectsReturned:
-                    print "pinsets repetidos!"
-        trunks = a_mysql_m.getTrunkInformation()
-        print 'trunks'
-        print trunks
-        for x in trunks:
-            print x
-            if x['trunkid']:
-                try:
-                    e = Provider.objects.get(asterisk_id = x['trunkid'])
-                except Provider.DoesNotExist:
-                    p = Provider(
-                        asterisk_id = x['trunkid'],
-                        asterisk_name = x['name'],
-                        name = x['name'],
-                        provider_tech = x['tech'],
-                        asterisk_channel_id = x['channelid']
-                        )
-                    p.save()
-                    print "Saved trunk",x
-                except Provider.MultipleObjectsReturned:
-                    print "troncales repetidas!"
+    #Import users, trunks and pinsets at first use...
+    a_mysql_m = AsteriskMySQLManager()
+    users = a_mysql_m.getUserInformation()
+    for u in users:
+        if u['extension']:
+            try:
+                e = Extension.objects.get(extension_number = u['extension'])
+            except Extension.DoesNotExist:
+                e = Extension(
+                    name = u['name'],
+                    extension_number = u['extension'],
+                    )
+                e.save()
+            except Extension.MultipleObjectsReturned:
+                print "extensiones repetidas!"
+    pinsets = a_mysql_m.getPinsetInformation()
+    # Revisamos que haya pinsets configurados
+    if len(pinsets) > 0:
+        for u in pinsets:
+            try:
+                e = Pinset.objects.get(pinset_number = u)
+            except Pinset.DoesNotExist:
+                e = Pinset(pinset_number = u)
+                e.save()
+            except Pinset.MultipleObjectsReturned:
+                print "pinsets repetidos!"
+    trunks = a_mysql_m.getTrunkInformation()
+    for x in trunks:
+        if x['trunkid']:
+            try:
+                e = Provider.objects.get(asterisk_id = x['trunkid'])
+            except Provider.DoesNotExist:
+                p = Provider(
+                    asterisk_id = x['trunkid'],
+                    asterisk_name = x['name'],
+                    name = x['name'],
+                    provider_tech = x['tech'],
+                    asterisk_channel_id = x['channelid']
+                    )
+                p.save()
+            except Provider.MultipleObjectsReturned:
+                print "troncales repetidas!"
         return HttpResponseRedirect('/wizard/start') # Redirect after POST
 
     providers_not_configured = Provider.objects.filter(is_configured=False).order_by('asterisk_name')
