@@ -55,7 +55,7 @@
 {% block content %}
 
 <div class="well well-small">
-    <div id="graph"style="height:400px; min-height:400px, width:100%"></div>
+    <div id="graph" style="height:400px; min-height:400px, width:100%"></div>
 </div>
 <div id="container">
 {% if data %}
@@ -149,8 +149,8 @@
                 try{
                     plot1 = jQuery.jqplot ('graph', [data], options);
                 }catch(Exception){
-                    console.log('exception when updating graph');
                     plot1.destroy();
+                    $('div#graph').html('');
                 }
             })
             .fail(function() {
