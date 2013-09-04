@@ -137,63 +137,63 @@ def realtime(request, action="show"):
         if d['Application'] == 'Dial':
             configured_extensions = Extension.objects.all()
             extension_list = [ e.extension_number for e in configured_extensions ]
-            if d['CallerID'] in extension_list:
+            #if d['CallerID'] in extension_list:
                 #This call went out from an extension and is outgoing...
                 #Now, we get the dialed number...
+            try:
+                call_data = d['Data'].split('/')
+                print call_data
+            except Exception as e:
+                print "Could not parse call data, so it must not be a call",e
+                continue
+
+            try:
+                provider = Provider.objects.get(asterisk_name = call_data[1])
+            except Exception as e: 
+                "Could not find provider with name",call_data[1]
+                continue
+
+            d.update( { 'provider': provider } )
+            d.update( { 'dialed_number': call_data[2].split(',')[0] })
+            if d['dialed_number'] not in extension_list:
+                #Now we're sure its an outgoing call...
+                #Calculating start time
                 try:
-                    call_data = d['Data'].split('/')
-                    print call_data
+                    t1 = datetime.datetime.strptime(d['Duration'], "%H:%M:%S")
+                    #print t1
+                    timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
+                    t = today - timedelta
+                    #print t
+                    d.update( { 'call_start': t.time().strftime("%H:%M:%S") } )
                 except Exception as e:
-                    print "Could not parse call data, so it must not be a call",e
+                    print "Error while calculating start time",e
                     continue
-
-                try:
-                    provider = Provider.objects.get(asterisk_name = call_data[1])
-                except Exception as e: 
-                    "Could not find provider with name",call_data[1]
-                    continue
-
-                d.update( { 'provider': provider } )
-                d.update( { 'dialed_number': call_data[2].split(',')[0] })
-                if d['dialed_number'] not in extension_list:
-                    #Now we're sure its an outgoing call...
-                    #Calculating start time
+                #Obtaining destination group
+                destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
+                #print destination_groups
+                for dest in destination_groups:
                     try:
-                        t1 = datetime.datetime.strptime(d['Duration'], "%H:%M:%S")
-                        #print t1
-                        timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
-                        t = today - timedelta
-                        #print t
-                        d.update( { 'call_start': t.time().strftime("%H:%M:%S") } )
-                    except Exception as e:
-                        print "Error while calculating start time",e
+                        pos = d['dialed_number'].index(dest.prefix)
+                    except ValueError,e :
+                        pos = None
+                    if pos == 0:
+                        d.update( { 'destination_group': dest })
+                        break
+                    else:
                         continue
-                    #Obtaining destination group
-                    destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
-                    #print destination_groups
-                    for dest in destination_groups:
-                        try:
-                            pos = d['dialed_number'].index(dest.prefix)
-                        except ValueError,e :
-                            pos = None
-                        if pos == 0:
-                            d.update( { 'destination_group': dest })
-                            break
-                        else:
-                            continue
-                    accountedFor = False
-                    for g in graphData:
-                        if g[0] == d['destination_group'].destination_name.name:
-                            accountedFor = True
-                            g[1] += 1
-                    if not accountedFor:
-                        graphData.append([d['destination_group'].destination_name.name, 1])
-                    #If all went well, we add this call to the list
-                    data.append(d)
-                else:
-                    print "Called number in extension list, hence its not an outgoing call."
+                accountedFor = False
+                for g in graphData:
+                    if g[0] == d['destination_group'].destination_name.name:
+                        accountedFor = True
+                        g[1] += 1
+                if not accountedFor:
+                    graphData.append([d['destination_group'].destination_name.name, 1])
+                #If all went well, we add this call to the list
+                data.append(d)
             else:
-                print "Caller not in extension list, so it cannot be an outgoing call."
+                print "Called number in extension list, hence its not an outgoing call."
+            #else:
+                #print "Caller not in extension list, so it cannot be an outgoing call."
         else:
             print "Not a dial application."
 
