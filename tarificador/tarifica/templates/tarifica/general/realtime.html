@@ -150,6 +150,7 @@
                     plot1 = jQuery.jqplot ('graph', [data], options);
                 }catch(Exception){
                     console.log('exception when updating graph');
+                    plot1.destroy();
                 }
             })
             .fail(function() {
