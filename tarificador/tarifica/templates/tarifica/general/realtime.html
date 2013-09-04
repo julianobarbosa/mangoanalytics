@@ -141,7 +141,6 @@
             })
             .done(function(data) {
                 $('#container').html(data.htmlData);
-                console.log(data.graphData);
                 data = $.parseJSON(data.graphData);
                 if(graphExists){
                     plot1.destroy();
