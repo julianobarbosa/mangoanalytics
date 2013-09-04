@@ -138,16 +138,16 @@
             <tbody>
                 {% for user in all_users %}
                 <tr>
-                    <td>{{user.name}}</td>
-                    <td>{{user.extension_number}}</td>
+                    <td>{{user.extension.name}}</td>
+                    <td>{{user.extension.extension_number}}</td>
                     <td>{{user.seconds}}</td>
                     <td>{{user.calls}}</td>
                     <td>{{ user_info.currency_symbol }}{{user.cost | floatformat:"2"}}</td>
                     <td>
                         {% if last_month %}
-                        <a href="{% url 'tarifica:users_detail_period' extension_id=user.id period_id='lastMonth' %}">More</a>
+                        <a href="{% url 'tarifica:users_detail_period' extension_id=user.extension.id period_id='lastMonth' %}">More</a>
                         {% else %}
-                        <a href="{% url 'tarifica:users_detail' user.id %}">More</a>
+                        <a href="{% url 'tarifica:users_detail' user.extension.id %}">More</a>
                         {% endif %}
                     </td>
                 </tr>

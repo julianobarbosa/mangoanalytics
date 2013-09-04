@@ -21,9 +21,9 @@ def setup(request, provider_id = 0):
         a_mysql_m = AsteriskMySQLManager()
         users = a_mysql_m.getUserInformation()
         for u in users:
-            if u['name']:
+            if u['extension']:
                 try:
-                    e = Extension.objects.get(name = u['name'])
+                    e = Extension.objects.get(extension_number = u['extension'])
                 except Extension.DoesNotExist:
                     e = Extension(
                         name = u['name'],

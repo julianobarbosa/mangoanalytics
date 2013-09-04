@@ -10,9 +10,21 @@ from tarifica import forms
 from django.db import connection, transaction
 import json
 from tarifica.django_countries.fields import Country
-
+from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 
 def generalPinsets(request, period_id="thisMonth"):
+    a_mysql_m = AsteriskMySQLManager()
+    pinsets = a_mysql_m.getPinsetInformation()
+    # Revisamos que haya pinsets configurados
+    if len(pinsets) > 0:
+        for u in pinsets:
+            try:
+                e = Pinset.objects.get(pinset_number = u)
+            except Pinset.DoesNotExist:
+                e = Pinset(pinset_number = u)
+                e.save()
+            except Pinset.MultipleObjectsReturned:
+                print "pinsets repetidos!"
     user_info = get_object_or_404(UserInformation, id = 1)
     cursor = connection.cursor()
     today = datetime.datetime.now()
@@ -48,21 +60,53 @@ def generalPinsets(request, period_id="thisMonth"):
         [start_date,end_date])
     pinsets = dictfetchall(cursor)[:5]
     #for e in pinsets : print e
-    cursor.execute(
-        'SELECT tarifica_pinsetdailydetail.id, SUM(tarifica_pinsetdailydetail.cost) AS cost, \
-        SUM(tarifica_pinsetdailydetail.total_calls) AS calls , \
-        SUM(tarifica_pinsetdailydetail.total_seconds) AS seconds, tarifica_pinset.pinset_number, \
-        tarifica_pinsetdailydetail.pinset_id AS pinid \
-        FROM tarifica_pinsetdailydetail LEFT JOIN tarifica_pinset\
-        ON tarifica_pinsetdailydetail.pinset_id = tarifica_pinset.id \
-        WHERE date > %s AND date < %s GROUP BY pinset_id ORDER BY SUM(cost) DESC',
-        [start_date,end_date])
-    all_pinsets = dictfetchall(cursor)
+    #cursor.execute(
+        #'SELECT tarifica_pinsetdailydetail.id, SUM(tarifica_pinsetdailydetail.cost) AS cost, \
+        #SUM(tarifica_pinsetdailydetail.total_calls) AS calls , \
+        #SUM(tarifica_pinsetdailydetail.total_seconds) AS seconds, tarifica_pinset.pinset_number, \
+        #tarifica_pinsetdailydetail.pinset_id AS pinid \
+        #FROM tarifica_pinsetdailydetail LEFT JOIN tarifica_pinset\
+        #ON tarifica_pinsetdailydetail.pinset_id = tarifica_pinset.id \
+        #WHERE date > %s AND date < %s GROUP BY pinset_id ORDER BY SUM(cost) DESC',
+        #[start_date,end_date])
+    #all_pinsets = dictfetchall(cursor)
     #for a in all_Pinsets: print a
+
+    all_pinsets_objects = Pinset.objects.all()
+    sql = 'SELECT SUM(tarifica_pinsetdailydetail.cost) AS cost, \
+    SUM(tarifica_pinsetdailydetail.total_calls) AS calls , \
+    SUM(tarifica_pinsetdailydetail.total_seconds) AS seconds \
+    FROM tarifica_pinsetdailydetail \
+    WHERE date > %s AND date < %s AND tarifica_pinsetdailydetail.pinset_id = %s'
+    all_pinsets = []
+    for e in all_pinsets_objects:
+        e_data = {
+            'pinset': e,
+            'cost': 0,
+            'calls': 0,
+            'seconds': 0,
+        }
+
+        cursor.execute(sql, [start_date,end_date, e.id])
+        data = dictfetchall(cursor)[0]
+        if data['cost'] is None:
+            data['cost'] = 0
+        if data['calls'] is None:
+            data['calls'] = 0
+        if data['seconds'] is None:
+            data['seconds'] = 0
+        e_data['cost'] = data['cost']
+        e_data['calls'] = data['calls']
+        e_data['seconds'] = data['seconds']
+        all_pinsets.append(e_data)
+
+    #Sorting pinsets by cost:
+    all_pinsets = sorted(all_pinsets, key=lambda pinset: pinset['cost'], reverse=True)
+
     average = 0
     n = 0
-    for cost in all_pinsets:
-        average += cost['cost']
+    for a in all_pinsets:
+        average += a['cost']
         n += 1
     if n: average = average/n
 
@@ -184,7 +228,7 @@ def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
         end_date = datetime.date(year=today.year, month=today.month, day=1)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data

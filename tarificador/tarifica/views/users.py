@@ -11,9 +11,24 @@ from tarifica import forms
 from django.db import connection, transaction
 import json
 from tarifica.django_countries.fields import Country
-
+from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 
 def generalUsers(request, period_id="thisMonth"):
+    #First, we make sure we have up-to-date info of asterisk's extensions
+    a_mysql_m = AsteriskMySQLManager()
+    users = a_mysql_m.getUserInformation()
+    for u in users:
+        if u['name']:
+            try:
+                e = Extension.objects.get(extension_number = u['extension'])
+            except Extension.DoesNotExist:
+                e = Extension(
+                    name = u['name'],
+                    extension_number = u['extension'],
+                    )
+                e.save()
+            except Extension.MultipleObjectsReturned:
+                print "extensiones repetidas!"
     user_info = get_object_or_404(UserInformation, id = 1)
     cursor = connection.cursor()
     today = datetime.datetime.now()
@@ -60,21 +75,41 @@ def generalUsers(request, period_id="thisMonth"):
         #ON tarifica_userdailydetail.extension_id = tarifica_extension.id \
         #WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC'
 
-    sql = 'SELECT tarifica_extension.id, tarifica_extension.name, \
-    tarifica_extension.extension_number, \
-    SUM(tarifica_userdailydetail.cost) AS cost, \
+    all_extensions = Extension.objects.all()
+    sql = 'SELECT SUM(tarifica_userdailydetail.cost) AS cost, \
     SUM(tarifica_userdailydetail.total_calls) AS calls , \
     SUM(tarifica_userdailydetail.total_seconds) AS seconds \
-    FROM tarifica_extension LEFT JOIN tarifica_userdailydetail \
-    ON tarifica_extension.id = tarifica_userdailydetail.extension_id \
-    WHERE date > %s AND date < %s GROUP BY extension_id ORDER BY SUM(cost) DESC'
-    cursor.execute(sql, [start_date,end_date])
-    all_users = dictfetchall(cursor)
-    for a in all_users: print a
+    FROM tarifica_userdailydetail \
+    WHERE date > %s AND date < %s AND tarifica_userdailydetail.extension_id = %s'
+    all_users = []
+    for e in all_extensions:
+        e_data = {
+            'extension': e,
+            'cost': 0,
+            'calls': 0,
+            'seconds': 0,
+        }
+
+        cursor.execute(sql, [start_date,end_date, e.id])
+        data = dictfetchall(cursor)[0]
+        if data['cost'] is None:
+            data['cost'] = 0
+        if data['calls'] is None:
+            data['calls'] = 0
+        if data['seconds'] is None:
+            data['seconds'] = 0
+        e_data['cost'] = data['cost']
+        e_data['calls'] = data['calls']
+        e_data['seconds'] = data['seconds']
+        all_users.append(e_data)
+
+    #Sorting users by cost:
+    all_users = sorted(all_users, key=lambda user: user['cost'], reverse=True)
+
     average = 0
     n = 0
-    for cost in all_users:
-        average += cost['cost']
+    for a in all_users:
+        average += a['cost']
         n += 1
     if n: average = average/n
 
@@ -177,7 +212,6 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'end_date': end_date - datetime.timedelta(days=1),
               })
 
-
 def analyticsUsers(request, extension_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
@@ -198,7 +232,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
         end_date = datetime.date(year=today.year, month=today.month, day=1)
-        start_date = datetime.date(year=t.year, month=t.month, day=1)
+        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
