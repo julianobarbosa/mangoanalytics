@@ -86,7 +86,11 @@
 <div class="row-fluid">
     <div class="span6 well well-small">
         <div style="float:right">
-            <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"></i>Usage analysis</a>
+        {% if last_month %}
+            <a href="{% url 'tarifica:users_analytics_period' extension_id=extension.id period_id='lastMonth' %}" class="btn btn-primary"></i>Usage analysis</a>
+        {% else %}
+            <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary">Usage analysis</a>
+        {% endif %}
         </div>
         <h5><strong> User {{extension.name}}({{extension.extension_number}}) Detail </strong></h5>
         <table class="table table-hovered table-condensed" border="0">

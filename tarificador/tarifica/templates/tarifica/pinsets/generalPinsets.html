@@ -141,7 +141,13 @@
                     <td>{{pin.seconds}}</td>
                     <td>{{pin.calls}}</td>
                     <td>{{ user_info.currency_symbol }}{{pin.cost | floatformat:"2"}}</td>
-                    <td><a href="{% url 'tarifica:pinsets_detail' pin.pinid%}">More</a></td>
+                    <td>
+                        {% if last_month %}
+                        <a href="{% url 'tarifica:pinsets_detail_period' pinset_id=pin.pinid period_id='lastMonth' %}">More</a>
+                        {% else %}
+                        <a href="{% url 'tarifica:pinsets_detail' pin.pinid%}">More</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -78,6 +78,11 @@
 
     <div class="span12 well well-small">
         <div id="container" style="float:right">
+            <span class="well well-small" style="margin-right:10px;">
+                <strong>
+                    Current period: {{ start_date | date:"d/M/Y" }} - {{ end_date | date:"d/M/Y" }}
+                </strong>
+            </span>
             {% if custom %}
 
                 <a href="{% url 'tarifica:users_analytics' extension.id %}" class="btn btn-primary"><i class="icon-white icon-align-justify"></i> This Month</a>
@@ -93,11 +98,6 @@
             {% endif %}
 
             <a href="#custom" class="btn btn-primary" data-toggle="modal"></i>Custom</a>
-            <span class="well well-small">
-                <strong>
-                    Current period: {{ start_date | date:"d/M/Y" }} - {{ end_date | date:"d/M/Y" }}
-                </strong>
-            </span>
 
             <div id="custom" class="modal hide fade">
                 <div class="modal-header">
