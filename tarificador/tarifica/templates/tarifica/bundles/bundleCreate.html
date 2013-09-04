@@ -3,7 +3,7 @@
 
 {% block css %}
     {{ block.super }}
-    <link href="{% static "tarifica/css/datepicker.css" %}" type="text/css" rel="stylesheet" media="screen">
+    <link href="{% static "tarifica/css/datepicker.css" %}" rel="stylesheet" media="screen">
 {% endblock %}
 
 {% block title %}Add bundles to {{ destination_group }}{% endblock %}
@@ -81,11 +81,9 @@
                 </a>
             </label>
             <div class="controls">
-                <div class="input-append datepicker" data-date="12-02-2012" data-date-format="yyyy-mm-dd">
+                <div class="input-append date" id="start_date" data-date="{{ start_date | date:"Y-m-d"}}" data-date-format="yyyy-mm-dd" data-date-minviewmode="months" data-date-viewmode="months">
                     {{ form.start_date }}
-                    <span class="add-on">
-                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                    </span>
+                    <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
             </div>
         </div>
@@ -97,11 +95,9 @@
                 </a>
             </label>
             <div class="controls">
-                <div class="input-append datepicker" data-date="12-02-2012" data-date-format="yyyy-mm-dd">
+                <div class="input-append date" id="end_date" data-date="{{ end_date | date:"Y-m-d"}}" data-date-format="yyyy-mm-dd" data-date-minviewmode="months" data-date-viewmode="months">
                     {{ form.end_date }}
-                    <span class="add-on">
-                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                    </span>
+                    <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
             </div>
         </div>
@@ -132,10 +128,20 @@
 
         var provider_period = {{ destination_group.provider.period_end }}
 
-        $('.datepicker').datepicker({
+        $('div#start_date').datepicker({
             format: 'yyyy-mm-dd',
             viewMode: 'months',
-            minViewMode: 'months'
+            minViewMode: 'months',
+            autoclose: true,
+            forceParse:false
+        });
+
+        $('div#end_date').datepicker({
+            format: 'yyyy-mm-dd',
+            viewMode: 'months',
+            minViewMode: 'months',
+            autoclose: true,
+            forceParse:false
         });
 
         $('a.help').each(function(){

@@ -44,6 +44,8 @@ def createBundle(request, destination_group_id):
         }) # An unbound form
 
     return render(request, 'tarifica/bundles/bundleCreate.html', {
+        'start_date': start_date,
+        'end_date': end_date,
         'form': form,
         'destination_group': destination_group,
         'user_info': user_info

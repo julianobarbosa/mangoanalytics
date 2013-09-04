@@ -130,16 +130,16 @@ table.jqplot-table-legend {
     margin-top: 12px;
     margin-bottom: 12px;
     margin-left: 12px;
-    margin-right: 5%;
+    margin-right: 50px;
     max-width: 50%; 
-    width: 25%; 
+    width: 80px; 
 }
 
 table.jqplot-table-legend, table.jqplot-cursor-legend {
     background-color: rgba(255,255,255,0.6);
     /*border: 1px solid #cccccc;*/
     position: absolute;
-    margin-right: 5%;
+    margin-right: 50px;
     font-size: 0.85em;
     border: 0;
 }
