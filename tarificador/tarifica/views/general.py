@@ -44,6 +44,8 @@ def setup(request, provider_id = 0):
                 except Pinset.MultipleObjectsReturned:
                     print "pinsets repetidos!"
         trunks = a_mysql_m.getTrunkInformation()
+        print 'trunks'
+        print trunks
         for x in trunks:
             print x
             if x['trunkid']:
