@@ -358,6 +358,7 @@ def getBarChartInfoByPin(cursor):
 
 
 def getBarChartInfoByPinForMonth(cursor, pinset_id, start_date, end_date):
+    start_date = start_date + datetime.timedelta(days=1)
     today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)
     data = []

@@ -148,7 +148,11 @@
                     <th>Time</th>
                     <th>Destination</th>
                     <th>Seconds</th>
-                    <th>Cost ({{ user_info.currency_code }})</th>
+                    <th>Cost ({{ user_info.currency_code }})
+                    <a class="help" href="#" data-toggle="popover" data-original-title="Call Cost" data-content="All calls with no cost are calls that were billed into a bundle.">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                    </th>
                     <th>Dialed Number</th>
                 </tr>
             </thead>
@@ -196,6 +200,13 @@
         });
 
         $(document).ready(function(){
+            $('a.help').each(function(){
+                $(this).popover({
+                    html: true,
+                    trigger: 'hover'
+                });
+            });
+            
             $('#datetimepicker1').datetimepicker({
                 pickTime: false
             });
