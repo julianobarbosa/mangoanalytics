@@ -33,7 +33,7 @@ class DestinationName(models.Model):
 
 class DestinationGroup(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
-    prefix = models.CharField(max_length = 255, blank=True, default="")
+    prefix = models.CharField(max_length = 255, blank=True, default="", unique=True)
     notes = models.TextField(null=True, blank=True)
     connection_fee = models.FloatField()
     minute_fee = models.FloatField(default=60)
@@ -154,6 +154,7 @@ class UserInformation(models.Model):
     notification_email = models.CharField(max_length=255)
     currency_code = models.CharField(max_length=10)
     currency_symbol = models.CharField(max_length=1)
+    accepted_privacy_policy = models.BooleanField(default=False)
 
 class UnconfiguredCall(models.Model):
     dialed_number = models.CharField(max_length = 255)

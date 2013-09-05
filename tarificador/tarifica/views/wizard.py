@@ -10,7 +10,6 @@ from tarifica.models import *
 from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
-from tarifica.views.config import initial
 
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -19,7 +18,7 @@ def start(request, page=1):
 
     if page == '3':
         if request.method == 'POST': # If the form has been submitted...
-            form = forms.getUserInfo(request.POST)
+            form = forms.getFirstUserInfo(request.POST)
             if form.is_valid(): # All validation rules pass
                 user_info.country = form.cleaned_data['country']
                 user_info.bussiness_name = form.cleaned_data['bussiness_name']
@@ -28,11 +27,13 @@ def start(request, page=1):
                 user_info.notification_email = form.cleaned_data['notification_email']
                 user_info.currency_code = form.cleaned_data['currency_code']
                 user_info.currency_symbol = form.cleaned_data['currency_symbol']
-                user_info.first_time_user = False
-                user_info.save()
-                return HttpResponseRedirect('/wizard/start/3') # Redirect after POST
+                user_info.accepted_privacy_policy = form.cleaned_data['accepted_privacy_policy']
+                if user_info.accepted_privacy_policy:
+                    user_info.first_time_user = False
+                    user_info.save()
+                    return HttpResponseRedirect('/wizard/start/3') # Redirect after POST
         else:
-            form = forms.getUserInfo(initial={
+            form = forms.getFirstUserInfo(initial={
                 'country': user_info.country,
                 'bussiness_name': user_info.bussiness_name,
                 'contact_first_name': user_info.contact_first_name,
@@ -40,6 +41,7 @@ def start(request, page=1):
                 'notification_email': user_info.notification_email,
                 'currency_code': user_info.currency_code,
                 'currency_symbol': user_info.currency_symbol,
+                'accepted_privacy_policy': user_info.accepted_privacy_policy
             })
 
         return render(request, 'tarifica/wizard/start3.html', {

@@ -7,7 +7,6 @@ urlpatterns = patterns('',
    url(r'^privacy$', general.privacy, name = 'privacy'),
    
    url(r'^config$', config.config, name = 'config'),
-   url(r'^config/initial$', config.initial, name = "config_initial"),
    url(r'^config/update/(?P<option>\w+)$', config.updateUser, name = 'config_update_user'),
 
    url(r'^providers/create/(?P<asterisk_id>\d+)$', providers.createProvider, name = 'providers_create'),

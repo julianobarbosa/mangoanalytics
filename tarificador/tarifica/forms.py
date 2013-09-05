@@ -112,6 +112,27 @@ class getUserInfo(forms.Form):
                     'required':u"Please input your currency's symbol."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
 
+class getFirstUserInfo(forms.Form):
+    bussiness_name = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Please input a name for your company.'},
+                    widget=forms.TextInput(attrs={'class':'input-xlarge'}))
+    contact_first_name = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Please input your first name.'})
+    contact_last_name = forms.CharField(max_length = 255, error_messages={
+                    'required':u'Please input your last name'})
+    notification_email = forms.EmailField(label = 'Email', error_messages={
+                        'required':u'Please input your e-mail address.',
+                        'invalid':u'Please input a valid e-mail address.'})
+    country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country')
+    currency_code = forms.CharField(max_length = 10, error_messages={
+                    'required':u"Please input your currency's code."},
+                    widget=forms.TextInput(attrs={'class':'input-mini'}))
+    currency_symbol = forms.CharField(max_length = 1, error_messages={
+                    'required':u"Please input your currency's symbol."},
+                    widget=forms.TextInput(attrs={'class':'input-mini'}))
+    accepted_privacy_policy = forms.BooleanField(required=True, error_messages={
+                    'required':u"You need to accept Mango Anaytics' privacy policy before continuing."})
+
 class loginForm(forms.Form):
     email = forms.CharField(max_length = 255, error_messages={
                     'required':u'Please provide your email address.'})
