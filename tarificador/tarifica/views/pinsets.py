@@ -179,7 +179,7 @@ def detailPinsets(request, pinset_id, period_id="thisMonth"):
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
-        WHERE date >= %s AND date <= %s AND pinset_number = %s ORDER BY dat',
+        WHERE date > %s AND date < %s AND pinset_number = %s ORDER BY dat',
         [start_date,end_date, Pin.pinset_number])
     all_calls = dictfetchall(cursor)
     average = 0

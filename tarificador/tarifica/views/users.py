@@ -183,7 +183,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         ON tarifica_call.destination_group_id = tarifica_destinationgroup.id \
         LEFT JOIN tarifica_destinationname ON tarifica_destinationgroup.destination_name_id = tarifica_destinationname.id \
         LEFT JOIN tarifica_provider ON tarifica_call.provider_id = tarifica_provider.id \
-        WHERE date >= %s AND date <= %s AND extension_number = %s ORDER BY dat',
+        WHERE date > %s AND date < %s AND extension_number = %s ORDER BY dat',
         [start_date,end_date, Ext.extension_number])
     all_calls = dictfetchall(cursor)
     #print all_calls[0]
