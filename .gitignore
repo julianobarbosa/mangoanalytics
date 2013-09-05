@@ -4,6 +4,4 @@
 local_settings.py
 *.sublime*
 *~
-nextor-tarificador
-nextor-tarificador.*
-nextor-tarificador/*
+*.tar*
