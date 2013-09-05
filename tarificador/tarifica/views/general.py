@@ -204,7 +204,7 @@ def realtime(request, action="show"):
                         accountedFor = True
                         g[1] += 1
                 if not accountedFor:
-                    graphData.append([d['destination_group'].destination_name.name, 1])
+                    graphData.append([d['destination_group_name'], 1])
                 #If all went well, we add this call to the list
                 data.append(d)
             else:
