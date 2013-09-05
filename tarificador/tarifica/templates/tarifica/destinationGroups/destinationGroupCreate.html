@@ -46,6 +46,7 @@
                 </div>
                 <div class="control-group">
                     {{ form.prefix.errors }}
+                    {{ form.provider.errors }}
                     <label class="control-label" for="id_prefix">Call Prefix
                         <a class="help" href="#" data-toggle="popover" data-original-title="Call Prefix" data-content="The part of the dialed number which indicates where you're calling. It begins with a country code and (in most places) continues with an area code. It also changes according to your provider. If you're unsure of how you're calling, you can check it by accessing your Elastix call history.<br><hr>If you want to add a <strong>Default Tariff</strong>, that is, a cost that should be applied if the prefix doesn't fit into any other configured tariffs, leave this space blank.">
                             <i class="icon-question-sign"></i>
@@ -106,6 +107,7 @@
                         {{ form.notes }}
                     </div>
                 </div>
+                {{ form.provider }}
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Tariff</button>
                     <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>

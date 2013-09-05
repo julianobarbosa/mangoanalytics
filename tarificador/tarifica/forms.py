@@ -41,6 +41,19 @@ class createDestinationGroup(forms.Form):
                             'required':'Please input a valid block type.',
                             'invalid':'Please input a valid integer number.'}, 
                             widget=forms.TextInput(attrs={'class':'input-small'}))
+    provider = forms.CharField(widget=forms.HiddenInput())
+
+    def clean_provider(self):
+        provider = self.cleaned_data['provider']
+        prefix = self.cleaned_data['prefix']
+        print self.cleaned_data
+        try:
+            existing = DestinationGroup.objects.get(prefix = prefix)
+            if existing.provider == Provider.objects.get(id = provider):
+                raise forms.ValidationError("You have already configured a tariff for this prefix.")
+        except Exception as e:
+            pass
+        return provider
 
 class createBundle(forms.Form):
     name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Please input a name for this bundle.'})

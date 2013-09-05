@@ -33,7 +33,7 @@ class DestinationName(models.Model):
 
 class DestinationGroup(models.Model):
     provider = models.ForeignKey(Provider, blank=True, null=True)
-    prefix = models.CharField(max_length = 255, blank=True, default="", unique=True)
+    prefix = models.CharField(max_length = 255, blank=True, default="")
     notes = models.TextField(null=True, blank=True)
     connection_fee = models.FloatField()
     minute_fee = models.FloatField(default=60)

@@ -15,17 +15,20 @@ def createDestinationGroup(request, provider_id):
     if request.method == 'POST': # If the form has been submitted...
         form = forms.createDestinationGroup(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            d = DestinationGroup(
-            	provider=provider, 
-            	destination_name=DestinationName.objects.get(id=form.cleaned_data['destination_name']), 
-            	destination_country=form.cleaned_data['destination_country'], 
-                prefix=form.cleaned_data['prefix'], 
-            	billing_interval=form.cleaned_data['billing_interval'], 
-                minute_fee=form.cleaned_data['minute_fee'],
-                connection_fee=form.cleaned_data['connection_fee'],
-            	notes=form.cleaned_data['notes'],
-            )
-            d.save()
+            try:
+                existing = DestinationGroup.objects.get(prefix = form.cleaned_data['prefix'])
+            except DestinationGroup.DoesNotExist:
+                d = DestinationGroup(
+                	provider=provider, 
+                	destination_name=DestinationName.objects.get(id=form.cleaned_data['destination_name']), 
+                	destination_country=form.cleaned_data['destination_country'], 
+                    prefix=form.cleaned_data['prefix'], 
+                	billing_interval=form.cleaned_data['billing_interval'], 
+                    minute_fee=form.cleaned_data['minute_fee'],
+                    connection_fee=form.cleaned_data['connection_fee'],
+                	notes=form.cleaned_data['notes'],
+                )
+                d.save()
             return HttpResponseRedirect('/destinations/create/'+provider_id) # Redirect after POST
     else:
         form = forms.createDestinationGroup(initial=
@@ -34,6 +37,7 @@ def createDestinationGroup(request, provider_id):
             'minute_fee': 0.00,
             'connection_fee': 0.00,
             'billing_interval': 60,
+            'provider': provider.id,
         }) # An unbound form
 
     return render(request, 'tarifica/destinationGroups/destinationGroupCreate.html', {
@@ -67,6 +71,7 @@ def updateDestinationGroup(request, destination_group_id):
             'minute_fee': destination_group.minute_fee,
             'connection_fee': destination_group.connection_fee,
             'billing_interval': destination_group.billing_interval,
+            'provider': provider.id,
         })
 
     return render(request, 'tarifica/destinationGroups/destinationGroupUpdate.html', {

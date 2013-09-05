@@ -31,7 +31,7 @@ def start(request, page=1):
                 if user_info.accepted_privacy_policy:
                     user_info.first_time_user = False
                     user_info.save()
-                    return HttpResponseRedirect('/wizard/start/3') # Redirect after POST
+                    return HttpResponseRedirect('/wizard/start/4') # Redirect after POST
         else:
             form = forms.getFirstUserInfo(initial={
                 'country': user_info.country,
