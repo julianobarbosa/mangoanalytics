@@ -56,7 +56,8 @@ def setup(request, provider_id = 0):
                     asterisk_name = x['name'],
                     name = x['name'],
                     provider_tech = x['tech'],
-                    asterisk_channel_id = x['channelid']
+                    asterisk_channel_id = x['channelid'],
+                    is_configured = False
                     )
                 p.save()
                 print "Saved trunk",x
