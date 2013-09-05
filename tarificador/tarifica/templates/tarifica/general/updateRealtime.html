@@ -18,8 +18,10 @@
                 <tr>
                     <td>{{ d.CallerID }}</td>
                     <td>
-                        <img src="{{ d.destination_group.destination_country.flag }}">
-                        {{d.destination_group.destination_name.name}}
+                        {% if d.destination_country_flag != '' %}
+                        <img src="{{ d.destination_country_flag }}">
+                        {% endif %}
+                        {{d.destination_group_name}}
                     </td>
                     <td>{{ d.dialed_number }}</td>
                     <td>{% if d.Accountcode == '' %}-{% else %}{{ d.Accountcode }}{% endif %}</td>
