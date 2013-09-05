@@ -4,6 +4,7 @@ from tarifica.views import bundles, destinationGroups, general, providers, trunk
 urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
    url(r'^setup$', general.setup, name = 'setup'),
+   url(r'^privacy$', general.privacy, name = 'privacy'),
    
    url(r'^config$', config.config, name = 'config'),
    url(r'^config/initial$', config.initial, name = "config_initial"),

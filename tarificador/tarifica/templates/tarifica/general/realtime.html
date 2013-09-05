@@ -78,7 +78,9 @@
                     <tr>
                         <td>{{ d.CallerID }}</td>
                         <td>
+                            {% if d.destination_country_flag != '' %}
                             <img src="{{ d.destination_group.destination_country.flag }}">
+                            {% endif %}
                             {{d.destination_group.destination_name.name}}
                         </td>
                         <td>{{ d.dialed_number }}</td>

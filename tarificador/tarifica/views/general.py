@@ -51,7 +51,7 @@ def setup(request, provider_id = 0):
             try:
                 e = Provider.objects.get(asterisk_id = x['trunkid'])
             except Provider.DoesNotExist:
-                if x['name'] == '': x['name'] = 'Unnamed' #AQUI ESTA LO QUE SE LE AGREGA A LOS QUE NO TIENEN NOMBREE!!!!!!!!!!!
+                if x['name'] == '': x['name'] = 'Unnamed Trunk' #AQUI ESTA LO QUE SE LE AGREGA A LOS QUE NO TIENEN NOMBREE!!!!!!!!!!!
                 p = Provider(
                     asterisk_id = x['trunkid'],
                     asterisk_name = x['name'],
@@ -177,16 +177,26 @@ def realtime(request, action="show"):
                 #Obtaining destination group
                 destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
                 #print destination_groups
+                destination_group_name = 'Unknown'
+                destination_country_name = 'Unknown'
+                destination_country_flag = ''
                 for dest in destination_groups:
                     try:
                         pos = d['dialed_number'].index(dest.prefix)
                     except ValueError,e :
                         pos = None
                     if pos == 0:
-                        d.update( { 'destination_group': dest })
+                        destination_group_name = dest.destination_name.name
+                        destination_country_name = dest.destination_country.name
+                        destination_country_flag = dest.destination_country.flag
                         break
                     else:
                         continue
+
+                d.update( { 'destination_group_name': destination_group_name })
+                d.update( { 'destination_country_name': destination_country_name })
+                d.update( { 'destination_country_flag': destination_country_flag })
+
                 accountedFor = False
                 for g in graphData:
                     if g[0] == d['destination_group'].destination_name.name:
@@ -275,7 +285,7 @@ def dashboard(request):
     end_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
     
     for x in xrange(0,6):
-        monthly_graph_ticks.append(start_date.strftime("%m"))
+        monthly_graph_ticks.append(start_date.strftime("%b"))
         cursor.execute(sql, (start_date, end_date))
         monthly_call_data = dictfetchall(cursor)
 
@@ -322,7 +332,6 @@ def dashboard(request):
         locale['country'] = Country(code=locale['country_name'])
 
     #Information for graph
-
     return render(request, 'tarifica/general/dashboard.html', {
         'user_info' : user_info,
         'total_cost' : total_cost,
@@ -334,6 +343,9 @@ def dashboard(request):
         'monthly_graph_ticks': json.dumps(monthly_graph_ticks),
         'ticks': json.dumps(ticks),
     })
+
+def privacy(request):
+    return render(request, 'tarifica/general/privacy.html', {})
 
 def dictfetchall(cursor):
     desc = cursor.description
