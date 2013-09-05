@@ -51,6 +51,7 @@ def setup(request, provider_id = 0):
             try:
                 e = Provider.objects.get(asterisk_id = x['trunkid'])
             except Provider.DoesNotExist:
+                if x['name'] == '': x['name'] = 'Unnamed' #AQUI ESTA LO QUE SE LE AGREGA A LOS QUE NO TIENEN NOMBREE!!!!!!!!!!!
                 p = Provider(
                     asterisk_id = x['trunkid'],
                     asterisk_name = x['name'],
