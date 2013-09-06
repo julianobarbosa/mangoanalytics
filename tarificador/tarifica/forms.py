@@ -43,17 +43,27 @@ class createDestinationGroup(forms.Form):
                             widget=forms.TextInput(attrs={'class':'input-small'}))
     provider = forms.CharField(widget=forms.HiddenInput())
 
-    def clean_provider(self):
-        provider = self.cleaned_data['provider']
-        prefix = self.cleaned_data['prefix']
-        print self.cleaned_data
+    def clean(self):
+        cleaned_data = super(createDestinationGroup, self).clean()
+        provider = cleaned_data.get("provider")
+        prefix = cleaned_data.get("prefix")
+
         try:
-            existing = DestinationGroup.objects.get(prefix = prefix)
-            if existing.provider == Provider.objects.get(id = provider):
-                raise forms.ValidationError("You have already configured a tariff for this prefix.")
-        except Exception as e:
-            pass
-        return provider
+            provider = Provider.objects.get(id = provider)
+        except Exception:
+            raise forms.ValidationError("No provider selected for this form!")
+
+        destination_groups = DestinationGroup.objects.filter(provider=provider)
+        for d in destination_groups:
+            if d.prefix == prefix:
+                msg = u"There can't be tariffs with the same prefix."
+                self._errors["prefix"] = self.error_class([msg])
+                # These fields are no longer valid. Remove them from the
+                # cleaned data.
+                del cleaned_data["prefix"]
+
+        # Always return the full collection of cleaned data.
+        return cleaned_data
 
 class createBundle(forms.Form):
     name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Please input a name for this bundle.'})

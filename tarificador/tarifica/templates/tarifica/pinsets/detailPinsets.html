@@ -194,7 +194,7 @@
         $('#modal-form-submit').on('click', function(e){
             // We don't want this to act as a link so cancel the link action
             e.preventDefault();
-
+            console.log('submitting');
             // Find form and submit it
             $('#modal-form').submit();
         });
