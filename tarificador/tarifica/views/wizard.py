@@ -40,7 +40,7 @@ def start(request, page=1):
                             user_info.contact_last_name
                         ),
                         to_addr = (
-                            'alfonso@nextortelecom.com',
+                            'info@nextortelecom.com',
                             u'To Nextor Telecom'
                         ),
                         subject = u'A new user has started using Mango Analytics!',
