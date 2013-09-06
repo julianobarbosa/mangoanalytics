@@ -40,21 +40,21 @@ def generalUsers(request, period_id="thisMonth"):
     custom = False
     timedelta = datetime.timedelta(days = 1)
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
-    start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
+    start_date = datetime.date(year=today.year, month=today.month, day=1)
     if period_id == "lastMonth":
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
         end_date = datetime.date(year=today.year, month=today.month, day=1)
-        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
+        start_date = datetime.date(year=t.year, month=t.month, day=1)
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date'] - timedelta
+                start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
-    #print start_date.isoformat()
-    #print end_date.isoformat()
+    print start_date.isoformat()
+    print end_date.isoformat()
     cursor.execute(
         'SELECT tarifica_userdailydetail.id, SUM(tarifica_userdailydetail.cost) AS cost, \
         tarifica_extension.name, tarifica_extension.extension_number, tarifica_userdailydetail.extension_id AS extid \
@@ -131,7 +131,7 @@ def generalUsers(request, period_id="thisMonth"):
         'lastMonth': lastMonth,
         'lastTwoMonths': lastTwoMonths,
         'data' : json.dumps(data),
-        'start_date': start_date + datetime.timedelta(days=1),
+        'start_date': start_date,
         'end_date': end_date - datetime.timedelta(days=1),
     })
 
@@ -153,7 +153,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
         end_date = datetime.date(year=today.year, month=today.month, day=1)
-        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
+        start_date = datetime.date(year=t.year, month=t.month, day=1)
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
@@ -161,8 +161,8 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
-    #print start_date.isoformat()
-    #print end_date.isoformat()
+    print start_date.isoformat()
+    print end_date.isoformat()
     cursor.execute('SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname, \
         tarifica_destinationgroup.destination_country \
@@ -208,7 +208,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'extension' : Ext,
               'data' : json.dumps(data),
               'day_data' : json.dumps(day_data),
-              'start_date': start_date + datetime.timedelta(days=1),
+              'start_date': start_date,
               'end_date': end_date - datetime.timedelta(days=1),
               })
 
@@ -232,12 +232,12 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
         t = datetime.datetime(year=today.year, month=today.month , day=1)- timedelta
         last_month = True
         end_date = datetime.date(year=today.year, month=today.month, day=1)
-        start_date = datetime.date(year=t.year, month=t.month, day=1) - timedelta
+        start_date = datetime.date(year=t.year, month=t.month, day=1)
     elif period_id == "custom":
         if request.method == 'POST': # If the form has been submitted...
             form = forms.getDate(request.POST) # A form bound to the POST data
             if form.is_valid(): # All validation rules pass
-                start_date = form.cleaned_data['start_date'] - timedelta
+                start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
     #print start_date.isoformat()
@@ -277,7 +277,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
               'extension' : Ext,
               'data' : json.dumps(data),
               'year_data' : json.dumps(year_data),
-              'start_date': start_date + datetime.timedelta(days=1),
+              'start_date': start_date,
               'end_date': end_date - datetime.timedelta(days=1),
               })
 

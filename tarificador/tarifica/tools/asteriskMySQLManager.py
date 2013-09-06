@@ -22,6 +22,7 @@
 
 import MySQLdb
 import MySQLdb.cursors
+from datetime import *
 
 class AsteriskMySQLManager:
 	dbUser = 'root'
@@ -72,5 +73,17 @@ class AsteriskMySQLManager:
 					passwordsData.extend(res)
 		return passwordsData
 
+def testDates():
+	am = AsteriskMySQLManager()
+	today = datetime.today()
+	t = datetime(year=today.year, month=today.month, day=1) - timedelta(days=1)
+	month_start = datetime(year=t.year, month=t.month, day=1)
+	month_end = datetime(year=today.year, month=today.month, day=1)
+	am.connect('asteriskcdrdb')
+	am.cursor.execute('SELECT calldate from asteriskcdrdb.cdr \
+		WHERE calldate > %s AND calldate < %s \
+		ORDER BY calldate ASC LIMIT 10 ', (month_start, month_end))
+	return am.cursor.fetchall()
+
 if __name__ == '__main__':
-	print 'running'
+	print "running!"

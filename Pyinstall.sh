@@ -26,7 +26,7 @@ virtualenv /opt/NEXTOR/tarificador
 source /opt/NEXTOR/tarificador/bin/activate
 
 #Installing django
-pip install django MySQL-python python-dateutil cherrypy
+pip install django MySQL-python python-dateutil cherrypy envelopes
 python tools/initialMySQLSetup.py
 
 /bin/bash install.sh

@@ -10,6 +10,7 @@ from tarifica.models import *
 from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
+from envelopes import Envelope
 
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -31,6 +32,35 @@ def start(request, page=1):
                 if user_info.accepted_privacy_policy:
                     user_info.first_time_user = False
                     user_info.save()
+
+                    envelope = Envelope(
+                        from_addr = (
+                            user_info.notification_email, 
+                            user_info.contact_first_name + " " +
+                            user_info.contact_last_name
+                        ),
+                        to_addr = (
+                            'alfonso@nextortelecom.com',
+                            u'To Nextor Telecom'
+                        ),
+                        subject = u'A new user has started using Mango Analytics!',
+                        text_body = "Name: {0} \nLast Name: {1} \nEmail: {2} \nCompany: {3} \
+                        \nCountry: {4} \n\n All hail Mango Analytics!".format(
+                            user_info.contact_first_name,
+                            user_info.contact_last_name,
+                            user_info.notification_email,
+                            user_info.bussiness_name,
+                            user_info.country.code
+                        )
+                    )
+
+                    try:
+                        envelope.send('localhost')
+                        print "Sent!"
+                    except Exception as e:
+                        #we could not send this mail...
+                        print "Could not send mail:",e
+
                     return HttpResponseRedirect('/wizard/start/4') # Redirect after POST
         else:
             form = forms.getFirstUserInfo(initial={

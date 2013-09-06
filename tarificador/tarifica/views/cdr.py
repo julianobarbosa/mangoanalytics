@@ -25,7 +25,11 @@ def general(request, page=1):
         form = forms.filterCDR(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             #Delete all existing filters 
+            print 'Previous filters'
+            print CDRFilter.objects.all()
             CDRFilter.objects.all().delete()
+            print 'After deleting filters'
+            print CDRFilter.objects.all()
             for possible_filter in form.cleaned_data:
                 #If its the indicator of wether to show or download, ignore:
                 if possible_filter == 'action':
@@ -76,7 +80,9 @@ def general(request, page=1):
                     print "Value:", real_filter.value
                     real_filter.save()
                     print "Saved new filter"
-
+        else:
+            print "Not valid!"
+            print form.errors
     else:
         start_date_value = ''
         start_date_comparison_value = ''
