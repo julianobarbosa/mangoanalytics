@@ -6,42 +6,42 @@
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="dashboard" desc="Dashboard" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="dashboard" desc="Dashboard" parent="mangoanalytics" module="no" link="http://localhost:8000/dashboard" order="61">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="realtime" desc="Realtime" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="realtime" desc="Realtime" parent="mangoanalytics" module="no" link="http://localhost:8000/realtime" order="62">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="trunks" desc="Trunks" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="trunks" desc="Trunks" parent="mangoanalytics" module="no" link="http://localhost:8000/trunks" order="63">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="users" desc="Users/Extensions" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="users" desc="Users/Extensions" parent="mangoanalytics" module="no" link="http://localhost:8000/users/general" order="64">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="pinsets" desc="Pinsets" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="pinsets" desc="Pinsets" parent="mangoanalytics" module="no" link="http://localhost:8000/pinsets/general" order="65">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="generalcdr" desc="General CDR" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="generalcdr" desc="General CDR" parent="mangoanalytics" module="no" link="http://localhost:8000/cdr" order="66">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="setup" desc="Setup" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="setup" desc="Setup" parent="mangoanalytics" module="no" link="http://localhost:8000/setup" order="67">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
-		<menuitem menuid="settings" desc="Settings" parent="mangoanalytics" module="no" link="http://localhost:9999" order="62">
+		<menuitem menuid="settings" desc="Settings" parent="mangoanalytics" module="no" link="http://localhost:8000/config" order="68">
 			<permissions>
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
