@@ -35,6 +35,7 @@ def createDestinationGroup(request, provider_id):
             'connection_fee': 0.00,
             'billing_interval': 60,
             'provider': provider.id,
+            'destination_group_id': 0,
         }) # An unbound form
 
     return render(request, 'tarifica/destinationGroups/destinationGroupCreate.html', {
@@ -69,6 +70,7 @@ def updateDestinationGroup(request, destination_group_id):
             'connection_fee': destination_group.connection_fee,
             'billing_interval': destination_group.billing_interval,
             'provider': destination_group.provider.id,
+            'destination_group_id': destination_group.id
         })
 
     return render(request, 'tarifica/destinationGroups/destinationGroupUpdate.html', {

@@ -42,11 +42,13 @@ class createDestinationGroup(forms.Form):
                             'invalid':'Please input a valid integer number.'}, 
                             widget=forms.TextInput(attrs={'class':'input-small'}))
     provider = forms.CharField(widget=forms.HiddenInput())
+    destination_group_id = forms.CharField(widget=forms.HiddenInput())
 
     def clean(self):
         cleaned_data = super(createDestinationGroup, self).clean()
         provider = cleaned_data.get("provider")
         prefix = cleaned_data.get("prefix")
+        d_id = cleaned_data.get("destination_group_id")
 
         try:
             provider = Provider.objects.get(id = provider)
@@ -55,6 +57,9 @@ class createDestinationGroup(forms.Form):
 
         destination_groups = DestinationGroup.objects.filter(provider=provider)
         for d in destination_groups:
+            if d.id == d_id:
+                #Es el mismo destination group, no debe dar error
+                continue
             if d.prefix == prefix:
                 msg = u"There can't be tariffs with the same prefix."
                 self._errors["prefix"] = self.error_class([msg])
