@@ -250,7 +250,7 @@ def analyticsUsers(request, extension_id, period_id="thisMonth"):
         FROM tarifica_call\
         WHERE date > %s AND date < %s AND extension_number = %s \
         GROUP BY dialed_number ORDER BY SUM(cost) DESC"
-    cursor.execute(sql,[start_date_month,end_date_month, Ext.extension_number])
+    cursor.execute(sql,[start_date,end_date, Ext.extension_number])
     top_calls = dictfetchall(cursor)[:10]
     data = []
     for n in top_calls :
