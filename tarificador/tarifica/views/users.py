@@ -161,8 +161,8 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
                 start_date = form.cleaned_data['start_date']
                 end_date = form.cleaned_data['end_date'] + timedelta
         custom = True
-    print start_date.isoformat()
-    print end_date.isoformat()
+    #print start_date.isoformat()
+    #print end_date.isoformat()
     cursor.execute('SELECT tarifica_userdestinationdetail.id, SUM(tarifica_userdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS destname, \
         tarifica_destinationgroup.destination_country \
@@ -399,11 +399,10 @@ def getBarChartInfoByLocale(cursor, extension_id):
     t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
     data = []
     aux = []
-    aux.append("This Month")
-    aux.append(getMonthName(t1.month))
     aux.append(getMonthName(t2.month))
+    aux.append(getMonthName(t1.month))
+    aux.append("This Month")
     data.append(aux)
-    #print aux
     aux = []
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
     start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta

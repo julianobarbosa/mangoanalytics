@@ -234,7 +234,7 @@
             // Ticks should match up one for each y value (category) in the series.
             var ticks = data[1];
              
-            var plot1 = $.jqplot('graph', [thisMonth, lastMonth, lastTwoMonths], {
+            var plot1 = $.jqplot('graph', [lastTwoMonths, lastMonth, thisMonth], {
                 // The "seriesDefaults" option is an options object that will
                 // be applied to all series in the chart.
                 seriesDefaults:{

@@ -1,6 +1,6 @@
 {% extends "setup.html" %}
 
-{% block title %}Add tariff to {{provider.name}}{% endblock %}
+{% block title %}Add fee to {{provider.name}}{% endblock %}
 
 {% block page-title %}
 <li>
@@ -10,7 +10,7 @@
 </li>
 <li>
     <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
-        Add base tariff to provider {{provider.name}}
+        Add base fee to provider {{provider.name}}
     </a>
 </li>
 {% endblock %}
@@ -110,7 +110,7 @@
                 {{ form.provider }}
                 {{ form.destination_group_id }}
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Tariff</button>
+                    <button type="submit" class="btn btn-primary">Save Fee</button>
                     <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
                 </div>
             </form>
@@ -120,7 +120,7 @@
     <div class="span6 well well-small">
         <div class="row-fluid">
             <div class="span8">
-                <h4>Tariffs configured</h4>
+                <h4>Fees configured</h4>
             </div>
             <div class="span4">
                 <span class="pull-right">

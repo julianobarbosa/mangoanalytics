@@ -55,7 +55,7 @@
                         <td>{{ user_info.currency_symbol }}{{prov.monthly_cost|floatformat:2}}</td>
                         <td>
                             <a href="{% url 'tarifica:destinations_create' prov.id %}">
-                                Add Base Tariffs
+                                Add Base Fees
                             </a>
                         </td>
                         <td>
@@ -142,7 +142,7 @@
 {% if locales %}
 <div class="row-fluid">
     <div class="span8 well well-small">
-        <h4><strong>Configured Tariffs</strong></h4>
+        <h4><strong>Configured Fees</strong></h4>
         <ul class="nav nav-tabs">
             {% for prov in configured %}
                 <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ prov.id }}" data-toggle="tab">{{ prov.name }}</a></li>
@@ -208,14 +208,14 @@
         <div class="alert alert-info">
             <a href="#" class="close" data-dismiss="alert">&times;</a>
             <p>
-                After configuring your trunks, assign base tariffs to each. That is, how much it costs for you to call each destination group (Local, National, Intl...)
+                After configuring your trunks, assign base fees to each. That is, how much it costs for you to call each destination group (Local, National, Intl...)
             </p>
             <p>
-                When you're finished adding tariffs to each of your configured trunks, click on the button below to continue.
+                When you're finished adding base fees to each of your configured trunks, click on the button below to continue.
             </p>
             <p>
                 <a href="{% url 'tarifica:config_update_user' 'base_tariffs_configured' %}" class="btn btn-primary">
-                    All base tariffs configured!
+                    All base fees configured!
                 </a>
             </p>
         </div>
@@ -225,21 +225,21 @@
 {% else %}
 <div class="row-fluid">
     <div class="span8 well well-small">
-        <h4>No base tariffs have been configured yet.</h4>
+        <h4>No base fees have been configured yet.</h4>
     </div>
     <div class="span4 well well-small">
         {% if user_info.trunks_configured and not user_info.base_tariffs_configured %}
         <div class="alert alert-info">
             <a href="#" class="close" data-dismiss="alert">&times;</a>
             <p>
-                After configuring your trunks, assign base tariffs to each. That is, how much it costs for you to call each destination group (Local, National, Intl...)
+                After configuring your trunks, assign base fees to each. That is, how much it costs for you to call each destination group (Local, National, Intl...)
             </p>
             <p>
-                When you're finished adding tariffs to each of your configured trunks, click on the button below to continue.
+                When you're finished adding base fees to each of your configured trunks, click on the button below to continue.
             </p>
             <p>
                 <a href="{% url 'tarifica:config_update_user' 'base_tariffs_configured' %}" class="btn btn-primary">
-                    All base tariffs configured!
+                    All base fees configured!
                 </a>
             </p>
         </div>

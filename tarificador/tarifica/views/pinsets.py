@@ -395,9 +395,9 @@ def getBarChartInfoByLocale(cursor, pinset_id):
     t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
     data = []
     aux = []
-    aux.append("This Month")
-    aux.append(getMonthName(t1.month))
     aux.append(getMonthName(t2.month))
+    aux.append(getMonthName(t1.month))
+    aux.append("This Month")
     data.append(aux)
     #print aux
     aux = []
