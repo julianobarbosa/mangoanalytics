@@ -57,7 +57,7 @@ class createDestinationGroup(forms.Form):
 
         destination_groups = DestinationGroup.objects.filter(provider=provider)
         for d in destination_groups:
-            if d.id == d_id:
+            if str(d.id) == d_id:
                 #Es el mismo destination group, no debe dar error
                 continue
             if d.prefix == prefix:

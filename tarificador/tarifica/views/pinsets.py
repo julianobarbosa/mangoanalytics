@@ -246,7 +246,7 @@ def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
         FROM tarifica_call\
         WHERE date > %s AND date < %s AND pinset_number = %s \
         GROUP BY dialed_number ORDER BY SUM(cost) DESC"
-    cursor.execute(sql,[start_date_month,end_date_month, Pin.pinset_number])
+    cursor.execute(sql,[start_date,end_date, Pin.pinset_number])
     top_calls = dictfetchall(cursor)[:10]
     data = []
     for n in top_calls :
