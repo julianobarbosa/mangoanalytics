@@ -5,6 +5,7 @@
     {% block css %}
         <link href="{% static "tarifica/css/bootstrap.css" %}" rel="stylesheet" media="screen">
         <link href="{% static "tarifica/css/styles.css" %}" rel="stylesheet" media="screen">
+        <link href="{% static "tarifica/css/docs.css" %}" rel="stylesheet" media="screen">
     {% endblock %}
     <link rel="shortcut icon" href="images/favicon.ico">
     <title>{% block title %}NEXTOR Tarificador{% endblock %}</title>
@@ -15,7 +16,9 @@
     <![endif]-->
 </head>
 
+{% block body %}
 <body>
+{% endblock %}
     <div id="navbar">
         <ul class="nav nav-pills well well-small">
             {% block navbar %}

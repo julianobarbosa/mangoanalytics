@@ -5,6 +5,7 @@ urlpatterns = patterns('',
    url(r'^$', general.setup, name = 'setup'),
    url(r'^setup$', general.setup, name = 'setup'),
    url(r'^privacy$', general.privacy, name = 'privacy'),
+   url(r'^manual$', general.manual, name = 'manual'),
    
    url(r'^config$', config.config, name = 'config'),
    url(r'^config/update/(?P<option>\w+)$', config.updateUser, name = 'config_update_user'),

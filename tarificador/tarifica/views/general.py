@@ -348,6 +348,12 @@ def dashboard(request):
 def privacy(request):
     return render(request, 'tarifica/general/privacy.html', {})
 
+
+def manual(request):
+    return render(request, 'tarifica/general/manual.html', {})
+
+
+
 def dictfetchall(cursor):
     desc = cursor.description
     return [
