@@ -159,7 +159,7 @@
                             <th>Prefix</th>
                             <th>Connection Fee</th>
                             <th>Minute Fee</th>
-                            <th>Has bundles?</th>
+                            <th>Bundles?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -258,6 +258,7 @@
                     <th>Name</th>
                     <th>Provider</th>
                     <th>Destination</th>
+                    <th>Prefix</th>
                     <th>Amount</th>
                     <th>Cost ({{ user_info.currency_code }})</th>
                     <th>Apply priority</th>
@@ -269,6 +270,7 @@
                     <td>{{bun.name}}</td>
                     <td>{{bun.destination_group.provider.name}}</td>
                     <td>{{bun.destination_group.destination_name.name}}</td>
+                    <td>{{bun.destination_group.prefix}}</td>
                     <td>{{bun.amount}} {{bun.tariff_mode.name}}s</td>
                     <td>{{ user_info.currency_symbol }}{{bun.cost|floatformat:2}}</td>
                     <td>{{bun.priority}}</td>
