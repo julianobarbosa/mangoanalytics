@@ -46,5 +46,10 @@
 				<group id="1" name="administrator" desc="total access"></group>
 			</permissions>
 		</menuitem>
+		<menuitem menuid="settings" desc="User Manual" parent="mangoanalytics" module="no" link="http://localhost:8000/manual" order="69">
+			<permissions>
+				<group id="1" name="administrator" desc="total access"></group>
+			</permissions>
+		</menuitem>
 	</menulist>
 </module>

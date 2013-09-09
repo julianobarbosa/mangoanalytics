@@ -70,6 +70,20 @@ class createDestinationGroup(forms.Form):
         # Always return the full collection of cleaned data.
         return cleaned_data
 
+class updateBundle(forms.Form):
+    name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Please input a name for this bundle.'})
+    tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')
+    cost = forms.FloatField(label = 'Costo', error_messages={
+                            'required':u"Please input this bundle's cost.",
+                            'invalid':'Please input a valid number.'},
+                            widget=forms.TextInput(attrs={'class':'input-small'}))
+    amount = forms.IntegerField(error_messages={
+                            'required':u'Please input the amount of minutes/sessions this bundle includes.',
+                            'invalid':'Please input a valid number.'})
+    priority = forms.IntegerField(error_messages={
+                            'required':u"Please input a number indicating the priority of this bundle. That is, which bundle should be applied first, in case two or more match the call's destination",
+                            'invalid':'Please input a valid number.'})
+
 class createBundle(forms.Form):
     name = forms.CharField(max_length = 255, label = 'Nombre de Paquete', error_messages={'required':u'Please input a name for this bundle.'})
     tariff_mode = forms.ChoiceField(choices = [(e.id, e.name) for e in TariffMode.objects.all()], label = 'Modo')

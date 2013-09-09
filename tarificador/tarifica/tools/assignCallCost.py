@@ -273,7 +273,7 @@ class CallCostAssigner:
 									print "Billing with bundle",b['name']
 									usage = b['usage']
 									print "Usage before: ", usage
-									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Session':
+									if self.getTariffMode(b['tariff_mode_id'])['name'] == 'Call':
 										usage += 1
 										appliedToBundle = True
 									else:
