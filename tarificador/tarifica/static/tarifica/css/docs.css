@@ -33,8 +33,9 @@ h3 code {
 /* padding for in-page bookmarks and fixed navbar */
 section {
   padding-top: 15px;
-  padding-left: 10px;
+  padding-left: 50px;
   padding-bottom: 10px;
+  margin-left: 30px;
 }
 section p {
   font-size: 15px;
@@ -254,9 +255,10 @@ only screen and (     -o-min-device-pixel-ratio: 2/1) {
 -------------------------------------------------- */
 
 .bs-docs-sidenav {
-  width: 218px;
+  width: 205px;
   margin: 20px 0 0;
   padding: 0;
+  padding-left: 15px;
   background-color: #fff;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;

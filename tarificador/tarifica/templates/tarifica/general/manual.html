@@ -29,18 +29,18 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span2 bs-docs-sidebar">
-        <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="400">
+        <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="420">
             <li class="active"><a href="#whatsinthisguide"><i class="icon-chevron-right"></i>What's in this guide?</a></li>
             <li><a href="#beforeyougetstarted"><i class="icon-chevron-right"></i>Before you get started</a></li>
-            <li><a href="#firstsetup"><i class="icon-chevron-right"></i>First Setup</a></li>
             <li><a href="#portaloverview"><i class="icon-chevron-right"></i>Portal Overview</a></li>
+            <li><a href="#firstsetup"><i class="icon-chevron-right"></i>First Setup</a></li>
             <li><a href="#feesexamples"><i class="icon-chevron-right"></i>Fees Examples</a></li>
             <li><a href="#faqs"><i class="icon-chevron-right"></i>Frequently Asked Questions</a></li>
             <li><a href="#contact"><i class="icon-chevron-right"></i>Contact Mango Analytics</a></li>
             <li><a href="#chipin"><i class="icon-chevron-right"></i>Chip In !</a></li>
         </ul>
     </div>
-    <div class="span10" style="margin-bottom:40px">
+    <div class="span10 pull-right" style="margin-bottom:40px">
         <section id="whatsinthisguide">
             <div class="page-header">
                 <h1>What's in this guide?</h1>
@@ -48,7 +48,7 @@
             <p>
                 The “Getting Started Guide” provides you with the following information and procedures:
                 <ul>
-                    <li>An overview of Mango Analytics initiative, so that you have a better understanding of what are we making and why.</li>
+                    <li>An overview of the Mango Analytics Analytic Initiative, so that you have a better understanding of what we are proposing and why.</li>
                     <li>Basic information of how to access Mango Analytics thru your Elastix Interface, and brief understanding of user permissions.</li>
                     <li>Understand all tables, graphs and some other things offered and how to interpret them.</li>
                     <li>Detailed information of costs, rates and bundles setup, and why is it so important to provide all that information correctly.</li>
@@ -66,13 +66,13 @@
             </p>
 
             <p>
-                Mango Analytics will help you save on your phone bill in ways you don't even know they existed! Just set all your trunk costs and bundles, import the CDR data and that’s it!
+                Mango Analytics will help you save on your phone bill in ways you didn't know existed! Just set all your trunk costs and bundles, import the CDR data and that’s it!
             </p>
 
             <h3>Why is it free?</h3>
 
             <p>
-                Mango Analytics is free software, and will always be. We believe in open source projects and sharing our experience in telco, and we also acknowledge that if Mango is useful for us, surely it will be useful for you too. We want everyone to have the best possible analytics reports.
+                Mango Analytics is free software, and will always be. We believe in open source projects and sharing our experience in telco, and we also acknowledge that if Mango is useful for us, surely it will be useful for you too. We want everyone to have the best possible analytic reports.
             </p>
 
             <p>
@@ -97,7 +97,7 @@
                 <ul>
                     <li>Telcos connected to PBX and trunks</li>
                     <li>Detailed rates of each and everyone of your Telco providers</li>
-                    <li>Detailed bundles info</li>
+                    <li>Detailed bundle info</li>
                 </ul>
             </p>
 
@@ -110,8 +110,191 @@
             </p>
 
             <p>
-                On the upper right area, the Setup button will give you access to all Trunks, Rates and Bundles setup.
+                On the upper right area, the Setup button will give you access to all Trunks, Rates and Bundle setup.
             </p>
+        </section>
+        <section id="portaloverview">
+            <div class="page-header">
+                <h1>Portal Overview</h1>
+            </div>
+            <h3>Dashboard</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1200px; height: 600px;" src="{% static "tarifica/img/dashboard.png" %}">
+                </li>
+            </ul>
+            <p>
+                Mango Analytics Dashboard page consists on at a glance information of your current and historic user & providers usage; This main page will give you quick information regarding top dialed destinations, users with the most expenditure and past 5 months expenses, letting you know who and how they’re using your telecom resources.
+            </p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Current month cost</dt>
+                <dd>The upper left table shows the current monthly cost of each of your configured trunks. This cost is the partial cost of the month. It doesn’t reflect the cost of your providers’ billing period. For more details on trunks, please click on the button called “More” located at the right of each trunk.</dd>
+                <dt>Top <abbr title="Destinations">Dest</abbr> last 7 days</dt>
+                <dd>Quick overview of top destinations. This information is gathered from your last 7 days of usage, showing your top dialed destinations. If you need more detail on the destinations, you need to set up the right rates for each trunk.</dd>
+                <dt>Top Users last 7 days</dt>
+                <dd>Quick overview of which users are the ones using (or abusing) more of your telecom resources. Very helpful at-a-glance data. For further data analysis, please go to users section.</dd>
+                <dt>Graphs</dt>
+                <dd>The lower right graph represents your current and past 5 months expenses for each trunk; You will see one vertical line for each trunk you have. This is quite helpful, you can see on a simple graph how your expenses per trunk are or have been. The graph is your gross usage per trunk. The lower left graph also reports current and past 5 months calculated based on the providers billing period.</dd>
+            </dl>
+            <h3><br>Realtime</h3>
+            <p>Very handy and simple real-time interface where you will be able to see the current outgoing calls. It refreshes itself  every 15 seconds. Here you can see who is calling, where are they calling, and how much time they have been on the phone.</p>
+            <h3><br>Trunks</h3>
+            <p>The main trunks area will give you detailed info on cost, destinations, billing periods and bundles purchased with your trunk providers.</p>
+            <p>On this section you will be able to see gross and per trunk usage and costs. The first left table and right graph offer at-a-glance costs and destination information.</p>
+            <p>Depending on how much trunks you have set up, beneath “Upper gross and per trunk area”, you will have detailed information of each trunk.</p>
+            <p><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner this two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want.</p>
+
+            <h3><br>Upper gross and per trunk area</h3>
+
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 300px;" src="{% static "tarifica/img/trunksgeneral.png" %}">
+                </li>
+            </ul>
+
+            <p><strong>Usage(upper gross and per trunk area)</strong></p>
+            <ul>
+                <li>At the upper left table, all general per trunk information will be showed; This information does not reflect your providers billing period data, it will show only current month costs.</li>
+                <dl class="dl-horizontal" style="font-size: 15px">
+                    <dt>Provider</dt>
+                    <dd>Your providers trunk name</dd>
+                    <dt>Bundles Cost</dt>
+                    <dd>Your bundle expenses</dd>
+                    <dt>Calls Cost</dt>
+                    <dd>The cost of all your calls (will not reflect calls that apply to any bundle you have)</dd>
+                    <dt>Monthly Cost</dt>
+                    <dd>The flat monthly fee your provider charges you</dd>
+                    <dt>Total Cost</dt>
+                    <dd>Sum of bundle cost, calls cost and monthly fee.</dd>
+                </dl>
+                <li>On the bottom of the table, a gross total will be shown.</li>
+            </ul>
+            <p><strong>This month´s destinations graph (upper gross and per trunk area)</strong></p>
+            <ul>
+                <li>This Pie graph shows the gross destination percentage based on call volume from all your configured trunks, it will give you a good idea of where your calls are going to.</li>
+            </ul>
+
+            <h3><br>Trunk detailed information</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 600px;" src="{% static "tarifica/img/trunks.png" %}">
+                </li>
+            </ul>
+            <p>
+                The trunk detail section will show one left panel and one right graph per trunk. Those aren’t necessarily the ones you have on your Elastix setup, but the ones you have already set up on the settings page of Mango Analytics.
+            </p>
+            <p><strong>Left Panel</strong></p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Provider Name</dt>
+                <dd>Name given to trunk when configured on Mango Analytics setup area</dd>
+                <dt>Trunk Name</dt>
+                <dd>Name given to trunk when created on your Elastix System</dd>
+                <dt>Trunk Type</dt>
+                <dd>E.g. SIP, DAHDI, H323</dd>
+                <dt>Billing interval</dt>
+                <dd>If postpaid, it will show the billing period start date</dd>
+                <dt>Payment type</dt>
+                <dd>Prepaid or postpaid.</dd>
+            </dl>
+            <p>The Average Monthly Cost gives you the current month usage (not the billing period interval), and the monthly average usage of this trunk. This average is taken from the last 6 months use.</p>
+            <p>
+                <img src="{% static "tarifica/img/ratesbundlesbutton.png" %}">This button will take you to the tariffs and bundles area for this trunk, showing detailed fees previously set, as well as all your bundles. You can edit or delete information on this part. Remember, if you modify or delete data, it is critical that you import all data again, so that all costs can be re-calculated.
+            </p>
+            <p>
+                <img src="{% static "tarifica/img/trunkanalysisbutton.png" %}">This button will take you to an in-depth analysis page of each trunk, we’ll get to that section next.
+            </p>
+
+            <h3><br>Trunk Analysis</h3>
+            <p>Here is the basic layout of the trunk analysis page</p>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/trunkdetail.png" %}">
+                </li>
+            </ul>
+            <p>As you can see you get the same information of the trunks from the general trunk page, but there’s two new graphs and a Billing table.</p>
+            <ul>
+                <li>
+                    The first graph, located at the right of the trunk information, shows you the total minutes and cost of that trunk by month, for the past 6 months.
+                </li>
+                <li>The Traffic Segmentation graph shows you the percentage of calls by destination, so you’ll get an idea of where your calls are going.</li>
+                <li>The Billing table shows you the billing period cost, calls and seconds talked of the last 6 billing periods.</li>
+            </ul>
+
+            <h3><br>Users/Pinsets</h3>
+            <p>Here is the basic layout of the users/pinsets general page</p>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/users.png" %}">
+                </li>
+            </ul>
+            <p>You get three zones here:</p>
+            <ul>
+                <li>Most expensive users/pinsets table; well you get the idea, the 5 most expensive users/pinsets on your system, the ones who have been on the phone for the most minutes.</li>
+                <li>Cost per extension/user/pinset graph; This shows you usage per user/pinset for the past 2 months.</li>
+                <li>Finally you get a table with all your extensions/pinsets registered on the Elastix system, their total seconds, calls and cost. If you want more detail per user/pinset, you can hit the Detail link at the side of every user/pinset.</li>
+            </ul>
+            <p><br><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner these two buttons are available. By default, the current month information is shown, but you can toggle to whichever date you want.</p>
+            <h3><br>Users/Pinsets Detail</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/userdetail.png" %}">
+                </li>
+            </ul>
+            <p>As you can see, you get:</p>
+            <ul>
+                <li><strong>Extension</strong> the extension/pinset number</li>
+                <li><strong>Name</strong> the name of the user</li>
+                <li>Destinations called</li>
+                <li>A graph located at the right hand side of the extension number/pinset and the name which details expenses per destination for the past 2 months.</li>
+                <li>Second graph which details the user/pinset cost per day.</li>
+                <li>A table containing all calls from that user/pinset, the date/time of each call, as well as seconds, cost, dialed number and the provider.</li>
+            </ul>
+            <p><br><img src="{% static "tarifica/img/useranalysisbutton.png" %}">This button will take you to the usage analysis page of the user/pinset</p>
+            <h3><br>Usage Analysis of User/Pinset</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 800px;" src="{% static "tarifica/img/usersanalysis.png" %}">
+                </li>
+            </ul>
+            <p>On this page you get:</p>
+            <ul>
+                <li>A graph detailing monthly user/pinset cost behavior of the current year.</li>
+                <li>A graph and a table detailing the top 10 most expensive dialed numbers of the month.</li>
+                <li>A table named “Detailed Usage” showing all the calls of the user/pinset of the month.</li>
+            </ul>
+            <p>
+                <br><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner these two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want ( just “Detailed Usage” table changes ).
+            </p>
+            <h3><br>General CDR</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/generalcdr.png" %}">
+                </li>
+            </ul>
+            <p>Here you can filter by various fields the CRD data in Mango Analytics and you can download it with the filters applied.</p>
+            <h3><br>My Settings</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/mysettings.png" %}">
+                </li>
+            </ul>
+            <p>On this page you can change your settings of MAngo Analytics, which are:</p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Country</dt>
+                <dd>The country where your system is located</dd>
+                <dt>Company Name</dt>
+                <dd>Your company name</dd>
+                <dt>Contact First Name</dt>
+                <dd>Installing user first name</dd>
+                <dt>Contact Last Name</dt>
+                <dd>Installing user flast name</dd>
+                <dt>Contact Email</dt>
+                <dd>Installing user email</dd>
+                <dt>Currency Code</dt>
+                <dd>E.g. MXN, USD, GBP, ARS</dd>
+                <dt>Currency Symbol</dt>
+                <dd>The symbol of the currency selected</dd>
+            </dl>
         </section>
         <section id="firstsetup">
             <div class="page-header">
@@ -126,7 +309,7 @@
 
             <ul>
                 <li>
-                    <strong>First data import.</strong> This import happens during first set up, after all trunks, rates and bundles are already configured. If your Elastix server is brand new you can import at any time, but if you have had a Elastix system for a long time, your CDR may be huge, so we recommend you to make first import at off peak hours. This data import can last some seconds, or several hours, it all depends on how much calls are saved on your main CDR, and obviously on your power server.
+                    <strong>First data import.</strong> This import happens during first set up, after all trunks, rates and bundles are already configured. If your Elastix server is brand new you can import at any time, but if you have had a Elastix system for a long time, your CDR may be huge, so we recommend you to make first import at off peak hours. This data import can last some seconds, or several hours, it all depends on how many calls are saved on your main CDR, and obviously on your power server.
                 </li>
                 <li>
                     <strong>Daily data import.</strong> Mango analytics retrieves past day CDR at 02:00 AM everyday (local time) , the import time is static and cannot be changed. On your reports and graphs you will always see info up to one day before the present date.
@@ -136,16 +319,16 @@
             <p><strong>Rate changes</strong></p>
 
             <p>
-                It’s normal that rates are changed by your telco provider once in awhile, to do this, you only need to change them on the rates area, there’s no need to import data again . New rates will be used Only for new calls, older calls will have older rates. If you run again data import, all old calls will be assigned the new rates, so please be careful.
+                It’s normal that rates are changed by your telco provider once in awhile, to do this, you only need to change them on the rates area, there’s no need to import data again . New rates will be used only for new calls, older calls will have older rates. If you run again data import, all old calls will be assigned the new rates, so please be careful.
             </p>
 
             <p><strong>Trunks Edit, Delete or Modifications</strong></p>
 
             <p>
-                You can change any information you want on your Trunks, even add new ones with their new rates, all this changes will be reflected on CDR starting on the date you made the changes, all older information will use old Trunk info. If you run again data import, all old calls will use updated Trunk information.
+                You can change any information you want on your Trunks, even add new ones with their new rates, all these changes will be reflected on the CDR starting on the date you made the changes, all older information will use old Trunk info. If you run again the data import, all old calls will use updated Trunk information.
             </p>
             <p>
-                You can delete a Trunk on your Mango setup, all prior stats will still be available for you. PLEASE DON'T run again data import, as this will delete all data of the previously deleted trunk.
+                You can delete a Trunk on your Mango setup, all prior stats will still be available for you. PLEASE DON'T run again the data import, as this will delete all data of the previously deleted trunk.
             </p>
 
             <p><strong>Bundles Edit, Delete or Modifications</strong>
@@ -179,7 +362,7 @@
                 <dt>Payment method</dt>
                 <dd>Whether your telco agreement is prepaid or postpaid.</dd>
                 <dt>Channels</dt>
-                <dd>How much channels you have available for this trunk. (For E1 lines you can have up to 30 channels or concurrent calls, for T1 lines, you can have up to 24 channels or concurrent calls)</dd>
+                <dd>How many channels you have available for this trunk. (For E1 lines you can have up to 30 channels or concurrent calls, for T1 lines, you can have up to 24 channels or concurrent calls)</dd>
 
             </dl>
             <p>Click save and proceed with the setup of the remaining trunks.
@@ -260,7 +443,7 @@
 
             <dl class="dl-horizontal" style="font-size: 15px">
                 <dt>Name</dt>
-                <dd>You can click on the Trunk name in order to see detailed rates and bundles information</dd>
+                <dd>You can click on the Trunk name in order to see detailed rates and bundle information</dd>
                 <dt>Add Base Rate</dt>
                 <dd>By clicking on it you will be redirected to the rate input area, we will cover it briefly</dd>
                 <dt><img src="{% static "tarifica/img/image05.png" %}">Trunk Edit</dt>
@@ -273,7 +456,7 @@
             <h3>Add Base Rates</h3>
 
             <p>
-                This is the most time consuming process of them all. Please take your time to fully understand it, and do not rush on tariff setup process, as one mistake can screw all reports up.
+                This is the most time consuming process of them all. Please take your time to fully understand it, and do not rush on the tariff setup process, as one mistake can screw all the reports up.
             </p>
 
             <p>
@@ -291,9 +474,9 @@
                 <dd>
                     What type of destination it is, you will have the next options:
                     <ul>
-                        <li><strong>Local Landline</strong> Select when calling a local landline on your area</li>
+                        <li><strong>Local Landline</strong> Select when calling a local landline in your area</li>
                         <li><strong>Domestic Landline</strong> Select when calling to a landline inside your country</li>
-                        <li><strong>Local Mobile</strong> Select when calling a mobile on your area</li>
+                        <li><strong>Local Mobile</strong> Select when calling a mobile in your area</li>
                         <li><strong>Domestic Mobile</strong> Select when calling a mobile inside your country</li>
                         <li><strong>International</strong> Select when calling a foreign country</li>
                     </ul>
@@ -428,189 +611,6 @@
             </ul>
             <p>And that’s it!</p>
         </section>
-        <section id="portaloverview">
-            <div class="page-header">
-                <h1>Portal Overview</h1>
-            </div>
-            <h3>Dashboard</h3>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 1300px; height: 700px;" src="{% static "tarifica/img/dashboard.png" %}">
-                </li>
-            </ul>
-            <p>
-                Mango Analytics Dashboard page consists on at a glance information of your current and historic user & providers usage; This main page will give you quick information regarding top dialed destinations, users with the most expenditure and past 5 months expenses, letting you know who and how they’re using your telecom resources.
-            </p>
-            <dl class="dl-horizontal" style="font-size: 15px">
-                <dt>Current month cost</dt>
-                <dd>The upper left table shows the current monthly cost of each of your configured trunks. This cost is the partial cost of the month. It doesn’t reflect the cost of your providers’ billing period. For more details on trunks, please click on the button called “More” located at the right of each trunk.</dd>
-                <dt>Top <abbr title="Destinations">Dest</abbr> last 7 days</dt>
-                <dd>Quick overview of top destinations. This information is gathered from your last 7 days of usage, showing your top dialed destinations. If you need more detail on the destinations, you need to set up the right rates for each trunk.</dd>
-                <dt>Top Users last 7 days</dt>
-                <dd>Quick overview of which users are the ones using (or abusing) more of your telecom resources. Very helpful at-a-glance data. For further data analysis, please go to users section.</dd>
-                <dt>Graphs</dt>
-                <dd>The lower right graph represents your current and past 5 months expense for each trunk; You will see one vertical line for each trunk you have. This is quite helpful, you can see on a simple graph how your expenses per trunk are or have been. The graph is your gross usage per trunk. The lower left graph also reports current and past 5 months calculated based on the providers billing period.</dd>
-            </dl>
-            <h3><br>Realtime</h3>
-            <p>Very handy and simple real-time interface where you will be able to see the current outgoing calls. It refreshes itself  every 15 seconds. Here you can see who is calling, where are they calling, and how much time they have been on the phone.</p>
-            <h3><br>Trunks</h3>
-            <p>The main trunks area will give you detailed info on cost, destinations, billing periods and bundles purchased with your trunk providers.</p>
-            <p>On this section you will be able to see gross and per trunk usage and costs. The first left table and right graph offer at-a-glance costs and destination information.</p>
-            <p>Depending on how much trunks you have set up, beneath “Upper gross and per trunk area”, you will have detailed information of each trunk.</p>
-            <p><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner this two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want.</p>
-
-            <h3><br>Upper gross and per trunk area</h3>
-
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 900px; height: 300px;" src="{% static "tarifica/img/trunksgeneral.png" %}">
-                </li>
-            </ul>
-
-            <p><strong>Usage(upper gross and per trunk area)</strong></p>
-            <ul>
-                <li>At the upper left table, all general per trunk information will be showed; This information does not reflect your providers billing period data, it will show only current month costs.</li>
-                <dl class="dl-horizontal" style="font-size: 15px">
-                    <dt>Provider</dt>
-                    <dd>Your providers trunk name</dd>
-                    <dt>Bundles Cost</dt>
-                    <dd>Your bundle expenses</dd>
-                    <dt>Calls Cost</dt>
-                    <dd>he cost of all your calls (will not reflect calls that apply to any bundle you have)</dd>
-                    <dt>Monthly Cost</dt>
-                    <dd>The flat monthly fee your provider charges you</dd>
-                    <dt>Total Cost</dt>
-                    <dd>Sum of bundle cost, calls cost and monthly fee.</dd>
-                </dl>
-                <li>On the bottom of the table, a gross total will be shown.</li>
-            </ul>
-            <p><strong>This month´s destinations graph (upper gross and per trunk area)</strong></p>
-            <ul>
-                <li>This Pie graph shows the gross destination percentage based on call volume from all your configured trunks, it will give you a good idea of where your calls are going to.</li>
-            </ul>
-
-            <h3><br>Trunk detailed information</h3>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 1000px; height: 600px;" src="{% static "tarifica/img/trunks.png" %}">
-                </li>
-            </ul>
-            <p>
-                The trunk detail section will show one left panel and one right graph per trunk. Those aren’t necessarily the ones you have on your Elastix setup, but the ones you have already set up on the settings page of Mango Analytics.
-            </p>
-            <p><strong>Left Panel</strong></p>
-            <dl class="dl-horizontal" style="font-size: 15px">
-                <dt>Provider Name</dt>
-                <dd>Name given to trunk when configured on Mango Analytics setup area</dd>
-                <dt>Trunk Name</dt>
-                <dd>Name given to trunk when created on your Elastix System</dd>
-                <dt>Trunk Type</dt>
-                <dd>E.g. SIP, DAHDI, H323</dd>
-                <dt>Billing interval</dt>
-                <dd>If postpaid, it will show the billing period start date</dd>
-                <dt>Payment type</dt>
-                <dd>Prepaid or postpaid.</dd>
-            </dl>
-            <p>The Average Monthly Cost gives you current month usage (not the billing period interval), and the monthly average usage of this trunk. This average is taken from the last 6 months of use.</p>
-            <p>
-                <img src="{% static "tarifica/img/ratesbundlesbutton.png" %}">This button will take you to the tariffs and bundles area for this trunk, showing detailed fees previously set, as well as all your bundles. You can edit or delete information on this part. Remember, if you modify or delete data, is critical that you import all data again, so that all costs can be re-calculated.
-            </p>
-            <p>
-                <img src="{% static "tarifica/img/trunkanalysisbutton.png" %}">This button will take you to an in-depth analysis page of each trunk, we’ll get to that section next.
-            </p>
-
-            <h3><br>Trunk Analysis</h3>
-            <p>Here is the basic layout of the trunk analysis page</p>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/trunkdetail.png" %}">
-                </li>
-            </ul>
-            <p>As you can see you get the same information of the trunks from the general trunk page, but there’s two new graphs and a Billing table.</p>
-            <ul>
-                <li>
-                    The first graph, located at the right of the trunk information, shows you the total minutes and cost of that trunk by month, for the past 6 months.
-                </li>
-                <li>The Traffic Segmentation graph shows you the percentage of calls by destination, so you’ll get an idea of where your calls are going.</li>
-                <li>The Billing table shows you the billing period cost, calls and seconds talked of the last 6 billing periods.</li>
-            </ul>
-
-            <h3><br>Users/Pinsets</h3>
-            <p>Here is the basic layout of the users/pinsets general page</p>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/users.png" %}">
-                </li>
-            </ul>
-            <p>You get three zones here:</p>
-            <ul>
-                <li>Most expensive users/pinsets table; well you get the idea, the 5 most expensive users/pinsets on your system, the ones who have been on the phone for the most minutes.</li>
-                <li>Cost per extension/user/pinset graph; This shows you usage per user/pinset for the past 2 months.</li>
-                <li>Finally you get a table with all your extensions/pinsets registered on the Elastix system, their total seconds, calls and cost. If you want more detail per user/pinset, you can hit the Detail link at the side of every user/pinset.</li>
-            </ul>
-            <p><br><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner this two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want.</p>
-            <h3><br>Users/Pinsets Detail</h3>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/userdetail.png" %}">
-                </li>
-            </ul>
-            <p>As you can see, you get:</p>
-            <ul>
-                <li><strong>Extension</strong> the extension/pinset number</li>
-                <li><strong>Name</strong> the name of the user</li>
-                <li>Destinations called</li>
-                <li>A graph located at right hand side of extension number/pinset and name which details expenses per destination for the past 2 months.</li>
-                <li>Second graph which details the user/pinset cost per day.</li>
-                <li>A table containing all calls from that user/pinset, the date/time of each call, as well as seconds, cost, dialed number and the provider.</li>
-            </ul>
-            <p><br><img src="{% static "tarifica/img/useranalysisbutton.png" %}">This button will take you to the usage analysis page of the user/pinset</p>
-            <h3><br>Usage Analysis of User/Pinset</h3>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 1000px; height: 800px;" src="{% static "tarifica/img/usersanalysis.png" %}">
-                </li>
-            </ul>
-            <p>On this page you get:</p>
-            <ul>
-                <li>A graph detailing monthly user/pinset cost behavior of the current year.</li>
-                <li>A graph and a table detailing the top 10 most expensive dialed numbers of the month.</li>
-                <li>A table named “Detailed Usage” showing all the calls of the user/pinset of the month.</li>
-            </ul>
-            <p>
-                <br><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner this two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want ( just “Detailed Usage” table changes ).
-            </p>
-            <h3><br>General CDR</h3>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/generalcdr.png" %}">
-                </li>
-            </ul>
-            <p>Here you can filter by various fields the CRD data in Mango Analytics and you can download it with the filters applied.</p>
-            <h3><br>My Settings</h3>
-            <ul class="thumbnails">
-                <li>
-                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/mysettings.png" %}">
-                </li>
-            </ul>
-            <p>On this page you can change your settings of MAngo Analytics, which are:</p>
-            <dl class="dl-horizontal" style="font-size: 15px">
-                <dt>Country</dt>
-                <dd>The country where your system is located</dd>
-                <dt>Company Name</dt>
-                <dd>Your company name</dd>
-                <dt>Contact First Name</dt>
-                <dd>Installing user first name</dd>
-                <dt>Contact Last Name</dt>
-                <dd>Installing user flast name</dd>
-                <dt>Contact Email</dt>
-                <dd>Installing user email</dd>
-                <dt>Currency Code</dt>
-                <dd>E.g. MXN, USD, GBP, ARS</dd>
-                <dt>Currency Symbol</dt>
-                <dd>The symbol of the currency selected</dd>
-            </dl>
-        </section>
         <section id="feesexamples">
             <div class="page-header">
                 <h1>Fees Examples</h1>
@@ -694,12 +694,15 @@
             <div class="page-header">
                 <h1>Chip In!</h1>
             </div>
+            <h3>If you like Mango Analytics, and it has been helpful for your company, consider making a donation. We need your support in order to make Mango Analytics better and more powerful!</h3>
+            <container class="text-center">
             <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                 <input type="hidden" name="cmd" value="_s-xclick">
                 <input type="hidden" name="hosted_button_id" value="BFP5VK7VQFZ7L">
                 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                 <img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1">
             </form>
+        </container>
         </section>
     </div>
   </div>
