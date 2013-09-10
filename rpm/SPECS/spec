@@ -1,0 +1,43 @@
+%define modname mango-analytics
+Summary: Mango Analytics
+Name: elastix-%{modname}
+Version: 1.0.1
+Release: 1
+License: GPLv2
+Group: Applications/System
+Source0: %{modname}_%{version}-%{release}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildArch: noarch
+Prereq: elastix-framework >= 2.2.0-25
+
+%description
+Mango Analytics is a cost reporting tool for Elastix PBX
+
+%prep
+
+%setup -n %{modname}
+
+%pre
+%install
+/bin/sh Pyinstall.sh
+
+%post
+elastix-menumerge /opt/NEXTOR/tarificador/django-tarificador/menu.xml
+echo "All ready motherfucker."
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%preun
+if [ $1 -eq 0 ] ; then # Validation for desinstall this rpm
+	echo "Deleting menus..."
+	elastix-menuremove "%{modname}"
+fi
+
+%files
+/opt/NEXTOR/*
+
+%changelog
+* Mon Sep 9 2013 Alfonso Lizarraga <alfonso@nextortelecom.com>
+−
+Initial version.
