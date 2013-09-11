@@ -13,7 +13,7 @@ from math import ceil
 from envelopes import Envelope
 from tarifica.tools.referrer_check import referer_matches_re
 
-@referer_matches_re('(index\.php\?menu=mangoanalytics){1,1}')
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
     user_info.first_time_user = False
@@ -85,6 +85,7 @@ def start(request, page=1):
         referer = request.META.get('HTTP_REFERER')
         return render(request, 'tarifica/wizard/start'+str(page)+'.html', {'referer':referer})
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def testrun(request, default="none"):
     import subprocess
     import os
@@ -131,6 +132,7 @@ def testrun(request, default="none"):
         'default': default
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def checkTestRunStatus(request, action="show"):
     user_info = get_object_or_404(UserInformation, id = 1)
     # By default, we import 6 month's worth of data, so we can check how many
@@ -176,6 +178,7 @@ def checkTestRunStatus(request, action="show"):
         'minutesRemaining': minutesRemaining
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def results(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     user_info.is_first_import_finished = False
@@ -189,6 +192,7 @@ def results(request):
         'percentage_not_processed': (import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)) * 100
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def run(request, default="none"):
     import subprocess
     import os
@@ -234,6 +238,7 @@ def run(request, default="none"):
         'default': default
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def checkProcessingStatus(request, action="show"):
     user_info = get_object_or_404(UserInformation, id = 1)
     # By default, we import 6 month's worth of data, so we can check how many

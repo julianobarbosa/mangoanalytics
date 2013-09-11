@@ -8,7 +8,9 @@ from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 from django.forms.formsets import formset_factory
+from tarifica.tools.referrer_check import referer_matches_re
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def createProvider(request, asterisk_id):
     provider = get_object_or_404(Provider, asterisk_id = asterisk_id)
 
@@ -31,6 +33,7 @@ def createProvider(request, asterisk_id):
         'provider': provider
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def getProvider(request, provider_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
@@ -43,6 +46,7 @@ def getProvider(request, provider_id):
         'bundles': bundles,
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def updateProvider(request, provider_id):
     provider = get_object_or_404(Provider, id = provider_id)
 
@@ -72,6 +76,7 @@ def updateProvider(request, provider_id):
         'provider': provider
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def deleteProvider(request, provider_id):
     provider = get_object_or_404(Provider, id = provider_id)
     provider.delete()

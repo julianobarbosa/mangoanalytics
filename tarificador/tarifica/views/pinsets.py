@@ -11,7 +11,9 @@ from django.db import connection, transaction
 import json
 from tarifica.django_countries.fields import Country
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
+from tarifica.tools.referrer_check import referer_matches_re
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def generalPinsets(request, period_id="thisMonth"):
     a_mysql_m = AsteriskMySQLManager()
     pinsets = a_mysql_m.getPinsetInformation()
@@ -132,6 +134,7 @@ def generalPinsets(request, period_id="thisMonth"):
         'end_date': end_date - datetime.timedelta(days=1),
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def detailPinsets(request, pinset_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Pin = get_object_or_404(Pinset, id = pinset_id)
@@ -207,7 +210,7 @@ def detailPinsets(request, pinset_id, period_id="thisMonth"):
               'end_date': end_date - datetime.timedelta(days=1),
               })
 
-
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Pin = get_object_or_404(Pinset, id = pinset_id)

@@ -12,7 +12,9 @@ from django.db import connection, transaction
 import json
 from tarifica.django_countries.fields import Country
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
+from tarifica.tools.referrer_check import referer_matches_re
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def generalUsers(request, period_id="thisMonth"):
     #First, we make sure we have up-to-date info of asterisk's extensions
     a_mysql_m = AsteriskMySQLManager()
@@ -135,6 +137,7 @@ def generalUsers(request, period_id="thisMonth"):
         'end_date': end_date - datetime.timedelta(days=1),
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def detailUsers(request, extension_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
@@ -212,6 +215,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'end_date': end_date - datetime.timedelta(days=1),
               })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def analyticsUsers(request, extension_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)

@@ -9,7 +9,9 @@ from tarifica.models import *
 from tarifica import forms
 from django.db import connection, transaction
 import json
+from tarifica.tools.referrer_check import referer_matches_re
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def config(request):
     user_info = UserInformation.objects.get(pk = 1)
     if request.method == 'POST': # If the form has been submitted...
@@ -39,6 +41,7 @@ def config(request):
         'form': form
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def updateUser(request, option):
     user_info = UserInformation.objects.get(pk = 1)
     if option == "trunks_configured":

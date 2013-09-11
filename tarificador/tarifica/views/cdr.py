@@ -10,7 +10,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from csv import *
 from math import ceil
 from django.db.models import Sum
+from tarifica.tools.referrer_check import referer_matches_re
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def general(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
     action = "show"

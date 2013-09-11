@@ -11,7 +11,9 @@ from django.db import connection, transaction
 from dateutil.relativedelta import *
 import json
 from csv import *
+from tarifica.tools.referrer_check import referer_matches_re
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def general(request, period_id="thisMonth"):
     # Required for getting this month's, last month's and custom start and end dates
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -98,6 +100,7 @@ def general(request, period_id="thisMonth"):
         'end_date': end_date - datetime.timedelta(days=1),
     })
 
+@referer_matches_re('(index\.php\?menu=){1,1}')
 def getTrunk(request, provider_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
