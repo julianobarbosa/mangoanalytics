@@ -11,7 +11,9 @@ from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
 from envelopes import Envelope
+from tarifica.tools.referrer_check import referer_matches_hostname
 
+@referer_matches_hostname('http://209.190.122.117:14780/index.php?')
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
     user_info.first_time_user = False

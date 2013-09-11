@@ -15,6 +15,11 @@ from tarifica.views.trunks import getBillingPeriods, dictfetchall
 from dateutil.relativedelta import *
 
 def setup(request, provider_id = 0):
+    import urlparse
+    referer = request.META.get('HTTP_REFERER', None)
+    print "referer",referer
+    referer_netloc = urlparse.urlparse(referer).netloc
+    print "referer_netlock",referer_netloc
     user_info = get_object_or_404(UserInformation, id = 1)
     #Import users, trunks and pinsets at first use...
     a_mysql_m = AsteriskMySQLManager()
@@ -43,8 +48,6 @@ def setup(request, provider_id = 0):
             except Pinset.MultipleObjectsReturned:
                 print "pinsets repetidos!"
     trunks = a_mysql_m.getTrunkInformation()
-    print 'trunks'
-    print trunks
     for x in trunks:
         print x
         if x['trunkid']:
@@ -61,7 +64,6 @@ def setup(request, provider_id = 0):
                     is_configured = False
                     )
                 p.save()
-                print "Saved trunk",x
             except Provider.MultipleObjectsReturned:
                 print "troncales repetidas!"
 
