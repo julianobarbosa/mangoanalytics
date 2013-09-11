@@ -236,7 +236,7 @@ def realtime(request, action="show"):
         'graphData' : json.dumps(graphData),
     })
 
-#@referer_matches_re('(index\.php\?menu=){1,1}')
+
 def dashboard(request):
     referer = request.META.get('HTTP_REFERER', '')
     print "referer",referer
