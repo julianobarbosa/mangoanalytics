@@ -11,9 +11,7 @@ def referer_matches_hostname(*netlocs):
         def _check_referer(request, *args, **kwargs):
             import urlparse
             referer = request.META.get('HTTP_REFERER', '')
-            print "referer",referer
             referer_netloc = urlparse.urlparse(referer).netloc
-            print "referer_netlock",referer_netloc
             if referer_netloc in netlocs:
                 return view_func(request, *args, **kwargs)
             raise PermissionDenied(referer)
