@@ -19,7 +19,7 @@ def start(request, page=1):
     user_info.first_time_user = False
     user_info.save()
     referer = request.META.get('HTTP_REFERER', '')
-    print referer
+    print "referer",referer
 
     if page == '3':
         if request.method == 'POST': # If the form has been submitted...
