@@ -11,7 +11,7 @@ from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
 from envelopes import Envelope
-from tarifica.tools.referrer_check import referer_matches_hostname
+from tarifica.tools.referrer_check import referer_matches_re
 
 @referer_matches_re('(index\.php\?menu=mangoanalytics){1,1}')
 def start(request, page=1):
