@@ -136,8 +136,6 @@ def updatePinsetInformation():
 
 if __name__ == "__main__":
     today = date.today()
-    start = today - timedelta(days=0)
-
     cca = CallCostAssigner()
     dig = Digester()
 
