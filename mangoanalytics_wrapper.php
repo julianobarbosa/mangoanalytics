@@ -16,7 +16,7 @@ else
 session_commit();
 if($pACL->isUserAdministratorGroup($elastix_user)){
 
-	$db = mysql_connect('localhost', 'nextor_tarificador', 'k4590NAEUI');
+	$db = mysql_connect($server='localhost', $username='nxt_tarificador', $password='k4590NAEUI');
 	#We save such credentials:
 	if(!mysql_select_db('nextor_tarificador')){
 		echo "Something went wrong while redirecting to Mango Analytics: ".mysql_error();
