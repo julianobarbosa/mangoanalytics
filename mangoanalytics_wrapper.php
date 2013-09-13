@@ -23,6 +23,7 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 		die();
 	}
 
+	$now = new Datetime('now');
 	$query = "UPDATE tarifica_elastixuser SET name = '".mysql_escape_string($elastix_user)."', permissions = 1 WHERE id = 1";
 	$result = mysql_query($query);
 	if(!$result){

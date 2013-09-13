@@ -1,5 +1,6 @@
 from django.core.exceptions import PermissionDenied
 from tarifica.models import ElastixUser
+from datetime import *
 
 def elastix_user_is_authorized():
     """
@@ -13,8 +14,10 @@ def elastix_user_is_authorized():
                 user = ElastixUser.objects.get(id = 1)
             except Exception as e:
                 raise PermissionDenied()
-            print user.name
-            print user.permissions
+            now = datetime.now()
+            login_time = now - user.first_login
+            if login_time.total_seconds > 10:
+                raise PermissionDenied()    
             if user.permissions:
                 return view_func(request, *args, **kwargs)
             raise PermissionDenied()

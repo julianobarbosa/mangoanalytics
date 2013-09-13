@@ -178,3 +178,4 @@ class CDRFilter(models.Model):
 class ElastixUser(models.Model):
     name = models.CharField(max_length=255)
     permissions = models.BooleanField()
+    first_login = models.DateTimeField()
