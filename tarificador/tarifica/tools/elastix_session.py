@@ -10,7 +10,7 @@ def elastix_user_is_authorized():
     def _dec(view_func):
         def elastix_user_set(request, *args, **kwargs):
             try:
-                $user = ElastixUser.objects.filter(id = 1)
+                user = ElastixUser.objects.get(id = 1)
             except Exception as e:
                 raise PermissionDenied(referer)
             return view_func(request, *args, **kwargs)
