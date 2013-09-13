@@ -8,9 +8,9 @@ from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
 from dateutil.relativedelta import *
-from tarifica.tools.referrer_check import referer_matches_re
+from tarifica.tools.elastix_session import elastix_user_is_authorized
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def createBundle(request, destination_group_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     destination_group = get_object_or_404(DestinationGroup, id=destination_group_id)
@@ -56,7 +56,7 @@ def createBundle(request, destination_group_id):
         'user_info': user_info
     })
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def updateBundle(request, bundle_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     b = get_object_or_404(Bundle, id = bundle_id)
@@ -86,7 +86,7 @@ def updateBundle(request, bundle_id):
         'user_info': user_info
     })
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def deleteBundle(request, bundle_id):
     bundle = get_object_or_404(Bundle, id = bundle_id)
     bundle.delete()

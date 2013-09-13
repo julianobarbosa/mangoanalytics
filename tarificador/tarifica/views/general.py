@@ -13,9 +13,9 @@ from tarifica.django_countries.fields import Country
 import json
 from tarifica.views.trunks import getBillingPeriods, dictfetchall
 from dateutil.relativedelta import *
-from tarifica.tools.referrer_check import referer_matches_re
+from tarifica.tools.elastix_session import elastix_user_is_authorized
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def setup(request, provider_id = 0):
     import urlparse
     referer = request.META.get('HTTP_REFERER', None)
@@ -84,7 +84,7 @@ def setup(request, provider_id = 0):
         'user_info' : user_info,
     })
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def realtime(request, action="show"):
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -353,11 +353,11 @@ def dashboard(request):
         'ticks': json.dumps(ticks),
     })
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def privacy(request):
     return render(request, 'tarifica/general/privacy.html', {})
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def manual(request):
     return render(request, 'tarifica/general/manual.html', {})
 

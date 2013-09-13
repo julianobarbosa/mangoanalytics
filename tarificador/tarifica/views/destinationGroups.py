@@ -7,9 +7,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
-from tarifica.tools.referrer_check import referer_matches_re
+from tarifica.tools.elastix_session import elastix_user_is_authorized
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def createDestinationGroup(request, provider_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
@@ -47,7 +47,7 @@ def createDestinationGroup(request, provider_id):
         'user_info': user_info
     })
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def updateDestinationGroup(request, destination_group_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
@@ -82,11 +82,11 @@ def updateDestinationGroup(request, destination_group_id):
         'user_info': user_info
     })
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def getDestinationGroup(request, provider_id):
     pass
 
-@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def deleteDestinationGroup(request, destination_group_id):
     destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
     destination_group.delete()

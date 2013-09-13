@@ -23,7 +23,7 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 		die();
 	}
 
-	$query = "UPDATE tarifica_elastixuser SET name = '".mysql_escape_string($elastix_user)."' WHERE id = 1";
+	$query = "UPDATE tarifica_elastixuser SET name = '".mysql_escape_string($elastix_user)."', permissions = 1 WHERE id = 1";
 	$result = mysql_query($query);
 	if(!$result){
 		echo "Something went wrong while redirecting to Mango Analytics: ".mysql_error();
