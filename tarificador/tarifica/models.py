@@ -177,4 +177,4 @@ class CDRFilter(models.Model):
 
 class ElastixUser(models.Model):
     name = models.CharField(max_length=255)
-    permission = models.BooleanField()
+    permissions = models.BooleanField()
