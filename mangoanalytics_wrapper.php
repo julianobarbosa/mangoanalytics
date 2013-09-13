@@ -14,19 +14,20 @@ if(isset($_SESSION["elastix_user"]))
 else
     $elastix_user = "";
 session_commit();
-var_dump($elastix_user);
 if($pACL->isUserAdministratorGroup($elastix_user)){
-	echo "Yesh, yesh, it has permits.";
-};
 
-$ip = $_SERVER["SERVER_ADDR"];
-$path = $_SERVER["PATH_INFO"];
-$orig_path = $_SERVER["ORIG_PATH_INFO"];
-var_dump("Orig path: ".$orig_path);
+	$db = mysql_connect('localhost', 'nextor_tarificador', 'k4590NAEUI');
+	#We save such credentials:
 
-$loc_path = "http://".$ip.":8000".$path;
-var_dump($loc_path);
+	$query = "INSERT INTO tarifica_elastixuser(name, permissions) VALUES('".$elastix_user."', 1)";
+	$result = mysql_query($query);
+	if(!$result){
+		echo "Something went wrong while redirecting to Mango Analytics.";
+	}
+	$ip = $_SERVER["SERVER_ADDR"];
+	$path = $_SERVER["PATH_INFO"];
 
-//header("Location: ".$loc_path);
-
+	$loc_path = "http://".$ip.":8000".$path;
+	header("Location: ".$loc_path);
+}
 ?>
