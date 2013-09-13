@@ -23,6 +23,7 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 	$result = mysql_query($query);
 	if(!$result){
 		echo "Something went wrong while redirecting to Mango Analytics.";
+		die();
 	}
 	$ip = $_SERVER["SERVER_ADDR"];
 	$path = $_SERVER["PATH_INFO"];

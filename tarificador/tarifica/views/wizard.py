@@ -11,9 +11,9 @@ from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
 from envelopes import Envelope
-from tarifica.tools.referrer_check import referer_matches_re
+from tarifica.tools.elastix_session import elastix_user_is_authorized
 
-#@referer_matches_re('(index\.php\?menu=){1,1}')
+@elastix_user_is_authorized()
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
     user_info.first_time_user = False
