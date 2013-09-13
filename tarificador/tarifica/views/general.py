@@ -205,7 +205,7 @@ def realtime(request, action="show"):
 
                 accountedFor = False
                 for g in graphData:
-                    if g[0] == d['destination_group_name']
+                    if g[0] == d['destination_group_name']:
                         accountedFor = True
                         g[1] += 1
                 if not accountedFor:
