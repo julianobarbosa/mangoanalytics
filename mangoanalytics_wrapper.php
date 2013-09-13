@@ -22,7 +22,7 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 	$query = "INSERT INTO tarifica_elastixuser(name, permissions) VALUES('".$elastix_user."', 1)";
 	$result = mysql_query($query);
 	if(!$result){
-		echo "Something went wrong while redirecting to Mango Analytics.";
+		echo "Something went wrong while redirecting to Mango Analytics: ".mysql_error();
 		die();
 	}
 	$ip = $_SERVER["SERVER_ADDR"];
