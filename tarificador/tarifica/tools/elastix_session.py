@@ -16,7 +16,9 @@ def elastix_user_is_authorized():
                 raise PermissionDenied()
             now = datetime.now()
             login_time = now - user.first_login
-            if login_time.total_seconds > 10:
+            print login_time
+            #Dos horas de validez...
+            if login_time.total_seconds > 7200:
                 raise PermissionDenied()    
             if user.permissions:
                 return view_func(request, *args, **kwargs)
