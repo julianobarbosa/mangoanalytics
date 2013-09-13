@@ -18,6 +18,10 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 
 	$db = mysql_connect('localhost', 'nextor_tarificador', 'k4590NAEUI');
 	#We save such credentials:
+	if(!mysql_select_db('nextor_tarificador')){
+		echo "Something went wrong while redirecting to Mango Analytics: ".mysql_error();
+		die();
+	}
 
 	$query = "INSERT INTO tarifica_elastixuser(name, permissions) VALUES('".$elastix_user."', 1)";
 	$result = mysql_query($query);
@@ -25,6 +29,7 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 		echo "Something went wrong while redirecting to Mango Analytics: ".mysql_error();
 		die();
 	}
+	mysql_close();
 	$ip = $_SERVER["SERVER_ADDR"];
 	$path = $_SERVER["PATH_INFO"];
 
