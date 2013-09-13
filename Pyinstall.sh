@@ -36,7 +36,7 @@ touch /var/log/mangoanalytics/daily.log
 
 mkdir /opt/NEXTOR/tarificador/django-tarificador
 cp -R tarificador /opt/NEXTOR/tarificador/django-tarificador/tarificador
-cp mangoanalytics_wrapper.php /var/www/html/
+cp -u mangoanalytics_wrapper.php /var/www/html/
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py collectstatic
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/serve.py > /var/log/mangoanalytics/server.log &2> /var/log/mangoanalytics/error.log &

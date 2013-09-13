@@ -1,32 +1,5 @@
 {% extends "base.html"%}
 
-{% block navbar %}
-<li>
-    <a href="{% url 'tarifica:dashboard' %}">Home</a>
-</li>
-<li>
-    <a href="{% url 'tarifica:realtime' %}">Realtime</a>
-</li>
-<li class="active">
-    <a href="{% url 'tarifica:trunks' %}">Trunks</a>
-</li>
-<li>
-    <a href="{% url 'tarifica:users_general' %}">Users</a>
-</li>
-<li>
-    <a href="{% url 'tarifica:pinsets_general' %}">Pinsets</a>
-</li>
-<li>
-    <a href="{% url 'tarifica:cdr' %}">General CDR</a>
-</li>
-<li class="pull-right">
-    <a href="{% url 'tarifica:config' %}">My Settings</a>
-</li>
-<li class="pull-right">
-    <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
-</li>
-{% endblock %}
-
 {% block localization %}
     <a class="brand" style="margin-left: 10px; text-align:vertical;" href="{% url 'tarifica:trunks' %}">Trunks</a>
 {% endblock %}

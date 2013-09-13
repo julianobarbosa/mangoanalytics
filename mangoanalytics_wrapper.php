@@ -36,7 +36,6 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 	$path = $_SERVER["PATH_INFO"];
 
 	$loc_path = "http://".$ip.":8000".$path;
-	echo "Moving";
-	//header("Location: ".$loc_path);
+	header("Location: ".$loc_path);
 }
 ?>
