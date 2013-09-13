@@ -24,7 +24,10 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 	}
 
 	$now = new Datetime('now');
-	$query = "UPDATE tarifica_elastixuser SET name = '".mysql_escape_string($elastix_user)."', permissions = 1 WHERE id = 1";
+	var_dump($now);
+	$query = "UPDATE tarifica_elastixuser SET name = '".mysql_escape_string($elastix_user)."', ";
+	$query .= "permissions = 1, first_login = '".$now->format('Y-m-d H:i:s')."'' WHERE id = 1";
+	var_dump($query);
 	$result = mysql_query($query);
 	if(!$result){
 		echo "Something went wrong while redirecting to Mango Analytics: ".mysql_error();
@@ -35,6 +38,6 @@ if($pACL->isUserAdministratorGroup($elastix_user)){
 	$path = $_SERVER["PATH_INFO"];
 
 	$loc_path = "http://".$ip.":8000".$path;
-	header("Location: ".$loc_path);
+	//header("Location: ".$loc_path);
 }
 ?>
