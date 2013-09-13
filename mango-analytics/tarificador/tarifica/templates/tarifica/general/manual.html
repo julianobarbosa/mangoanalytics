@@ -1,0 +1,712 @@
+{% extends "base.html"%}
+{% load staticfiles %}
+
+{% block title %} User Manual {% endblock %}
+
+{% block localization %}
+    <a class="brand" style="margin-left: 10px; text-align:vertical;padding-right: 10px;" href="{% url 'tarifica:manual' %}">User Manual</a>
+{% endblock %}
+
+{% block page-title %}
+{% endblock %}
+
+{% block body %}
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+{% endblock %}
+
+{% block content%}
+
+<header class="jumbotron subhead">
+    <div class="container">
+        <h1>Mango Analytics User Guide</h1>
+        <p class="lead">Welcome to the Mango Analytics Getting Started guide, here you will find everything you need to know about Mango, and how to get around.</p>
+        <p class="lead">Dive In!</p>
+    </div>
+</header>
+
+
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="420">
+            <li class="active"><a href="#whatsinthisguide"><i class="icon-chevron-right"></i>What's in this guide?</a></li>
+            <li><a href="#beforeyougetstarted"><i class="icon-chevron-right"></i>Before you get started</a></li>
+            <li><a href="#portaloverview"><i class="icon-chevron-right"></i>Portal Overview</a></li>
+            <li><a href="#firstsetup"><i class="icon-chevron-right"></i>First Setup</a></li>
+            <li><a href="#feesexamples"><i class="icon-chevron-right"></i>Fees Examples</a></li>
+            <li><a href="#faqs"><i class="icon-chevron-right"></i>Frequently Asked Questions</a></li>
+            <li><a href="#contact"><i class="icon-chevron-right"></i>Contact Mango Analytics</a></li>
+            <li><a href="#chipin"><i class="icon-chevron-right"></i>Chip In !</a></li>
+        </ul>
+    </div>
+    <div class="span10 pull-right" style="margin-bottom:40px">
+        <section id="whatsinthisguide">
+            <div class="page-header">
+                <h1>What's in this guide?</h1>
+            </div>
+            <p>
+                The “Getting Started Guide” provides you with the following information and procedures:
+                <ul>
+                    <li>An overview of the Mango Analytics Analytic Initiative, so that you have a better understanding of what we are proposing and why.</li>
+                    <li>Basic information of how to access Mango Analytics thru your Elastix Interface, and brief understanding of user permissions.</li>
+                    <li>Understand all tables, graphs and some other things offered and how to interpret them.</li>
+                    <li>Detailed information of costs, rates and bundles setup, and why is it so important to provide all that information correctly.</li>
+                </ul>
+
+            </p>
+
+            <h3>Why Mango Analytics?</h3>
+            <p>
+                Lets start by the name. We named this awesome reporting tool “Mango Analytics” because we wanted to offer a new and fresh way to show trunk and user behavior. We want you to have accurate and real-time information in just a couple of clicks, we even want you to save on your monthly telco bill by identifying abusive users on your company (which, by the way, 8 out of 10 companies have).
+            </p>
+
+            <p>
+                We know how hard is to make and in-depth expenditure analysis,and lets be honest, you probably don't know which user is making tons of offshore calls making your telco bill grow immensely. You probably download your monthly CDR onto a spreadsheet program and it takes you forever to make a good analysis, am I right?
+            </p>
+
+            <p>
+                Mango Analytics will help you save on your phone bill in ways you didn't know existed! Just set all your trunk costs and bundles, import the CDR data and that’s it!
+            </p>
+
+            <h3>Why is it free?</h3>
+
+            <p>
+                Mango Analytics is free software, and will always be. We believe in open source projects and sharing our experience in telco, and we also acknowledge that if Mango is useful for us, surely it will be useful for you too. We want everyone to have the best possible analytic reports.
+            </p>
+
+            <p>
+                If you like Mango Analytics, and it has been helpful for your company, consider making a donation. We need your support in order to make Mango Analytics better and more powerful!
+            </p>
+        </section>
+        <section id="beforeyougetstarted">
+            <div class="page-header">
+                <h1>Before You Get Started</h1>
+            </div>
+
+            <p>
+                Mango Analytics offer in-depth trunk and user analysis per day, month and telco(s) billing periods. You will be able to know top dialed destinations, users with excessive use (or abuse), as well as user detailed reports.
+            </p>
+
+            <p>
+                We like to think that we made Mango Analytics as intuitive as possible, whenever you see a question mark like this <img src="{% static "tarifica/img/image03.png" %}"> it means that a brief explanation is waiting for you to read. Just hover your mouse  over the question mark to see the explanation.
+            </p>
+
+            <p>
+                Please gather all the information needed before starting Mango setup:
+                <ul>
+                    <li>Telcos connected to PBX and trunks</li>
+                    <li>Detailed rates of each and everyone of your Telco providers</li>
+                    <li>Detailed bundle info</li>
+                </ul>
+            </p>
+
+            <p>
+                During first set up, all the previous info will be asked to input, please be as detailed as possible on the rates and destinations.
+            </p>
+
+            <p>
+                The main page is the PBX dashboard with at a glance information of your trunks, users and destinations. You can toggle to Trunks, Users and Pinsets pages for more detailed information.
+            </p>
+
+            <p>
+                On the upper right area, the Setup button will give you access to all Trunks, Rates and Bundle setup.
+            </p>
+        </section>
+        <section id="portaloverview">
+            <div class="page-header">
+                <h1>Portal Overview</h1>
+            </div>
+            <h3>Dashboard</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1200px; height: 600px;" src="{% static "tarifica/img/dashboard.png" %}">
+                </li>
+            </ul>
+            <p>
+                Mango Analytics Dashboard page consists on at a glance information of your current and historic user & providers usage; This main page will give you quick information regarding top dialed destinations, users with the most expenditure and past 5 months expenses, letting you know who and how they’re using your telecom resources.
+            </p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Current month cost</dt>
+                <dd>The upper left table shows the current monthly cost of each of your configured trunks. This cost is the partial cost of the month. It doesn’t reflect the cost of your providers’ billing period. For more details on trunks, please click on the button called “More” located at the right of each trunk.</dd>
+                <dt>Top <abbr title="Destinations">Dest</abbr> last 7 days</dt>
+                <dd>Quick overview of top destinations. This information is gathered from your last 7 days of usage, showing your top dialed destinations. If you need more detail on the destinations, you need to set up the right rates for each trunk.</dd>
+                <dt>Top Users last 7 days</dt>
+                <dd>Quick overview of which users are the ones using (or abusing) more of your telecom resources. Very helpful at-a-glance data. For further data analysis, please go to users section.</dd>
+                <dt>Graphs</dt>
+                <dd>The lower right graph represents your current and past 5 months expenses for each trunk; You will see one vertical line for each trunk you have. This is quite helpful, you can see on a simple graph how your expenses per trunk are or have been. The graph is your gross usage per trunk. The lower left graph also reports current and past 5 months calculated based on the providers billing period.</dd>
+            </dl>
+            <h3><br>Realtime</h3>
+            <p>Very handy and simple real-time interface where you will be able to see the current outgoing calls. It refreshes itself  every 15 seconds. Here you can see who is calling, where are they calling, and how much time they have been on the phone.</p>
+            <h3><br>Trunks</h3>
+            <p>The main trunks area will give you detailed info on cost, destinations, billing periods and bundles purchased with your trunk providers.</p>
+            <p>On this section you will be able to see gross and per trunk usage and costs. The first left table and right graph offer at-a-glance costs and destination information.</p>
+            <p>Depending on how much trunks you have set up, beneath “Upper gross and per trunk area”, you will have detailed information of each trunk.</p>
+            <p><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner this two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want.</p>
+
+            <h3><br>Upper gross and per trunk area</h3>
+
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 300px;" src="{% static "tarifica/img/trunksgeneral.png" %}">
+                </li>
+            </ul>
+
+            <p><strong>Usage(upper gross and per trunk area)</strong></p>
+            <ul>
+                <li>At the upper left table, all general per trunk information will be showed; This information does not reflect your providers billing period data, it will show only current month costs.</li>
+                <dl class="dl-horizontal" style="font-size: 15px">
+                    <dt>Provider</dt>
+                    <dd>Your providers trunk name</dd>
+                    <dt>Bundles Cost</dt>
+                    <dd>Your bundle expenses</dd>
+                    <dt>Calls Cost</dt>
+                    <dd>The cost of all your calls (will not reflect calls that apply to any bundle you have)</dd>
+                    <dt>Monthly Cost</dt>
+                    <dd>The flat monthly fee your provider charges you</dd>
+                    <dt>Total Cost</dt>
+                    <dd>Sum of bundle cost, calls cost and monthly fee.</dd>
+                </dl>
+                <li>On the bottom of the table, a gross total will be shown.</li>
+            </ul>
+            <p><strong>This month´s destinations graph (upper gross and per trunk area)</strong></p>
+            <ul>
+                <li>This Pie graph shows the gross destination percentage based on call volume from all your configured trunks, it will give you a good idea of where your calls are going to.</li>
+            </ul>
+
+            <h3><br>Trunk detailed information</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 600px;" src="{% static "tarifica/img/trunks.png" %}">
+                </li>
+            </ul>
+            <p>
+                The trunk detail section will show one left panel and one right graph per trunk. Those aren’t necessarily the ones you have on your Elastix setup, but the ones you have already set up on the settings page of Mango Analytics.
+            </p>
+            <p><strong>Left Panel</strong></p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Provider Name</dt>
+                <dd>Name given to trunk when configured on Mango Analytics setup area</dd>
+                <dt>Trunk Name</dt>
+                <dd>Name given to trunk when created on your Elastix System</dd>
+                <dt>Trunk Type</dt>
+                <dd>E.g. SIP, DAHDI, H323</dd>
+                <dt>Billing interval</dt>
+                <dd>If postpaid, it will show the billing period start date</dd>
+                <dt>Payment type</dt>
+                <dd>Prepaid or postpaid.</dd>
+            </dl>
+            <p>The Average Monthly Cost gives you the current month usage (not the billing period interval), and the monthly average usage of this trunk. This average is taken from the last 6 months use.</p>
+            <p>
+                <img src="{% static "tarifica/img/ratesbundlesbutton.png" %}">This button will take you to the tariffs and bundles area for this trunk, showing detailed fees previously set, as well as all your bundles. You can edit or delete information on this part. Remember, if you modify or delete data, it is critical that you import all data again, so that all costs can be re-calculated.
+            </p>
+            <p>
+                <img src="{% static "tarifica/img/trunkanalysisbutton.png" %}">This button will take you to an in-depth analysis page of each trunk, we’ll get to that section next.
+            </p>
+
+            <h3><br>Trunk Analysis</h3>
+            <p>Here is the basic layout of the trunk analysis page</p>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/trunkdetail.png" %}">
+                </li>
+            </ul>
+            <p>As you can see you get the same information of the trunks from the general trunk page, but there’s two new graphs and a Billing table.</p>
+            <ul>
+                <li>
+                    The first graph, located at the right of the trunk information, shows you the total minutes and cost of that trunk by month, for the past 6 months.
+                </li>
+                <li>The Traffic Segmentation graph shows you the percentage of calls by destination, so you’ll get an idea of where your calls are going.</li>
+                <li>The Billing table shows you the billing period cost, calls and seconds talked of the last 6 billing periods.</li>
+            </ul>
+
+            <h3><br>Users/Pinsets</h3>
+            <p>Here is the basic layout of the users/pinsets general page</p>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/users.png" %}">
+                </li>
+            </ul>
+            <p>You get three zones here:</p>
+            <ul>
+                <li>Most expensive users/pinsets table; well you get the idea, the 5 most expensive users/pinsets on your system, the ones who have been on the phone for the most minutes.</li>
+                <li>Cost per extension/user/pinset graph; This shows you usage per user/pinset for the past 2 months.</li>
+                <li>Finally you get a table with all your extensions/pinsets registered on the Elastix system, their total seconds, calls and cost. If you want more detail per user/pinset, you can hit the Detail link at the side of every user/pinset.</li>
+            </ul>
+            <p><br><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner these two buttons are available. By default, the current month information is shown, but you can toggle to whichever date you want.</p>
+            <h3><br>Users/Pinsets Detail</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 700px;" src="{% static "tarifica/img/userdetail.png" %}">
+                </li>
+            </ul>
+            <p>As you can see, you get:</p>
+            <ul>
+                <li><strong>Extension</strong> the extension/pinset number</li>
+                <li><strong>Name</strong> the name of the user</li>
+                <li>Destinations called</li>
+                <li>A graph located at the right hand side of the extension number/pinset and the name which details expenses per destination for the past 2 months.</li>
+                <li>Second graph which details the user/pinset cost per day.</li>
+                <li>A table containing all calls from that user/pinset, the date/time of each call, as well as seconds, cost, dialed number and the provider.</li>
+            </ul>
+            <p><br><img src="{% static "tarifica/img/useranalysisbutton.png" %}">This button will take you to the usage analysis page of the user/pinset</p>
+            <h3><br>Usage Analysis of User/Pinset</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1000px; height: 800px;" src="{% static "tarifica/img/usersanalysis.png" %}">
+                </li>
+            </ul>
+            <p>On this page you get:</p>
+            <ul>
+                <li>A graph detailing monthly user/pinset cost behavior of the current year.</li>
+                <li>A graph and a table detailing the top 10 most expensive dialed numbers of the month.</li>
+                <li>A table named “Detailed Usage” showing all the calls of the user/pinset of the month.</li>
+            </ul>
+            <p>
+                <br><img src="{% static "tarifica/img/custombutton.png" %}">On the upper left corner these two buttons are available. By default, current month information is shown, but you can toggle to whichever date you want ( just “Detailed Usage” table changes ).
+            </p>
+            <h3><br>General CDR</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/generalcdr.png" %}">
+                </li>
+            </ul>
+            <p>Here you can filter by various fields the CRD data in Mango Analytics and you can download it with the filters applied.</p>
+            <h3><br>My Settings</h3>
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/mysettings.png" %}">
+                </li>
+            </ul>
+            <p>On this page you can change your settings of MAngo Analytics, which are:</p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Country</dt>
+                <dd>The country where your system is located</dd>
+                <dt>Company Name</dt>
+                <dd>Your company name</dd>
+                <dt>Contact First Name</dt>
+                <dd>Installing user first name</dd>
+                <dt>Contact Last Name</dt>
+                <dd>Installing user flast name</dd>
+                <dt>Contact Email</dt>
+                <dd>Installing user email</dd>
+                <dt>Currency Code</dt>
+                <dd>E.g. MXN, USD, GBP, ARS</dd>
+                <dt>Currency Symbol</dt>
+                <dd>The symbol of the currency selected</dd>
+            </dl>
+        </section>
+        <section id="firstsetup">
+            <div class="page-header">
+                <h1>First Setup</h1>
+            </div>
+
+            <h3>Understanding Data Setup</h3>
+
+            <p>
+                Mango analytics doesn't interact with the production CDR of your Elastix system, it only imports data. There are two types of data import.
+            </p>
+
+            <ul>
+                <li>
+                    <strong>First data import.</strong> This import happens during first set up, after all trunks, rates and bundles are already configured. If your Elastix server is brand new you can import at any time, but if you have had a Elastix system for a long time, your CDR may be huge, so we recommend you to make first import at off peak hours. This data import can last some seconds, or several hours, it all depends on how many calls are saved on your main CDR, and obviously on your power server.
+                </li>
+                <li>
+                    <strong>Daily data import.</strong> Mango analytics retrieves past day CDR at 02:00 AM everyday (local time) , the import time is static and cannot be changed. On your reports and graphs you will always see info up to one day before the present date.
+                </li>
+            </ul>
+
+            <p><strong>Rate changes</strong></p>
+
+            <p>
+                It’s normal that rates are changed by your telco provider once in awhile, to do this, you only need to change them on the rates area, there’s no need to import data again . New rates will be used only for new calls, older calls will have older rates. If you run again data import, all old calls will be assigned the new rates, so please be careful.
+            </p>
+
+            <p><strong>Trunks Edit, Delete or Modifications</strong></p>
+
+            <p>
+                You can change any information you want on your Trunks, even add new ones with their new rates, all these changes will be reflected on the CDR starting on the date you made the changes, all older information will use old Trunk info. If you run again the data import, all old calls will use updated Trunk information.
+            </p>
+            <p>
+                You can delete a Trunk on your Mango setup, all prior stats will still be available for you. PLEASE DON'T run again the data import, as this will delete all data of the previously deleted trunk.
+            </p>
+
+            <p><strong>Bundles Edit, Delete or Modifications</strong>
+
+            <p>
+                Bundles cannot be modified, only deleted. If you need to modify a bundle, you can delete it and create a new one, all new bundles are applied automatically.
+            </p>
+        </section>
+        <section>
+            <h3>Understanding Trunk Setup</h3>
+
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 1300px; height: 700px;" src="{% static "tarifica/img/setup1.png" %}">
+                </li>
+            </ul>
+            <p>Trunk setup is fairly simple, you only need to setup the basic Trunk information and save changes.</p>
+
+            <p>On the Setup area, the upper left table will show Trunks that have already been set up, the ones that haven’t been set up appear on the right of that same page on a table named “Unconfigured Trunks”.</p>
+
+            <p>To setup a trunk just click on the Trunk name you want to set up from the right pane.</p>
+            <p>You need to input basic Trunk info</p>
+
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Alias</dt>
+                <dd>This is the Friendly name for the Trunk</dd>
+                <dt>Monthly fee</dt>
+                <dd>The monthly fee of this Trunk</dd>
+                <dt>Billing start date</dt>
+                <dd>The start date of your monthly telco invoice (If your account is prepaid just input “1”)</dd>
+                <dt>Payment method</dt>
+                <dd>Whether your telco agreement is prepaid or postpaid.</dd>
+                <dt>Channels</dt>
+                <dd>How many channels you have available for this trunk. (For E1 lines you can have up to 30 channels or concurrent calls, for T1 lines, you can have up to 24 channels or concurrent calls)</dd>
+
+            </dl>
+            <p>Click save and proceed with the setup of the remaining trunks.
+                    <br><small>NOTE. The info input on this area, is for reporting issues, it does not affect in any way your Elastix configs</small>
+            </p>
+
+            <p>
+                All configured Trunks will now appear on the upper left table on the Setup Area. Please be sure that you have set up all your Trunks, on the right panel, under “unconfigured Trunks” you’ll see the Trunks that still need to be configured. If you have trunks that you don't use, you don't need to set them up, it won't affect your reporting.
+            </p>
+
+            <p><strong>Deleted Trunks</strong></p>
+            <p>
+                Its important that you know that only the Trunks that are set up on your Elastix system will be displayed on the left panel of the setup area, it you want to report trunks that were deleted before this procedure, you need to set them up again on your Elastix trunk config. Please be SURE to use the exact name as they had before, because, otherwise, Mango won't be able to track them down on your general CDR.
+            </p>
+
+            <p><strong>Trunk Types</strong></p>
+
+            <p>Your Elastix PBX system accepts several types of Voice technologies, such as</p>
+
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>PSTN E1/T1 Lines</dt>
+                <dd>Traditionally connected to your PBX with a E1/T1 PCI (e) card. It can handle up to 24 calls T1 and 30 calls on an E1.</dd>
+                <dt>SIP/H323/IAX</dt>
+                <dd>calls sent via the Internet to your local Telco or another VoIP provider. No limit on channels</dd>
+                <dt>PSTN Analog</dt>
+                <dd>Traditional connected to your PBX with a PCI (e) card. Each port is one channel only.</dd>
+            </dl>
+
+            <p>
+                When using PSTN analog lines, its recommended that you configure your analog lines per channel, not per group, that way you will be able to report each channel, as normally local telcos offer bundle packs per channel.
+            </p>
+
+            <p>
+                <strong>Example.</strong> Local telco charges you $20 monthly per line, offering say 100 minutes free for domestic calls. You need to create a bundle for each analog line. If you have your 4 analog lines on one group, Mango Analytics won't be able to assign a bundle for each line, it will be applied to all lines.
+            </p>
+
+            <p>All this information will be imported from your Elastix system.</p>
+
+        </section>
+        <section>
+            <h3>Understanding Rates Setup</h3>
+
+            <p>
+                Rates setup is the most crucial setup of all. We are going to elaborate on this area, above all the explanation you'll find helpful per country examples.
+            </p>
+
+            <p>Difference between dialed number and outgoing number:</p>
+
+
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Dialed Number</dt> 
+                <dd>What your user dials to reach a certain destination. This number can include an internal prefix only used for your Elastix users.
+                For example: When user wants to dial number 44-1234-5678 they need to dial (9) -44-1234-5678.</dd>
+                <dt>Outgoing Number</dt>
+                <dd>This is the number sent to your Telco, and it changes depending on country, access technology, provider, etc.
+                Example. Your user dials 9-44-1234-5678, and your Elastix converts this number onto 011-44-1234-5678.</dd>
+            </dl>
+
+            <p class="text-center"><strong>Mango will ID the previous call example as  011-44-1234-5678.</strong></p>
+
+            <p>So, in other words, you'll need to know all prefixes for outgoing numbers from your Elastix system in order to configure all your rates and costs.</p>
+
+            <h3>Preparing for rate setup</h3>
+
+            <p>
+                First of all, you need to gather all the information per provider for fee application, you need to know all the places where you normally call, as well as costs, prefixes, increments and connection fees.
+            </p>
+
+            <p>
+                On the Setup Area, (left panel Configured Trunks), you will see all previously configured Trunks. If you don't see the trunk you want to set up, first you'll need to configure it. 
+            </p>
+
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 250px;" src="{% static "tarifica/img/configtrunks.png" %}">
+                </li>
+            </ul>
+
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Name</dt>
+                <dd>You can click on the Trunk name in order to see detailed rates and bundle information</dd>
+                <dt>Add Base Rate</dt>
+                <dd>By clicking on it you will be redirected to the rate input area, we will cover it briefly</dd>
+                <dt><img src="{% static "tarifica/img/image05.png" %}">Trunk Edit</dt>
+                <dd>Modify Trunk information configured during Trunk Setup</dd>
+                <dt><img src="{% static "tarifica/img/image10.png" %}">Trunk Delete</dt>
+                <dd>This will delete ALL info Mango has of this Trunk. It won't appear on stats nor graphs. NOTE. This <strong>WON'T</strong> delete any data from your Elastix main CDR.</dd>
+            </dl>
+        </section>
+        <section>
+            <h3>Add Base Rates</h3>
+
+            <p>
+                This is the most time consuming process of them all. Please take your time to fully understand it, and do not rush on the tariff setup process, as one mistake can screw all the reports up.
+            </p>
+
+            <p>
+                Base rates are all the rates that your provider charges you for local, domestic, mobile and international calls. You need to setup each rate per destination. Even if rates are that same for  local and domestic, we recommend setting up both rates, that way Mango will report per destination in full detail.
+            </p>
+
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 900px; height: 600px;" src="{% static "tarifica/img/basefees.png" %}">
+                </li>
+            </ul>
+
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Destination</dt>
+                <dd>
+                    What type of destination it is, you will have the next options:
+                    <ul>
+                        <li><strong>Local Landline</strong> Select when calling a local landline in your area</li>
+                        <li><strong>Domestic Landline</strong> Select when calling to a landline inside your country</li>
+                        <li><strong>Local Mobile</strong> Select when calling a mobile in your area</li>
+                        <li><strong>Domestic Mobile</strong> Select when calling a mobile inside your country</li>
+                        <li><strong>International</strong> Select when calling a foreign country</li>
+                    </ul>
+                </dd>
+                <dt>Country</dt>
+                <dd>By default, your country will appear, please select another country for international calls. Be sure to select International as well on the “Destination” section above.</dd>
+                <dt>Call Prefix</dt>
+                <dd>The call prefix used for identifying the recipient call. Examples:
+                    <ul>
+                        <li>For the UK you would need to input 01144 (where 011 is your international prefix code)</li>
+                        <li>
+                            For Spain landlines you input 011349 (where 011 is your international prefix, 34 is the country code, and 9 is the Spain´s landline code)
+                        </li>
+                        <li>If you only have one rate for all international calls, and your intl prefix is 011, just setup 011 as call prefix.</li>
+                        <li>For more prefix examples go to section Fees Examples.
+                            <br><small>NOTE. normally retail telcos don't require any prefix for local calls, 
+                            you can leave it empty for local calls. All calls that don't have any prefix match will use the default fee.</small></li>
+                    </ul>
+                </dd>
+                <dt>Minute Fee</dt>
+                <dd>The rate per minute that your telco charges you. You need to enter it using the currency you setup on My settings page.</dd>
+                <dt>Billing interval</dt>
+                <dd>Depending on your country and telco, you may be charged per minute, per second or per 6 seconds increment, or whatever funky increment your telco offers. Please be sure to input the seconds your increment has for this destination. Examples:
+                    <ul>
+                        <li>If your Telco charges per minute, input 60.</li>
+                        <li>If your telco charges by the second, input 1.</li>
+                        <li>If your Telco charges you by 30 seconds increment, input 30.</li>
+                    </ul>
+                </dd>
+                <dt>Call Connection Fee</dt>
+                <dd>Per call fee that your telco charges you. This charge is only made once per call. If your Telco charges you a flat rate per call and not per minute, leave “Minute Fee” in “0”, and input here the connection fee only.</dd>
+                <dt>Notes</dt>
+                <dd>Brief note about this destination.</dd>
+            </dl>
+            <p>
+                On the left side of the rate input area, you will see all tariffs already set, you can edit them or delete them. When you are done setting up your rates, please click “Return to Setup”
+            </p>
+
+            <ul class="thumbnails">
+                <li>
+                    <img alt="" style="width: 400px; height: 300px;" src="{% static "tarifica/img/baseratesconfigured.png" %}">
+                </li>
+            </ul>
+
+            <p>
+                Now you'll be able to see all of your configured rates.
+            </p>
+
+            <p><strong>Same destination on several trunks, but different prefixes for each</strong></p>
+            <p>
+                On some PBX scenarios, you use 2 or more trunks for the same destinations, for failover or channel balance, or god knows why, and some telcos will give you global rates and some others very detailed rates.
+            </p>
+            <p>
+                For Example. Your users call to Spain quite a lot, calls are balanced among 2 providers,
+                <table class="table table-condensed table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Prefix</th>
+                            <th>Provider #1</th>
+                            <th>Provider #2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Spain All</td>
+                            <td>34</td>
+                            <td>$0.01</td>
+                            <td>$0.20</td>
+                        </tr>
+                        <tr>
+                            <td>Spain Proper</td>
+                            <td>349</td>
+                            <td>$0.1</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Spain Mobile</td>
+                            <td>346</td>
+                            <td>$0.15</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Spain Madrid</td>
+                            <td>3491</td>
+                            <td>$0.0015</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+            <p>
+                On the table above you can see a typical example of tariff detailing, Provider #2 gives you a flat rate for all Spain, meanwhile Provider #1 offers detailed rate for different types of destinations.
+            </p>
+            <p>
+                Even though Provider #2 offers only 1 flat rate, it's recommended that you input the detailed tariffs for provider #2 Trunk. We know its more work for you, but it will greatly improve Mango´s reporting and analysis data.
+            </p>
+        </section>
+        <section>
+            <h3>Understanding Bundles Setup</h3>
+            <p>
+                To configure your bundles, go to the setup page on Mango Analytics. On the section called “Configured Rates” you can see all your base rates per provider. Select the provider to which you want to add a bundle, then, for every destination configured on that trunk you’ll have the option to add a bundle, to do so, just click on “Assign Bundles”. Please provide :
+            </p>
+            <dl class="dl-horizontal" style="font-size: 15px">
+                <dt>Name</dt>
+                <dd>The name of the bundle.</dd>
+                <dt>Billing Mode</dt>
+                <dd>If the bundle has free minutes, select Minute, if it has free calls select Call.</dd>
+                <dt>Cost</dt>
+                <dd>The monthly cost of the bundle.</dd>
+                <dt>Amount of <abbr title="minutes">min</abbr>/calls</dt>
+                <dd>The amount of free calls/minutes.</dd>
+                <dt>Start Date</dt>
+                <dd>Date when the provider will start applying this bundle.</dd>
+                <dt>End Date</dt>
+                <dd>The bundles, by default, have a lifespan of 2 years, but if you know it doesn’t last that long, you can fix the end date.</dd>
+                <dt>Priority</dt>
+                <dd>If you have multiple bundles for a destination, you can specify the order in which you want them applied.</dd>
+            </dl>
+            <p>
+                When you’ve finished filling in all the information, press “Save Bundle”, and repeat, if necessary, for every destination.
+            </p>
+        </section>
+        <section>
+            <h3>Understanding Data Importing</h3>
+            <p>
+                When you have finished configuring all your trunks, base rates and bundles, you can import all of your data from the Elastix system. There’s two ways to do this:
+            </p>
+            <ul>
+                <li><strong>Thru the “Start Test Run” button</strong> If you start thru here, pressing this button will lead you to a page where you can select from which date you want to import, select it or use the default date from 6 months before, then click “Start”. This will lead you to a informative page where it tells you the percentage of calls processed as well as the estimated time to finish processing calls. When Mango finishes processing your calls, go to the results page, there you will be informed about how many calls were/weren’t processed. If they weren’t processed, it’s because the calls didn’t have a base rate on which to calculate costs; You can go back to the setup to add more base rates or you can click “Run and Save” to save the data without the non processed calls, and continue to the dashboard.</li>
+                <li><strong>Thru the “Import Data” button</strong> which is the same as above without the option to review processed calls.</li>
+            </ul>
+            <p>And that’s it!</p>
+        </section>
+        <section id="feesexamples">
+            <div class="page-header">
+                <h1>Fees Examples</h1>
+            </div>
+            <p>Prefixes setup examples for some countries</p>
+            <h3><br>México <small>(almost all carriers use same prefix setup)</small></h3>
+            <p>If you are on the MGM area codes (Mexico City, Monterrey and Guadalajara) 8 digits are used for local calls, all other areas will use 7 digits. The total amount of digits needs to be 10 (including area code + phone number)
+            </p>
+            <p><strong>Example:</strong></p>
+            <ul>
+                <li><strong>Local call:</strong> 8 digits will be sent to telco and they charge per call, not per minute, so on this scenario no prefix needs to be set, cost per minute needs to be in $0.00, and cost per call shall be in “Connection Fee”</li>
+                <li><strong>Domestic Call:</strong> “01” prefix is the national domestic prefix. All carriers charge per minute, just add additional info as required.</li>
+                <li><strong>Local Mobile call:</strong> Mexico uses 044 prefix for local mobile calls, just input “044” on the prefix area, All carriers charge per minute, just add additional info as required.</li>
+                <li><strong>Domestic Mobile call:</strong> Mexico uses 045 prefix for domestic mobile calls, just input “045” on the prefix area, All carriers charge per minute, just add additional info as required.</li>
+                <li><strong>International call:</strong> “00” is the prefix used for calls outside Mexico. If you have a flat international rate, just create an international fee with “00” as prefix and a fixed cost.</li>
+            </ul>
+            <p><br>In all probability, you’ll have different rates for international destinations; For example, you have a rate for calls to USA/CAN which is different for calls to Europe or South America. It’s very important that you configure all call rates were you normally call to.Please be as detailed as possible.</p>
+            <p>Remember, the more detailed your rates are, the more detail your Mango Reports will have
+                <br><small>NOTE: If you use 2 providers for the same destinations, it’s very important that both trunks have the same destinations setup.</small></p>
+
+            <h3><br>Dominican Republic  <small>(almost all carriers use same prefix setup)</small></h3>
+            <p>DR uses only 3 main country area codes which are 809, 849 & 829.
+            </p>
+            <p><strong>Example:</strong></p>
+            <ul>
+                <li><strong>Local call:</strong> If your number is a 849, you need to set “849” as your prefix, and destination as local, the billing interval is most likely “1” (as all DR telcos charge per second), just add additional info as required.</li>
+                <li><strong>Domestic Call:</strong> You need to make two more tariff rates, one for 809 and another one for 829, set destination as “National”, just add additional info as required.</li>
+                <li><strong>Local Mobile call:</strong> DR requires prefix “1” for local and domestic mobile calls. You need to generate 3 tariff rates, one for each area code (809,849 & 829). On the destination part select “local cell phone” or “national cell phone”, whichever fits you best, just add additional info as required.</li>
+                <li><strong>Domestic Mobile call:</strong> Same example as above.</li>
+                <li><strong>International call:</strong> “011” is the prefix used for calls outside DR. If you have a flat international rate, just create an international tariff with “011” as prefix and a fixed cost.</li>
+                <li>Calls to USA, CAN, Puerto Rico, are dialed with “1” prefix. Set “Destination”as International and set up additional info as required.</li>
+            </ul>
+            <p><br>In all probability, you’ll have different rates for international destinations; For example, you have a rate for calls to USA/CAN which is different for calls to Europe or South America. It’s very important that you configure all call rates were you normally call to.Please be as detailed as possible.</p>
+
+            <h3><br>USA and CANADA</h3>
+            <p>USA/CAN uses many country area codes</p>
+            <ul>
+                <li><strong>Local call:</strong> If your number is in area code 212, you need to set “212” as your prefix, and destination as local, the billing interval is most likely “6” or “60” (as all telcos charge per 6 or 60 second increments), just setup additional info as required.</li>
+                <li><strong>Domestic Call:</strong> You need to set up at least one rate with prefix “1” for USACAN domestic calls. but its very important to add extra rates for Puerto Rico, Dominican Republic, Alaska, etc (for all countries that share prefix “1”), just add additional info as required.</li>
+                <li><strong>Local Mobile call:</strong> No need to setup as same rates and prefixes are used for fixed and mobile lines.</li>
+                <li><strong>Domestic Mobile call:</strong>No need to setup as same rates and prefixes are used for fixed and mobile lines.</li>
+                <li><strong>International call:</strong> “011” is the prefix used for calls outside USACAN. If you have a flat international rate, just create an international fee with “011” as prefix and a fixed cost.</li>
+            </ul>
+            <p><br>In all probability, you’ll have different rates for international destinations; For example, you have a rate for calls to México which is different for calls to Europe, South America or even Central America . It’s very important that you configure all call rates were you normally call to. Please be as detailed as possible.</p>
+        </section>
+        <section id="faqs">
+            <div class="page-header">
+                <h1>Frequently Asked Questions</h1>
+            </div>
+            <h4><strong>Is mango Really Free?</strong></h4>
+            <p>Si señor! Mango is free and will always be for Asterisk servers. Further Mango applications will be released for other paid PBX platforms where we will indeed charge for it, and that way, Mango analytics for Asterisk will always be updated and free for use under GPL V3!</p>
+            <h4><strong>Is it available for 1.X Versions of Elastix?</strong></h4>
+            <p>We are developing the repositories for older Elastix versions, they will be free as well, but installation will be manual. Please check our website once in awhile for updated info.</p>
+            <h4><strong>Does Mango reports inbound toll and toll free calls?</strong></h4>
+            <p>Not at the moment, but its considered for version 2</p>
+            <h4><strong>Can I download nice looking report with graphs and everything?</strong></h4>
+            <p>Not at the moment, but its considered for version 2</p>
+            <h4><strong>I have tons of rates and its impossible to upload them manually, can I import them onto Mango?</strong></h4>
+            <p>Not at the moment, but its considered for version 2</p>
+            <h4><strong>I need a report per users group, is that possible?</strong></h4>
+            <p>V1 doesn't have the functionality, but its already considered on V2. You will be able to group extensions and generate detailed reports and analytics.</p>
+            <h4><strong>Realtime doesn't report inbound and internal calls, why?</strong></h4>
+            <p>Realtime report is intended for visualizing outgoing calls that cost you, we don't want to report info that really doesn't affect your pocket. For version 2, inbound toll free calls are going to be visualizable on the report.</p>
+            <h4><strong>Why, if Mango is developed in Mexico and offered on Elastix (Ecuatorian distro), isn't it available in spanish?</strong></h4>
+            <p>That's a very good question. We need Mango to be available for everybody, and english is the base language of all open source projects, V2 will we on more languages.</p>
+            <h4><strong>Can I use Mango on my legacy PBX?</strong></h4>
+            <p>No, and we don't plan to support legacy PBX's</p>
+            <h4><strong>Outgoing transferred calls are reported partially</strong></h4>
+            <p>When a call is made by extension 1 (lasted 40 secs), and then transferred to extension 2 (lasted 3 mins), only the call from extension 1 will be billed, in other words, call indeed lasted 3 mins and 40 seconds, but only 40 seconds will be reported and billed by Mango Analytics. This is mainly because Asterisk CDR treats transferred calls as internal calls, and Mango has no way of knowing that it was a transfer. We are working on this issue and hope it will be solved on V2.</p>
+        </section>
+        <section id="contact">
+            <div class="page-header">
+                <h1>Contact Mango Analytics</h1>
+            </div>
+            <h4>Mango Analytics page:</h4>
+            <h4><small><a href="http://www.mangoanalytics.org">http://www.mangoanalytics.org</a></h4>
+            <h4>Customer Service Department:</h4>
+            <h4><small><a href="mailto:info@nextortelecom.com">info@nextortelecom.com</a></small><br><br><br></h4>
+        </section>
+        <section id="chipin">
+            <div class="page-header">
+                <h1>Chip In!</h1>
+            </div>
+            <h3>If you like Mango Analytics, and it has been helpful for your company, consider making a donation. We need your support in order to make Mango Analytics better and more powerful!</h3>
+            <container class="text-center">
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="BFP5VK7VQFZ7L">
+                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1">
+            </form>
+        </container>
+        </section>
+    </div>
+  </div>
+</div>
+<img src="http://addon-24.mangoanalytics.org/manual.png">
+
+{% endblock %}

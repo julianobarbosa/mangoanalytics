@@ -1,0 +1,99 @@
+{% extends "setup.html" %}
+{% load staticfiles %}
+
+{% block title %}Update bundle {{ bundle.name }}{% endblock %}
+
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Updating bundle {{ bundle.name }} of destination {{ bundle.destination_group.destination_name.name }}
+    </a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span6 well well-small">
+
+        <form action="{% url 'tarifica:bundles_update' bundle.id %}" method="post" class="form-horizontal">{% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="control-group">
+                {{ form.name.errors }}
+                <label class="control-label" for="id_name">Name
+                    <a class="help" href="#" data-toggle="popover" data-original-title="Bundle Name" data-content="Custom name for this bundle.">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </label>
+                <div class="controls">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.tariff_mode.errors }}
+                <label class="control-label" for="id_tariff_mode">Billing Mode
+                    <a class="help" href="#" data-toggle="popover" data-original-title="Billing Mode" data-content="Is this bundle billed per sesion or per minute?">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </label>
+                <div class="controls">
+                    {{ form.tariff_mode }}
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.cost.errors }}
+                <label class="control-label" for="id_cost">Cost
+                    <a class="help" href="#" data-toggle="popover" data-original-title="Monthly Cost" data-content="The monthly fee charged by your provider for this bundle.">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </label>
+                <div class="controls">
+                    <div class="input-prepend input-append">
+                        <span class="add-on">{{ user_info.currency_symbol }}</span>
+                        {{ form.cost }}
+                        <span class="add-on">{{ user_info.currency_code }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.amount.errors }}
+                <label class="control-label" for="id_amount">Amount of minutes/sessions
+                    <a class="help" href="#" data-toggle="popover" data-original-title="Minutes/Sessions" data-content="How many minutes/sessions are included in this bundle?">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </label>
+                <div class="controls">
+                    {{ form.amount }}
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form.priority.errors }}
+                <label class="control-label" for="id_priority">Apply Priority
+                    <a class="help" href="#" data-toggle="popover" data-original-title="Bundle Apply Priority" data-content="If you have several bundles that include a common destination, which should be applied first? If priority is set to 1, it will be the first one to be applied.">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </label>
+                <div class="controls">
+                    {{ form.priority }}
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Bundle</button>
+                <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <div class="span6">
+        <p class="well well-small">
+            Start Date: <strong>{{ bundle.start_date | date:"d/m/Y" }}</strong>
+        </p>
+        <p class="well well-small">
+            End Date: <strong>{{ bundle.end_date | date:"d/m/Y" }}</strong>
+        </p>
+    </div>
+</div>
+{% endblock %}
