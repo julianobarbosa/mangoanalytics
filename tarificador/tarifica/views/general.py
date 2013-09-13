@@ -238,8 +238,6 @@ def realtime(request, action="show"):
 
 
 def dashboard(request):
-    referer = request.META.get('HTTP_REFERER', '')
-    print "referer",referer
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)

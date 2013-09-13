@@ -12,12 +12,12 @@ def elastix_user_is_authorized():
             try:
                 user = ElastixUser.objects.get(id = 1)
             except Exception as e:
-                raise PermissionDenied(referer)
+                raise PermissionDenied()
             print user.name
             print user.permissions
             if user.permissions:
                 return view_func(request, *args, **kwargs)
-            raise PermissionDenied(referer)
+            raise PermissionDenied()
         elastix_user_set.__doc__ = view_func.__doc__
         elastix_user_set.__dict__ = view_func.__dict__        
         return elastix_user_set
