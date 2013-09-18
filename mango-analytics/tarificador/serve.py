@@ -43,6 +43,11 @@ Finally, since the CherryPy WSGI server doesn't offer a log
 facility, we add a straightforward WSGI middleware to do so, based
 on the CherryPy built-in logger. Obviously any other log middleware
 can be used instead.
+
+-------------------------------------------------------------------------------
+18-Sep-2013: 
+Modified this file to run as a well-behaved UNIX daemon, using python-daemon.
+Alfonso Lizárraga Santos
 """
 
 # Python stdlib imports
@@ -57,6 +62,9 @@ from cherrypy import _cplogging, _cperror
 from django.conf import settings
 from django.core.handlers.wsgi import WSGIHandler
 from django.http import HttpResponseServerError
+
+#Imports for deamonization, with python-daemon
+from daemon import runner
 
 class Server(object):
     def __init__(self):
@@ -94,7 +102,7 @@ class DjangoAppPlugin(plugins.SimplePlugin):
 
         # Well this isn't quite as clean as I'd like so
         # feel free to suggest something more appropriate
-        from tarificador.settings import *
+        from tarificador.settings import STATIC_ROOT, STATIC_URL
         app_settings = locals().copy()
         del app_settings['self']
         settings.configure(**app_settings)
@@ -161,6 +169,18 @@ class HTTPLogger(_cplogging.LogManager):
         except:
             self.error(traceback=True)
 
+class App():
+    def __init__(self):
+        self.stdin_path = '/dev/null'
+        self.stdout_path = '/var/log/mangoanalytics/server.log'
+        self.stderr_path = '/var/log/mangoanalytics/error.log'
+        # self.stdout_path = '/dev/tty'
+        # self.stderr_path = '/dev/tty'
+        self.pidfile_path =  '/var/run/mangoanalytics.pid'
+        self.pidfile_timeout = 5
+    def run(self):
+        Server().run()
 
-if __name__ == '__main__':
-    Server().run()
+app = App()
+daemon_runner = runner.DaemonRunner(app)
+daemon_runner.do_action()
