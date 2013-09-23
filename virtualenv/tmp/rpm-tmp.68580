@@ -1,0 +1,44 @@
+#!/bin/sh
+
+RPM_SOURCE_DIR="/home/rpm/virtualenv/SOURCES"
+RPM_BUILD_DIR="/home/rpm/virtualenv/BUILD"
+RPM_OPT_FLAGS="-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic"
+RPM_ARCH="x86_64"
+RPM_OS="linux"
+export RPM_SOURCE_DIR RPM_BUILD_DIR RPM_OPT_FLAGS RPM_ARCH RPM_OS
+RPM_DOC_DIR="/usr/share/doc"
+export RPM_DOC_DIR
+RPM_PACKAGE_NAME="elastix-python2.7-virtualenv"
+RPM_PACKAGE_VERSION="1.10.1"
+RPM_PACKAGE_RELEASE="1"
+export RPM_PACKAGE_NAME RPM_PACKAGE_VERSION RPM_PACKAGE_RELEASE
+RPM_BUILD_ROOT="/home/rpm/elastix-python2.7-virtualenv-1.10.1-root"
+export RPM_BUILD_ROOT
+
+PKG_CONFIG_PATH="/usr/lib64/pkgconfig:/usr/share/pkgconfig"
+export PKG_CONFIG_PATH
+
+set -x
+umask 022
+cd /home/rpm/virtualenv/BUILD
+
+cd 'virtualenv-1.10.1'
+LANG=C
+export LANG
+unset DISPLAY
+
+rm -rf $RPM_BUILD_ROOT
+mkdir -p /home/rpm/elastix-python2.7-virtualenv-1.10.1-root/usr/local/lib/python2.7/site-packages/ 
+python2.7 setup.py install --prefix=$RPM_BUILD_ROOT/usr/local
+
+
+    
+    
+    
+    /usr/lib/rpm/redhat/brp-compress 
+    /usr/lib/rpm/redhat/brp-strip /usr/bin/strip 
+    /usr/lib/rpm/redhat/brp-strip-static-archive /usr/bin/strip 
+    /usr/lib/rpm/redhat/brp-strip-comment-note /usr/bin/strip /usr/bin/objdump 
+    /usr/lib/rpm/brp-python-bytecompile 
+    /usr/lib/rpm/redhat/brp-java-repack-jars 
+

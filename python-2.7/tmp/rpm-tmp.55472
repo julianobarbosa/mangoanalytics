@@ -1,0 +1,44 @@
+#!/bin/sh
+
+RPM_SOURCE_DIR="/home/rpm/python-2.7/SOURCES"
+RPM_BUILD_DIR="/home/rpm/python-2.7/BUILD"
+RPM_OPT_FLAGS="-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic"
+RPM_ARCH="x86_64"
+RPM_OS="linux"
+export RPM_SOURCE_DIR RPM_BUILD_DIR RPM_OPT_FLAGS RPM_ARCH RPM_OS
+RPM_DOC_DIR="/usr/share/doc"
+export RPM_DOC_DIR
+RPM_PACKAGE_NAME="elastix-python2.7.5-alternate"
+RPM_PACKAGE_VERSION="2.7.5"
+RPM_PACKAGE_RELEASE="1"
+export RPM_PACKAGE_NAME RPM_PACKAGE_VERSION RPM_PACKAGE_RELEASE
+RPM_BUILD_ROOT="/home/rpm/elastix-python2.7.5-alternate-2.7.5-root"
+export RPM_BUILD_ROOT
+
+PKG_CONFIG_PATH="/usr/lib64/pkgconfig:/usr/share/pkgconfig"
+export PKG_CONFIG_PATH
+
+set -x
+umask 022
+cd /home/rpm/python-2.7/BUILD
+
+LANG=C
+export LANG
+unset DISPLAY
+
+
+cd '/home/rpm/python-2.7/BUILD'
+rm -rf 'Python2.7.5'
+/usr/bin/bzip2 -dc '/home/rpm/python-2.7/SOURCES/Python-2.7.5.tar.bz2' | tar -xvvf -
+STATUS=$?
+if [ $STATUS -ne 0 ]; then
+  exit $STATUS
+fi
+cd 'Python2.7.5'
+[ `/usr/bin/id -u` = '0' ] && /bin/chown -Rhf root .
+[ `/usr/bin/id -u` = '0' ] && /bin/chgrp -Rhf root .
+/bin/chmod -Rf a+rX,u+w,g-w,o-w .
+
+
+
+exit 0
