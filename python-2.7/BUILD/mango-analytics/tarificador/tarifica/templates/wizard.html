@@ -1,0 +1,19 @@
+{% extends "base.html"%}
+
+{% block localization %}
+    <a class="brand" style="margin-left: 10px; text-align:vertical;" href="{% url 'tarifica:setup' %}">Wizard</a>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(function() {
+        $('a.help').each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
+        });
+    });
+    </script>
+{% endblock %}

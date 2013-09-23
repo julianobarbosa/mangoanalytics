@@ -1,0 +1,166 @@
+{% extends "setup.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static "tarifica/css/datepicker.css" %}" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block title %}Add bundles to {{ destination_group }}{% endblock %}
+
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical;padding-left: 10px;" href="#">
+        Adding bundles to provider {{ destination_group.provider.name }} for destination {{ destination_group.destination_name.name }}
+    </a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="well well-small">
+    <form action="{% url 'tarifica:bundles_create' destination_group.id %}" method="post" class="form-horizontal">{% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="control-group">
+            {{ form.name.errors }}
+            <label class="control-label" for="id_name">Name
+                <a class="help" href="#" data-toggle="popover" data-original-title="Bundle Name" data-content="Custom name for this bundle.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.tariff_mode.errors }}
+            <label class="control-label" for="id_tariff_mode">Billing Mode
+                <a class="help" href="#" data-toggle="popover" data-original-title="Billing Mode" data-content="Is this bundle billed per sesion or per minute?">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.tariff_mode }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.cost.errors }}
+            <label class="control-label" for="id_cost">Cost
+                <a class="help" href="#" data-toggle="popover" data-original-title="Monthly Cost" data-content="The monthly fee charged by your provider for this bundle.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                <div class="input-prepend input-append">
+                    <span class="add-on">{{ user_info.currency_symbol }}</span>
+                    {{ form.cost }}
+                    <span class="add-on">{{ user_info.currency_code }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.amount.errors }}
+            <label class="control-label" for="id_amount">Amount of minutes/calls
+                <a class="help" href="#" data-toggle="popover" data-original-title="Minutes/Calls" data-content="How many minutes/calls are included in this bundle?">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.amount }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.start_date.errors }}
+            <label class="control-label" for="id_start_date">Start Date
+                <a class="help" href="#" data-toggle="popover" data-original-title="Start Date" data-content="<p>Date when your provider begins applying this bundle.</p><p>The start and end date are fixed because they must be the same day that when your provider's period ends.</p>">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                <div class="input-append date" id="start_date" data-date="{{ start_date | date:"Y-m-d"}}" data-date-format="yyyy-mm-dd" data-date-minviewmode="months" data-date-viewmode="months">
+                    {{ form.start_date }}
+                    <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.end_date.errors }}
+            <label class="control-label" for="id_end_date">End Date
+                <a class="help" href="#" data-toggle="popover" data-original-title="End Date" data-content="By default, each bundle has a life span of 2 years. If you know, however, that this bundle lasts only for a fixed amount of months, select an end date here.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                <div class="input-append date" id="end_date" data-date="{{ end_date | date:"Y-m-d"}}" data-date-format="yyyy-mm-dd" data-date-minviewmode="months" data-date-viewmode="months">
+                    {{ form.end_date }}
+                    <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.priority.errors }}
+            <label class="control-label" for="id_priority">Apply Priority
+                <a class="help" href="#" data-toggle="popover" data-original-title="Bundle Apply Priority" data-content="If you have several bundles that include a common destination, which should be applied first? If priority is set to 1, it will be the first one to be applied.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.priority }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Bundle</button>
+            <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "tarifica/js/datepicker/bootstrap-datepicker.js" %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        var provider_period = {{ destination_group.provider.period_end }}
+        console.log("Provider end: "+provider_period)
+
+        $('div#start_date').datepicker({
+            format: 'yyyy-mm-dd',
+            viewMode: 'months',
+            minViewMode: 'months',
+            autoclose: true,
+        }).on('changeDate', function(e){
+            current_date = e.date;
+            console.log(current_date);
+            current_date.setDate(provider_period);
+            console.log(current_date);
+            $('div#start_date').datepicker('setValue', current_date);
+        });
+
+        $('div#end_date').datepicker({
+            format: 'yyyy-mm-dd',
+            viewMode: 'months',
+            minViewMode: 'months',
+            autoclose: true,
+        }).on('changeDate', function(e){
+            current_date = e.date;
+            console.log(current_date);
+            current_date.setDate(provider_period);
+            console.log(current_date);
+            $('div#end_date').datepicker('setValue', current_date);
+        });
+
+        $('a.help').each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
+        });
+    });
+    </script>
+{% endblock %}

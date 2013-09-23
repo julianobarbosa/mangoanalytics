@@ -6,8 +6,10 @@ License: GPL
 Group: Applications/System
 Source0: distribute-0.6.49.tar.gz
 BuildRoot: /home/rpm/%{name}-%{version}-root
-BuildArch: x86_64
+BuildArch: i386
 Autoreq: 0
+Prereq: elastix-python2.7.5-alternate-2.7.5-1
+Requires: elastix-python2.7.5-alternate-2.7.5-1
 
 %description
 Easy Install is a python module (easy_install) bundled with setuptools that lets you automatically download, build, install, and manage Python packages.

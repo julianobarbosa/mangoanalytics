@@ -5,8 +5,8 @@ Release: 1
 License: GPL
 Group: Applications/System
 Source0: Python-2.7.5.tar.bz2
-BuildRoot: /home/rpm/%{name}-%{version}-root
-BuildArch: x86_64
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildArch: i386
 BuildRequires: zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel mysql-devel
 Autoreq: 0
 

@@ -1,0 +1,98 @@
+{% extends "setup.html" %}
+
+{% block title %}Add provider information{% endblock %}
+
+{% block page-title %}
+<li>
+    <a href="#" style="padding-left: 0px;padding-right: 0px; font-size: 16px;">
+        <span class="fui-arrow-right"></span>
+    </a>
+</li>
+<li>
+    <a style="margin-left: 10px; text-align:vertical; padding-left: 10px;" href="#">
+        Adding information for provider {{provider.asterisk_name}}
+    </a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="well well-small">
+    <form action="{% url 'tarifica:providers_create' provider.asterisk_id %}" method="post" class="form-horizontal">{% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="control-group">
+            {{ form.name.errors }}
+            <label class="control-label" for="id_name">Alias
+                <a class="help" href="#" data-toggle="popover" data-original-title="Trunk Alias" data-content="Custom, friendly name for this trunk. Only used within Mango Analytics.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.monthly_cost.errors }}
+            <label class="control-label" for="id_monthly_cost">Monthly Fee
+                <a class="help" href="#" data-toggle="popover" data-original-title="Monthly Fee" data-content="Monthly fee charged by this trunk's providers.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.monthly_cost }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.period_end.errors }}
+            <label class="control-label" for="id_period_end">Billing start date
+                <a class="help" href="#" data-toggle="popover" data-original-title="Billing start date" data-content="Day of the month when billing starts.">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.period_end }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.payment_type.errors }}
+            <label class="control-label" for="id_payment_type">Payment Method
+                <a class="help" href="#" data-toggle="popover" data-original-title="Payment Method" data-content="Do your provider charges you when your billing period ends, or do you need to pay beforehand in order to use their service?">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.payment_type }}
+            </div>
+        </div>
+        <div class="control-group">
+            {{ form.channels.errors }}
+            <label class="control-label" for="id_channels">Channels
+                <a class="help" href="#" data-toggle="popover" data-original-title="Channel Number" data-content="How many calls can you make at the same time?">
+                    <i class="icon-question-sign"></i>
+                </a>
+            </label>
+            <div class="controls">
+                {{ form.channels }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a class="btn" href="{% url 'tarifica:setup' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(function() {
+        $('a.help').each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
+        });
+    });
+    </script>
+{% endblock %}

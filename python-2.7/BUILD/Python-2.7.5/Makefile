@@ -28,10 +28,10 @@ MODLIBS=        $(LOCALMODLIBS) $(BASEMODLIBS)
 VERSION=	2.7
 srcdir=		.
 
-abs_srcdir=	/home/rpm/python-2.7/BUILD/Python-2.7.5
-abs_builddir=	/home/rpm/python-2.7/BUILD/Python-2.7.5
-build=		x86_64-unknown-linux-gnu
-host=		x86_64-unknown-linux-gnu
+abs_srcdir=	/root/python-2.7/BUILD/Python-2.7.5
+abs_builddir=	/root/python-2.7/BUILD/Python-2.7.5
+build=		i686-pc-linux-gnu
+host=		i686-pc-linux-gnu
 
 CC=		gcc -pthread
 CXX=		g++ -pthread
@@ -195,7 +195,7 @@ BUILDPYTHON=	python$(BUILDEXE)
 
 PYTHON_FOR_BUILD=./$(BUILDPYTHON) -E
 _PYTHON_HOST_PLATFORM=
-HOST_GNU_TYPE=  x86_64-unknown-linux-gnu
+HOST_GNU_TYPE=  i686-pc-linux-gnu
 
 # The task to run while instrument when building the profile-opt target
 PROFILE_TASK=	$(srcdir)/Tools/pybench/pybench.py -n 2 --with-gc --with-syscheck

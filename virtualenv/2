@@ -1,0 +1,40 @@
+%define modname distribute
+Summary: Distribute 0.6.49
+Name: %{modname}
+Version: 0.6.49
+Release: 1
+License: GPLv2
+Group: Applications/System
+Source0: distribute-0.6.49.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildArch: noarch
+Autoreq: 0 
+
+%description
+Distribute 0.6.49, a fork of easy_install for python
+
+%prep
+
+%setup -n distribute-0.6.49
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p /usr/local/lib/python2.7/site-packages/
+python2.7 setup.py install --prefix=$RPM_BUILD_ROOT/usr/local
+
+%pre
+
+%post
+
+%preun
+
+%files
+/usr/*
+
+%changelog
+* Mon Sep 9 2013 Alfonso Lizarraga <alfonso@nextortelecom.com>
+−
+Initial version.
