@@ -123,7 +123,7 @@ def realtime(request, action="show"):
         for line in lines[1:]:
             data_row = {}
             #Now, having how long are the columns, we can slice each line by each column width
-            #And after stripping it of ending newlines, we have our data!
+            #And after stripping it of ending newlines, we have our data, baby!
             start = 0
             end = 0
             for c in columns:
@@ -155,12 +155,13 @@ def realtime(request, action="show"):
                 continue
 
             try:
-                provider = Provider.objects.get(asterisk_name = call_data[1])
+                provider = Provider.objects.get(asterisk_channel_id = call_data[1])
+                provider_name = provider.name
             except Exception as e: 
                 "Could not find provider with name",call_data[1]
-                continue
+                provider_name = call_data[1]
 
-            d.update( { 'provider': provider } )
+            d.update( { 'provider_name': provider_name } )
             d.update( { 'dialed_number': call_data[2].split(',')[0] })
             if d['dialed_number'] not in extension_list:
                 #Now we're sure its an outgoing call...
