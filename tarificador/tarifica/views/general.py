@@ -158,11 +158,16 @@ def realtime(request, action="show"):
                 provider = Provider.objects.get(asterisk_channel_id = call_data[1])
                 provider_name = provider.name
             except Exception as e: 
-                "Could not find provider with name",call_data[1]
+                print "Could not find provider with name",call_data[1]
                 provider_name = call_data[1]
 
+            try:
+                dialed_number = call_data[2].split(',')[0]
+            except Exception as e:
+                print "Could not obtain dialed number information from data column."
+                dialed_number = 'Unknown'
             d.update( { 'provider_name': provider_name } )
-            d.update( { 'dialed_number': call_data[2].split(',')[0] })
+            d.update( { 'dialed_number': dialed_number })
             if d['dialed_number'] not in extension_list:
                 #Now we're sure its an outgoing call...
                 #Calculating start time
