@@ -9,8 +9,8 @@ Source0: mango-analytics.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 BuildRequires: mysql-devel
-Requires: mysql-devel, elastix-python2.7-virtualenv-1.10.1-1
-PreReq: mysql-devel, elastix-python2.7-virtualenv-1.10.1-1
+#Requires: mysql-devel, elastix-python2.7-virtualenv >= 1.10.1-1
+#PreReq: mysql-devel, elastix-python2.7-virtualenv >= 1.10.1-1
 Autoreq: 0 
 
 %description
@@ -38,7 +38,7 @@ cp -u mangoanalytics_wrapper.php $RPM_BUILD_ROOT/var/www/html/
 
 /usr/local/bin/virtualenv /opt/NEXTOR/tarificador
 
-yum -y install mysql-devel
+#yum -y install mysql-devel
 
 mkdir -p /var/log/mangoanalytics
 

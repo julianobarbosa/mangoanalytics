@@ -9,8 +9,8 @@ Source0: virtualenv-1.10.1.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: i386
 Autoreq: 0 
-PreReq: elastix-python2.7-setuptools-1.1.6-1
-Requires: elastix-python2.7-setuptools-1.1.6-1
+PreReq: elastix-python2.7-setuptools >= 1.1.6-1
+Requires: elastix-python2.7-setuptools >= 1.1.6-1
 
 %description
 Virtualenv, a tool to create isolated Python environments.

@@ -8,8 +8,8 @@ Source0: setuptools-1.1.6.tar.gz
 BuildRoot: /home/rpm/%{name}-%{version}-root
 BuildArch: i386
 Autoreq: 0
-Prereq: elastix-python2.7.5-alternate-2.7.5-1
-Requires: elastix-python2.7.5-alternate-2.7.5-1
+Prereq: elastix-python2.7.5-alternate >= 2.7.5-1
+Requires: elastix-python2.7.5-alternate >= 2.7.5-1
 
 %description
 Easy Install is a python module (easy_install) bundled with setuptools that lets you automatically download, build, install, and manage Python packages.
