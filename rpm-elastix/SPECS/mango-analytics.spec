@@ -9,8 +9,7 @@ Source0: mango-analytics.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 BuildRequires: mysql-devel
-#Requires: mysql-devel, elastix-python2.7-virtualenv >= 1.10.1-1
-#PreReq: mysql-devel, elastix-python2.7-virtualenv >= 1.10.1-1
+PreReq: mysql-devel, elastix-python2.7-virtualenv >= 1.10.1-1
 Autoreq: 0 
 
 %description
@@ -20,10 +19,9 @@ Mango Analytics, a cost reporting tool for Elastix PBX, by NEXTOR Telecom Mexico
 
 %setup -n mango-analytics
 
-%clean
+%install
 rm -rf $RPM_BUILD_ROOT
 
-%install
 mkdir -p $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador
 cp -R tarificador $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/tarificador
 cp -R tools $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/tools
@@ -37,8 +35,6 @@ cp -u mangoanalytics_wrapper.php $RPM_BUILD_ROOT/var/www/html/
 %post
 
 /usr/local/bin/virtualenv /opt/NEXTOR/tarificador
-
-#yum -y install mysql-devel
 
 mkdir -p /var/log/mangoanalytics
 
@@ -76,10 +72,10 @@ if [ $1 -eq 0 ] ; then # Validation for desinstall this rpm
 fi
 
 %files
+%defattr(-, asterisk, asterisk)
 /opt/*
-/var/www/html/*
+%{_localstatedir}/www/html/*
 
 %changelog
 * Mon Sep 9 2013 Alfonso Lizarraga <alfonso@nextortelecom.com>
-−
-Initial version.
+− Initial version.

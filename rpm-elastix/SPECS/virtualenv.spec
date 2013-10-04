@@ -10,29 +10,28 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: i386
 Autoreq: 0 
 PreReq: elastix-python2.7-setuptools >= 1.1.6-1
-Requires: elastix-python2.7-setuptools >= 1.1.6-1
 
 %description
 Virtualenv, a tool to create isolated Python environments.
 
 %prep
 
+%setup -n virtualenv-1.10.1
+
 %clean
 
 %install
-easy_install-2.7 --install-dir=$RPM_BUILD_ROOT/usr/local/bin virtualenv
-#rm -rf /usr/local/lib/python2.7/site-packages/site.pyc
-#rm -rf /usr/local/lib/python2.7/site-packages/site.pyo
-#rm -rf $RPM_BUILD_ROOT/usr/local/lib/python2.7/site-packages/site.pyc
+mkdir -p /root/rpm/tmp/elastix-python2.7-virtualenv-1.10.1-root/usr/local/lib/python2.7/site-packages
+#easy_install-2.7 --prefix=$RPM_BUILD_ROOT/usr/local virtualenv==1.10.1
+
+python2.7 setup.py install --prefix=$RPM_BUILD_ROOT/usr/local
 
 %pre
-rm -rf /usr/local/lib/python2.7/site-packages/site.pyc
-rm -rf /usr/local/lib/python2.7/site-packages/site.pyo
 
 %post
 
 %files
-/usr/local/bin/*
+/usr/local/*
 
 %changelog
 * Mon Sep 9 2013 Alfonso Lizarraga <alfonso@nextortelecom.com>

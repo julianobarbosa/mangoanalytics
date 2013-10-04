@@ -1,0 +1,3 @@
+%packager Alfonso Lizarraga
+%_topdir /root/rpm-elastix
+%_tmppath /root/rpm-elastix/tmp
