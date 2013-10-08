@@ -18,7 +18,7 @@
 
 {% block body %}
 <body>
-{% endblock %}
+    {% block navbar %}
     <div class="navbar">
         <div class="navbar-inner" style="padding-top: 5px; padding-bottom: 5px;">
             <a href="http://www.mangoanalytics.org/" target="_blank">
@@ -51,15 +51,18 @@
                     <a href="{% url 'tarifica:setup' %}"><i class="icon-cog"></i> Setup</a>
                 </li>
                 <li>
-                    <a href="{% url 'tarifica:config' %}">My Settings</a>
+                    <a href="{% url 'tarifica:config' %}"><i class="icon-user"></i> My Settings</a>
                 </li>
                 <li>
-                    <a href="#myModal" role="button" data-toggle="modal"><i class="icon-question-sign"></i> About</a>
+                    <a href="{% url 'tarifica:logout' %}"><i class="icon-off"></i> Logout</a>
                 </li>
             </ul>
         </div>
     </div>
+    {% endblock %}
+
     {% block content %}{% endblock %}
+    {% block footer %}
     <footer class="well well-small">
         <div class="text-center">
             <ul class="inline">
@@ -136,6 +139,9 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
         </div>
     </div>
+    {% endblock %}
+
+{% endblock %}
 
 {% block js %}
     <script src="{% static "tarifica/js/jquery.min.js" %}"></script>

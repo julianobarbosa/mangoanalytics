@@ -11,9 +11,9 @@ from django.db import connection, transaction
 from dateutil.relativedelta import *
 import json
 from csv import *
-from tarifica.tools.elastix_session import elastix_user_is_authorized
+from django.contrib.auth.decorators import login_required
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def general(request, period_id="thisMonth"):
     # Required for getting this month's, last month's and custom start and end dates
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -100,7 +100,7 @@ def general(request, period_id="thisMonth"):
         'end_date': end_date - datetime.timedelta(days=1),
     })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def getTrunk(request, provider_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
@@ -334,6 +334,7 @@ def getProviderBundleCost(provider, start_date, end_date):
                 print "Bundle", bundle.name, "not in range."
     return {'total_bundle_cost': bundle_costs}
 
+@login_required(login_url='tarifica:login')
 def downloadTrunkCDR(request, provider_id, start_date, end_date):
     file_path = '/tmp/'
     file_name = 'trunk_cdr.csv'

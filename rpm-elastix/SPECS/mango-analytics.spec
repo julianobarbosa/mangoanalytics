@@ -9,7 +9,7 @@ Source0: mango-analytics.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 BuildRequires: mysql-devel
-PreReq: mysql-devel, elastix-python2.7-virtualenv >= 1.10.1-1
+PreReq: mysql-devel, elastix-python2.7-setuptools >= 1.1.6-1
 Autoreq: 0 
 
 %description
@@ -27,6 +27,8 @@ cp -R tarificador $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/tari
 cp -R tools $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/tools
 cp README.md $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/
 
+mkdir -p $RPM_BUILD_ROOT/var/log/mangoanalytics
+
 mkdir -p $RPM_BUILD_ROOT/var/www/html
 cp -u mangoanalytics_wrapper.php $RPM_BUILD_ROOT/var/www/html/
 
@@ -34,9 +36,9 @@ cp -u mangoanalytics_wrapper.php $RPM_BUILD_ROOT/var/www/html/
 
 %post
 
-/usr/local/bin/virtualenv /opt/NEXTOR/tarificador
+/usr/local/bin/easy_install-2.7 /opt/NEXTOR/tarificador/django-tarificador/tools/virtualenv-1.10.1.tar.gz 
 
-mkdir -p /var/log/mangoanalytics
+/usr/local/bin/virtualenv /opt/NEXTOR/tarificador
 
 elastix-menumerge /opt/NEXTOR/tarificador/django-tarificador/tarificador/elastix/elastix_menu.xml
 
@@ -73,8 +75,10 @@ fi
 
 %files
 %defattr(-, asterisk, asterisk)
-/opt/*
+/opt/NEXTOR
+%defattr(-, root, root)
 %{_localstatedir}/www/html/*
+%{_localstatedir}/log/mangoanalytics
 
 %changelog
 * Mon Sep 9 2013 Alfonso Lizarraga <alfonso@nextortelecom.com>

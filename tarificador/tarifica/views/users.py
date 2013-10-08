@@ -12,9 +12,9 @@ from django.db import connection, transaction
 import json
 from tarifica.django_countries.fields import Country
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
-from tarifica.tools.elastix_session import elastix_user_is_authorized
+from django.contrib.auth.decorators import login_required
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def generalUsers(request, period_id="thisMonth"):
     #First, we make sure we have up-to-date info of asterisk's extensions
     a_mysql_m = AsteriskMySQLManager()
@@ -137,7 +137,7 @@ def generalUsers(request, period_id="thisMonth"):
         'end_date': end_date - datetime.timedelta(days=1),
     })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def detailUsers(request, extension_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
@@ -215,7 +215,7 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
               'end_date': end_date - datetime.timedelta(days=1),
               })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def analyticsUsers(request, extension_id, period_id="thisMonth"):
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
@@ -364,7 +364,6 @@ def getBarChartInfoByExt(cursor):
     data.append(aux)
     return data
 
-
 def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
     start_date = start_date + datetime.timedelta(days=1)
     today = datetime.datetime.now()
@@ -394,7 +393,6 @@ def getBarChartInfoByExtForMonth(cursor, extension_id, start_date, end_date):
         sdate += timedelta
     data.append(aux)
     return data
-
 
 def getBarChartInfoByLocale(cursor, extension_id):
     today = datetime.datetime.now()
@@ -483,8 +481,6 @@ def getBarChartInfoByLocale(cursor, extension_id):
     data[1] = aux
     return data
 
-
-
 def getBarChartInfoByExtForYear(cursor, extension_id):
     today = datetime.datetime.now()
     start_date = datetime.datetime(day = 1, month=1, year=today.year).replace(tzinfo=utc)
@@ -513,9 +509,6 @@ def getBarChartInfoByExtForYear(cursor, extension_id):
         sDate = datetime.datetime(day=1, month=fDate.month+1, year=fDate.year).replace(tzinfo=utc)
     data.append(aux)
     return data
-
-
-
 
 def getMonthName(n):
     if n == 1:

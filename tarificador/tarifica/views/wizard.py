@@ -11,9 +11,8 @@ from tarifica import forms
 from dateutil.relativedelta import *
 from math import ceil
 from envelopes import Envelope
-from tarifica.tools.elastix_session import elastix_user_is_authorized
 
-@elastix_user_is_authorized()
+#@elastix_user_is_authorized()
 def start(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
     user_info.first_time_user = False
@@ -84,7 +83,7 @@ def start(request, page=1):
         user_info = get_object_or_404(UserInformation, id = 1)
         return render(request, 'tarifica/wizard/start'+str(page)+'.html', {})
 
-@elastix_user_is_authorized()
+#@elastix_user_is_authorized()
 def testrun(request, default="none"):
     import subprocess
     import os
@@ -131,7 +130,7 @@ def testrun(request, default="none"):
         'default': default
     })
 
-@elastix_user_is_authorized()
+#@elastix_user_is_authorized()
 def checkTestRunStatus(request, action="show"):
     user_info = get_object_or_404(UserInformation, id = 1)
     # By default, we import 6 month's worth of data, so we can check how many
@@ -177,7 +176,7 @@ def checkTestRunStatus(request, action="show"):
         'minutesRemaining': minutesRemaining
     })
 
-@elastix_user_is_authorized()
+#@elastix_user_is_authorized()
 def results(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     user_info.is_first_import_finished = False
@@ -191,7 +190,7 @@ def results(request):
         'percentage_not_processed': (import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)) * 100
     })
 
-@elastix_user_is_authorized()
+#@elastix_user_is_authorized()
 def run(request, default="none"):
     import subprocess
     import os
@@ -237,7 +236,7 @@ def run(request, default="none"):
         'default': default
     })
 
-@elastix_user_is_authorized()
+#@elastix_user_is_authorized()
 def checkProcessingStatus(request, action="show"):
     user_info = get_object_or_404(UserInformation, id = 1)
     # By default, we import 6 month's worth of data, so we can check how many

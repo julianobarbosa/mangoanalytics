@@ -7,9 +7,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from tarifica import forms
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from tarifica.models import *
-from tarifica.tools.elastix_session import elastix_user_is_authorized
+from django.contrib.auth.decorators import login_required
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def createDestinationGroup(request, provider_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
@@ -47,7 +47,7 @@ def createDestinationGroup(request, provider_id):
         'user_info': user_info
     })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def updateDestinationGroup(request, destination_group_id):
     user_info = get_object_or_404(UserInformation, id = 1)
     destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
@@ -82,11 +82,11 @@ def updateDestinationGroup(request, destination_group_id):
         'user_info': user_info
     })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def getDestinationGroup(request, provider_id):
     pass
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def deleteDestinationGroup(request, destination_group_id):
     destination_group = get_object_or_404(DestinationGroup, id = destination_group_id)
     destination_group.delete()

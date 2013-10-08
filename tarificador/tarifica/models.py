@@ -174,8 +174,3 @@ class CDRFilter(models.Model):
     field_name = models.CharField(max_length=50)
     value = models.CharField(max_length=255)
     extras = models.CharField(max_length=10, null=True, blank=True)
-
-class ElastixUser(models.Model):
-    name = models.CharField(max_length=255)
-    permissions = models.BooleanField()
-    first_login = models.DateTimeField()

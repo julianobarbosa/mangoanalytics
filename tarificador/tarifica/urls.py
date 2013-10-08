@@ -1,7 +1,11 @@
 from django.conf.urls import patterns, url
-from tarifica.views import bundles, destinationGroups, general, providers, trunks, users, wizard, config, pinsets, cdr
+from tarifica.views import bundles, destinationGroups, general, providers, \
+   trunks, users, wizard, config, pinsets, cdr, security
 
 urlpatterns = patterns('',
+   url(r'^login$', security.login_view, name='login'),
+   url(r'^logout$', security.logout_view, name='logout'),
+
    url(r'^$', general.setup, name = 'setup'),
    url(r'^setup$', general.setup, name = 'setup'),
    url(r'^privacy$', general.privacy, name = 'privacy'),

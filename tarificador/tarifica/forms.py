@@ -240,3 +240,9 @@ class filterCDR(forms.Form):
 class getImportStartDate(forms.Form):
     start_date = forms.DateField(label = 'Fecha inicial', error_messages={
                 'required':u'Please select a valid date.'})
+
+class loginForm(forms.Form):
+    username = forms.CharField(max_length = 50, error_messages={
+                    'required':u'Please input an username.'})
+    password = forms.CharField(max_length = 100, error_messages={
+                    'required':u'Please input your password.'})

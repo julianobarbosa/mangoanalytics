@@ -13,9 +13,9 @@ from tarifica.django_countries.fields import Country
 import json
 from tarifica.views.trunks import getBillingPeriods, dictfetchall
 from dateutil.relativedelta import *
-from tarifica.tools.elastix_session import elastix_user_is_authorized
+from django.contrib.auth.decorators import login_required
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
     #Import users, trunks and pinsets at first use...
@@ -79,7 +79,7 @@ def setup(request, provider_id = 0):
         'user_info' : user_info,
     })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def realtime(request, action="show"):
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
@@ -237,7 +237,7 @@ def realtime(request, action="show"):
         'graphData' : json.dumps(graphData),
     })
 
-
+@login_required(login_url='tarifica:login')
 def dashboard(request):
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.now()
@@ -352,11 +352,11 @@ def dashboard(request):
         'ticks': json.dumps(ticks),
     })
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def privacy(request):
     return render(request, 'tarifica/general/privacy.html', {})
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def manual(request):
     return render(request, 'tarifica/general/manual.html', {})
 

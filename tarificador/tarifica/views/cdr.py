@@ -10,9 +10,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from csv import *
 from math import ceil
 from django.db.models import Sum
-from tarifica.tools.elastix_session import elastix_user_is_authorized
+from django.contrib.auth.decorators import login_required
 
-@elastix_user_is_authorized()
+@login_required(login_url='tarifica:login')
 def general(request, page=1):
     user_info = get_object_or_404(UserInformation, id = 1)
     action = "show"
