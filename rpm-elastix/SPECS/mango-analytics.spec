@@ -30,7 +30,7 @@ cp README.md $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/
 mkdir -p $RPM_BUILD_ROOT/var/log/mangoanalytics
 
 mkdir -p $RPM_BUILD_ROOT/var/www/html
-cp -u mangoanalytics_wrapper.php $RPM_BUILD_ROOT/var/www/html/
+#cp -u mangoanalytics_wrapper.php $RPM_BUILD_ROOT/var/www/html/
 
 %pre
 
@@ -57,19 +57,30 @@ source /opt/NEXTOR/tarificador/bin/activate && pip install /opt/NEXTOR/tarificad
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tools/initialMySQLSetup.py
 
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
+
+#Importing elastix user
+source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tools/importElastixUsers.py
+
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py collectstatic --noinput
 
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk
 
 echo "source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk
 " >> /etc/rc.d/rc.local
+
 echo "0 2 * * * source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/dailyImporter.py > /var/log/mangoanalytics/daily.log" >> /var/spool/cron/root
 
 echo "Install finished."
 
 %preun
 if [ $1 -eq 0 ] ; then # Validation for desinstall this rpm
-	echo "Delete example menus"
+	echo "Deleting files from /opt..."
+	rm -rf /opt/NEXTOR
+	echo "Deleting init for mangos' server"
+    sed -i".backup" '/\/opt\/NEXTOR\/tarificador\/bin\/activate/d' /etc/rc.d/rc.local
+    echo "Deleting cron job for mango..."
+    sed -i".backup" '/\/opt\/NEXTOR\/tarificador\/bin\/activate/d' /var/spool/cron/root
+    echo "Deleting mangoanalytics elastix menus..."
 	elastix-menuremove "%{modname}"
 fi
 
@@ -77,7 +88,6 @@ fi
 %defattr(-, asterisk, asterisk)
 /opt/NEXTOR
 %defattr(-, root, root)
-%{_localstatedir}/www/html/*
 %{_localstatedir}/log/mangoanalytics
 
 %changelog

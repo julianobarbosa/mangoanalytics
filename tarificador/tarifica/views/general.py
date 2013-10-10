@@ -182,7 +182,11 @@ def realtime(request, action="show"):
                     print "Error while calculating start time",e
                     continue
                 #Obtaining destination group
-                destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
+                try:
+                    destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')
+                except Exception as e:
+                    print "Either we have no provider defined or something odd happened."
+                    destination_groups = []
                 #print destination_groups
                 destination_group_name = 'Unknown'
                 destination_country_name = 'Unknown'

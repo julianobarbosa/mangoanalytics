@@ -32,7 +32,7 @@ try:
 	cursor.execute('SELECT * FROM acl_user')
 	data = cursor.fetchall()
 	for d in data:
-		now = date.now()
+		now = datetime.now()
 		try:
 			insertSQL = "insert into nextor_tarificador.auth_user(\
 				password, is_superuser, username, \
