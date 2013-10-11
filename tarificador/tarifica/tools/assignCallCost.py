@@ -343,7 +343,7 @@ class CallCostAssigner:
 			return {
 				'callInfo':
 				(
-					call['dst'], 
+					dialedNoForProvider, 
 					call['src'], 
 					call['accountcode'], 
 					call['billsec'], 

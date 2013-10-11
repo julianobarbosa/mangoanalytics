@@ -17,10 +17,15 @@
 		        <div class="control-group text-center">
 					<img class="center-text" src="{% static "tarifica/img/mango_image_logo.png" %}" alt="Hi!" style="height:40px; margin-right:5px;"/>
 					<img class="center-text" src="{% static "tarifica/img/mango_text_logo.png" %}" alt="Hi!" />
+					{% if not messages %}
+					<div class="alert alert-info" style="margin-top:20px; margin-bottom:0px;">
+					    Welcome to Mango Analytics! You can login below with your Elastix web username and password.
+					</div>
+					{% endif %}
 					{% if messages %}
 					<div class="alert alert-danger" style="margin-top:20px; margin-bottom:0px;">
 					    {% for message in messages %}
-					    <p>{{ message }}</p>
+					    {{ message }}
 					    {% endfor %}
 					</div>
 					{% endif %}
