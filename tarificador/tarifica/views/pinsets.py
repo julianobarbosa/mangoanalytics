@@ -12,21 +12,13 @@ import json
 from tarifica.django_countries.fields import Country
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from django.contrib.auth.decorators import login_required
+from tarifica.views.general import syncAsteriskInformation
 
 @login_required(login_url='tarifica:login')
 def generalPinsets(request, period_id="thisMonth"):
-    a_mysql_m = AsteriskMySQLManager()
-    pinsets = a_mysql_m.getPinsetInformation()
-    # Revisamos que haya pinsets configurados
-    if len(pinsets) > 0:
-        for u in pinsets:
-            try:
-                e = Pinset.objects.get(pinset_number = u)
-            except Pinset.DoesNotExist:
-                e = Pinset(pinset_number = u)
-                e.save()
-            except Pinset.MultipleObjectsReturned:
-                print "pinsets repetidos!"
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     cursor = connection.cursor()
     today = datetime.datetime.now()
@@ -136,6 +128,9 @@ def generalPinsets(request, period_id="thisMonth"):
 
 @login_required(login_url='tarifica:login')
 def detailPinsets(request, pinset_id, period_id="thisMonth"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     Pin = get_object_or_404(Pinset, id = pinset_id)
     cursor = connection.cursor()
@@ -212,6 +207,9 @@ def detailPinsets(request, pinset_id, period_id="thisMonth"):
 
 @login_required(login_url='tarifica:login')
 def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     Pin = get_object_or_404(Pinset, id = pinset_id)
     cursor = connection.cursor()

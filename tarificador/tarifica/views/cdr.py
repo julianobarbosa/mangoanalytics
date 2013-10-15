@@ -11,14 +11,20 @@ from csv import *
 from math import ceil
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+from tarifica.views.general import syncAsteriskInformation
 
 @login_required(login_url='tarifica:login')
 def general(request, page=1):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+    
     user_info = get_object_or_404(UserInformation, id = 1)
     action = "show"
     calls = []
     limit = 100
-    page = int(page) - 1    
+    page = int(page)
+    if page != 0:
+        page = page - 1    
     # Query:
     exclude_kwargs = {}
     filter_kwargs = {}

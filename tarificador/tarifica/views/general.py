@@ -11,58 +11,15 @@ from tarifica import forms
 from django.db import connection, transaction
 from tarifica.django_countries.fields import Country
 import json
-from tarifica.views.trunks import getBillingPeriods, dictfetchall
+from tarifica.views.trunks import getBillingPeriods
 from dateutil.relativedelta import *
 from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='tarifica:login')
 def setup(request, provider_id = 0):
     user_info = get_object_or_404(UserInformation, id = 1)
-    #Import users, trunks and pinsets at first use...
-    a_mysql_m = AsteriskMySQLManager()
-    users = a_mysql_m.getUserInformation()
-    for u in users:
-        if u['extension']:
-            try:
-                e = Extension.objects.get(extension_number = u['extension'])
-            except Extension.DoesNotExist:
-                e = Extension(
-                    name = u['name'],
-                    extension_number = u['extension'],
-                    )
-                e.save()
-            except Extension.MultipleObjectsReturned:
-                print "extensiones repetidas!"
-    pinsets = a_mysql_m.getPinsetInformation()
-    # Revisamos que haya pinsets configurados
-    if len(pinsets) > 0:
-        for u in pinsets:
-            try:
-                e = Pinset.objects.get(pinset_number = u)
-            except Pinset.DoesNotExist:
-                e = Pinset(pinset_number = u)
-                e.save()
-            except Pinset.MultipleObjectsReturned:
-                print "pinsets repetidos!"
-    trunks = a_mysql_m.getTrunkInformation()
-    for x in trunks:
-        print x
-        if x['trunkid']:
-            try:
-                e = Provider.objects.get(asterisk_id = x['trunkid'])
-            except Provider.DoesNotExist:
-                if x['name'] == '': x['name'] = 'Unnamed Trunk' #AQUI ESTA LO QUE SE LE AGREGA A LOS QUE NO TIENEN NOMBREE!!!!!!!!!!!
-                p = Provider(
-                    asterisk_id = x['trunkid'],
-                    asterisk_name = x['name'],
-                    name = x['name'],
-                    provider_tech = x['tech'],
-                    asterisk_channel_id = x['channelid'],
-                    is_configured = False
-                    )
-                p.save()
-            except Provider.MultipleObjectsReturned:
-                print "troncales repetidas!"
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
 
     if user_info.first_time_user:
         return HttpResponseRedirect('/wizard/start') # Redirect after POST
@@ -81,6 +38,9 @@ def setup(request, provider_id = 0):
 
 @login_required(login_url='tarifica:login')
 def realtime(request, action="show"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     import subprocess, re
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.today()
@@ -243,6 +203,9 @@ def realtime(request, action="show"):
 
 @login_required(login_url='tarifica:login')
 def dashboard(request):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)
@@ -364,7 +327,52 @@ def privacy(request):
 def manual(request):
     return render(request, 'tarifica/general/manual.html', {})
 
+def syncAsteriskInformation():
+    a_mysql_m = AsteriskMySQLManager()
+    users = a_mysql_m.getUserInformation()
+    for u in users:
+        if u['extension']:
+            try:
+                e = Extension.objects.get(extension_number = u['extension'])
+            except Extension.DoesNotExist:
+                e = Extension(
+                    name = u['name'],
+                    extension_number = u['extension'],
+                    )
+                e.save()
+            except Extension.MultipleObjectsReturned:
+                print "extensiones repetidas!"
+    pinsets = a_mysql_m.getPinsetInformation()
+    # Revisamos que haya pinsets configurados
+    if len(pinsets) > 0:
+        for u in pinsets:
+            try:
+                e = Pinset.objects.get(pinset_number = u)
+            except Pinset.DoesNotExist:
+                e = Pinset(pinset_number = u)
+                e.save()
+            except Pinset.MultipleObjectsReturned:
+                print "pinsets repetidos!"
+    trunks = a_mysql_m.getTrunkInformation()
+    for x in trunks:
+        if x['trunkid']:
+            try:
+                e = Provider.objects.get(asterisk_id = x['trunkid'])
+            except Provider.DoesNotExist:
+                if x['name'] == '': x['name'] = 'Unnamed Trunk' #AQUI ESTA LO QUE SE LE AGREGA A LOS QUE NO TIENEN NOMBREE!!!!!!!!!!!
+                p = Provider(
+                    asterisk_id = x['trunkid'],
+                    asterisk_name = x['name'],
+                    name = x['name'],
+                    provider_tech = x['tech'],
+                    asterisk_channel_id = x['channelid'],
+                    is_configured = False
+                    )
+                p.save()
+            except Provider.MultipleObjectsReturned:
+                print "troncales repetidas!"
 
+    print "Information synced with asterisk database."
 
 def dictfetchall(cursor):
     desc = cursor.description

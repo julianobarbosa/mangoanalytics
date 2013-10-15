@@ -13,24 +13,13 @@ import json
 from tarifica.django_countries.fields import Country
 from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from django.contrib.auth.decorators import login_required
+from tarifica.views.general import syncAsteriskInformation
 
 @login_required(login_url='tarifica:login')
 def generalUsers(request, period_id="thisMonth"):
-    #First, we make sure we have up-to-date info of asterisk's extensions
-    a_mysql_m = AsteriskMySQLManager()
-    users = a_mysql_m.getUserInformation()
-    for u in users:
-        if u['name']:
-            try:
-                e = Extension.objects.get(extension_number = u['extension'])
-            except Extension.DoesNotExist:
-                e = Extension(
-                    name = u['name'],
-                    extension_number = u['extension'],
-                    )
-                e.save()
-            except Extension.MultipleObjectsReturned:
-                print "extensiones repetidas!"
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+    
     user_info = get_object_or_404(UserInformation, id = 1)
     cursor = connection.cursor()
     today = datetime.datetime.now()
@@ -139,6 +128,9 @@ def generalUsers(request, period_id="thisMonth"):
 
 @login_required(login_url='tarifica:login')
 def detailUsers(request, extension_id, period_id="thisMonth"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
     cursor = connection.cursor()
@@ -217,6 +209,9 @@ def detailUsers(request, extension_id, period_id="thisMonth"):
 
 @login_required(login_url='tarifica:login')
 def analyticsUsers(request, extension_id, period_id="thisMonth"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     Ext = get_object_or_404(Extension, id = extension_id)
     cursor = connection.cursor()

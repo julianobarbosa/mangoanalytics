@@ -2,6 +2,7 @@
 
 from __future__ import division
 import datetime
+from tarifica.tools.asteriskMySQLManager import AsteriskMySQLManager
 from django.utils.timezone import utc
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseServerError
@@ -15,6 +16,9 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='tarifica:login')
 def general(request, period_id="thisMonth"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     # Required for getting this month's, last month's and custom start and end dates
     user_info = get_object_or_404(UserInformation, id = 1)
     today = datetime.datetime.now()
@@ -102,6 +106,9 @@ def general(request, period_id="thisMonth"):
 
 @login_required(login_url='tarifica:login')
 def getTrunk(request, provider_id, period_id="thisMonth"):
+    #Syncing extensions, pinsets and trunks
+    syncAsteriskInformation()
+
     user_info = get_object_or_404(UserInformation, id = 1)
     provider = get_object_or_404(Provider, id = provider_id)
 
@@ -388,3 +395,50 @@ def dictfetchall(cursor):
         dict(zip([col[0] for col in desc], row))
         for row in cursor.fetchall()
     ]
+
+def syncAsteriskInformation():
+    a_mysql_m = AsteriskMySQLManager()
+    users = a_mysql_m.getUserInformation()
+    for u in users:
+        if u['extension']:
+            try:
+                e = Extension.objects.get(extension_number = u['extension'])
+            except Extension.DoesNotExist:
+                e = Extension(
+                    name = u['name'],
+                    extension_number = u['extension'],
+                    )
+                e.save()
+            except Extension.MultipleObjectsReturned:
+                print "extensiones repetidas!"
+    pinsets = a_mysql_m.getPinsetInformation()
+    # Revisamos que haya pinsets configurados
+    if len(pinsets) > 0:
+        for u in pinsets:
+            try:
+                e = Pinset.objects.get(pinset_number = u)
+            except Pinset.DoesNotExist:
+                e = Pinset(pinset_number = u)
+                e.save()
+            except Pinset.MultipleObjectsReturned:
+                print "pinsets repetidos!"
+    trunks = a_mysql_m.getTrunkInformation()
+    for x in trunks:
+        if x['trunkid']:
+            try:
+                e = Provider.objects.get(asterisk_id = x['trunkid'])
+            except Provider.DoesNotExist:
+                if x['name'] == '': x['name'] = 'Unnamed Trunk' #AQUI ESTA LO QUE SE LE AGREGA A LOS QUE NO TIENEN NOMBREE!!!!!!!!!!!
+                p = Provider(
+                    asterisk_id = x['trunkid'],
+                    asterisk_name = x['name'],
+                    name = x['name'],
+                    provider_tech = x['tech'],
+                    asterisk_channel_id = x['channelid'],
+                    is_configured = False
+                    )
+                p.save()
+            except Provider.MultipleObjectsReturned:
+                print "troncales repetidas!"
+
+    print "Information synced with asterisk database."
