@@ -1,0 +1,10 @@
+
+<p>hola</p>
+
+
+<form action=" {% url 'accounts:log'%}" method="post">
+{% csrf_token %}
+	<input type="text" name="username" id="username" />
+	<input type="password" name="password" id="password" />
+	<input type="submit" value="login" />
+</form>

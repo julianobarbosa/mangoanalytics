@@ -1,0 +1,90 @@
+[
+  {
+    "model": "tarifica.TariffMode",
+    "pk": 1,
+    "fields": {
+      "name": "Minute"
+    }
+  },
+  {
+    "model": "tarifica.TariffMode",
+    "pk": 2,
+    "fields": {
+      "name": "Call"
+    }
+  },
+  {
+    "model": "tarifica.PaymentType",
+    "pk": 1,
+    "fields": {
+      "name": "Postpaid"
+    }
+  },
+  {
+    "model": "tarifica.PaymentType",
+    "pk": 2,
+    "fields": {
+      "name": "Prepaid"
+    }
+  },
+  {
+    "model": "tarifica.DestinationName",
+    "pk": 1,
+    "fields": {
+      "name": "Local Landline"
+    }
+  },
+  {
+    "model": "tarifica.DestinationName",
+    "pk": 2,
+    "fields": {
+      "name": "Domestic Landline"
+    }
+  },
+  {
+    "model": "tarifica.DestinationName",
+    "pk": 3,
+    "fields": {
+      "name": "International"
+    }
+  },
+  {
+    "model": "tarifica.DestinationName",
+    "pk": 4,
+    "fields": {
+      "name": "Local Mobile"
+    }
+  },
+  {
+    "model": "tarifica.DestinationName",
+    "pk": 5,
+    "fields": {
+      "name": "Domestic Mobile"
+    } 
+  },
+  {
+    "model": "tarifica.DestinationName",
+    "pk": 6,
+    "fields": {
+      "name": "Default Tariff"
+    } 
+  },
+  {
+    "model": "tarifica.UserInformation",
+    "pk": 1,
+    "fields": {
+      "first_time_user": true,
+      "is_first_import_finished":  false,
+      "trunks_configured":  false,
+      "base_tariffs_configured":  false,
+      "bundles_configured":  false,
+      "country": "US",
+      "currency_code": "USD",
+      "currency_symbol": "$",
+      "contact_first_name": "Name",
+      "contact_last_name": "Last Name",
+      "notification_email": "me@example.com",
+      "bussiness_name": "My Company"
+    }
+  }
+]
