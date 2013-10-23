@@ -97,3 +97,18 @@
     </div>
 </div>
 {% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        $('a.help').each(function(){
+            $(this).popover({
+                html: true,
+                trigger: 'hover'
+            });
+        });
+    });
+    </script>
+{% endblock %}
