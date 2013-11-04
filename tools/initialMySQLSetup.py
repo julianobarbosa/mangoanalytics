@@ -22,12 +22,15 @@ dbPass = 'k4590NAEUI'
 db = _mysql.connect(host='localhost',user='root',
 	passwd=rootPass)
 
+# We won't drop the db before in case this is not a fresh install and a user
+# has data previously saved.
+
 # 3 - Drop database:
-dropDBSQL = "DROP DATABASE "+dbName
-try:
-	db.query(dropDBSQL)
-except Exception, e:
-	print "Drop database failed with message:", e
+#dropDBSQL = "DROP DATABASE "+dbName
+#try:
+#	db.query(dropDBSQL)
+#except Exception, e:
+#	print "Drop database failed with message:", e
 
 # 4 - Create database:
 createDBSQL = "CREATE DATABASE "+dbName

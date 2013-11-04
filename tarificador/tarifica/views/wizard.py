@@ -184,10 +184,15 @@ def results(request):
 
     import_results = ImportResults.objects.order_by('-id')[0]
     unconfigured_calls = UnconfiguredCall.objects.all()[:100]
+    total_calls = import_results.calls_not_saved + import_results.calls_saved
+    if total_calls > 0:
+        percentage_not_processed = import_results.calls_not_saved / total_calls
+    else:
+        percentage_not_processed = 1
     return render(request, 'tarifica/wizard/results.html', {
         'import_results': import_results,
         'unconfigured_calls': unconfigured_calls,
-        'percentage_not_processed': (import_results.calls_not_saved / (import_results.calls_not_saved + import_results.calls_saved)) * 100
+        'percentage_not_processed': percentage_not_processed * 100
     })
 
 #@elastix_user_is_authorized()

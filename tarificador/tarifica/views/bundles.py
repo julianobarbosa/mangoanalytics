@@ -88,5 +88,10 @@ def updateBundle(request, bundle_id):
 #@elastix_user_is_authorized()
 def deleteBundle(request, bundle_id):
     bundle = get_object_or_404(Bundle, id = bundle_id)
+    destination_group = bundle.destination_group
     bundle.delete()
+    if len(Bundle.objects.filter(destination_group = destination_group)) == 0:
+        destination_group.has_bundles = False
+        destination_group.save()
+
     return HttpResponseRedirect('/setup')

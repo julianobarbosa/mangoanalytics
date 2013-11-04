@@ -99,7 +99,7 @@ def realtime(request, action="show"):
     graphData = []
     data = []
     for d in data_row_columns:
-        print d
+        #print d
         #We first check if it is an outgoing call:
         if d['Application'] == 'Dial':
             configured_extensions = Extension.objects.all()
@@ -109,7 +109,7 @@ def realtime(request, action="show"):
                 #Now, we get the dialed number...
             try:
                 call_data = d['Data'].split('/')
-                print call_data
+                #print call_data
             except Exception as e:
                 print "Could not parse call data, so it must not be a call",e
                 continue
@@ -118,8 +118,16 @@ def realtime(request, action="show"):
                 provider = Provider.objects.get(asterisk_channel_id = call_data[1])
                 provider_name = provider.name
             except Exception as e: 
-                print "Could not find provider with name",call_data[1]
-                provider_name = call_data[1]
+                #Could be that asterisk_channel_id is not what asterisk core show channels
+                #is returning, it could also be the field trunkid
+                try:
+                    provider = Provider.objects.get(asterisk_id = call_data[1])
+                except Exception as e:
+                    #Not found either, this call cannot be an outbound call since
+                    #there's no info on its provider.
+                    print "Could not find provider with name or id",call_data[1]
+                    continue
+                    provider_name = call_data[1]
 
             try:
                 dialed_number = call_data[2].split(',')[0]
@@ -135,12 +143,17 @@ def realtime(request, action="show"):
                     t1 = datetime.datetime.strptime(d['Duration'], "%H:%M:%S")
                     #print t1
                     timedelta = datetime.timedelta(hours=t1.hour, minutes=t1.minute, seconds=t1.second)
-                    t = today - timedelta
+                    #System time:
+                    system_time = subprocess.check_output(["date","+'%F %H:%M:%S'"])
+                    system_time = system_time.strip('\n')
+                    system_time = system_time.replace("'",'')
+                    system_time = datetime.datetime.strptime(system_time, '%Y-%m-%d %H:%M:%S')
+                    t = system_time - timedelta
                     #print t
                     d.update( { 'call_start': t.time().strftime("%H:%M:%S") } )
                 except Exception as e:
                     print "Error while calculating start time",e
-                    continue
+                    d.update( { 'call_start': '-' } )
                 #Obtaining destination group
                 try:
                     destination_groups = DestinationGroup.objects.filter(provider = provider).order_by('-prefix')

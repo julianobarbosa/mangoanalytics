@@ -147,10 +147,10 @@ class getUserInfo(forms.Form):
                         'required':u'Please input your e-mail address.',
                         'invalid':u'Please input a valid e-mail address.'})
     country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country')
-    currency_code = forms.CharField(max_length = 10, error_messages={
+    currency_code = forms.CharField(max_length = 20, error_messages={
                     'required':u"Please input your currency's code."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
-    currency_symbol = forms.CharField(max_length = 1, error_messages={
+    currency_symbol = forms.CharField(max_length = 10, error_messages={
                     'required':u"Please input your currency's symbol."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
 
@@ -166,14 +166,15 @@ class getFirstUserInfo(forms.Form):
                         'required':u'Please input your e-mail address.',
                         'invalid':u'Please input a valid e-mail address.'})
     country = forms.ChoiceField(choices = [(e[0], e[1]) for e in COUNTRIES], label = 'Country')
-    currency_code = forms.CharField(max_length = 10, error_messages={
+    currency_code = forms.CharField(max_length = 20, error_messages={
                     'required':u"Please input your currency's code."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
-    currency_symbol = forms.CharField(max_length = 1, error_messages={
+    currency_symbol = forms.CharField(max_length = 10, error_messages={
                     'required':u"Please input your currency's symbol."},
                     widget=forms.TextInput(attrs={'class':'input-mini'}))
     accepted_privacy_policy = forms.BooleanField(required=True, error_messages={
-                    'required':u"You need to accept Mango Anaytics' privacy policy before continuing."})
+                    'required':u"You need to accept Mango Anaytics' \
+                    privacy policy before continuing."})
 
 class loginForm(forms.Form):
     email = forms.CharField(max_length = 255, error_messages={
@@ -245,4 +246,5 @@ class loginForm(forms.Form):
     username = forms.CharField(max_length = 50, error_messages={
                     'required':u'Please input an username.'})
     password = forms.CharField(max_length = 100, error_messages={
-                    'required':u'Please input your password.'})
+                    'required':u'Please input your password.'}, 
+                    widget=forms.PasswordInput)

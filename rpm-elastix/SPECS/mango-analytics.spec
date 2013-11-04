@@ -1,7 +1,7 @@
 %define modname mangoanalytics
 Summary: mango
 Name: %{modname}
-Version: 1.0.2
+Version: 1.0.3
 Release: 1
 License: GPLv2
 Group: Applications/System
@@ -23,9 +23,12 @@ Mango Analytics, a cost reporting tool for Elastix PBX, by NEXTOR Telecom Mexico
 rm -rf $RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador
+mkdir -p $RPM_BUILD_ROOT/var/www/html/
 cp -R tarificador $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/tarificador
 cp -R tools $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/tools
 cp README.md $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/
+cp LICENSE $RPM_BUILD_ROOT/opt/NEXTOR/tarificador/django-tarificador/
+cp -u tools/mango-wrapper.php $RPM_BUILD_ROOT/var/www/html/
 
 mkdir -p $RPM_BUILD_ROOT/var/log/mangoanalytics
 
@@ -58,15 +61,20 @@ source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/dj
 
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py syncdb --noinput
 
+#
+# NOT NECESSARY ANYMORE SINCE v1.0: Users are automatically updated when accesing /login
+#
 #Importing elastix user
-source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tools/importElastixUsers.py
+#source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tools/importElastixUsers.py
+
+#Run db update patches
+source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tools/update-patches/v1.py
 
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py collectstatic --noinput
 
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk
 
-echo "source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk
-" >> /etc/rc.d/rc.local
+echo "source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk" >> /etc/rc.d/rc.local
 
 echo "0 2 * * * source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/dailyImporter.py > /var/log/mangoanalytics/daily.log" >> /var/spool/cron/root
 
@@ -88,6 +96,7 @@ fi
 %defattr(-, asterisk, asterisk)
 /opt/NEXTOR
 %defattr(-, root, root)
+%{_localstatedir}/www/html/*
 %{_localstatedir}/log/mangoanalytics
 
 %changelog
