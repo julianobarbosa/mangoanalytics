@@ -136,10 +136,11 @@ def updatePinsetInformation():
 
 if __name__ == "__main__":
     today = date.today()
+    today = today - timedelta(days=1)
     cca = CallCostAssigner()
     dig = Digester()
 
-    print "Digesting data from", start.strftime('%Y-%m-%d')
+    print "Digesting data from", today.strftime('%Y-%m-%d')
 
     #First we update all information on django's db:
     print "Updating Trunk Information..."
@@ -152,18 +153,18 @@ if __name__ == "__main__":
     print "----------------------------------------------"
     print "Assigning costs..."
 
-    result = cca.getDailyAsteriskCalls(start)
+    result = cca.getDailyAsteriskCalls(today)
     print "Calls Saved:",result['total_calls_saved']
     print "Calls Not Saved:" ,result['total_calls_not_saved']
 
-    dig.saveUserDailyDetail(start)
-    dig.saveUserDestinationDetail(start)
-    dig.saveUserDestinationNumberDetail(start)
-    dig.saveProviderDailyDetail(start)
-    dig.saveProviderDestinationDetail(start)
-    dig.savePinsetDailyDetail(start)
-    dig.savePinsetDestinationDetail(start)
-    dig.savePinsetDestinationNumberDetail(start)
+    dig.saveUserDailyDetail(today)
+    dig.saveUserDestinationDetail(today)
+    dig.saveUserDestinationNumberDetail(today)
+    dig.saveProviderDailyDetail(today)
+    dig.saveProviderDestinationDetail(today)
+    dig.savePinsetDailyDetail(today)
+    dig.savePinsetDestinationDetail(today)
+    dig.savePinsetDestinationNumberDetail(today)
 
     print "----------------------------------------------"
     print "Digestion finished."

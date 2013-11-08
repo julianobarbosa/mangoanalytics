@@ -1,7 +1,7 @@
 %define modname mangoanalytics
 Summary: mango
 Name: %{modname}
-Version: 1.0.3
+Version: 1.0.4
 Release: 1
 License: GPLv2
 Group: Applications/System
@@ -74,9 +74,9 @@ source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/dj
 
 source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk
 
-echo "source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk" >> /etc/rc.d/rc.local
+echo -e "source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/manage.py runwsgiserver port=8123 daemonize=true pidfile=/var/run/django-cpwsgi.pid host=0.0.0.0 workdir=/opt/NEXTOR/tarificador/django-tarificador/tarificador server_user=asterisk server_group=asterisk\n" >> /etc/rc.d/rc.local
 
-echo "0 2 * * * source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/dailyImporter.py > /var/log/mangoanalytics/daily.log" >> /var/spool/cron/root
+echo -e "0 2 * * * source /opt/NEXTOR/tarificador/bin/activate && python /opt/NEXTOR/tarificador/django-tarificador/tarificador/tarifica/tools/dailyImporter.py > /var/log/mangoanalytics/daily.log\n" >> /var/spool/cron/root
 
 echo "Install finished."
 
