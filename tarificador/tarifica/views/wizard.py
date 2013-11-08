@@ -224,7 +224,8 @@ def run(request, default="none"):
             p = subprocess.Popen([
                 'python2.7', 
                 importer_script_path+'importer.py',
-                start_date.strftime("%Y-%m-%d")
+                start_date.strftime("%Y-%m-%d"),
+                '> /var/log/mango/import.log'
             ])
             # p = subprocess.check_output(['python2.7', importer_script_path+'importer.py'])
         except Exception, e:

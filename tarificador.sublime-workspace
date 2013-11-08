@@ -1,0 +1,1171 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"percentage",
+				"percentage_not_processed"
+			],
+			[
+				"type",
+				"type	type"
+			],
+			[
+				"destination",
+				"destination_groups"
+			],
+			[
+				"STATIC_",
+				"STATIC_URL"
+			],
+			[
+				"mysql_",
+				"mysql_close"
+			],
+			[
+				"loca",
+				"loc_path"
+			],
+			[
+				"tarifica_",
+				"tarifica_call"
+			],
+			[
+				"destination_",
+				"destination_group"
+			],
+			[
+				"provider",
+				"provider_period"
+			],
+			[
+				"curre",
+				"current_date"
+			],
+			[
+				"tarifica",
+				"tarifica_extension"
+			],
+			[
+				"month",
+				"monthly_plot"
+			],
+			[
+				"montl",
+				"monthly_plot"
+			],
+			[
+				"monthl",
+				"monthly_graph"
+			],
+			[
+				"monthly",
+				"monthly_graph_options"
+			],
+			[
+				"attr",
+				"attr	.attr() - single"
+			],
+			[
+				"bill",
+				"billing_periods"
+			],
+			[
+				"mont",
+				"monthly_data"
+			],
+			[
+				"graph",
+				"monthly_graph"
+			],
+			[
+				"date",
+				"datepicker"
+			],
+			[
+				"last_",
+				"last_7_days"
+			],
+			[
+				"extension",
+				"extension_list"
+			],
+			[
+				"extension_",
+				"extension_list"
+			],
+			[
+				"configured",
+				"configured_extensions"
+			],
+			[
+				"provider_",
+				"provider_period_end"
+			],
+			[
+				"provider_period",
+				"provider_period_start"
+			],
+			[
+				"provider_per",
+				"provider_period_start"
+			],
+			[
+				"provider_c",
+				"provider_choices"
+			],
+			[
+				"paddin",
+				"padding-bottom"
+			],
+			[
+				"php_t",
+				"php_tzinfo"
+			],
+			[
+				"php_",
+				"php_tzinfo"
+			],
+			[
+				"tarifica_destination",
+				"tarifica_destinationname"
+			],
+			[
+				"tarifica_pro",
+				"tarifica_provider"
+			],
+			[
+				"strf",
+				"strftime"
+			],
+			[
+				"start_date",
+				"start_date_value"
+			],
+			[
+				"poss",
+				"possible_value"
+			],
+			[
+				"possible_",
+				"possible_filter"
+			],
+			[
+				"grap",
+				"graphData"
+			],
+			[
+				"p",
+				"p	Tag"
+			],
+			[
+				"u",
+				"ul	Tag"
+			],
+			[
+				"billin",
+				"billingPeriodData"
+			],
+			[
+				"billing",
+				"billingPeriodData"
+			],
+			[
+				"padding-",
+				"padding-right"
+			],
+			[
+				"existing",
+				"existing_providers"
+			],
+			[
+				"exis",
+				"existing"
+			],
+			[
+				"existin",
+				"existing_providers"
+			],
+			[
+				"dialed",
+				"dialed_number_comparison"
+			],
+			[
+				"fo",
+				"form	Tag"
+			],
+			[
+				"padding",
+				"padding-top"
+			],
+			[
+				"el",
+				"elif	elif"
+			],
+			[
+				"font-s",
+				"font-size"
+			],
+			[
+				"tarifica_pr",
+				"tarifica_providerdailydetail"
+			],
+			[
+				"this",
+				"this_month_total_usage"
+			],
+			[
+				"Http",
+				"HttpResponseServerError"
+			],
+			[
+				"total_call",
+				"total_call_cost"
+			],
+			[
+				"billingP",
+				"billingPeriodData"
+			],
+			[
+				"billion",
+				"billingPeriodData"
+			],
+			[
+				"tarifica_provide",
+				"tarifica_providerdailydetail"
+			],
+			[
+				"savePro",
+				"saveProviderMonthlyCost"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"general",
+				"general_data"
+			],
+			[
+				"parse",
+				"parse	$.parseJSON()"
+			],
+			[
+				"ticks",
+				"ticksAssigned"
+			],
+			[
+				"providers_",
+				"providers_6_month_graph"
+			],
+			[
+				"prov",
+				"provider_name"
+			],
+			[
+				"pro",
+				"provider_id"
+			],
+			[
+				"provi",
+				"providersGraphs"
+			],
+			[
+				"destina",
+				"destinationInfo"
+			],
+			[
+				"tari",
+				"tarifica_call"
+			],
+			[
+				"user_",
+				"user_info"
+			],
+			[
+				"currency",
+				"currency_code"
+			],
+			[
+				"mnth",
+				"month"
+			],
+			[
+				"json",
+				"jQuery.parseJSON	jQuery.parseJSON"
+			],
+			[
+				"averag",
+				"averageMonthlyCost"
+			],
+			[
+				"getTrunk",
+				"getTrunkCDR"
+			],
+			[
+				"minutes",
+				"minutesRemaining"
+			],
+			[
+				"lapsed",
+				"lapsedMinutes"
+			],
+			[
+				"th",
+				"th	Tag"
+			],
+			[
+				"def",
+				"defs	Method"
+			],
+			[
+				"ex",
+				"except	keyword"
+			],
+			[
+				"callInfo",
+				"callInfoList"
+			],
+			[
+				"destin",
+				"destinations"
+			],
+			[
+				"reset",
+				"resetBundleUsage"
+			],
+			[
+				"tr",
+				"try	Try/Except"
+			],
+			[
+				"tarific",
+				"tarifica_provider"
+			],
+			[
+				"get",
+				"getBundles"
+			],
+			[
+				"desta",
+				"destinationGroup_id"
+			],
+			[
+				"destinatio",
+				"destinationGroup_id"
+			],
+			[
+				"ass",
+				"assignedToBundle"
+			],
+			[
+				"tariff",
+				"tariffMode_id"
+			],
+			[
+				"getDi",
+				"getDailyAsteriskCalls"
+			],
+			[
+				"db",
+				"dbName"
+			],
+			[
+				"mysql",
+				"mysqlPasswd"
+			],
+			[
+				"if",
+				"ifmain	if __name__ == '__main__'"
+			],
+			[
+				"elas",
+				"elastixConf"
+			],
+			[
+				"cer",
+				"certificate"
+			],
+			[
+				"encr",
+				"encryptedPrivateKey"
+			],
+			[
+				"getUuid",
+				"getStampUuid"
+			],
+			[
+				"Finkok",
+				"FinkokInvoiceInformation"
+			],
+			[
+				"finkok",
+				"finkokInformation"
+			],
+			[
+				"html",
+				"htmlentities"
+			],
+			[
+				"soap",
+				"soapClient"
+			],
+			[
+				"invoice",
+				"invoiceStatus"
+			],
+			[
+				"faul",
+				"faultstring"
+			],
+			[
+				"finko",
+				"finkokPassword"
+			],
+			[
+				"fink",
+				"finkokUsername"
+			],
+			[
+				"noCertif",
+				"noCertificadoSAT"
+			],
+			[
+				"num",
+				"number_format"
+			],
+			[
+				"stru",
+				"strtoupper"
+			],
+			[
+				"cadena",
+				"cadenaOriginal"
+			],
+			[
+				"cfdi",
+				"cfdiXML"
+			],
+			[
+				"temp",
+				"templating"
+			],
+			[
+				"Cade",
+				"cadenaOriginal"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "tarificador/tarifica/tools/dailyImporter.py",
+			"settings":
+			{
+				"buffer_size": 6251,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "rpm-elastix/SPECS/mango-analytics.spec",
+			"settings":
+			{
+				"buffer_size": 4596,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/templates/base.html",
+			"settings":
+			{
+				"buffer_size": 6942,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/views/wizard.py",
+			"settings":
+			{
+				"buffer_size": 11645,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/tools/digester.py",
+			"settings":
+			{
+				"buffer_size": 12162,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/tools/importer.py",
+			"settings":
+			{
+				"buffer_size": 5930,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/tools/assignCallCost.py",
+			"settings":
+			{
+				"buffer_size": 13020,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Python/Python.sublime-build",
+	"command_palette":
+	{
+		"height": 400.0,
+		"selected_items":
+		[
+			[
+				"html",
+				"Snippet: html"
+			],
+			[
+				"set html",
+				"Set Syntax: HTML"
+			],
+			[
+				"pytho",
+				"Set Syntax: Python"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"set xml",
+				"Set Syntax: XML"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 601.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/fed/Desktop/openfireWrapper.php",
+		"/home/fed/tarificador/django-tarificador/tools/test.py",
+		"/home/fed/tarificador/django-tarificador/tools/mango-wrapper.php",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/wizard.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/forms.py",
+		"/home/fed/tarificador/django-tarificador/tools/update-patches/v1.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/security/login.html",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/mango-analytics.spec",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/security.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/general.py",
+		"/home/fed/tarificador/django-tarificador/tools/initialMySQLSetup.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/base.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/elastix/elastix_menu.xml",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/bundles.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/django_countries/fields.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarificador/settings.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/pinsets.py",
+		"/home/fed/tarificador/django-tarificador/tools/importElastixUsers.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/trunks.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/users.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/bundles/bundleUpdate.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/manual.html",
+		"/home/fed/Desktop/Puestos",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/models.py",
+		"/home/fed/tarificador/django-tarificador/mango-analytics/tarificador/tarifica/django_countries/fields.py",
+		"/home/fed/tarificador/django-tarificador/README.md",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/providers.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/assignCallCost.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/destinationGroups.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/config.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/cdr.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/accounts/views.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/fixtures/initial_data.json",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/admin.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/urls.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarificador/urls.py",
+		"/home/fed/tarificador/django-tarificador/tools/mangoanalytics.cron",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/virtualenv.spec",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/setuptools.spec",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/distribute.spec",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/virtualenv_64.spec",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/setuptools_64.spec",
+		"/home/fed/tarificador/django-tarificador/tools/virtualenv-1.10.1.tar.gz",
+		"/home/fed/Downloads/mango-analytics.spec",
+		"/home/fed/tarificador/django-tarificador/rpm-elastix/SPECS/distribute_64.spec",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/realtime.html",
+		"/home/fed/tarificador/django-tarificador/rpms/SPECS/virtualenv_64.spec",
+		"/home/fed/tarificador/django-tarificador/rpms/SPECS/distribute_64.spec",
+		"/home/fed/tarificador/django-tarificador/rpms/SPECS/python-2.7_64.spec",
+		"/home/fed/tarificador/django-tarificador/rpms/SPECS/setuptools_64.spec",
+		"/home/fed/tarificador/django-tarificador/rpm/SOURCES/virtualenv-1.10.1/setup.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/updateRealtime.html",
+		"/home/fed/tarificador/django-tarificador/mango-analytics/SOURCES/mango-analytics/tarificador/tarifica/views/general.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/server.cfg",
+		"/home/fed/tarificador/django-tarificador/tarificador/serve.py",
+		"/home/fed/Projects/Vozero/src/NEXTOR/Vozero/PortalBundle/Daemon/daemonProd.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/start1.html",
+		"/home/fed/tarificador/django-tarificador/Pyinstall.sh",
+		"/home/fed/Desktop/virtualenv/SOURCES/virtualenv-1.10.1/virtualenv.py",
+		"/home/fed/tarificador/django-tarificador/mango-analytics/README.md",
+		"/home/fed/tarificador/django-tarificador/mango-analytics/Pyinstall.sh",
+		"/home/fed/tarificador/django-tarificador/mango-analytics/tarificador/serve.py",
+		"/home/fed/tarificador/django-tarificador/mango-analytics/tarificador/server.cfg",
+		"/home/fed/tarificador/django-tarificador/mangoanalytics_wrapper.php",
+		"/home/fed/tarificador/django-tarificador/tarificador/genericdaemon.py",
+		"/home/fed/tarificador/local/lib/python2.7/site-packages/daemon/runner.py",
+		"/home/fed/Downloads/django-served-by-cherrypy-0.1.0/server.cfg",
+		"/home/fed/Downloads/django-served-by-cherrypy-0.1.0/serve.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/daemon.py",
+		"/home/fed/rpm/SPECS/spec",
+		"/home/fed/tarificador/django-tarificador/rpm/SPECS/spec",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/docs.css",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/config.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/pinsets.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/setup.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/cdr.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/dashboard.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/trunks.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/users.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/wizard.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/elastix_session.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/dailyImporter.py",
+		"/home/fed/rpm/SOURCES/Pyinstall.sh",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/referrer_check.py",
+		"/home/fed/Desktop/HTTPReferer",
+		"/home/fed/daily.log",
+		"/home/fed/python2.7/SPECS/spec",
+		"/home/fed/RPM/spec",
+		"/home/fed/.cache/.fr-w8WSm4/Python-2.7.5/configure",
+		"/home/fed/tarificador/django-tarificador/tarificador/elastix/spec",
+		"/home/fed/RPM/README.md",
+		"/home/fed/tarificador/django-tarificador/install.sh",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/setup.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/pinsets/analyticsPinsets.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/destinationGroups/destinationGroupCreate.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/destinationGroups/destinationGroupUpdate.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/config/config.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/pinsets/detailPinsets.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/general/privacy.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/trunks/trunks.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/trunks/trunksGet.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/users/analyticsUsers.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/users/detailUsers.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/users/generalUsers.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/pinsets/generalPinsets.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/asteriskMySQLManager.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/start3.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/config/initial.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/datepicker.css",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/bundles/bundleCreate.html",
+		"/home/fed/Desktop/realtime.py",
+		"/home/fed/Desktop/test",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/digester.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/providers/providerGet.html",
+		"/home/fed/server.log",
+		"/tmp/server.log",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/providers/providerCreate.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/importer.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/providers/providerUpdate.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/start5.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/start4.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/start2.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/fixtures/nextor_tariffs.json",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/styles.css",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/jquery.jqplot.css",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/results.html",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/middleware/TimezoneMiddleware.py",
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/updateTestRunStatus.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 103.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"start",
+			"p",
+			"Vers",
+			"nextor_tarificador.",
+			"mangoWrapper",
+			"ssl_certificate",
+			"https://{NAME_SERVER}:8123",
+			"print",
+			"/etc/pki/tls/",
+			"/etc/pki/tls/certs",
+			"http",
+			"in",
+			"dialedNoForProvider",
+			"mangoanalytics_wrapper",
+			"mangoanalytics_wrapper.php",
+			"mangoanalytics_wrapper.php/dashboard",
+			"data",
+			"today",
+			">>> ",
+			"@login_required(login_url='login')",
+			"class=\"pull-left\"",
+			"center>",
+			"username",
+			"p",
+			"Username",
+			"username",
+			"setup",
+			"general",
+			"accounts",
+			"elastix_user_is_authorized",
+			"root",
+			"Maxcom_39",
+			"(Outgoing ",
+			"Outgoing",
+			"'(Outgoing",
+			"(Outgoing",
+			"provider",
+			"Outgoing",
+			"menuid",
+			"settings",
+			"$RPM_BUILD_ROOT/opt/NEXTOR/tarificador/",
+			"make_pidlockfile",
+			"().",
+			"='/dev/null'",
+			".mysql_error()",
+			"referer",
+			"@referer_matches_re('(index\\.php\\?menu=){1,1}')",
+			"@elastix_user_is_authorized()",
+			"@referer_matches_re('(index\\.php\\?menu=){1,1}')",
+			"from tarifica.tools.referrer_check import referer_matches_re",
+			"@referer_matches_re('(index\\.php\\?menu=){1,1}')",
+			"();\n",
+			"_check_referer",
+			"dropUser",
+			"http://127.0.0.1:8000",
+			"localhost",
+			"%{modname}",
+			"$RPM_BUILD_ROOT/../../",
+			"../",
+			"python2.7",
+			"%clean",
+			" $RPM_BUILD_ROOT/",
+			"*",
+			"RPM_BUILD_ROOT",
+			"{% url 'tarifica:dashboard' %}",
+			"_month",
+			"number-graph",
+			"9999",
+			"TextInput",
+			"self",
+			"start_date + datetime.timedelta(days=1),",
+			"provider",
+			"self",
+			"currency_symbol",
+			"dt",
+			"t",
+			"dt",
+			"start_date",
+			"12-02-2012",
+			"start",
+			"data-date-format=\"yyyy-mm-dd\"",
+			"th",
+			"<span class=\"add-on\">",
+			"<i data-time-icon=\"icon-time\" data-date-icon=\"icon-th\"></i>",
+			"datepicker",
+			"calendar",
+			"Histori",
+			"pinid",
+			"user",
+			"users",
+			"user",
+			"extensions",
+			"a",
+			"user.id",
+			"cost",
+			"calls",
+			"cost",
+			"monthly_plot",
+			"graph_",
+			"monthly_graph",
+			"general_data",
+			"billing_periods_graph",
+			"=",
+			"destination",
+			"general_6_month_graph",
+			"'start_date': start_date,\n              'end_date': end_date,",
+			"start",
+			"e.g. ",
+			"...",
+			"end_date",
+			"start_date",
+			"replace(tzinfo=utc)",
+			"update",
+			"append",
+			"Could not parse call data, so it must not be a call",
+			"17:10:17",
+			"'Dial'",
+			"Dial",
+			"Up",
+			"Extension",
+			"CallerID",
+			"Start",
+			"olumns[i]",
+			"columns",
+			"    });\n\n    $(function() {",
+			"el",
+			"print",
+			"usage is now"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "tarificador/tarifica/tools/dailyImporter.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6251,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4166,
+								4166
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1620.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "rpm-elastix/SPECS/mango-analytics.spec",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4596,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3890,
+								3890
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 855.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "tarificador/tarifica/templates/base.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6942,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1740,
+								1740
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "tarificador/tarifica/views/wizard.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11645,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8261,
+								8261
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2835.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 4,
+					"file": "tarificador/tarifica/tools/digester.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12162,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10996,
+								10996
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3955.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "tarificador/tarifica/tools/importer.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5930,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5153,
+								5153
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2205.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "tarificador/tarifica/tools/assignCallCost.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 13020,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1404,
+								1404
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1215.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 37.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 25.0
+	},
+	"project": "tarificador.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"~/Projects/Vozero/vozero.sublime-project"
+			],
+			[
+				"vo",
+				"~/Projects/Vozero/vozero.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 400.0,
+		"selected_items":
+		[
+		],
+		"width": 457.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 230.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
