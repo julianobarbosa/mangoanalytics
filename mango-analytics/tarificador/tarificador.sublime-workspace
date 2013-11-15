@@ -1,0 +1,253 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"margin-",
+				"margin-left"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"paddin",
+				"padding"
+			],
+			[
+				"border",
+				"border-top"
+			],
+			[
+				"padd",
+				"padding-top"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"text-",
+				"text-transform"
+			],
+			[
+				"margin",
+				"margin"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/fed/tarificador/Pyinstall.sh",
+			"settings":
+			{
+				"buffer_size": 2653,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"s",
+				"Snippet: html"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/fed/mirnos.com/mirnos/citec/static/citec/css/styles.css",
+		"/home/fed/mirnos.com/mirnos/citec/index.html",
+		"/home/fed/mirnos.com/mirnos/mirnos/urls.py",
+		"/home/fed/mirnos.com/mirnos/mainsite/views.py",
+		"/home/fed/mirnos.com/mirnos/mainsite/templates/index.html",
+		"/home/fed/mirnos.com/mirnos/citec/static/citec/js/jquery.flexslider.js",
+		"/home/fed/mirnos.com/mirnos/citec/static/citec/css/flexslider.css",
+		"/home/fed/mirnos.com/mirnos/citec/static/citec/css/bootstrap.css",
+		"/home/fed/Downloads/woothemes-FlexSlider-ca347d4/demo/index.html",
+		"/home/fed/mirnos.com/mirnos/citec/static/citec/404.html",
+		"/home/fed/mirnos.com/mirnos/citec/static/citec/index.html",
+		"/home/fed/mirnos.com/mirnos/mirnos/settings.py",
+		"/home/fed/mirnos.com/mirnos/citec/forms.py",
+		"/home/fed/mirnos.com/mirnos/citec/models.py",
+		"/home/fed/tarificador/tarificador/tarifica/models.py",
+		"/home/fed/tarificador/tarificador/tarifica/forms.py",
+		"/home/fed/Downloads/ensenaac.info",
+		"/home/fed/mirnos.com/mirnos/.gitignore"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			">\n",
+			"#",
+			"hover",
+			"background-color",
+			"block",
+			"display: block;",
+			".flexslider",
+			"slide",
+			" class=\"active\"",
+			"50",
+			"nav",
+			"font",
+			"fonts",
+			".jpg",
+			"slide1",
+			"<li>",
+			" class=\"active\"",
+			"nav-pills",
+			"-",
+			"-tabs",
+			"nav",
+			"contact",
+			"%}\n",
+			"my_app",
+			"context",
+			"polls",
+			"Validat",
+			"Valida",
+			"min_value"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/fed/tarificador/Pyinstall.sh",
+					"settings":
+					{
+						"buffer_size": 2653,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								767,
+								767
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/home/fed/Projects/NEXTOR/Vozero/vozero.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 279.0,
+	"status_bar_visible": true
+}
