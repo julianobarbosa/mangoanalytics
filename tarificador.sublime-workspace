@@ -490,14 +490,6 @@
 				"buffer_size": 11645,
 				"line_ending": "Unix"
 			}
-		},
-		{
-			"file": "tarificador/tarifica/tools/assignCallCost.py",
-			"settings":
-			{
-				"buffer_size": 13020,
-				"line_ending": "Unix"
-			}
 		}
 	],
 	"build_system": "Packages/Python/Python.sublime-build",
@@ -849,7 +841,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -894,8 +886,8 @@
 						"selection":
 						[
 							[
-								3601,
-								3601
+								1423,
+								1423
 							]
 						],
 						"settings":
@@ -905,7 +897,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1075.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -923,8 +915,8 @@
 						"selection":
 						[
 							[
-								1740,
-								1740
+								698,
+								698
 							]
 						],
 						"settings":
@@ -971,37 +963,8 @@
 			]
 		},
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 4,
-					"file": "tarificador/tarifica/tools/assignCallCost.py",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 13020,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3209,
-								3209
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1215.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
