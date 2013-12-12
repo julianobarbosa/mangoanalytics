@@ -535,10 +535,7 @@
 	},
 	"console":
 	{
-		"height": 0.0,
-		"history":
-		[
-		]
+		"height": 0.0
 	},
 	"distraction_free":
 	{
@@ -686,7 +683,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 103.0,
+		"height": 0.0,
 		"where_history":
 		[
 		]
@@ -847,7 +844,6 @@
 				{
 					"buffer": 0,
 					"file": "tarificador/tarifica/tools/dailyImporter.py",
-					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 6251,
@@ -876,7 +872,6 @@
 				{
 					"buffer": 1,
 					"file": "rpm-elastix/SPECS/mango-analytics.spec",
-					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 4638,
@@ -905,7 +900,6 @@
 				{
 					"buffer": 2,
 					"file": "tarificador/tarifica/templates/base.html",
-					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 6942,
@@ -934,7 +928,6 @@
 				{
 					"buffer": 3,
 					"file": "tarificador/tarifica/views/wizard.py",
-					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 11645,
@@ -961,11 +954,6 @@
 					"type": "text"
 				}
 			]
-		},
-		{
-			"sheets":
-			[
-			]
 		}
 	],
 	"incremental_find":
@@ -985,18 +973,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.5,
 			1.0
 		],
 		"rows":
@@ -1010,7 +991,6 @@
 	{
 		"height": 25.0
 	},
-	"project": "tarificador.sublime-project",
 	"replace":
 	{
 		"height": 46.0
@@ -1040,24 +1020,10 @@
 		],
 		"width": 380.0
 	},
-	"select_symbol":
-	{
-		"height": 400.0,
-		"selected_items":
-		[
-		],
-		"width": 457.0
-	},
-	"settings":
-	{
-	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 230.0,
-	"status_bar_visible": true,
-	"template_settings":
-	{
-	}
+	"status_bar_visible": true
 }
