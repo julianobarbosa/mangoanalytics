@@ -476,10 +476,10 @@
 			}
 		},
 		{
-			"file": "tarificador/tarifica/templates/base.html",
+			"file": "tarificador/tarifica/views/cdr.py",
 			"settings":
 			{
-				"buffer_size": 6942,
+				"buffer_size": 11053,
 				"line_ending": "Unix"
 			}
 		},
@@ -535,7 +535,10 @@
 	},
 	"console":
 	{
-		"height": 0.0
+		"height": 0.0,
+		"history":
+		[
+		]
 	},
 	"distraction_free":
 	{
@@ -548,6 +551,7 @@
 	},
 	"file_history":
 	[
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/base.html",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/digester.py",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/importer.py",
 		"/home/fed/Desktop/openfireWrapper.php",
@@ -561,7 +565,6 @@
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/security.py",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/general.py",
 		"/home/fed/tarificador/django-tarificador/tools/initialMySQLSetup.py",
-		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/base.html",
 		"/home/fed/tarificador/django-tarificador/tarificador/elastix/elastix_menu.xml",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/views/bundles.py",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/django_countries/fields.py",
@@ -693,6 +696,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"vers",
 			"start",
 			"p",
 			"Vers",
@@ -819,8 +823,7 @@
 			"columns",
 			"    });\n\n    $(function() {",
 			"el",
-			"print",
-			"usage is now"
+			"print"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -844,6 +847,7 @@
 				{
 					"buffer": 0,
 					"file": "tarificador/tarifica/tools/dailyImporter.py",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 6251,
@@ -853,8 +857,8 @@
 						"selection":
 						[
 							[
-								4568,
-								4568
+								5660,
+								5660
 							]
 						],
 						"settings":
@@ -864,7 +868,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1612.0,
+						"translation.y": 1600.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -872,6 +876,7 @@
 				{
 					"buffer": 1,
 					"file": "rpm-elastix/SPECS/mango-analytics.spec",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 4638,
@@ -881,8 +886,8 @@
 						"selection":
 						[
 							[
-								1423,
-								1423
+								327,
+								327
 							]
 						],
 						"settings":
@@ -899,28 +904,29 @@
 				},
 				{
 					"buffer": 2,
-					"file": "tarificador/tarifica/templates/base.html",
+					"file": "tarificador/tarifica/views/cdr.py",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6942,
+						"buffer_size": 11053,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								698,
-								698
+								7830,
+								7830
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"syntax": "Packages/Python/Python.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2170.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -928,6 +934,7 @@
 				{
 					"buffer": 3,
 					"file": "tarificador/tarifica/views/wizard.py",
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 11645,
@@ -991,6 +998,7 @@
 	{
 		"height": 25.0
 	},
+	"project": "tarificador.sublime-project",
 	"replace":
 	{
 		"height": 46.0
@@ -1011,7 +1019,7 @@
 		[
 			[
 				"",
-				"~/Projects/Vozero/vozero.sublime-project"
+				"~/experos/experos/experos-python.sublime-project"
 			],
 			[
 				"vo",
@@ -1020,10 +1028,24 @@
 		],
 		"width": 380.0
 	},
+	"select_symbol":
+	{
+		"height": 400.0,
+		"selected_items":
+		[
+		],
+		"width": 400.0
+	},
+	"settings":
+	{
+	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 230.0,
-	"status_bar_visible": true
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
 }
