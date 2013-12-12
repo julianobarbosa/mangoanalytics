@@ -191,7 +191,7 @@ def general(request, page=1):
             'pinset_number': 'Pinset Number',
             'provider_id': 'Provider',
             'destination_group_id': 'Destination',
-            'duration': 'Minutes',
+            'duration': 'Seconds',
             'cost': 'Cost',
         }
         field_names = [

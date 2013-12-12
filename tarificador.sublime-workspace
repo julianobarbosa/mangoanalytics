@@ -484,6 +484,15 @@
 			}
 		},
 		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 23,
+				"line_ending": "Unix",
+				"name": "*.pyc"
+			}
+		},
+		{
 			"file": "tarificador/tarifica/views/wizard.py",
 			"settings":
 			{
@@ -841,7 +850,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -915,8 +924,8 @@
 						"selection":
 						[
 							[
-								7830,
-								7830
+								7527,
+								7527
 							]
 						],
 						"settings":
@@ -933,6 +942,34 @@
 				},
 				{
 					"buffer": 3,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"auto_name": "*.pyc",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "tarificador/tarifica/views/wizard.py",
 					"semi_transient": false,
 					"settings":
