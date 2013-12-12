@@ -1,7 +1,7 @@
 %define modname mangoanalytics
 Summary: mango
 Name: %{modname}
-Version: 1.0.5
+Version: 1.0.6
 Release: 1
 License: GPLv2
 Group: Applications/System
