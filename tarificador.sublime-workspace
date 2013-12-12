@@ -468,10 +468,34 @@
 			}
 		},
 		{
+			"file": "tarificador/tarifica/tools/importer.py",
+			"settings":
+			{
+				"buffer_size": 5930,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/tools/assignCallCost.py",
+			"settings":
+			{
+				"buffer_size": 13020,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "rpm-elastix/SPECS/mango-analytics.spec",
 			"settings":
 			{
 				"buffer_size": 4638,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tarificador/tarifica/templates/base.html",
+			"settings":
+			{
+				"buffer_size": 6942,
 				"line_ending": "Unix"
 			}
 		},
@@ -481,15 +505,6 @@
 			{
 				"buffer_size": 11053,
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": ".gitignore",
-			"settings":
-			{
-				"buffer_size": 23,
-				"line_ending": "Unix",
-				"name": "*.pyc"
 			}
 		},
 		{
@@ -560,6 +575,9 @@
 	},
 	"file_history":
 	[
+		"/home/fed/Downloads/import.log",
+		"/home/fed/tarificador/django-tarificador/.gitignore",
+		"/home/fed/tarificador/django-tarificador/requirements.txt",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/base.html",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/digester.py",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/tools/importer.py",
@@ -684,10 +702,7 @@
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/start2.html",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/fixtures/nextor_tariffs.json",
 		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/styles.css",
-		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/jquery.jqplot.css",
-		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/results.html",
-		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/middleware/TimezoneMiddleware.py",
-		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/templates/tarifica/wizard/updateTestRunStatus.html"
+		"/home/fed/tarificador/django-tarificador/tarificador/tarifica/static/tarifica/css/jquery.jqplot.css"
 	],
 	"find":
 	{
@@ -705,6 +720,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getDailyAsteriskCalls",
+			"1.0.5",
 			"vers",
 			"start",
 			"p",
@@ -830,9 +847,7 @@
 			"Start",
 			"olumns[i]",
 			"columns",
-			"    });\n\n    $(function() {",
-			"el",
-			"print"
+			"    });\n\n    $(function() {"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -850,7 +865,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -866,8 +881,8 @@
 						"selection":
 						[
 							[
-								5660,
-								5660
+								4640,
+								4640
 							]
 						],
 						"settings":
@@ -877,13 +892,70 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1600.0,
+						"translation.y": 1793.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "tarificador/tarifica/tools/importer.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5930,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4081,
+								4081
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1814.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "tarificador/tarifica/tools/assignCallCost.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13020,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12635,
+								12635
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3880.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
 					"file": "rpm-elastix/SPECS/mango-analytics.spec",
 					"semi_transient": false,
 					"settings":
@@ -895,8 +967,8 @@
 						"selection":
 						[
 							[
-								327,
-								327
+								1122,
+								1122
 							]
 						],
 						"settings":
@@ -912,7 +984,36 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 4,
+					"file": "tarificador/tarifica/templates/base.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6942,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4002,
+								4002
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1080.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "tarificador/tarifica/views/cdr.py",
 					"semi_transient": false,
 					"settings":
@@ -924,8 +1025,8 @@
 						"selection":
 						[
 							[
-								7527,
-								7527
+								9009,
+								9009
 							]
 						],
 						"settings":
@@ -935,41 +1036,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2170.0,
+						"translation.y": 2665.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": ".gitignore",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 23,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								23,
-								23
-							]
-						],
-						"settings":
-						{
-							"auto_name": "*.pyc",
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "tarificador/tarifica/views/wizard.py",
 					"semi_transient": false,
 					"settings":
@@ -981,8 +1054,8 @@
 						"selection":
 						[
 							[
-								8605,
-								8605
+								9278,
+								9278
 							]
 						],
 						"settings":
@@ -992,11 +1065,16 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2835.0,
+						"translation.y": 2745.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				}
+			]
+		},
+		{
+			"sheets":
+			[
 			]
 		}
 	],
@@ -1017,11 +1095,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.5,
 			1.0
 		],
 		"rows":
