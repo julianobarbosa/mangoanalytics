@@ -2,8 +2,7 @@
 	"folders":
 	[
 		{
-			"follow_symlinks": true,
-			"path": "/home/fed/tarificador/django-tarificador"
+			"path": "tarificador"
 		}
 	]
 }
