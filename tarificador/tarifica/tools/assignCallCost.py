@@ -247,7 +247,7 @@ class CallCostAssigner:
 
 							today = datetime.datetime.today()
 							provider_period_start = datetime.date(
-								year=today.year, month=today.month, day=prov['period_end']
+								year=call['calldate'].year, month=call['calldate'].month, day=prov['period_end']
 							)
 							if provider_period_start > call['calldate'].date():
 								#Entonces el periodo es el anterior:
