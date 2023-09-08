@@ -33,16 +33,13 @@ class Country(object):
     def name(self):
         # Local import so the countries aren't loaded unless they are needed. 
         from tarifica.django_countries.countries import COUNTRIES
-        for code, name in COUNTRIES:
-            if self.code == code:
-                return name
-        return ''
+        return next((name for code, name in COUNTRIES if self.code == code), '')
     
     @property
     def flag(self):
         if not self.code:
             return ''
-        return '/static/tarifica/img/flags/'+self.code.lower()+'.gif'
+        return f'/static/tarifica/img/flags/{self.code.lower()}.gif'
 
 
 class CountryDescriptor(object):
@@ -62,8 +59,8 @@ class CountryDescriptor(object):
     def __get__(self, instance=None, owner=None):
         if instance is None:
             raise AttributeError(
-                "The '%s' attribute can only be accessed from %s instances."
-                % (self.field.name, owner.__name__))
+                f"The '{self.field.name}' attribute can only be accessed from {owner.__name__} instances."
+            )
         return Country(code=instance.__dict__[self.field.name])
 
     def __set__(self, instance, value):
@@ -107,6 +104,4 @@ class CountryField(CharField):
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
         # Convert the Country to unicode for database insertion.
-        if value is None:
-            return None
-        return unicode(value)
+        return None if value is None else unicode(value)

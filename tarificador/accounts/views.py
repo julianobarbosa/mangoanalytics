@@ -13,11 +13,10 @@ def log(request):
 	username = request.POST['username']
 	password = request.POST['password']
 	user = authenticate(username=username, password=password)
-	if user is not None:
-		login(request,user)
-		return render(request, 'accounts/logged.html')
-	else:
+	if user is None:
 		return render(request, 'accounts/notlogged.html')
+	login(request,user)
+	return render(request, 'accounts/logged.html')
 
 @login_required(login_url='accounts/login')
 def details(request):

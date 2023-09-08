@@ -249,9 +249,7 @@ def analyticsPinsets(request, pinset_id, period_id="thisMonth"):
         GROUP BY dialed_number ORDER BY SUM(cost) DESC"
     cursor.execute(sql,[start_date,end_date, Pin.pinset_number])
     top_calls = dictfetchall(cursor)[:10]
-    data = []
-    for n in top_calls :
-        data.append([n['dialed_number'], n['cost']])
+    data = [[n['dialed_number'], n['cost']] for n in top_calls]
     cursor.execute('SELECT tarifica_call.id, tarifica_call.cost, tarifica_call.dialed_number, tarifica_call.duration, \
         tarifica_destinationname.name, tarifica_destinationgroup.destination_country AS country, tarifica_call.date AS dat,\
         tarifica_call.date AS time FROM tarifica_call LEFT JOIN tarifica_destinationgroup\
@@ -290,14 +288,9 @@ def getBarChartInfoByPin(cursor):
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
     t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
-    data = []
-    aux = []
-    aux.append("This Month")
-    aux.append(getMonthName(t1.month))
+    aux = ["This Month", getMonthName(t1.month)]
     aux.append(getMonthName(t2.month))
-    data.append(aux)
-    #print aux
-    aux = []
+    data = [aux]
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
     start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     cursor.execute(
@@ -305,10 +298,8 @@ def getBarChartInfoByPin(cursor):
         FROM tarifica_pinset\
          ORDER BY id')
     users = dictfetchall(cursor)
-    #print users
-    for u in users: aux.append(u['pinset_number'])
+    aux = [u['pinset_number'] for u in users]
     data.append(aux)
-    aux = []
     cursor.execute(
         'SELECT tarifica_pinsetdailydetail.id, SUM(tarifica_pinsetdailydetail.cost) AS cost, \
         tarifica_pinset.pinset_number, tarifica_pinset.id AS pinid \
@@ -317,13 +308,10 @@ def getBarChartInfoByPin(cursor):
         WHERE date > %s AND date < %s GROUP BY pinset_id ',
         [start_date,end_date])
     pinsets = dictfetchall(cursor)
-    #print users
-    for n in data[1]: aux.append(0)
+    aux = [0 for _ in data[1]]
     for u in pinsets:
         aux[u['pinid']-1] = u['cost']
     data.append(aux)
-    #print aux
-    aux = []
     end_date = datetime.date(year=today.year, month=today.month, day=1)
     start_date = datetime.date(year=t1.year, month=t1.month, day=1) - timedelta
     cursor.execute(
@@ -334,13 +322,10 @@ def getBarChartInfoByPin(cursor):
         WHERE date > %s AND date < %s GROUP BY pinset_id ',
         [start_date,end_date])
     pinsets = dictfetchall(cursor)
-    #print pinsets
-    for n in data[1]: aux.append(0)
+    aux = [0 for _ in data[1]]
     for u in pinsets:
         aux[u['pinid']-1] = u['cost']
     data.append(aux)
-    #print aux
-    aux = []
     end_date = datetime.date(year=t1.year, month=t1.month, day=1)
     start_date = datetime.date(year=t2.year, month=t2.month, day=1) - timedelta
     cursor.execute(
@@ -351,7 +336,7 @@ def getBarChartInfoByPin(cursor):
         WHERE date > %s AND date < %s GROUP BY pinset_id ',
         [start_date,end_date])
     pinsets = dictfetchall(cursor)
-    for n in data[1]: aux.append(0)
+    aux = [0 for _ in data[1]]
     for u in pinsets:
         aux[u['pinid']-1] = u['cost']
     data.append(aux)
@@ -362,10 +347,8 @@ def getBarChartInfoByPinForMonth(cursor, pinset_id, start_date, end_date):
     start_date = start_date + datetime.timedelta(days=1)
     today = datetime.datetime.now()
     timedelta = datetime.timedelta(days=1)
-    data = []
-    aux = []
-    aux.append("Cost")
-    data.append(aux)
+    aux = ["Cost"]
+    data = [aux]
     aux = []
     sdate = start_date
     fdate = end_date
@@ -394,14 +377,9 @@ def getBarChartInfoByLocale(cursor, pinset_id):
     timedelta = datetime.timedelta(days = 1)
     t1 = datetime.datetime(year=today.year, month = today.month, day=1) - timedelta
     t2 = datetime.datetime(year=t1.year, month = t1.month, day=1) - timedelta
-    data = []
-    aux = []
-    aux.append(getMonthName(t2.month))
-    aux.append(getMonthName(t1.month))
-    aux.append("This Month")
-    data.append(aux)
-    #print aux
-    aux = []
+    aux = [getMonthName(t2.month)]
+    aux.extend((getMonthName(t1.month), "This Month"))
+    data = [aux]
     end_date = datetime.date(year=today.year, month=today.month, day=today.day) + timedelta
     start_date = datetime.date(year=today.year, month=today.month, day=1) - timedelta
     cursor.execute(
@@ -409,12 +387,8 @@ def getBarChartInfoByLocale(cursor, pinset_id):
         FROM tarifica_destinationname\
          ORDER BY id')
     users = dictfetchall(cursor)
-    n=0
-    for u in users: 
-        aux.append([u['name'], n])
-        n += 1
+    aux = [[u['name'], n] for n, u in enumerate(users)]
     data.append(aux)
-    aux = []
     cursor.execute(
         'SELECT SUM(tarifica_pinsetdestinationdetail.cost) AS cost,\
         tarifica_destinationgroup.id AS destid, tarifica_destinationname.name AS name\
@@ -424,13 +398,12 @@ def getBarChartInfoByLocale(cursor, pinset_id):
         WHERE date > %s AND date < %s AND pinset_id = %s GROUP BY destination_group_id ',
         [start_date,end_date,pinset_id])
     users = dictfetchall(cursor)
-    for n in data[1]: aux.append(0)
+    aux = [0 for _ in data[1]]
     for n in data[1]:
         for u in users:
             if n[0] == u['name']:
                 aux[n[1]] = u['cost']
     data.append(aux)
-    aux = []
     end_date = datetime.date(year=today.year, month=today.month, day=1)
     start_date = datetime.date(year=t1.year, month=t1.month, day=1) - timedelta
     cursor.execute(
@@ -442,14 +415,12 @@ def getBarChartInfoByLocale(cursor, pinset_id):
         WHERE date > %s AND date < %s AND pinset_id = %s GROUP BY destination_group_id ',
         [start_date,end_date,pinset_id])
     users = dictfetchall(cursor)
-    for n in data[1]: aux.append(0)
+    aux = [0 for _ in data[1]]
     for n in data[1]:
         for u in users:
             if n[0] == u['name']:
                 aux[n[1]] = u['cost']
     data.append(aux)
-    #print aux
-    aux = []
     end_date = datetime.date(year=t1.year, month=t1.month, day=1)
     start_date = datetime.date(year=t2.year, month=t2.month, day=1) - timedelta
     cursor.execute(
@@ -461,19 +432,18 @@ def getBarChartInfoByLocale(cursor, pinset_id):
         WHERE date > %s AND date < %s AND pinset_id = %s GROUP BY destination_group_id ',
         [start_date,end_date,pinset_id])
     users = dictfetchall(cursor)
-    for n in data[1]: aux.append(0)
+    aux = [0 for _ in data[1]]
     for n in data[1]:
         for u in users:
             if n[0] == u['name']:
                 aux[n[1]] = u['cost']
     data.append(aux)
-    aux = []
     cursor.execute(
         'SELECT tarifica_destinationname.name , tarifica_destinationname.id\
         FROM tarifica_destinationname\
          ORDER BY id')
     users = dictfetchall(cursor)
-    for u in users: aux.append(u['name'])
+    aux = [u['name'] for u in users]
     data[1] = aux
     return data
 
@@ -483,10 +453,8 @@ def getBarChartInfoByPinForYear(cursor, pinset_id):
     today = datetime.datetime.now()
     start_date = datetime.datetime(day = 1, month=1, year=today.year).replace(tzinfo=utc)
     end_date = datetime.datetime(day=monthrange(today.year, today.month)[1], month=today.month, year=today.year).replace(tzinfo=utc)
-    data = []
-    aux = []
-    aux.append("Cost")
-    data.append(aux)
+    aux = ["Cost"]
+    data = [aux]
     aux = []
     sDate = start_date
     timedelta = datetime.timedelta(days=1)
@@ -536,6 +504,4 @@ def getMonthName(n):
         return "October"
     if n == 11:
         return "November"
-    if n == 12:
-        return "December"
-    return "Not a month"
+    return "December" if n == 12 else "Not a month"

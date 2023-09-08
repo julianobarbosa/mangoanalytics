@@ -51,7 +51,6 @@ class Digester:
 		print "User Daily Detail saved:", totalRowsSaved
 
 	def getUserDestinationDetail(self, day):
-		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_seconds, \
@@ -65,16 +64,17 @@ class Digester:
 			WHERE date > %s AND date < %s \
 			GROUP BY tarifica_call.extension_number, tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
-		for row in self.am.cursor.fetchall():
-			callDetail.append((
+		return [
+			(
 				row['extension_number'],
 				row['total_calls'],
 				row['total_seconds'],
 				row['cost'],
 				row['destination_group_id'],
-				row['date']
-			))
-		return callDetail
+				row['date'],
+			)
+			for row in self.am.cursor.fetchall()
+		]
 
 	def saveUserDestinationDetail(self, day):
 		callData = self.getUserDestinationDetail(day)
@@ -88,7 +88,6 @@ class Digester:
 		print "User Destination Detail saved:", totalRowsSaved
 
 	def getUserDestinationNumberDetail(self, day):
-		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_seconds, \
@@ -104,17 +103,18 @@ class Digester:
 			WHERE date > %s AND date < %s \
 			GROUP BY tarifica_call.dialed_number"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
-		for row in self.am.cursor.fetchall():
-			callDetail.append((
+		return [
+			(
 				row['extension_number'],
 				row['total_calls'],
 				row['total_seconds'],
 				row['cost'],
 				row['prefix'],
 				row['dialed_number'],
-				row['date']
-			))
-		return callDetail
+				row['date'],
+			)
+			for row in self.am.cursor.fetchall()
+		]
 
 	def saveUserDestinationNumberDetail(self, day):
 		callData = self.getUserDestinationNumberDetail(day)
@@ -129,7 +129,6 @@ class Digester:
 
 	# -----------------TRUNKS---------------------
 	def getProviderDailyDetail(self, day):
-		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_seconds, \
@@ -141,15 +140,16 @@ class Digester:
 			WHERE date > %s AND date < %s \
 			GROUP BY tarifica_destinationgroup.provider_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
-		for row in self.am.cursor.fetchall():
-			callDetail.append((
+		return [
+			(
 				row['provider'],
 				row['cost'],
 				row['total_calls'],
 				row['total_seconds'],
-				row['date']
-			))
-		return callDetail
+				row['date'],
+			)
+			for row in self.am.cursor.fetchall()
+		]
 
 	def saveProviderDailyDetail(self, day):
 		callData = self.getProviderDailyDetail(day)
@@ -163,7 +163,6 @@ class Digester:
 		print "Provider Daily Detail saved:", totalRowsSaved
 
 	def getProviderDestinationDetail(self, day):
-		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_seconds, \
@@ -176,16 +175,17 @@ class Digester:
 			WHERE date > %s AND date < %s \
 			GROUP BY tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
-		for row in self.am.cursor.fetchall():
-			callDetail.append((
+		return [
+			(
 				row['provider'],
 				row['cost'],
 				row['total_calls'],
 				row['total_seconds'],
 				row['destination_group_id'],
-				row['date']
-			))
-		return callDetail
+				row['date'],
+			)
+			for row in self.am.cursor.fetchall()
+		]
 
 	def saveProviderDestinationDetail(self, day):
 		callData = self.getProviderDestinationDetail(day)
@@ -236,7 +236,6 @@ class Digester:
 		print "Pinset Daily Detail saved:", totalRowsSaved
 
 	def getPinsetDestinationDetail(self, day):
-		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_seconds, \
@@ -250,16 +249,17 @@ class Digester:
 			WHERE date > %s AND date < %s AND tarifica_call.pinset_number IS NOT NULL\
 			GROUP BY tarifica_call.pinset_number, tarifica_call.destination_group_id"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
-		for row in self.am.cursor.fetchall():
-			callDetail.append((
+		return [
+			(
 				row['pinset_number'],
 				row['total_calls'],
 				row['total_seconds'],
 				row['cost'],
 				row['destination_group_id'],
-				row['date']
-			))
-		return callDetail
+				row['date'],
+			)
+			for row in self.am.cursor.fetchall()
+		]
 
 	def savePinsetDestinationDetail(self, day):
 		callData = self.getPinsetDestinationDetail(day)
@@ -273,7 +273,6 @@ class Digester:
 		print "Pinset Destination Detail saved:", totalRowsSaved
 
 	def getPinsetDestinationNumberDetail(self, day):
-		callDetail = []	
 		self.am.connect('nextor_tarificador')
 		sql = "SELECT SUM(tarifica_call.cost) as cost, \
 			SUM(tarifica_call.duration) as total_seconds, \
@@ -289,17 +288,18 @@ class Digester:
 			WHERE date > %s AND date < %s \
 			GROUP BY tarifica_call.dialed_number"
 		self.am.cursor.execute(sql, (getStartOfDay(day), getEndOfDay(day)))
-		for row in self.am.cursor.fetchall():
-			callDetail.append((
+		return [
+			(
 				row['pinset_number'],
 				row['total_calls'],
 				row['total_seconds'],
 				row['cost'],
 				row['prefix'],
 				row['dialed_number'],
-				row['date']
-			))
-		return callDetail
+				row['date'],
+			)
+			for row in self.am.cursor.fetchall()
+		]
 
 	def savePinsetDestinationNumberDetail(self, day):
 		callData = self.getPinsetDestinationNumberDetail(day)

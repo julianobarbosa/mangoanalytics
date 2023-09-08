@@ -42,7 +42,7 @@ class DestinationGroup(models.Model):
     destination_country = CountryField(max_length = 6)
     has_bundles = models.BooleanField(default=False)
     def __unicode__(self):
-        return self.provider.name+'-'+self.destination_name.name
+        return f'{self.provider.name}-{self.destination_name.name}'
 
 class Bundle(models.Model):
     name = models.CharField(max_length = 255)
