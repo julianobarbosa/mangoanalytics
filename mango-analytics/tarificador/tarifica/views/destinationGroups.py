@@ -28,7 +28,7 @@ def createDestinationGroup(request, provider_id):
             	notes=form.cleaned_data['notes'],
             )
             d.save()
-            return HttpResponseRedirect('/destinations/create/'+provider_id) # Redirect after POST
+            return HttpResponseRedirect(f'/destinations/create/{provider_id}')
     else:
         form = forms.createDestinationGroup(initial=
         {

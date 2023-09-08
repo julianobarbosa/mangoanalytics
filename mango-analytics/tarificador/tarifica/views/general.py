@@ -248,7 +248,7 @@ def dashboard(request):
 
             if not ticksAssigned:
                 ticks.append(p['date_start'].strftime('%b')+" - "+p['date_end'].strftime('%b'))
-            
+
         ticksAssigned = True
 
         billing_periods_graph.append({
@@ -271,8 +271,8 @@ def dashboard(request):
     start_date = datetime.datetime(year=today.year, month=today.month, day=1)
     #End of the month
     end_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
-    
-    for x in xrange(0,6):
+
+    for _ in xrange(0,6):
         monthly_graph_ticks.append(start_date.strftime("%b"))
         cursor.execute(sql, (start_date, end_date))
         monthly_call_data = dictfetchall(cursor)

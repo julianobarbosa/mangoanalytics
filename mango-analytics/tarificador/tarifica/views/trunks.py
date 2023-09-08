@@ -142,7 +142,7 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
     billing_period_cost = 0
 
     # Obtenemos los periodos de cobro:
-    billingPeriods = getBillingPeriods(provider)        
+    billingPeriods = getBillingPeriods(provider)
     graph_data = []
     for b in billingPeriods:
         minutes = int(b['total_seconds'])
@@ -156,15 +156,14 @@ def getTrunk(request, provider_id, period_id="thisMonth"):
             b['date_start'].strftime('%b')+" - "+b['date_end'].strftime('%b'),
             minutes
         ])
-    
+
     this_month_total_usage = getTrunkCurrentIntervalData(provider, start_date, end_date)
     average_monthly_cost = billing_period_cost / len(billingPeriods)
 
     destinationInfo = getProviderDestinationCDR(provider.id, start_date, end_date)
-    destinationGraph = []
-    for d in destinationInfo:
-        destinationGraph.append([d['destination_name'], d['total_cost']])
-
+    destinationGraph = [
+        [d['destination_name'], d['total_cost']] for d in destinationInfo
+    ]
     return render(request, 'tarifica/trunks/trunksGet.html', {
         'user_info' : user_info,
         'provider': provider,
@@ -256,13 +255,15 @@ def getBillingPeriods(provider):
         day = provider.period_end
     )
     endCurrentBillingPeriod = startCurrentBillingPeriod + relativedelta(months=1) - relativedelta(days=1)
-    
+
     billingPeriodData = {
         'date_start': startCurrentBillingPeriod,
         'date_end': endCurrentBillingPeriod,
     }
 
-    billingPeriodData.update(getTrunkCDR(provider.id, startCurrentBillingPeriod, endCurrentBillingPeriod))
+    billingPeriodData |= getTrunkCDR(
+        provider.id, startCurrentBillingPeriod, endCurrentBillingPeriod
+    )
     billingPeriodData.update(getProviderBundleCost(provider, startCurrentBillingPeriod, endCurrentBillingPeriod))
 
     if billingPeriodData['total_call_cost'] is None:
@@ -272,11 +273,14 @@ def getBillingPeriods(provider):
     if billingPeriodData['total_calls'] is None:
         billingPeriodData['total_calls'] = 0
 
-    billingPeriodData.update({'monthly_cost': provider.monthly_cost})
-    billingPeriodData.update({'total_cost': billingPeriodData['total_call_cost'] + billingPeriodData['total_bundle_cost'] + billingPeriodData['monthly_cost']})
+    billingPeriodData['monthly_cost'] = provider.monthly_cost
+    billingPeriodData['total_cost'] = (
+        billingPeriodData['total_call_cost']
+        + billingPeriodData['total_bundle_cost']
+        + billingPeriodData['monthly_cost']
+    )
 
-    billingPeriods = []
-    billingPeriods.append(billingPeriodData)
+    billingPeriods = [billingPeriodData]
     months = 5
     while True:
         if months == 0:
@@ -288,7 +292,9 @@ def getBillingPeriods(provider):
             'date_start': startCurrentBillingPeriod,
             'date_end': endCurrentBillingPeriod
         }
-        billingPeriodData.update(getTrunkCDR(provider.id, startCurrentBillingPeriod, endCurrentBillingPeriod))
+        billingPeriodData |= getTrunkCDR(
+            provider.id, startCurrentBillingPeriod, endCurrentBillingPeriod
+        )
         billingPeriodData.update(getProviderBundleCost(provider, startCurrentBillingPeriod, endCurrentBillingPeriod))
         # Adding bundle costs to each month
         if billingPeriodData['total_call_cost'] is None:
@@ -298,9 +304,13 @@ def getBillingPeriods(provider):
         if billingPeriodData['total_calls'] is None:
             billingPeriodData['total_calls'] = 0
 
-        billingPeriodData.update({'monthly_cost': provider.monthly_cost})
-        billingPeriodData.update({'total_cost': billingPeriodData['total_call_cost'] + billingPeriodData['total_bundle_cost'] + billingPeriodData['monthly_cost']})
-        
+        billingPeriodData['monthly_cost'] = provider.monthly_cost
+        billingPeriodData['total_cost'] = (
+            billingPeriodData['total_call_cost']
+            + billingPeriodData['total_bundle_cost']
+            + billingPeriodData['monthly_cost']
+        )
+
         billingPeriods.append(billingPeriodData)
         months -= 1
     return billingPeriods
@@ -323,7 +333,9 @@ def getTrunkCalls(provider_id, start_date, end_date):
         ON tarifica_call.provider_id = tarifica_provider.id \
         WHERE tarifica_call.provider_id = %s \
         AND date > %s AND date < %s ORDER BY date"
-    cursor.execute(sql, (provider_id, start_date+" 23:59:59", end_date+" 00:00:00"))
+    cursor.execute(
+        sql, (provider_id, f"{start_date} 23:59:59", f"{end_date} 00:00:00")
+    )
     return dictfetchall(cursor)
 
 def getProviderBundleCost(provider, start_date, end_date):
